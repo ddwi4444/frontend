@@ -26,5 +26,6 @@ Vue.prototype.$api = 'http://127.0.0.1:8000/api';
 new Vue({
   vuetify,
   router,
+  BootstrapVue,
   render: h => h(App)
 }).$mount('#app')

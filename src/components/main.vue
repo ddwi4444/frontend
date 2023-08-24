@@ -3,7 +3,7 @@
     <div class="app">
       <nav class="navbar">
         <div class="logo">
-          <a 
+          <a @click="this.goToHafHome"
             ><img
               src="@/assets/logoHAF2.png"
               class="d-inline-block align-top"
@@ -20,7 +20,7 @@
         </div>
 
         <div class="avatar-dropdown">
-          <div class="avatar">
+          <div class="avatar" @click="this.toggleDropdown">
             <div class="user-avatar">
               <b-avatar
                 badge
@@ -38,7 +38,7 @@
           </div>
         </div>
 
-        <button class="menu-toggle" >
+        <button class="menu-toggle" @click="this.toggleMenu">
           <span class="bar"></span>
           <span class="bar"></span>
           <span class="bar"></span>
