@@ -187,7 +187,7 @@
                     hide-default-footer
                   >
                     <template v-slot:[`item.actions`]="{ item }">
-                      <v-icon dense color="#316291" @click="detailHandler(item)"
+                      <v-icon dense color="#316291" @click="this.detailHandler(item)"
                         >mdi-delete-circle-outline</v-icon
                       >
                     </template>

@@ -201,12 +201,7 @@ export default {
       isDropdownOpen: false,
     };
   },
-  mounted () {
-  window.addEventListener('scroll', this.onScroll)
-  },
-  beforeDestroy () {
-    window.removeEventListener('scroll', this.onScroll)
-  },
+  mounted () {},
   methods: {
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
