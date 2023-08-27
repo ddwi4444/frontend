@@ -2,7 +2,7 @@
   <div>
     <center>
       <div class="row" style="margin-top: 30px; justify-content: center">
-        <form class="form">
+        <form class="form" @submit.prevent="login">
           <img
             src="@/assets/logoHAF2.png"
             class="d-inline-block align-top"
@@ -14,20 +14,34 @@
             Signup now and get full access to our app.
           </p>
           <label>
-            <input placeholder="" type="email" class="input" required />
+            <input
+              v-model="form.email"
+              placeholder=""
+              type="email"
+              class="input"
+              required
+            />
             <span>Email</span>
           </label>
 
           <label>
-            <input placeholder="" type="password" class="input" required />
+            <input
+              v-model="form.password"
+              placeholder=""
+              type="password"
+              class="input"
+              required
+            />
             <span>Password</span>
           </label>
           <div class="row" style="justify-content: center">
             <div class="col-sm-4">
-              <button class="button-login-register">Login</button>
+              <button class="button-login-register" @click="test()">
+                Login
+              </button>
             </div>
             <div class="col-sm-4">
-              <button @click="this.goToRegister" class="button-login-register">
+              <button class="button-login-register" @click="login()">
                 Register
               </button>
             </div>
@@ -203,19 +217,55 @@
 </style>
 
 <script lang="ts">
+// import axios from 'axios';
+
 export default {
   name: "main-view",
   data() {
-    return {};
+    return {
+      form: {
+        email: "",
+        password: "",
+      },
+    };
   },
   methods: {
-    goToRegister() {
-      const path = "/";
-      if (this.$route.path !== path) {
-        this.$router.push({
-          name: "register",
+    test() {
+      console.log(this.form.email, this.form.password);
+    },
+    // goToRegister() {
+    //   const path = "/";
+    //   if (this.$route.path !== path) {
+    //     this.$router.push({
+    //       name: "register",
+    //     });
+    //   }
+    // },
+    login() {
+      var url = this.$api + "/login";
+      let data = {
+        email: this.form.email,
+        password: this.form.password,
+      };
+
+      this.$http
+        .post(url, data)
+        .then((response) => {
+          let userLogin = {
+            token: response.data.data.token,
+          };
+
+          localStorage.setItem("userLogin", JSON.stringify(userLogin));
+
+          this.$router.push({
+            name: "Dashboard",
+          });
+
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
         });
-      }
     },
   },
 };

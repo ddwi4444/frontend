@@ -67,6 +67,11 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, form, next) => {
+
+  if(to.name == "login"  && localStorage.getItem("userLogin") != null){
+    next({ name: "register" })
+}
+
   document.title = to.meta.title;
   next();
 });
