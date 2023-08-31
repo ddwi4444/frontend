@@ -2,7 +2,7 @@
   <div>
     <center>
       <div class="row" style="margin-top: 30px; justify-content: center">
-        <form class="form" @submit.prevent="login">
+        <form class="form" @submit.prevent="login()">
           <img
             src="@/assets/logoHAF2.png"
             class="d-inline-block align-top"
@@ -36,12 +36,12 @@
           </label>
           <div class="row" style="justify-content: center">
             <div class="col-sm-4">
-              <button class="button-login-register" @click="test()">
+              <button class="button-login-register">
                 Login
               </button>
             </div>
             <div class="col-sm-4">
-              <button class="button-login-register" @click="login()">
+              <button class="button-login-register" @click="goToRegister()">
                 Register
               </button>
             </div>
@@ -218,8 +218,9 @@
 
 <script lang="ts">
 // import axios from 'axios';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
   name: "main-view",
   data() {
     return {
@@ -230,17 +231,14 @@ export default {
     };
   },
   methods: {
-    test() {
-      console.log(this.form.email, this.form.password);
+    goToRegister() {
+      const path = "/";
+      if (this.$route.path !== path) {
+        this.$router.push({
+          name: "register",
+        });
+      }
     },
-    // goToRegister() {
-    //   const path = "/";
-    //   if (this.$route.path !== path) {
-    //     this.$router.push({
-    //       name: "register",
-    //     });
-    //   }
-    // },
     login() {
       var url = this.$api + "/login";
       let data = {
@@ -253,12 +251,13 @@ export default {
         .then((response) => {
           let userLogin = {
             token: response.data.data.token,
+            nama: response.data.data.user.nama_persona,
           };
 
           localStorage.setItem("userLogin", JSON.stringify(userLogin));
 
           this.$router.push({
-            name: "Dashboard",
+            name: "haf-profile",
           });
 
           console.log(response);
@@ -268,5 +267,5 @@ export default {
         });
     },
   },
-};
+});
 </script>

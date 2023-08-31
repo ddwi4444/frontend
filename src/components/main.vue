@@ -3,7 +3,7 @@
     <div class="app">
       <nav class="navbar">
         <div class="logo">
-          <a @click="this.goToHafHome"
+          <a @click="goToHafHome"
             ><img
               src="@/assets/logoHAF2.png"
               class="d-inline-block align-top"

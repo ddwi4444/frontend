@@ -41,7 +41,7 @@
           <button class="button-login-register">Register</button>
           <p class="signin">
             Already have an acount ?
-            <a style="color: blue" @click="this.goToLogin">Sign in</a>
+            <a style="color: blue" @click="goToLogin">Sign in</a>
           </p>
         </form>
       </div>
