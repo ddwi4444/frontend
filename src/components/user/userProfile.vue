@@ -17,11 +17,11 @@
     </v-card-title>
 
     <v-card-text>
-      <p>Doni Dwi Irawan</p>
+      <h5 style="margin-bottom: 0px;">Doni Dwi Irawan</h5>
     </v-card-text>
 
     <div>
-      <b-tabs content-class="mt-5" align="center" style="padding-left: 0px">
+      <b-tabs align="center" style="padding-left: 0px">
         <b-tab title="Profile" active>
           <div>
             

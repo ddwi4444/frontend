@@ -41,9 +41,9 @@
               </button>
             </div>
             <div class="col-sm-4">
-              <button class="button-login-register" @click="goToRegister()">
+              <router-link to="register"><button class="button-login-register">
                 Register
-              </button>
+              </button></router-link>
             </div>
           </div>
           <p class="signin">Forgot Password? <a href="#">Help</a></p>
@@ -218,9 +218,9 @@
 
 <script lang="ts">
 // import axios from 'axios';
-import { defineComponent } from 'vue';
+import Vue from 'vue';
 
-export default defineComponent({
+export default Vue.extend({
   name: "main-view",
   data() {
     return {

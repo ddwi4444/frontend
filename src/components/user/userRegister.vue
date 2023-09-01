@@ -41,7 +41,7 @@
           <button class="button-login-register">Register</button>
           <p class="signin">
             Already have an acount ?
-            <a style="color: blue" @click="goToLogin">Sign in</a>
+            <router-link style="color: blue" to="login">Sign In </router-link>
           </p>
         </form>
       </div>

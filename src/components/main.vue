@@ -3,13 +3,14 @@
     <div class="app">
       <nav class="navbar">
         <div class="logo">
-          <a @click="goToHafHome"
-            ><img
+          <router-link to="/">
+            <img
               src="@/assets/logoHAF2.png"
               class="d-inline-block align-top"
               alt="Logo HAF"
               style="height: 30px"
-          /></a>
+            />
+          </router-link>
         </div>
 
         <div :class="['links', { open: isMenuOpen }]">
@@ -32,8 +33,13 @@
           </div>
           <div class="dropdown" v-if="isDropdownOpen">
             <ul>
-              <li><router-link style="color: aliceblue; text-decoration: none;" to="haf-service">HAF Service</router-link></li>
-              <li><router-link style="color: aliceblue; text-decoration: none;" to="haf-service">HAF Service</router-link></li>
+              <li>
+                <router-link
+                  style="color: aliceblue; text-decoration: none"
+                  to="haf-profile"
+                  >My Profile</router-link
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -179,7 +185,7 @@
     text-align: center;
     z-index: 1;
     animation-duration: 4s;
-  animation-delay: 2s;
+    animation-delay: 2s;
   }
 
   .links.open {
@@ -201,53 +207,13 @@ export default {
       isDropdownOpen: false,
     };
   },
-  mounted () {},
+  mounted() {},
   methods: {
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
     },
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen;
-    },
-    goToHafHome() {
-      const path = "/";
-      if (this.$route.path !== path) {
-        this.$router.push({
-          name: "home",
-        });
-      }
-    },
-    goToHafService() {
-      const path = `/haf-service`;
-      if (this.$route.path !== path) {
-        this.$router.push({
-          name: "haf-service",
-        });
-      }
-    },
-    goToHafMerchandise() {
-      const path = `/haf-merchandise`;
-      if (this.$route.path !== path) {
-        this.$router.push({
-          name: "haf-merchandise",
-        });
-      }
-    },
-    goToHafSchool() {
-      const path = `/haf-school`;
-      if (this.$route.path !== path) {
-        this.$router.push({
-          name: "haf-school",
-        });
-      }
-    },
-    goToHafAbout() {
-      const path = `/haf-about`;
-      if (this.$route.path !== path) {
-        this.$router.push({
-          name: "haf-about",
-        });
-      }
     },
   },
 };
