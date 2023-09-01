@@ -1,36 +1,61 @@
 <template>
-    <div class="dashboard">
-      <h1>Dashboard</h1>
-      <div class="statistic" v-for="stat in statistics" :key="stat.id">
-        <h2>{{ stat.title }}</h2>
-        <p>{{ stat.value }}</p>
-      </div>
+  <div>
+    <v-card-title
+      class="lighten-2"
+      style="margin-top: 0px; padding-top: 0px; justify-content: center"
+    >
+      <img
+        style="
+          border-radius: 50%;
+          height: 100px;
+          width: 100px;
+          object-fit: cover;
+        "
+        src="https://cdn1.katadata.co.id/media/images/thumb/2022/11/10/Ilustrasi_Ciri-ciri_Orang_Yang_Bersyukur-2022_11_10-13_22_48_d368708753bdc5c3131472013522d76c_960x640_thumb.jpg"
+        alt="Avatar"
+      />
+    </v-card-title>
+
+    <v-card-text>
+      <p>Doni Dwi Irawan</p>
+    </v-card-text>
+
+    <div>
+      <b-tabs content-class="mt-5" align="center" style="padding-left: 0px">
+        <b-tab title="Profile" active>
+          <div>
+            
+          </div>
+        </b-tab>
+        <b-tab title="Review">
+          <div style="display: flex">
+            <center></center>
+          </div>
+        </b-tab>
+        <b-tab title="Order">
+          <div></div>
+        </b-tab>
+      </b-tabs>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: "main-view",    data() {
-      return {
-        statistics: [
-          { id: 1, title: 'Total Users', value: 1000 },
-          { id: 2, title: 'Revenue', value: '$50,000' },
-          { id: 3, title: 'Orders', value: 300 },
-          { id: 4, title: 'Visitors', value: 5000 },
-        ],
-      };
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .dashboard {
-    padding: 20px;
-  }
-  .statistic {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px;
-  }
-  </style>
-  
+  </div>
+</template>
+
+<script>
+export default {
+  name: "main-view",
+  data() {
+    return {};
+  },
+};
+</script>
+
+<style scoped>
+.dashboard {
+  padding: 20px;
+}
+.statistic {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+}
+</style>

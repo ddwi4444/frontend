@@ -252,6 +252,7 @@ export default defineComponent({
           let userLogin = {
             token: response.data.data.token,
             nama: response.data.data.user.nama_persona,
+            role: response.data.data.user.role,
           };
 
           localStorage.setItem("userLogin", JSON.stringify(userLogin));
@@ -259,8 +260,6 @@ export default defineComponent({
           this.$router.push({
             name: "haf-profile",
           });
-
-          console.log(response);
         })
         .catch((error) => {
           console.log(error);
