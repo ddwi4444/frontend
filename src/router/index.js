@@ -87,11 +87,17 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, form, next) => {
-  if (to.name == "login" && localStorage.getItem("userLogin") != null) {
+  if (to.name == "login" && localStorage.getItem('token') != null) {
     next({
       name: "home",
     });
-  } else if (to.name == "register" && localStorage.getItem("userLogin") != null) {
+  }
+  if (to.name == "register" && localStorage.getItem('token') != null) {
+    next({
+      name: "home",
+    });
+  }
+  if (to.name == "haf-profile" && localStorage.getItem('token') == null) {
     next({
       name: "home",
     });

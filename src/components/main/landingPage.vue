@@ -44,7 +44,7 @@
           Latest Updates
         </h5>
         <div class="row">
-          <div class="row" style="justify-content: center">
+          <div class="row" style="justify-content: center; max-width: none;">
             <article class="card card--1">
               <div class="card__img"></div>
               <a href="#" class="card_link">

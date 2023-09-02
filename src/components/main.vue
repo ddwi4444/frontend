@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="app">
-      <nav class="navbar">
+      <nav class="navbar d-flex w-full p-x-15">
         <div class="logo">
           <router-link to="/">
             <img
@@ -28,7 +28,7 @@
                 badge-variant="success"
                 src="https://placekitten.com/300/300"
               ></b-avatar
-              ><span class="mr-auto"> J. Circlehead</span>
+              ><span class="mr-auto" style="width: 100px; display: inline-block;"> {{ getNamaPersona }}</span>
             </div>
           </div>
           <div class="dropdown" v-if="isDropdownOpen">
@@ -214,6 +214,11 @@ export default {
     },
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen;
+    },
+  },
+  computed: {
+    getNamaPersona() {
+      return localStorage.getItem("nama_persona");
     },
   },
 };

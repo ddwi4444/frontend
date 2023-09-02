@@ -17,7 +17,7 @@
     </v-card-title>
 
     <v-card-text>
-      <h5 style="margin-bottom: 0px;">Doni Dwi Irawan</h5>
+      <h5 style="margin-bottom: 0px;">{{ getNamaPersona }}</h5>
     </v-card-text>
 
     <div>
@@ -45,6 +45,11 @@ export default {
   name: "main-view",
   data() {
     return {};
+  },
+  computed: {
+    getNamaPersona() {
+      return localStorage.getItem("nama_persona");
+    },
   },
 };
 </script>

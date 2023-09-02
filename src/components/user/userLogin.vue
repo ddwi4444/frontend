@@ -36,14 +36,14 @@
           </label>
           <div class="row" style="justify-content: center">
             <div class="col-sm-4">
-              <button class="button-login-register">
-                Login
-              </button>
+              <button class="button-login-register">Login</button>
             </div>
             <div class="col-sm-4">
-              <router-link to="register"><button class="button-login-register">
-                Register
-              </button></router-link>
+              <router-link to="register"
+                ><button class="button-login-register">
+                  Register
+                </button></router-link
+              >
             </div>
           </div>
           <p class="signin">Forgot Password? <a href="#">Help</a></p>
@@ -218,7 +218,7 @@
 
 <script lang="ts">
 // import axios from 'axios';
-import Vue from 'vue';
+import Vue from "vue";
 
 export default Vue.extend({
   name: "main-view",
@@ -249,13 +249,8 @@ export default Vue.extend({
       this.$http
         .post(url, data)
         .then((response) => {
-          let userLogin = {
-            token: response.data.data.token,
-            nama: response.data.data.user.nama_persona,
-            role: response.data.data.user.role,
-          };
-
-          localStorage.setItem("userLogin", JSON.stringify(userLogin));
+          localStorage.setItem("nama_persona", response.data.data.user.nama_persona);
+          localStorage.setItem("token", response.data.data.token);
 
           this.$router.push({
             name: "haf-profile",
