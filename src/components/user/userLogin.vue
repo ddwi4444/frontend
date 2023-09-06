@@ -2,7 +2,7 @@
   <div>
     <center>
       <div class="row" style="margin-top: 30px; justify-content: center">
-        <form class="form" @submit.prevent="login()">
+        <v-form class="form" ref="form" @submit.prevent="login()">
           <img
             src="@/assets/logoHAF2.png"
             class="d-inline-block align-top"
@@ -14,44 +14,129 @@
             Signup now and get full access to our app.
           </p>
           <label>
-            <input
+            <v-text-field
               v-model="form.email"
-              placeholder=""
+              :rules="emailRules"
+              placeholder="Email"
               type="email"
               class="input"
+              prepend-icon="mdi-account"
               required
             />
-            <span>Email</span>
           </label>
 
           <label>
-            <input
+            <v-text-field
               v-model="form.password"
-              placeholder=""
+              :rules="passwordRules"
+              placeholder="Password"
               type="password"
               class="input"
+              prepend-icon="mdi-lock"
               required
             />
-            <span>Password</span>
           </label>
           <div class="row" style="justify-content: center">
             <div class="col-sm-4">
-              <button class="button-login-register">Login</button>
+              <v-btn
+                class="button-login-register primary"
+                style="text-transform: unset !important"
+                :loading="loading"
+                @click="login()"
+              >
+                Login
+              </v-btn>
             </div>
             <div class="col-sm-4">
               <router-link to="register"
-                ><button class="button-login-register">
+                ><v-btn
+                  class="button-login-register primary"
+                  style="text-transform: unset !important"
+                >
                   Register
-                </button></router-link
+                </v-btn></router-link
               >
             </div>
           </div>
           <p class="signin">Forgot Password? <a href="#">Help</a></p>
-        </form>
+        </v-form>
       </div>
     </center>
   </div>
 </template>
+
+<script lang="ts">
+import Vue from "vue";
+export default Vue.extend({
+  name: "login-view",
+  data() {
+    return {
+      form: {
+        email: "",
+        password: "",
+      },
+
+      // ADDONS
+      loading: false,
+    };
+  },
+  computed: {
+    // VALIDATION FORM
+    emailRules() {
+      return [
+        (v) => !!v || "This field is required",
+        (v) => /.+@.+\..+/.test(v) || "Please enter a valid email address",
+      ];
+    },
+    passwordRules() {
+      return [
+        (v) => !!v || "This field is required",
+        (v) =>
+          (v && v.length >= 8) ||
+          "Your password needs to be minimal 8 characters",
+      ];
+    },
+  },
+  methods: {
+    goToRegister() {
+      const path = "/";
+      if (this.$route.path !== path) {
+        this.$router.push({
+          name: "register",
+        });
+      }
+    },
+    login() {
+      if (this.$refs.form.validate()) {
+        var url = this.$api + "/login";
+        let data = {
+          email: this.form.email,
+          password: this.form.password,
+        };
+
+        this.$http
+          .post(url, data)
+          .then((response) => {
+            localStorage.setItem("nama_persona",response.data.data.user.nama_persona);
+            localStorage.setItem("role",response.data.data.user.role);
+            localStorage.setItem("image",response.data.data.user.image);
+            localStorage.setItem("image",response.data.data.user.uuid);
+            localStorage.setItem("token", response.data.data.token);
+
+            this.$router.push({
+              name: "haf-profile",
+            });
+          })
+          .catch((error) => {
+            console.log(error.response.data.error);
+          });
+        this.loading = true;
+        setTimeout(() => (this.loading = false), 10000);
+      }
+    },
+  },
+});
+</script>
 
 <style>
 .form {
@@ -129,7 +214,7 @@
 
 .form label .input {
   width: 100%;
-  padding: 10px 10px 20px 10px;
+  padding: 15px 10px 0px 10px;
   outline: 0;
   border: 1px solid rgba(105, 105, 105, 0.397);
   border-radius: 10px;
@@ -195,7 +280,6 @@
   border-radius: 100px;
   background-color: royalblue;
   color: #ffffff;
-  font-weight: Bold;
   transition: all 0.5s;
   -webkit-transition: all 0.5s;
 }
@@ -215,51 +299,3 @@
 }
 /* /Button Login / Register */
 </style>
-
-<script lang="ts">
-// import axios from 'axios';
-import Vue from "vue";
-
-export default Vue.extend({
-  name: "main-view",
-  data() {
-    return {
-      form: {
-        email: "",
-        password: "",
-      },
-    };
-  },
-  methods: {
-    goToRegister() {
-      const path = "/";
-      if (this.$route.path !== path) {
-        this.$router.push({
-          name: "register",
-        });
-      }
-    },
-    login() {
-      var url = this.$api + "/login";
-      let data = {
-        email: this.form.email,
-        password: this.form.password,
-      };
-
-      this.$http
-        .post(url, data)
-        .then((response) => {
-          localStorage.setItem("nama_persona", response.data.data.user.nama_persona);
-          localStorage.setItem("token", response.data.data.token);
-
-          this.$router.push({
-            name: "haf-profile",
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-  },
-});
-</script>

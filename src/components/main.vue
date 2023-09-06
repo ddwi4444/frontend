@@ -28,7 +28,12 @@
                 badge-variant="success"
                 src="https://placekitten.com/300/300"
               ></b-avatar
-              ><span class="mr-auto" style="width: 100px; display: inline-block;"> {{ getNamaPersona }}</span>
+              ><span
+                class="mr-auto"
+                style="width: 100px; display: inline-block"
+              >
+                {{ getNamaPersona }}</span
+              >
             </div>
           </div>
           <div class="dropdown" v-if="isDropdownOpen">
@@ -57,6 +62,35 @@
     </div>
   </div>
 </template>
+
+<script lang="ts">
+export default {
+  name: "main-view",
+  data() {
+    return {
+      isMenuOpen: false,
+      isDropdownOpen: false,
+    };
+  },
+  mounted() {},
+  methods: {
+    toggleMenu() {
+      this.isMenuOpen = !this.isMenuOpen;
+    },
+    toggleDropdown() {
+      this.isDropdownOpen = !this.isDropdownOpen;
+    },
+  },
+  computed: {
+    getNamaPersona() {
+      return localStorage.getItem("nama_persona");
+    },
+    loggedIn() {
+      return localStorage.getItem("token") != null;
+    },
+  },
+};
+</script>
 
 <style scoped>
 .avatar-dropdown {
@@ -197,29 +231,3 @@
   }
 }
 </style>
-
-<script lang="ts">
-export default {
-  name: "main-view",
-  data() {
-    return {
-      isMenuOpen: false,
-      isDropdownOpen: false,
-    };
-  },
-  mounted() {},
-  methods: {
-    toggleMenu() {
-      this.isMenuOpen = !this.isMenuOpen;
-    },
-    toggleDropdown() {
-      this.isDropdownOpen = !this.isDropdownOpen;
-    },
-  },
-  computed: {
-    getNamaPersona() {
-      return localStorage.getItem("nama_persona");
-    },
-  },
-};
-</script>

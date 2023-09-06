@@ -2,7 +2,7 @@
   <div>
     <center>
       <div class="row" style="margin-top: 30px; justify-content: center">
-        <form class="form">
+        <v-form ref="form" class="form" @submit.prevent="submit">
           <img
             src="@/assets/logoHAF2.png"
             class="d-inline-block align-top"
@@ -13,41 +13,149 @@
           <p class="message" style="margin-bottom: 0px">
             Signup now and get full access to our app.
           </p>
-          <div class="flex">
-            <label>
-              <input placeholder="" type="text" class="input" required />
-              <span>Firstname</span>
-            </label>
-
-            <label>
-              <input placeholder="" type="text" class="input" required />
-              <span>Lastname</span>
-            </label>
-          </div>
 
           <label>
-            <input placeholder="" type="email" class="input" required />
-            <span>Email</span>
+            <v-text-field
+              v-model="nama_persona"
+              :rules="namaPersonaRules"
+              placeholder="Name (Persona Name)"
+              type="text"
+              class="input"
+              required
+            />
           </label>
 
           <label>
-            <input placeholder="" type="password" class="input" required />
-            <span>Password</span>
+            <v-text-field
+              v-model="email"
+              :rules="emailRules"
+              placeholder="Email"
+              type="email"
+              class="input"
+              required
+            />
           </label>
+
           <label>
-            <input placeholder="" type="password" class="input" required />
-            <span>Confirm password</span>
+            <v-text-field
+              v-model="password"
+              :rules="passwordRules"
+              placeholder="Password"
+              type="password"
+              class="input"
+              required
+            />
           </label>
-          <button class="button-login-register">Register</button>
+
+          <label>
+            <v-text-field
+              v-model="confirmPassword"
+              :rules="confirmPasswordRules"
+              placeholder="Confirm password"
+              type="password"
+              class="input"
+              required
+            />
+          </label>
+
+          <v-btn
+            class="button-login-register primary"
+            style="text-transform: unset !important"
+            @click="submit"
+            :loading="loading"
+            >Register</v-btn
+          >
           <p class="signin">
             Already have an acount ?
             <router-link style="color: blue" to="login">Sign In </router-link>
           </p>
-        </form>
+        </v-form>
       </div>
     </center>
   </div>
 </template>
+
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
+  name: "main-view",
+  data() {
+    return {
+      // FORM
+      registerForm: new FormData(),
+      nama_persona: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+
+      // ADDONS
+      loading: false,
+    };
+  },
+  computed: {
+    // VALIDATION FORM
+    namaPersonaRules() {
+      return [(v) => !!v || "This field is required"];
+    },
+    emailRules() {
+      return [
+        (v) => !!v || "This field is required",
+        (v) => /.+@.+\..+/.test(v) || "Please enter a valid email address",
+      ];
+    },
+    passwordRules() {
+      return [
+        (v) => !!v || "This field is required",
+        (v) =>
+          (v && v.length >= 8) ||
+          "Your password needs to be minimal 8 characters",
+      ];
+    },
+    confirmPasswordRules() {
+      return [
+        (v) => !!v || "This field is required",
+        (v) =>
+          (v && v.length >= 8) ||
+          "Your password needs to be minimal 8 characters",
+        (v) =>
+          v === this.password ||
+          "Password Confirmation did not match with password",
+      ];
+    },
+  },
+  methods: {
+    goToLogin() {
+      const path = "/";
+      if (this.$route.path !== path) {
+        this.$router.push({
+          name: "login",
+        });
+      }
+    },
+    submit() {
+      if (this.$refs.form.validate()) {
+        var url = this.$api + "/register";
+        let data = {
+          nama_persona: this.nama_persona,
+          email: this.email,
+          password: this.password,
+        };
+
+        this.$http
+          .post(url, data)
+            this.$router.push({
+              name: "home",
+            });
+          
+        
+        this.loading = true;
+        setTimeout(() => (this.loading = false), 10000);
+      }
+    },
+  },
+});
+</script>
 
 <style>
 .form {
@@ -125,7 +233,7 @@
 
 .form label .input {
   width: 100%;
-  padding: 10px 10px 20px 10px;
+  padding: 15px 10px 0px 10px;
   outline: 0;
   border: 1px solid rgba(105, 105, 105, 0.397);
   border-radius: 10px;
@@ -191,7 +299,6 @@
   border-radius: 100px;
   background-color: royalblue;
   color: #ffffff;
-  font-weight: Bold;
   transition: all 0.5s;
   -webkit-transition: all 0.5s;
 }
@@ -211,22 +318,3 @@
 }
 /* /Button Login / Register */
 </style>
-
-<script lang="ts">
-export default {
-  name: "main-view",
-  data() {
-    return {};
-  },
-  methods: {
-    goToLogin() {
-      const path = "/";
-      if (this.$route.path !== path) {
-        this.$router.push({
-          name: "login",
-        });
-      }
-    },
-  },
-};
-</script>

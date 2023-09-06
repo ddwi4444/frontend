@@ -23,9 +23,32 @@
     <div>
       <b-tabs align="center" style="padding-left: 0px">
         <b-tab title="Profile" active>
-          <div>
-            
-          </div>
+          <b-container>
+            <b-row>
+              <b-col sm="7">
+                <p class="ma-0 pa-0">Name : Doni Dwi Irawan</p>
+                <p class="ma-0 pa-0">Age : 17 Tahun</p>
+                <p class="ma-0 pa-0">Racial : Half Demon-Vampire</p>
+                <p class="ma-0 pa-0">Birth Date : 9 April</p>
+                <p class="ma-0 pa-0">Zodiac : Aries</p>
+                <p class="ma-0 pa-0">MBTI : INFJ-T</p>
+                <p class="ma-0 pa-0">Body Weight : 50 kg</p>
+                <p class="ma-0 pa-0">Body Tall : 171 cm</p>
+                <br>
+                <p class="ma-0 pa-0">Hobby : Memasak, Membaca Dongeng, minum teh, dan berjalan jalan.</p>
+                <p class="ma-0 pa-0">Like : Bakso, Darah, orang yang mentaati peraturan, langit malam dan Rasi Bintang, Musik klasik.</p>
+                <p class="ma-0 pa-0">Did not Like : Bakso, Darah, orang yang mentaati peraturan, langit malam dan Rasi Bintang, Musik klasik.</p>
+                <br>
+                <p class="ma-0 pa-0">Quotes :<br>“May God Forgive Your sin”</p>
+                <h3 class="ma-0 pa-0" style="color: #a36e1e;">............</h3>
+
+
+              </b-col>
+              <b-col sm="4">
+                <b-img fluid src="https://historicalartfantasia.files.wordpress.com/2022/11/fullbody-gilang-1-b-ilkom-m.-rafael-indrawan.png" alt="Character"></b-img>              
+              </b-col>
+            </b-row>
+          </b-container>
         </b-tab>
         <b-tab title="Review">
           <div style="display: flex">
