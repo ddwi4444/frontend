@@ -1,7 +1,7 @@
 <template>
     <div class="">
         <v-overlay v-model="overlay">
-            <img src="@/assets/loading.svg" height="150px">
+            <img src="@/assets/Spin-1s-200px.gif" height="150px">
         </v-overlay>
     </div>
 </template>

@@ -4,6 +4,11 @@ import vuetify from '@/plugins/vuetify';
 import router from './router'
 import axios from 'axios';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import Vue2Editor from "vue2-editor";
+
+
+// Text Editor
+Vue.use(Vue2Editor);
 
 
 // Import Bootstrap and BootstrapVue CSS files (order is important)

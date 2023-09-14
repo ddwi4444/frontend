@@ -30,7 +30,7 @@
               ></b-avatar
               ><span
                 class="mr-auto"
-                style="width: 100px; display: inline-block"
+                style="display: inline-block; min-width: 150px; text-transform: capitalize;" 
               >
                 {{ getNamaPersona }}</span
               >
