@@ -255,7 +255,7 @@
       >
         <h3
           class="f-24 f-md-20 f-secondary text-center m-b-50"
-          style="margin-bottom: 50px; padding-top: 30px; font-family: 'Georgia'"
+          style="margin-bottom: 50px; padding-top: 30px; font-family: 'Georgia'; font-weight: bold;"
         >
           {{ inputType == "AddNPC" ? "Add New NPC" : "Update NPC" }}
         </h3>
@@ -348,6 +348,7 @@
                     v-if="!isNPCNameValid"
                     transition="scroll-y-transition"
                     style="
+                    margin-top: 1px;
                       font-size: 12px;
                       text-align: left;
                       color: red;
@@ -597,6 +598,7 @@ export default {
       this.npc_name = item.npc_name;
       this.npc_profile = item.npc_profile;
       this.npc_story = item.npc_story;
+      this.selectedFile= item.image_npc;
     },
 
     deleteHandlerNPC(item) {
@@ -820,6 +822,8 @@ export default {
       this.npc_profile = "";
       this.npc_story = "";
       this.image64Foto = "";
+      this.fotoError= false;
+      this.selectedFile= null; // Store the selected file
     },
 
     // For chech file is empty or not
