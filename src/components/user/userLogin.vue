@@ -7,6 +7,8 @@
             src="@/assets/logoHAF2.png"
             class="d-inline-block align-top"
             alt="Logo HAF"
+            @click="goToHome()"
+            style="cursor: pointer"
           />
 
           <p class="title" style="margin-bottom: 0px">Login</p>
@@ -98,6 +100,9 @@ export default Vue.extend({
     },
   },
   methods: {
+    goToHome() {
+      return this.$router.push("/");
+    },
     goToRegister() {
       const path = "/";
       if (this.$route.path !== path) {
@@ -117,9 +122,12 @@ export default Vue.extend({
         this.$http
           .post(url, data)
           .then((response) => {
-            localStorage.setItem("nama_persona",response.data.data.user.nama_persona);
-            localStorage.setItem("role",response.data.data.user.role);
-            localStorage.setItem("image",response.data.data.user.uuid);
+            localStorage.setItem(
+              "nama_persona",
+              response.data.data.user.nama_persona
+            );
+            localStorage.setItem("role", response.data.data.user.role);
+            localStorage.setItem("image", response.data.data.user.uuid);
             localStorage.setItem("token", response.data.data.token);
 
             this.$router.push({

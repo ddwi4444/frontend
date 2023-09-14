@@ -45,6 +45,11 @@
                   >My Profile</router-link
                 >
               </li>
+              <li
+                  style="color: aliceblue; text-decoration: none"
+                  @click="logout()"
+                  >Logout
+              </li>
             </ul>
           </div>
         </div>
@@ -66,12 +71,15 @@
 <script lang="ts">
 export default {
   name: "main-view",
-  data() {
-    return {
+  data: () => ({
       isMenuOpen: false,
       isDropdownOpen: false,
-    };
-  },
+
+      // Addons
+    userLogin: {
+      token: localStorage.getItem("token"), // initialize with a valid token or empty string
+    },
+  }),
   mounted() {},
   methods: {
     toggleMenu() {
@@ -80,6 +88,24 @@ export default {
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen;
     },
+    logout(){
+        var url = this.$api + '/logout';
+        var headers = {
+          Authorization: "Bearer " + this.userLogin.token,
+        };
+
+        this.$http.post(url, this.NPCForm, { headers: headers })
+        .then(response => {
+          console.log(response.data.message);
+          localStorage.removeItem("image")
+          localStorage.removeItem("nama_persona")
+          localStorage.removeItem("role")
+          localStorage.removeItem("token")
+          this.$router.push({
+            name: 'login',
+          });
+        });
+      },
   },
   computed: {
     getNamaPersona() {

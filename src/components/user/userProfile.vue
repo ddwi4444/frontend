@@ -788,7 +788,7 @@ export default {
       ) {
         this.textMessage = "Format image only accepted for jpg, png, dan jpeg.";
         this.snackbar = true;
-        console.log("gabisa goblog");
+        this.color = "secondary";
       } else {
         let fotoData = new FileReader();
 
