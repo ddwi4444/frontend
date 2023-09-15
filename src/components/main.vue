@@ -1,5 +1,10 @@
 <template>
   <div>
+    <v-fade-transition>
+      <div v-if="loadingScreen == true">
+        <loading-screen :value="true"></loading-screen>
+      </div>
+    </v-fade-transition>
     <div class="app">
       <nav class="navbar d-flex w-full p-x-15">
         <div class="logo">
@@ -30,7 +35,11 @@
               ></b-avatar
               ><span
                 class="mr-auto"
-                style="display: inline-block; min-width: 150px; text-transform: capitalize;" 
+                style="
+                  display: inline-block;
+                  min-width: 150px;
+                  text-transform: capitalize;
+                "
               >
                 {{ getNamaPersona }}</span
               >
@@ -46,9 +55,10 @@
                 >
               </li>
               <li
-                  style="color: aliceblue; text-decoration: none"
-                  @click="logout()"
-                  >Logout
+                style="color: aliceblue; text-decoration: none"
+                @click="logout()"
+              >
+                Logout
               </li>
             </ul>
           </div>
@@ -68,14 +78,19 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
+import LoadingScreen from "@/components/loading-screen.vue";
+
 export default {
   name: "main-view",
+  components: {
+    "loading-screen": LoadingScreen,
+  },
   data: () => ({
-      isMenuOpen: false,
-      isDropdownOpen: false,
+    isMenuOpen: false,
+    isDropdownOpen: false,
+    loadingScreen: false,
 
-      // Addons
     userLogin: {
       token: localStorage.getItem("token"), // initialize with a valid token or empty string
     },
@@ -88,24 +103,30 @@ export default {
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen;
     },
-    logout(){
-        var url = this.$api + '/logout';
-        var headers = {
-          Authorization: "Bearer " + this.userLogin.token,
-        };
+    logout() {
+      this.loadingScreen = true;
 
-        this.$http.post(url, this.NPCForm, { headers: headers })
-        .then(response => {
+      var url = this.$api + "/logout";
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      this.$http
+        .post(url, this.NPCForm, { headers: headers })
+        .then((response) => {
           console.log(response.data.message);
-          localStorage.removeItem("image")
-          localStorage.removeItem("nama_persona")
-          localStorage.removeItem("role")
-          localStorage.removeItem("token")
+          localStorage.removeItem("image");
+          localStorage.removeItem("nama_persona");
+          localStorage.removeItem("role");
+          localStorage.removeItem("token");
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 5000);
           this.$router.push({
-            name: 'login',
+            name: "login",
           });
         });
-      },
+    },
   },
   computed: {
     getNamaPersona() {

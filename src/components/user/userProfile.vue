@@ -516,6 +516,7 @@ export default {
     image64Foto: "",
     fotoError: false,
     selectedFile: null, // Store the selected file
+    getImage: null, // initialize getImage property here
 
     // Snackbar
     snackbar: false,
@@ -527,7 +528,6 @@ export default {
       token: localStorage.getItem("token"), // initialize with a valid token or empty string
     },
     multiLine: true,
-    getImage: null, // initialize getImage property here
     dialogZoom: false,
     loadingScreen: true,
     loading: false,
@@ -673,6 +673,7 @@ export default {
     },
 
     axioDataNPC() {
+      this.loadingScreen = true;
       var url = this.$api + "/show-all-npc";
 
       // Use the 'url' variable somewhere in your code
