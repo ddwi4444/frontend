@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading-screen :value="loadingScreen"></loading-screen>
     <v-card-title
       class="lighten-2"
       style="margin-top: 0px; padding-top: 0px; justify-content: center"
@@ -75,18 +76,17 @@
         <!-- NPC -->
         <b-tab title="NPC">
           <template>
-            <loading-screen :value="loadingScreen"></loading-screen>
             <v-container class="conatiner-size-my-profile p-0">
               <b-container class="bv-example-row">
                 <b-row>
                   <b-col
                     ><!-- SEARCH -->
-                    <div class="form-input">
+                    <div class="form-input" style="margin-left: 10px;">
                       <v-text-field
-                        v-model="search"
+                        v-model="list.search_npc"
                         class="p-0 m-0"
                         append-icon="mdi-magnify"
-                        label="Search"
+                        label="Search NPC"
                         single-line
                         hide-details
                       ></v-text-field></div
@@ -109,15 +109,7 @@
               <v-data-table
                 :headers="list.headers"
                 :items="list.npcs"
-                :search="list.search"
-                class="elevation-1"
-                :footer-props="{
-                  showFirstLastPage: true,
-                  firstIcon: 'mdi-skip-previous',
-                  lastIcon: 'mdi-skip-next',
-                  itemsPerPageAllText: 'All',
-                  itemsPerPageText: 'Rows per page',
-                }"
+                :search="list.search_npc"
               >
                 <template v-slot:[`item.no`]="{ item }">
                   <template>{{ list.npcs.indexOf(item) + 1 }}</template>
@@ -169,7 +161,6 @@
 
         <!-- Comic -->
         <b-tab title="Comic">
-          <div></div>
         </b-tab>
         <!-- End Comic -->
 
@@ -554,13 +545,13 @@ export default {
     dialogZoom: false,
     loadingScreen: true,
     loading: false,
-    search: "",
     dialog: false,
     dialogDelete: false,
 
     list: {
       headers: [],
       npcs: [],
+      search_npc: '',
     },
   }),
   created() {
@@ -605,6 +596,12 @@ export default {
     },
   },
   methods: {
+
+    // For Comic
+
+    // End Comic
+
+
     // For NPC
 
     // For Uppercase Form
@@ -695,7 +692,6 @@ export default {
         {
           text: "NPC Name",
           value: "npc_name",
-          filterable: false,
           align: "center",
           sortable: false,
         },
