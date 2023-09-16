@@ -64,16 +64,6 @@
         </v-form>
       </div>
     </center>
-
-    <!-- Snackbar -->
-    <v-snackbar v-model="snackbar" :color="color" text>
-      {{ textMessage }}
-      <template v-slot:action="{ attrs }">
-        <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
   </div>
 </template>
 
@@ -87,11 +77,6 @@ export default Vue.extend({
         email: "",
         password: "",
       },
-
-      // Snackbar
-      snackbar: false,
-      textMessage: "",
-      color: "",
 
       // ADDONS
       loading: false,
@@ -144,10 +129,6 @@ export default Vue.extend({
             localStorage.setItem("role", response.data.data.user.role);
             localStorage.setItem("image", response.data.data.user.uuid);
             localStorage.setItem("token", response.data.data.token);
-
-            this.textMessage = "You have successfully login";
-            this.snackbar = true;
-            this.color = "green";
 
             this.$router.push({
               name: "haf-profile",
