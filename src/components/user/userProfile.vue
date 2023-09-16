@@ -110,6 +110,8 @@
                 :headers="list.headers"
                 :items="list.npcs"
                 :search="list.search_npc"
+                :sort-by="defaultSortBy" 
+                :sort-desc="defaultSortDesc"
               >
                 <template v-slot:[`item.no`]="{ item }">
                   <template>{{ list.npcs.indexOf(item) + 1 }}</template>
@@ -541,6 +543,8 @@ export default {
     userLogin: {
       token: localStorage.getItem("token"), // initialize with a valid token or empty string
     },
+    defaultSortBy: "updated_at", // Kolom mana yang akan diurutkan secara default
+    defaultSortDesc: true, // true untuk mengurutkan secara descending (terbaru ke terlama)
     multiLine: true,
     dialogZoom: false,
     loadingScreen: true,
@@ -713,16 +717,15 @@ export default {
       this.$http
         .post(url)
         .then((response) => {
-          // Inisialisasi instance Moment
-          const momentInstance = moment();
 
           // Memformat data NPC dan menyimpannya dalam this.list.npcs
           this.list.npcs = response.data.data.map((x) => {
             return {
               ...x,
-              updated_at: momentInstance.format("MMMM D, YYYY, h:mm a"),
+              updated_at: moment(x.updated_at).format("MMMM D, YYYY, h:mm a"),
             };
           });
+          console.log(response.data.data)
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
