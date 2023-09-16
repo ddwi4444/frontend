@@ -255,7 +255,12 @@
       >
         <h3
           class="f-24 f-md-20 f-secondary text-center m-b-50"
-          style="margin-bottom: 50px; padding-top: 30px; font-family: 'Georgia'; font-weight: bold;"
+          style="
+            margin-bottom: 50px;
+            padding-top: 30px;
+            font-family: 'Georgia';
+            font-weight: bold;
+          "
         >
           {{ inputType == "AddNPC" ? "Add New NPC" : "Update NPC" }}
         </h3>
@@ -332,6 +337,7 @@
               >NPC Name</label
             >
             <v-text-field
+              @keyup="uppercase"
               solo
               v-model="npc_name"
               type="text"
@@ -339,30 +345,32 @@
               placeholder="Filled the NPC Name"
               variant="underline"
               autocomplete="false"
-              hide-details=true
+              hide-details="true"
             >
             </v-text-field>
             <div style="height: 15px">
-                <v-slide-y-transition>
-                  <div
-                    v-if="!isNPCNameValid"
-                    transition="scroll-y-transition"
-                    style="
+              <v-slide-y-transition>
+                <div
+                  v-if="!isNPCNameValid"
+                  transition="scroll-y-transition"
+                  style="
                     margin-top: 1px;
-                      font-size: 12px;
-                      text-align: left;
-                      color: red;
-                      margin-left: 15px;
-                      min-height: 14px;
-                      font-weight: lighter;
-                    "
-                  >
-                    This field is required
-                  </div>
-                </v-slide-y-transition>
-              </div>
+                    font-size: 12px;
+                    text-align: left;
+                    color: red;
+                    margin-left: 15px;
+                    min-height: 14px;
+                    font-weight: lighter;
+                  "
+                >
+                  This field is required
+                </div>
+              </v-slide-y-transition>
+            </div>
           </div>
-          <div style="padding-left: 50px; padding-right: 50px; margin-top: 30px;">
+          <div
+            style="padding-left: 50px; padding-right: 50px; margin-top: 30px"
+          >
             <label
               style="
                 justify-content: start;
@@ -373,10 +381,7 @@
               >NPC Profile</label
             >
             <div id="app">
-              <vue-editor
-                id="editor1"
-                v-model="npc_profile"
-              />
+              <vue-editor id="editor1" v-model="npc_profile" />
               <div style="height: 15px">
                 <v-slide-y-transition>
                   <div
@@ -410,10 +415,7 @@
               >NPC Story</label
             >
             <div id="app">
-              <vue-editor
-                id="editor2"
-                v-model="npc_story"
-              />
+              <vue-editor id="editor2" v-model="npc_story" />
               <div style="height: 15px">
                 <v-slide-y-transition>
                   <div
@@ -439,6 +441,7 @@
         <v-card-actions class="justify-end">
           <div v-if="!isNPCStoryValid || !isNPCProfileValid">
             <v-btn
+              style="text-transform: unset !important"
               rounded
               outlined
               disabled
@@ -453,8 +456,16 @@
               >{{ inputType == "AddNPC" ? "Add NPC" : "Update NPC" }}</v-btn
             >
           </div>
-          <div v-if="isNPCStoryValid && isNPCProfileValid && isFileSelected && isNPCNameValid">
+          <div
+            v-if="
+              isNPCStoryValid &&
+              isNPCProfileValid &&
+              isFileSelected &&
+              isNPCNameValid
+            "
+          >
             <v-btn
+              style="text-transform: unset !important"
               rounded
               outlined
               color="indigo"
@@ -469,7 +480,13 @@
             >
           </div>
 
-          <v-btn plain text @click="dialogNPC = false">Close</v-btn>
+          <v-btn
+            style="text-transform: unset !important"
+            plain
+            text
+            @click="dialogNPC = false"
+            >Close</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -479,8 +496,14 @@
     <v-snackbar v-model="snackbar" :color="color" text>
       {{ textMessage }}
       <template v-slot:action="{ attrs }">
-        <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
-          Close
+        <v-btn plain color="red" text v-bind="attrs" @click="snackbar = false">
+          <v-icon
+            dense
+            color="#FF0000"
+            @click="deleteHandlerNPC(item)"
+            class="data-table-icon"
+            >mdi-close</v-icon
+          >
         </v-btn>
       </template>
     </v-snackbar>
@@ -567,7 +590,6 @@ export default {
       return this.npc_story.trim() !== ""; // Content is required (not empty)
     },
 
-
     // VAlidator for File required
     isFileSelected() {
       // Custom validation logic
@@ -584,6 +606,17 @@ export default {
   },
   methods: {
     // For NPC
+
+    // For Uppercase Form
+    uppercase() {
+      const words = this.npc_name.split(" ");
+      for (let i = 0; i < words.length; i++) {
+        words[i] =
+          words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
+      }
+      this.npc_name = words.join(" ");
+    },
+
     addHandlerNPC() {
       this.clearForm();
       this.inputType = "AddNPC";
@@ -598,7 +631,7 @@ export default {
       this.npc_name = item.npc_name;
       this.npc_profile = item.npc_profile;
       this.npc_story = item.npc_story;
-      this.selectedFile= item.image_npc;
+      this.selectedFile = item.image_npc;
     },
 
     deleteHandlerNPC(item) {
@@ -623,11 +656,17 @@ export default {
           this.error_message = response.data.message;
           console.log(this.error);
           this.dialogConfirmDeleteNPC = false;
+          this.textMessage = "NPC Succesfully Deleted";
+          this.snackbar = true;
+          this.color = "green";
           this.axioDataNPC();
         })
         .catch((error) => {
           this.error_message = error.response.data.message;
           console.log(this.error);
+          this.textMessage = "NPC Unsuccesfully Created";
+          this.snackbar = true;
+          this.color = "green";
           setTimeout(() => {
             this.loadingScreen = false;
           }, 300);
@@ -722,7 +761,7 @@ export default {
               this.closeDialog();
               this.axioDataNPC();
 
-              this.textMessage = this.error_message;
+              this.textMessage = "NPC Succesfully Created";
               this.snackbar = true;
               this.color = "green";
               setTimeout(() => {
@@ -754,7 +793,7 @@ export default {
               this.closeDialog();
               this.axioDataNPC();
 
-              this.textMessage = this.error_message;
+              this.textMessage = "NPC Succesfully Created";
               this.snackbar = true;
               this.color = "green";
               setTimeout(() => {
@@ -823,8 +862,8 @@ export default {
       this.npc_profile = "";
       this.npc_story = "";
       this.image64Foto = "";
-      this.fotoError= false;
-      this.selectedFile= null; // Store the selected file
+      this.fotoError = false;
+      this.selectedFile = null; // Store the selected file
     },
 
     // For chech file is empty or not
