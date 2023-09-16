@@ -81,7 +81,7 @@
                 <b-row>
                   <b-col
                     ><!-- SEARCH -->
-                    <div class="form-input" style="margin-left: 10px;">
+                    <div class="form-input" style="margin-left: 10px">
                       <v-text-field
                         v-model="list.search_npc"
                         class="p-0 m-0"
@@ -160,8 +160,7 @@
         <!-- End NPC -->
 
         <!-- Comic -->
-        <b-tab title="Comic">
-        </b-tab>
+        <b-tab title="Comic"> </b-tab>
         <!-- End Comic -->
 
         <!-- Portfolio -->
@@ -504,6 +503,7 @@
 <script>
 import LoadingScreen from "@/components/loading-screen.vue";
 import { VueEditor } from "vue2-editor";
+import moment from "moment";
 
 export default {
   name: "main-view",
@@ -551,7 +551,7 @@ export default {
     list: {
       headers: [],
       npcs: [],
-      search_npc: '',
+      search_npc: "",
     },
   }),
   created() {
@@ -596,11 +596,9 @@ export default {
     },
   },
   methods: {
-
     // For Comic
 
     // End Comic
-
 
     // For NPC
 
@@ -711,15 +709,31 @@ export default {
       this.loadingScreen = true;
       var url = this.$api + "/show-all-npc";
 
-      // Use the 'url' variable somewhere in your code
-      // ...
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .post(url)
+        .then((response) => {
+          // Inisialisasi instance Moment
+          const momentInstance = moment();
 
-      this.$http.post(url).then((response) => {
-        this.list.npcs = response.data.data;
-        setTimeout(() => {
+          // Memformat data NPC dan menyimpannya dalam this.list.npcs
+          this.list.npcs = response.data.data.map((x) => {
+            return {
+              ...x,
+              updated_at: momentInstance.format("MMMM D, YYYY, h:mm a"),
+            };
+          });
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching NPC data:", error);
           this.loadingScreen = false;
-        }, 300);
-      });
+        });
     },
 
     submitNPC(val) {

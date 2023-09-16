@@ -5,7 +5,12 @@ import router from './router'
 import axios from 'axios';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import Vue2Editor from "vue2-editor";
+import moment from 'moment';
 
+
+
+// Moment untuk format tanggal
+Vue.use(moment);
 
 // Text Editor
 Vue.use(Vue2Editor);
