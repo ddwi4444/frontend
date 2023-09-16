@@ -6,7 +6,7 @@
       </div>
     </v-fade-transition>
     <div class="app">
-      <nav class="navbar d-flex w-full p-x-15">
+      <nav class="navbar padding-navbar d-flex w-full p-x-15">
         <div class="logo">
           <router-link to="/">
             <img
@@ -19,55 +19,41 @@
         </div>
 
         <div :class="['links', { open: isMenuOpen }]">
+          <div class="show-my-profile">
+            <router-link to="haf-profile">My Profile</router-link>
+          </div>
           <router-link to="haf-service">HAF Service</router-link>
           <router-link to="haf-merchandise">HAF Merchandise</router-link>
           <router-link to="haf-school">HAF School</router-link>
           <router-link to="haf-about">About</router-link>
         </div>
 
-        <div class="avatar-dropdown">
-          <div class="avatar" @click="this.toggleDropdown">
-            <div class="user-avatar">
-              <b-avatar
-                badge
-                badge-variant="success"
-                src="https://placekitten.com/300/300"
-              ></b-avatar
-              ><span
-                class="mr-auto"
-                style="
-                  display: inline-block;
-                  min-width: 150px;
-                  text-transform: capitalize;
-                "
-              >
-                {{ getNamaPersona }}</span
-              >
-            </div>
-          </div>
-          <div class="dropdown" v-if="isDropdownOpen">
-            <ul>
-              <li>
-                <router-link
-                  style="color: aliceblue; text-decoration: none"
-                  to="haf-profile"
-                  >My Profile</router-link
-                >
-              </li>
-              <li
-                style="color: aliceblue; text-decoration: none"
-                @click="logout()"
-              >
-                Logout
-              </li>
-            </ul>
+        <div class="avatar" @click="goToMyProfile">
+          <div class="user-avatar">
+            <b-avatar
+              style="margin-right: 5px"
+              badge
+              badge-variant="success"
+              src="https://placekitten.com/300/300"
+            ></b-avatar
+            ><span
+              class="mr-auto"
+              style="display: inline-block; text-transform: capitalize"
+            >
+              {{ getNamaPersona }}</span
+            >
           </div>
         </div>
 
         <button class="menu-toggle" @click="this.toggleMenu">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
+          <span class="menu-icon">
+            <v-icon color="#FFFFFF" class="data-table-icon" v-if="!isMenuOpen"
+              >mdi-menu</v-icon
+            >
+            <v-icon color="#FFFFFF" class="data-table-icon" v-else
+              >mdi-close</v-icon
+            >
+          </span>
         </button>
       </nav>
     </div>
@@ -88,7 +74,6 @@ export default {
   },
   data: () => ({
     isMenuOpen: false,
-    isDropdownOpen: false,
     loadingScreen: false,
 
     userLogin: {
@@ -97,11 +82,15 @@ export default {
   }),
   mounted() {},
   methods: {
+    goToMyProfile() {
+      return this.$router.push("/haf-profile").catch((error) => {
+        if (error.name != "NavigationDuplicated") {
+          throw error;
+        }
+      });
+    },
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
-    },
-    toggleDropdown() {
-      this.isDropdownOpen = !this.isDropdownOpen;
     },
     logout() {
       this.loadingScreen = true;
@@ -140,6 +129,10 @@ export default {
 </script>
 
 <style scoped>
+.show-my-profile {
+  display: none;
+}
+
 .avatar-dropdown {
   position: relative;
 }
@@ -185,10 +178,11 @@ export default {
 }
 
 .navbar {
+  padding-left: 100px;
+  padding-right: 100px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
   background-color: #006598;
   color: white;
 }
@@ -247,8 +241,28 @@ export default {
 }
 
 @media (max-width: 768px) {
+  .menu-icon {
+  cursor: pointer;
+  transition: opacity 5s ease; /* Define the transition */
+  transition: all 5s ease-in-out; 
+}
+
+.menu-icon:hover {
+  cursor: pointer;
+  opacity: 0.7; /* Adjust the opacity on hover */
+}
+
+  .show-my-profile {
+    display: block;
+  }
+
+  .avatar {
+    display: none;
+  }
   .navbar {
     top: 0;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 
   .navbar-hidden {
@@ -265,6 +279,7 @@ export default {
     background-color: #006598;
     text-align: center;
     z-index: 1;
+    transition: ease-in-out;
     animation-duration: 4s;
     animation-delay: 2s;
   }
