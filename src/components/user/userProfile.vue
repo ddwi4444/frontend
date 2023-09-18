@@ -712,7 +712,7 @@ export default {
     editHandlerNPC(item) {
       this.inputType = "Update";
       this.dialogNPC = true;
-      this.editIdNPC = item.id;
+      this.editUuidNPC = item.uuid;
       this.image_npc = item.image_npc;
       this.npc_name = item.npc_name;
       this.npc_profile = item.npc_profile;
@@ -721,16 +721,15 @@ export default {
     },
 
     deleteHandlerNPC(item) {
-      this.deleteIdNPC = item.id;
+      this.deleteUuidNPC = item.uuid;
       this.npc_name = item.npc_name;
-      console.log(item);
       this.dialogConfirmDeleteNPC = true;
     },
 
     deleteDataNPC() {
       this.loadingScreen = true;
-      let id = this.deleteIdNPC;
-      var url = this.$api + "/delete-npc/" + id;
+      let uuid = this.deleteUuidNPC;
+      var url = this.$api + "/delete-npc/" + uuid;
       // Set the headers
       var headers = {
         Authorization: "Bearer " + this.userLogin.token,
@@ -831,7 +830,7 @@ export default {
         var headers = {
           Authorization: "Bearer " + this.userLogin.token,
         };
-        let id = this.editIdNPC;
+        let uuid = this.editUuidNPC;
 
         var inputFoto = document.getElementById("file-foto"),
           dataFileFoto = inputFoto.files[0];
@@ -878,7 +877,7 @@ export default {
               }, 300);
             });
         } else {
-          var urlEditNPC = this.$api + "/update-npc/" + id;
+          var urlEditNPC = this.$api + "/update-npc/" + uuid;
           if (dataFileFoto) {
             this.NPCForm.append("image_npc", dataFileFoto);
           }
