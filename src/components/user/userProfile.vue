@@ -160,7 +160,89 @@
         <!-- End NPC -->
 
         <!-- Comic -->
-        <b-tab title="Comic"> </b-tab>
+        <b-tab title="Comic">
+          <template>
+            <v-container class="conatiner-size-my-profile p-0">
+              <b-container class="bv-example-row">
+                <b-row>
+                  <b-col
+                    ><!-- SEARCH -->
+                    <div class="form-input" style="margin-left: 10px">
+                      <v-text-field
+                        v-model="list.search_npc"
+                        class="p-0 m-0"
+                        append-icon="mdi-magnify"
+                        label="Search Comic"
+                        single-line
+                        hide-details
+                      ></v-text-field></div
+                  ></b-col>
+                  <b-col
+                    ><v-btn
+                      small
+                      color="primary"
+                      dark
+                      class="mb-2"
+                      style="text-transform: unset !important"
+                      @click="addHandlerNPC"
+                    >
+                      Add NPC
+                    </v-btn></b-col
+                  >
+                </b-row>
+              </b-container>
+
+              <v-data-table
+                :headers="list.headers"
+                :items="list.npcs"
+                :search="list.search_npc"
+              >
+                <template v-slot:[`item.no`]="{ item }">
+                  <template>{{ list.npcs.indexOf(item) + 1 }}</template>
+                </template>
+
+                <template v-slot:[`item.image_npc`]="{ item }">
+                  <div
+                    class="w-img-oval m-2"
+                    @click="zoom($baseUrl + '/storage/' + item.image_npc)"
+                  >
+                    <img
+                      :src="$baseUrl + '/storage/' + item.image_npc"
+                      class="img-oval"
+                    />
+                    <a class="img-oval-zoom">
+                      <i class="mdi mdi-eye f-28 text-white"></i>
+                    </a>
+                  </div>
+                </template>
+
+                <template v-slot:[`item.actions`]="{ item }">
+                  <v-icon
+                    dense
+                    color="#ffbd03"
+                    @click="editHandlerNPC(item)"
+                    class="data-table-icon mr-3"
+                    >mdi-pencil</v-icon
+                  >
+                  <v-icon
+                    dense
+                    color="#FF0000"
+                    @click="deleteHandlerNPC(item)"
+                    class="data-table-icon"
+                    >mdi-delete</v-icon
+                  >
+                </template>
+                <template v-slot:[`footer.page-text`]="items">
+                  {{ items.pageStart }} - {{ items.pageStop }} dari
+                  {{ items.itemsLength }}
+                </template>
+                <template v-slot:no-data>
+                  <div color="white"><p class="p-0 m-0">NPC is empty</p></div>
+                </template>
+              </v-data-table>
+            </v-container>
+          </template>
+        </b-tab>
         <!-- End Comic -->
 
         <!-- Portfolio -->
@@ -179,6 +261,14 @@
         <b-tab title="Your Activity">
           <div></div>
         </b-tab>
+
+        <!-- Logout -->
+        <b-tab @click="logout">
+      <template #title>
+        <b-spinner style="color: red;" type="grow" small></b-spinner>  <i style="color: red;">Logout</i> 
+      </template>
+      <img style="height: 200px; margin-top: 100px;" src="@/assets/CircleLoader.gif"/>
+    </b-tab>
       </b-tabs>
       <!--  End Your Activity -->
     </div>
@@ -547,6 +637,7 @@ export default {
     loading: false,
     dialog: false,
     dialogDelete: false,
+    loadingScreenLogout: "",
 
     list: {
       headers: [],
@@ -879,11 +970,40 @@ export default {
       // Update the selectedFile data property when a file is selected
       this.selectedFile = event.target.files[0];
     },
+
+    // For Logout
+    logout() {
+      this.loadingScreenLogout = true;
+
+      var url = this.$api + "/logout";
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      this.$http
+        .post(url, this.NPCForm, { headers: headers })
+        .then((response) => {
+          console.log(response.data.message);
+          localStorage.removeItem("image");
+          localStorage.removeItem("nama_persona");
+          localStorage.removeItem("role");
+          localStorage.removeItem("token");
+          setTimeout(() => {
+            this.loadingScreenLogout = false;
+          }, 5000);
+          this.$router.push({
+            name: "login",
+          });
+        });
+    }
   },
 };
 </script>
 
 <style scoped>
+.tab-title-class {
+    color: #FF0000 !important;  
+}
 .btn-img-profil {
   position: absolute;
   display: flex;

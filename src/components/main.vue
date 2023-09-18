@@ -19,13 +19,16 @@
         </div>
 
         <div :class="['links', { open: isMenuOpen }]">
-          <div class="show-my-profile">
+          <div class="show-profile-and-logout">
             <router-link to="haf-profile">My Profile</router-link>
           </div>
           <router-link to="haf-service">HAF Service</router-link>
           <router-link to="haf-merchandise">HAF Merchandise</router-link>
           <router-link to="haf-school">HAF School</router-link>
           <router-link to="haf-about">About</router-link>
+          <div class="show-profile-and-logout" style="margin-bottom: 15px;">
+            <router-link style="margin-bottom: 10px;" to="login" @click.native="logout">Logout</router-link>
+          </div>
         </div>
 
         <div class="avatar" @click="goToMyProfile">
@@ -129,7 +132,7 @@ export default {
 </script>
 
 <style scoped>
-.show-my-profile {
+.show-profile-and-logout {
   display: none;
 }
 
@@ -242,17 +245,17 @@ export default {
 
 @media (max-width: 768px) {
   .menu-icon {
-  cursor: pointer;
-  transition: opacity 5s ease; /* Define the transition */
-  transition: all 5s ease-in-out; 
-}
+    cursor: pointer;
+    transition: opacity 5s ease; /* Define the transition */
+    transition: all 5s ease-in-out;
+  }
 
-.menu-icon:hover {
-  cursor: pointer;
-  opacity: 0.7; /* Adjust the opacity on hover */
-}
+  .menu-icon:hover {
+    cursor: pointer;
+    opacity: 0.7; /* Adjust the opacity on hover */
+  }
 
-  .show-my-profile {
+  .show-profile-and-logout {
     display: block;
   }
 

@@ -24,6 +24,7 @@
               type="text"
               class="input"
               required
+              @keyup="uppercase"
             />
           </label>
 
@@ -127,6 +128,16 @@ export default Vue.extend({
     },
   },
   methods: {
+    // For Uppercase Form For Nama Persona
+    uppercase() {
+      const words = this.nama_persona.split(" ");
+      for (let i = 0; i < words.length; i++) {
+        words[i] =
+          words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
+      }
+      this.npc_name = words.join(" ");
+    },
+
     goToHome() {
       return this.$router.push("/");
     },
@@ -149,7 +160,7 @@ export default Vue.extend({
 
         this.$http.post(url, data);
         this.$router.push({
-          name: "home",
+          name: "login",
         });
 
         this.loading = true;
