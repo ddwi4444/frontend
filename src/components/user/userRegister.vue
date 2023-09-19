@@ -135,7 +135,7 @@ export default Vue.extend({
         words[i] =
           words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
       }
-      this.npc_name = words.join(" ");
+      this.nama_persona = words.join(" ");
     },
 
     goToHome() {
