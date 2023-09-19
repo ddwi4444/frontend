@@ -107,7 +107,7 @@
               </b-container>
 
               <v-data-table
-                :headers="list.headers"
+                :headers="list.headersNPC"
                 :items="list.npcs"
                 :search="list.search_npc"
               >
@@ -184,30 +184,30 @@
                       dark
                       class="mb-2"
                       style="text-transform: unset !important"
-                      @click="addHandlerNPC"
+                      @click="addHandlerComic"
                     >
-                      Add NPC
+                      Add Comic
                     </v-btn></b-col
                   >
                 </b-row>
               </b-container>
 
               <v-data-table
-                :headers="list.headers"
-                :items="list.npcs"
-                :search="list.search_npc"
+                :headers="list.headersComic"
+                :items="list.comics"
+                :search="list.search_comic"
               >
                 <template v-slot:[`item.no`]="{ item }">
-                  <template>{{ list.npcs.indexOf(item) + 1 }}</template>
+                  <template>{{ list.comics.indexOf(item) + 1 }}</template>
                 </template>
 
-                <template v-slot:[`item.image_npc`]="{ item }">
+                <template v-slot:[`item.thumbnail`]="{ item }">
                   <div
                     class="w-img-oval m-2"
-                    @click="zoom($baseUrl + '/storage/' + item.image_npc)"
+                    @click="zoom($baseUrl + '/storage/' + item.thumbnail)"
                   >
                     <img
-                      :src="$baseUrl + '/storage/' + item.image_npc"
+                      :src="$baseUrl + '/storage/' + item.thumbnail"
                       class="img-oval"
                     />
                     <a class="img-oval-zoom">
@@ -220,14 +220,14 @@
                   <v-icon
                     dense
                     color="#ffbd03"
-                    @click="editHandlerNPC(item)"
+                    @click="editHandlerComic(item)"
                     class="data-table-icon mr-3"
                     >mdi-pencil</v-icon
                   >
                   <v-icon
                     dense
                     color="#FF0000"
-                    @click="deleteHandlerNPC(item)"
+                    @click="deleteHandlerComic(item)"
                     class="data-table-icon"
                     >mdi-delete</v-icon
                   >
@@ -264,11 +264,15 @@
 
         <!-- Logout -->
         <b-tab @click="logout">
-      <template #title>
-        <b-spinner style="color: red;" type="grow" small></b-spinner>  <i style="color: red;">Logout</i> 
-      </template>
-      <img style="height: 200px; margin-top: 100px;" src="@/assets/CircleLoader.gif"/>
-    </b-tab>
+          <template #title>
+            <b-spinner style="color: red" type="grow" small></b-spinner>
+            <i style="color: red">Logout</i>
+          </template>
+          <img
+            style="height: 200px; margin-top: 100px"
+            src="@/assets/CircleLoader.gif"
+          />
+        </b-tab>
       </b-tabs>
       <!--  End Your Activity -->
     </div>
@@ -323,7 +327,7 @@
     </v-dialog>
     <!-- End Dialog Delete NPC Handler -->
 
-    <!-- Dialog Edit NPC -->
+    <!-- Dialog Add and Edit NPC -->
     <v-dialog
       transition="dialog-top-transition"
       max-width="1000"
@@ -417,7 +421,7 @@
               >NPC Name</label
             >
             <v-text-field
-              @keyup="uppercase"
+              @keyup="uppercaseNPC"
               solo
               v-model="npc_name"
               type="text"
@@ -519,7 +523,7 @@
         </v-form>
 
         <v-card-actions class="justify-end">
-          <div v-if="!isNPCStoryValid || !isNPCProfileValid">
+          <div v-if="!isNPCStoryValid || !isNPCProfileValid || !isNPCNameValid || !isFileSelected">
             <v-btn
               style="text-transform: unset !important"
               rounded
@@ -570,7 +574,319 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- End Dialog Edit NPC -->
+    <!-- End Dialog Add and Edit NPC -->
+
+    <!-- Dialog Add and Edit Comic -->
+    <v-dialog
+      transition="dialog-top-transition"
+      max-width="1000"
+      v-model="dialogComic"
+      persistent
+    >
+      <v-card
+        class="position-relative m-x-auto p-x-25 p-y-50 br-10 bs-none min-w-full min-w-lg-full"
+      >
+        <h3
+          class="f-24 f-md-20 f-secondary text-center m-b-50"
+          style="
+            margin-bottom: 50px;
+            padding-top: 30px;
+            font-family: 'Georgia';
+            font-weight: bold;
+          "
+        >
+          {{ inputType == "AddComic" ? "Add New Comic" : "Update Comic" }}
+        </h3>
+        <v-form
+          ref="form"
+          class="w-full"
+          @submit.prevent="
+            inputType == 'AddComic'
+              ? submitNPC('AddComic')
+              : submitComic('UpdateComic')
+          "
+        >
+          <div
+            class="h-auto w-full d-flex align-center justify-center flex-column m-b-25 mt-5"
+          >
+            <label
+              for="file-foto"
+              class="br-full position-relative p-all-10"
+              :class="{ 'border-error-file': fotoError }"
+            >
+              <v-img
+                v-if="image64Foto != '' || inputType == 'AddComic'"
+                :src="image64Foto"
+                class="img-profil border"
+                cover
+              ></v-img>
+              <div v-else>
+                <v-img
+                  v-if="thumbnail != null"
+                  :src="$baseUrl + '/storage/' + thumbnail"
+                  class="img-profil"
+                  cover
+                ></v-img>
+              </div>
+              <input
+                type="file"
+                id="file-foto"
+                ref="fileFoto"
+                accept="image/*"
+                hidden
+                @change="handleFileChange"
+                v-on:change="onFotoChange"
+              />
+              <a class="btn-img-profil cp">
+                <i class="icon mdi mdi-pencil f-18"></i>
+              </a>
+            </label>
+            <div style="height: 15px">
+              <v-slide-y-transition>
+                <div
+                  v-if="!isFileSelected"
+                  transition="scroll-y-transition"
+                  style="
+                    font-size: 12px;
+                    text-align: left;
+                    color: red;
+                    min-height: 14px;
+                    font-weight: lighter;
+                  "
+                >
+                  This field is required
+                </div>
+              </v-slide-y-transition>
+            </div>
+          </div>
+          <div
+            style="padding-left: 50px; padding-right: 50px; margin-top: 50px"
+          >
+            <label
+              style="
+                justify-content: start;
+                display: grid;
+                margin-bottom: 10px;
+                font-family: 'Georgia';
+              "
+              >Comic Title</label
+            >
+            <v-text-field
+              @keyup="uppercaseComic"
+              solo
+              v-model="judul"
+              type="text"
+              class="input-form-primary"
+              placeholder="Filled the Comic Title"
+              variant="underline"
+              autocomplete="false"
+              hide-details="true"
+            >
+            </v-text-field>
+            <div style="height: 15px">
+              <v-slide-y-transition>
+                <div
+                  v-if="!isComicTitleValid"
+                  transition="scroll-y-transition"
+                  style="
+                    margin-top: 1px;
+                    font-size: 12px;
+                    text-align: left;
+                    color: red;
+                    margin-left: 15px;
+                    min-height: 14px;
+                    font-weight: lighter;
+                  "
+                >
+                  This field is required
+                </div>
+              </v-slide-y-transition>
+            </div>
+          </div>
+          <div
+            style="padding-left: 50px; padding-right: 50px; margin-top: 15px"
+          >
+            <div id="app">
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Genre</label
+                  >
+                  <v-select
+                    v-model="genre"
+                    :items="items"
+                    label="Genre"
+                    solo
+                    hide-details="true"
+                  ></v-select>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isComicGenreValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                        This field is required
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Volume</label
+                  >
+                  <v-text-field
+                    solo
+                    v-model="volume"
+                    type="number"
+                    class="input-form-primary"
+                    placeholder="Filled the Comic Title"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isComicVolumeValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                        This field is required and must be a number
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+              </v-row>
+            </div>
+          </div>
+          <div
+            style="padding-left: 50px; padding-right: 50px; margin-top: 30px"
+          >
+            <label
+              style="
+                justify-content: start;
+                display: grid;
+                margin-bottom: 10px;
+                font-family: 'Georgia';
+              "
+              >Instagram Author</label
+            >
+            <div id="app">
+              <v-text-field
+                    solo
+                    v-model="instagram_author"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="Filled your instagram profile url"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>              
+                <div style="height: 15px">
+                <v-slide-y-transition>
+                  <div
+                    v-if="!isComicInstagramAuthorValid"
+                    transition="scroll-y-transition"
+                    style="
+                      font-size: 12px;
+                      text-align: left;
+                      color: red;
+                    margin-left: 15px;
+                      min-height: 14px;
+                      font-weight: lighter;
+                    "
+                  >
+                  Invalid Instagram URL
+                  </div>
+                </v-slide-y-transition>
+              </div>
+            </div>
+          </div>
+        </v-form>
+
+        <v-card-actions class="justify-end">
+          <div v-if="!isComicTitleValid ||
+              !isComicGenreValid ||
+              !isComicVolumeValid ||
+              !isComicInstagramAuthorValid ||
+              !isFileSelected">
+            <v-btn
+              style="text-transform: unset !important"
+              rounded
+              outlined
+              disabled
+              color="indigo"
+              class="btn-form-primary m-t-35"
+              :loading="loading"
+              @click="
+                inputType == 'AddNPC'
+                  ? submitNPC('AddNPC')
+                  : submitNPC('UpdateNPC')
+              "
+              >{{ inputType == "AddNPC" ? "Add NPC" : "Update NPC" }}</v-btn
+            >
+          </div>
+          <div
+            v-if="
+              isComicTitleValid &&
+              isComicGenreValid &&
+              isComicVolumeValid &&
+              isComicInstagramAuthorValid &&
+              isFileSelected
+            "
+          >
+            <v-btn
+              style="text-transform: unset !important"
+              rounded
+              outlined
+              color="indigo"
+              class="m-t-35"
+              :loading="loading"
+              @click="
+                inputType == 'AddNPC'
+                  ? submitNPC('AddNPC')
+                  : submitNPC('UpdateNPC')
+              "
+              >{{ inputType == "AddNPC" ? "Add NPC" : "Update NPC" }}</v-btn
+            >
+          </div>
+
+          <v-btn
+            style="text-transform: unset !important"
+            plain
+            text
+            @click="dialogComic = false"
+            >Close</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Add and Edit Comic -->
 
     <!-- Snackbar -->
     <v-snackbar v-model="snackbar" :color="color" text>
@@ -616,6 +932,17 @@ export default {
     NPCForm: new FormData(),
     inputType: "AddNPC",
 
+    // Comic
+    items: ["foo", "bar", "fizz", "buzz"],
+    dialogComic: false,
+    judul: "",
+    thumbnail: "",
+    genre: "",
+    volume: "",
+    instagram_author: "",
+
+    // Form Comic
+
     // Forms
     image64Foto: "",
     fotoError: false,
@@ -640,13 +967,16 @@ export default {
     loadingScreenLogout: "",
 
     list: {
-      headers: [],
+      headersNPC: [],
+      headersComic: [],
       npcs: [],
+      comics: [],
       search_npc: "",
     },
   }),
   created() {
     this.initializeNPC();
+    this.initializeComic();
   },
   computed: {
     getNamaPersona() {
@@ -661,15 +991,33 @@ export default {
 
     // Validation for NPC
     isNPCNameValid() {
-      // Custom validation logic
       return this.npc_name.trim() !== ""; // Content is required (not empty)
     },
     isNPCProfileValid() {
-      // Custom validation logic
       return this.npc_profile.trim() !== ""; // Content is required (not empty)
     },
     isNPCStoryValid() {
       return this.npc_story.trim() !== ""; // Content is required (not empty)
+    },
+
+    // Validation for Comic
+    isComicTitleValid() {
+      return this.judul.trim() !== ""; // Content is required (not empty)
+    },
+    isComicGenreValid() {
+      console.log(this.genre);
+      return this.genre.trim() !== ""; // Content is required (not empty)
+    },
+    isComicVolumeValid() {
+      const trimmedVolume = this.volume.trim();
+      return trimmedVolume !== "" && !isNaN(trimmedVolume);
+    },
+    isComicInstagramAuthorValid() {
+      // Regular expression to match a valid URL
+      const urlPattern = /^(http|https):\/\/(www\.)?instagram\.com\/[\w-]+\/?$/i;
+
+      // Use test method to check if input matches the URL pattern
+      return urlPattern.test(this.instagram_author);
     },
 
     // VAlidator for File required
@@ -689,12 +1037,115 @@ export default {
   methods: {
     // For Comic
 
+    // For Uppercase Form
+    uppercaseComic() {
+      const words = this.judul.split(" ");
+      for (let i = 0; i < words.length; i++) {
+        words[i] =
+          words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
+      }
+      this.judul = words.join(" ");
+    },
+
+    editHandlerComic(item) {
+      this.inputType = "Update";
+      this.dialogComic = true;
+      this.editUuidNPC = item.uuid;
+    },
+
+    deleteHandlerComic(item) {
+      this.deleteUuidNPC = item.uuid;
+      this.npc_name = item.npc_name;
+      this.dialogConfirmDeleteNPC = true;
+    },
+
+    addHandlerComic() {
+      this.clearForm();
+      this.inputType = "AddComic";
+      this.dialogComic = true;
+    },
+
+    initializeComic() {
+      this.list.headersComic = [
+        {
+          text: "Number",
+          value: "no",
+          filterable: false,
+          width: "10%",
+          align: "center",
+          sortable: false,
+        },
+        {
+          text: "Thumbnail",
+          value: "thumbnail",
+          align: "center",
+          filterable: false,
+          sortable: false,
+        },
+        {
+          text: "Judul",
+          value: "judul",
+          sortable: false,
+          align: "center",
+          width: "10%",
+        },
+        {
+          text: "Status",
+          value: "status",
+          align: "center",
+          filterable: false,
+          sortable: false,
+        },
+        {
+          text: "Published Date",
+          value: "updated_at",
+          filterable: false,
+          align: "center",
+          sortable: true,
+        },
+        { text: "Actions", value: "actions", align: "center", sortable: false },
+      ];
+      this.axioDataComic();
+    },
+
+    axioDataComic() {
+      this.loadingScreen = true;
+      var url = this.$api + "/show-all-comic";
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          // Memformat data NPC dan menyimpannya dalam this.list.npcs
+          this.list.comics = response.data.data.map((x) => {
+            return {
+              ...x,
+              updated_at: moment(x.updated_at).format("MMMM D, YYYY, h:mm a"),
+            };
+          });
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching NPC data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
     // End Comic
 
     // For NPC
 
     // For Uppercase Form
-    uppercase() {
+    uppercaseNPC() {
       const words = this.npc_name.split(" ");
       for (let i = 0; i < words.length; i++) {
         words[i] =
@@ -760,7 +1211,7 @@ export default {
     },
 
     initializeNPC() {
-      this.list.headers = [
+      this.list.headersNPC = [
         {
           text: "Number",
           value: "no",
@@ -798,12 +1249,15 @@ export default {
     axioDataNPC() {
       this.loadingScreen = true;
       var url = this.$api + "/show-all-npc";
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
 
       // Gunakan 'url' dalam permintaan POST
       this.$http
-        .post(url)
+        .get(url, { headers: headers })
         .then((response) => {
-
           // Memformat data NPC dan menyimpannya dalam this.list.npcs
           this.list.npcs = response.data.data.map((x) => {
             return {
@@ -994,14 +1448,14 @@ export default {
             name: "login",
           });
         });
-    }
+    },
   },
 };
 </script>
 
 <style scoped>
 .tab-title-class {
-    color: #FF0000 !important;  
+  color: #ff0000 !important;
 }
 .btn-img-profil {
   position: absolute;
