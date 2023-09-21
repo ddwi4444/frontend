@@ -147,7 +147,7 @@
                   >
                 </template>
                 <template v-slot:[`footer.page-text`]="items">
-                  {{ items.pageStart }} - {{ items.pageStop }} dari
+                  {{ items.pageStart }} - {{ items.pageStop }} from
                   {{ items.itemsLength }}
                 </template>
                 <template v-slot:no-data>
@@ -169,7 +169,7 @@
                     ><!-- SEARCH -->
                     <div class="form-input" style="margin-left: 10px">
                       <v-text-field
-                        v-model="list.search_npc"
+                        v-model="list.search_comic"
                         class="p-0 m-0"
                         append-icon="mdi-magnify"
                         label="Search Comic"
@@ -219,6 +219,13 @@
                 <template v-slot:[`item.actions`]="{ item }">
                   <v-icon
                     dense
+                    color="#36abcf"
+                    @click="editHandlerComic(item)"
+                    class="data-table-icon mr-3"
+                    >mdi-information</v-icon
+                  >
+                  <v-icon
+                    dense
                     color="#ffbd03"
                     @click="editHandlerComic(item)"
                     class="data-table-icon mr-3"
@@ -233,11 +240,11 @@
                   >
                 </template>
                 <template v-slot:[`footer.page-text`]="items">
-                  {{ items.pageStart }} - {{ items.pageStop }} dari
+                  {{ items.pageStart }} - {{ items.pageStop }} from
                   {{ items.itemsLength }}
                 </template>
                 <template v-slot:no-data>
-                  <div color="white"><p class="p-0 m-0">NPC is empty</p></div>
+                  <div color="white"><p class="p-0 m-0">Comic is empty</p></div>
                 </template>
               </v-data-table>
             </v-container>
@@ -326,6 +333,42 @@
       </v-card>
     </v-dialog>
     <!-- End Dialog Delete NPC Handler -->
+
+    <!-- Dialog Delete Comic Handler -->
+    <v-dialog v-model="dialogConfirmDeleteComic" persistent max-width="400px">
+      <v-card>
+        <v-card-title class="dialog-confirm-title">
+          <span class="headline white--text">Delete Comic</span>
+        </v-card-title>
+        <v-card-text class="dialog-confirm-text">
+          <span
+            >Are you sure want to delete
+            <b style="text-transform: capitalize">{{ judul }}</b
+            >'s Comic?</span
+          >
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            class="ma-1"
+            color="grey"
+            plain
+            @click="dialogConfirmDeleteComic = false"
+            style="text-transform: unset !important"
+            >Cancel</v-btn
+          >
+          <v-btn
+            class="ma-1"
+            color="error"
+            plain
+            @click="deleteDataComic()"
+            style="text-transform: unset !important"
+            >Delete</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Delete Comic Handler -->
 
     <!-- Dialog Add and Edit NPC -->
     <v-dialog
@@ -426,7 +469,7 @@
               v-model="npc_name"
               type="text"
               class="input-form-primary"
-              placeholder="Filled the NPC Name"
+              placeholder="Fill the NPC Name"
               variant="underline"
               autocomplete="false"
               hide-details="true"
@@ -522,8 +565,15 @@
           </div>
         </v-form>
 
-        <v-card-actions class="justify-end">
-          <div v-if="!isNPCStoryValid || !isNPCProfileValid || !isNPCNameValid || !isFileSelected">
+        <v-card-actions class="justify-end mt-5">
+          <div
+            v-if="
+              !isNPCStoryValid ||
+              !isNPCProfileValid ||
+              !isNPCNameValid ||
+              !isFileSelected
+            "
+          >
             <v-btn
               style="text-transform: unset !important"
               rounded
@@ -568,7 +618,7 @@
             style="text-transform: unset !important"
             plain
             text
-            @click="dialogNPC = false"
+            @click="closeDialogAddandEditNPC"
             >Close</v-btn
           >
         </v-card-actions>
@@ -677,7 +727,7 @@
               v-model="judul"
               type="text"
               class="input-form-primary"
-              placeholder="Filled the Comic Title"
+              placeholder="Fill the Comic Title"
               variant="underline"
               autocomplete="false"
               hide-details="true"
@@ -720,7 +770,7 @@
                   >
                   <v-select
                     v-model="genre"
-                    :items="items"
+                    v-bind:items="items"
                     label="Genre"
                     solo
                     hide-details="true"
@@ -757,9 +807,9 @@
                   <v-text-field
                     solo
                     v-model="volume"
-                    type="number"
+                    type="text"
                     class="input-form-primary"
-                    placeholder="Filled the Comic Title"
+                    placeholder="Fill with number only"
                     variant="underline"
                     hide-details="true"
                   ></v-text-field>
@@ -799,15 +849,15 @@
             >
             <div id="app">
               <v-text-field
-                    solo
-                    v-model="instagram_author"
-                    type="text"
-                    class="input-form-primary"
-                    placeholder="Filled your instagram profile url"
-                    variant="underline"
-                    hide-details="true"
-                  ></v-text-field>              
-                <div style="height: 15px">
+                solo
+                v-model="instagram_author"
+                type="text"
+                class="input-form-primary"
+                placeholder="Fill your instagram profile url"
+                variant="underline"
+                hide-details="true"
+              ></v-text-field>
+              <div style="height: 15px">
                 <v-slide-y-transition>
                   <div
                     v-if="!isComicInstagramAuthorValid"
@@ -816,12 +866,12 @@
                       font-size: 12px;
                       text-align: left;
                       color: red;
-                    margin-left: 15px;
+                      margin-left: 15px;
                       min-height: 14px;
                       font-weight: lighter;
                     "
                   >
-                  Invalid Instagram URL
+                    Invalid Instagram URL
                   </div>
                 </v-slide-y-transition>
               </div>
@@ -829,12 +879,16 @@
           </div>
         </v-form>
 
-        <v-card-actions class="justify-end">
-          <div v-if="!isComicTitleValid ||
+        <v-card-actions class="justify-end mt-5">
+          <div
+            v-if="
+              !isComicTitleValid ||
               !isComicGenreValid ||
               !isComicVolumeValid ||
               !isComicInstagramAuthorValid ||
-              !isFileSelected">
+              !isFileSelected
+            "
+          >
             <v-btn
               style="text-transform: unset !important"
               rounded
@@ -844,11 +898,13 @@
               class="btn-form-primary m-t-35"
               :loading="loading"
               @click="
-                inputType == 'AddNPC'
-                  ? submitNPC('AddNPC')
-                  : submitNPC('UpdateNPC')
+                inputType == 'AddComic'
+                  ? submitComic('AddComic')
+                  : submitComic('UpdateComic')
               "
-              >{{ inputType == "AddNPC" ? "Add NPC" : "Update NPC" }}</v-btn
+              >{{
+                inputType == "AddComic" ? "Add Comic" : "Update Comic"
+              }}</v-btn
             >
           </div>
           <div
@@ -868,11 +924,13 @@
               class="m-t-35"
               :loading="loading"
               @click="
-                inputType == 'AddNPC'
-                  ? submitNPC('AddNPC')
-                  : submitNPC('UpdateNPC')
+                inputType == 'AddComic'
+                  ? submitComic('AddComic')
+                  : submitComic('UpdateComic')
               "
-              >{{ inputType == "AddNPC" ? "Add NPC" : "Update NPC" }}</v-btn
+              >{{
+                inputType == "AddComic" ? "Add Comic" : "Update Comic"
+              }}</v-btn
             >
           </div>
 
@@ -880,7 +938,7 @@
             style="text-transform: unset !important"
             plain
             text
-            @click="dialogComic = false"
+            @click="closeDialogAddandEditComic"
             >Close</v-btn
           >
         </v-card-actions>
@@ -930,11 +988,11 @@ export default {
 
     // FORM NPC
     NPCForm: new FormData(),
-    inputType: "AddNPC",
 
     // Comic
     items: ["foo", "bar", "fizz", "buzz"],
     dialogComic: false,
+    dialogConfirmDeleteComic: false,
     judul: "",
     thumbnail: "",
     genre: "",
@@ -942,8 +1000,10 @@ export default {
     instagram_author: "",
 
     // Form Comic
+    ComicForm: new FormData(),
 
     // Forms
+    inputType: "",
     image64Foto: "",
     fotoError: false,
     selectedFile: null, // Store the selected file
@@ -972,6 +1032,7 @@ export default {
       npcs: [],
       comics: [],
       search_npc: "",
+      search_comic: "",
     },
   }),
   created() {
@@ -1005,16 +1066,16 @@ export default {
       return this.judul.trim() !== ""; // Content is required (not empty)
     },
     isComicGenreValid() {
-      console.log(this.genre);
       return this.genre.trim() !== ""; // Content is required (not empty)
     },
     isComicVolumeValid() {
-      const trimmedVolume = this.volume.trim();
-      return trimmedVolume !== "" && !isNaN(trimmedVolume);
+      const volume = this.volume.trim();
+      return volume !== "" && /^\d+$/.test(volume); // Content is required (not empty) and contains only numbers
     },
     isComicInstagramAuthorValid() {
       // Regular expression to match a valid URL
-      const urlPattern = /^(http|https):\/\/(www\.)?instagram\.com\/[\w-]+\/?$/i;
+      const urlPattern =
+        /^(http|https):\/\/(www\.)?instagram\.com\/[\w-]+\/?$/i;
 
       // Use test method to check if input matches the URL pattern
       return urlPattern.test(this.instagram_author);
@@ -1048,21 +1109,62 @@ export default {
     },
 
     editHandlerComic(item) {
-      this.inputType = "Update";
+      this.clearForm();
+      this.inputType = "UpdateComic";
       this.dialogComic = true;
-      this.editUuidNPC = item.uuid;
+      this.editUuidComic = item.uuid;
+      this.judul = item.judul;
+      this.thumbnail = item.thumbnail;
+      this.genre = item.genre;
+      this.volume = item.volume;
+      this.instagram_author = item.instagram_author;
+      this.selectedFile = item.thumbnail;
+      console.log(this.image64Foto)
     },
 
     deleteHandlerComic(item) {
-      this.deleteUuidNPC = item.uuid;
-      this.npc_name = item.npc_name;
-      this.dialogConfirmDeleteNPC = true;
+      this.deleteUuidComic = item.uuid;
+      this.judul = item.judul;
+      this.dialogConfirmDeleteComic = true;
     },
 
     addHandlerComic() {
       this.clearForm();
       this.inputType = "AddComic";
       this.dialogComic = true;
+    },
+
+    deleteDataComic() {
+      this.loadingScreen = true;
+      let uuid = this.deleteUuidComic;
+      var url = this.$api + "/delete-komik/" + uuid;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      this.$http
+        .delete(url, { headers: headers })
+        .then((response) => {
+          this.error_message = response.data.message;
+          console.log(this.error);
+          this.dialogConfirmDeleteComic = false;
+          this.textMessage = "Comic Succesfully Deleted";
+          this.snackbar = true;
+          this.color = "green";
+          this.axioDataComic();
+        })
+        .catch((error) => {
+          this.error_message = error.response.data.message;
+          console.log(this.error);
+          this.textMessage = "Comic Unsuccesfully Created";
+          this.snackbar = true;
+          this.color = "green";
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+          this.dialogConfirmDeleteComic = false;
+        });
     },
 
     initializeComic() {
@@ -1140,6 +1242,105 @@ export default {
         });
     },
 
+    submitComic(val) {
+      if (this.$refs.form.validate()) {
+        // Set the headers
+        var headers = {
+          Authorization: "Bearer " + this.userLogin.token,
+        };
+        let uuid = this.editUuidComic;
+
+        var inputFotoComic = document.getElementById("file-foto"),
+        dataFileFotoComic = inputFotoComic.files[0];
+        // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+        document.getElementById("file-foto").value = "";
+
+        this.ComicForm = new FormData();
+
+        this.ComicForm.append("judul", this.judul);
+        this.ComicForm.append("genre", this.genre);
+        this.ComicForm.append("volume", this.volume);
+        this.ComicForm.append("instagram_author", this.instagram_author);
+
+        this.loadingScreen = true;
+
+        if (val == "AddComic") {
+          var urlAddComic = this.$api + "/create-komik";
+
+          if (dataFileFotoComic) {
+            this.ComicForm.append("thumbnail", dataFileFotoComic);
+          }
+
+          this.$http
+            .post(urlAddComic, this.ComicForm, { headers: headers })
+            .then((response) => {
+              this.error_message = response.data.message;
+              console.log(this.error_message);
+
+              this.closeDialog();
+              this.axioDataComic();
+
+              this.textMessage = "Comic Succesfully Created";
+              this.snackbar = true;
+              this.color = "green";
+              setTimeout(() => {
+                this.loadingScreen = false;
+              }, 300);
+            })
+            .catch((error) => {
+              console.log(error);
+
+              this.snackbar = true;
+              this.textMessage = "Comic Unsuccesfully Created";
+              this.color = "secondary";
+              setTimeout(() => {
+                this.loadingScreen = false;
+              }, 300);
+            });
+        } else {
+          var urlEditComic = this.$api + "/update-komik/" + uuid;
+          if (dataFileFotoComic) {
+            this.ComicForm.append("thumbnail", dataFileFotoComic);
+          }
+
+          this.$http
+            .post(urlEditComic, this.ComicForm, { headers: headers })
+            .then((response) => {
+              this.error_message = response.data.message;
+              console.log(this.error_message);
+
+              this.closeDialog();
+              this.axioDataComic();
+
+              this.textMessage = "Comic Succesfully Updated";
+              this.snackbar = true;
+              this.color = "green";
+              setTimeout(() => {
+                this.loadingScreen = false;
+              }, 300);
+            })
+            .catch((error) => {
+              console.log(error);
+
+              this.snackbar = true;
+              this.textMessage = "Comic Unsuccesfully updated";
+              this.color = "secondary";
+              setTimeout(() => {
+                this.loadingScreen = false;
+              }, 300);
+            });
+        }
+
+        setTimeout(() => {
+          this.loadingScreen = false;
+        }, 300);
+      }
+    },
+
+    closeDialogAddandEditComic(){
+      this.dialogComic = false;
+    },
+
     // End Comic
 
     // For NPC
@@ -1161,7 +1362,8 @@ export default {
     },
 
     editHandlerNPC(item) {
-      this.inputType = "Update";
+      this.clearForm();
+      this.inputType = "UpdateNPC";
       this.dialogNPC = true;
       this.editUuidNPC = item.uuid;
       this.image_npc = item.image_npc;
@@ -1169,6 +1371,7 @@ export default {
       this.npc_profile = item.npc_profile;
       this.npc_story = item.npc_story;
       this.selectedFile = item.image_npc;
+      console.log(this.image64Foto)
     },
 
     deleteHandlerNPC(item) {
@@ -1287,13 +1490,15 @@ export default {
         let uuid = this.editUuidNPC;
 
         var inputFoto = document.getElementById("file-foto"),
-          dataFileFoto = inputFoto.files[0];
+        dataFileFoto = inputFoto.files[0];
+        // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+        document.getElementById("file-foto").value = "";
 
         this.NPCForm = new FormData();
 
         this.NPCForm.append("npc_name", this.npc_name);
         this.NPCForm.append("npc_profile", this.npc_profile);
-        this.NPCForm.append("npc_story", this.npc_story);
+        this.NPCForm.append("npc_story", this.npc_story);        
 
         this.loadingScreen = true;
 
@@ -1345,7 +1550,7 @@ export default {
               this.closeDialog();
               this.axioDataNPC();
 
-              this.textMessage = "NPC Succesfully Created";
+              this.textMessage = "NPC Succesfully Updated";
               this.snackbar = true;
               this.color = "green";
               setTimeout(() => {
@@ -1356,7 +1561,7 @@ export default {
               console.log(error);
 
               this.snackbar = true;
-              this.textMessage = "NPC Unsuccesfully updated";
+              this.textMessage = "NPC Unsuccesfully Updated";
               this.color = "secondary";
               setTimeout(() => {
                 this.loadingScreen = false;
@@ -1368,6 +1573,10 @@ export default {
           this.loadingScreen = false;
         }, 300);
       }
+    },
+
+    closeDialogAddandEditNPC(){
+      this.dialogNPC = false;
     },
 
     // End For NPC
@@ -1395,24 +1604,36 @@ export default {
       }
     },
 
+    
+
     // For zoom image
     zoom(img) {
       this.getImage = img;
       this.dialogZoom = true;
-      console.log(this.getImage);
     },
 
     // Close Dialog
     closeDialog() {
       this.dialogNPC = false;
+      this.dialogComic = false;
     },
 
     // For Clear Form
     clearForm() {
+      // NPC
       this.image_npc = "";
       this.npc_name = "";
       this.npc_profile = "";
       this.npc_story = "";
+
+      // Comic
+      this.judul = "";
+      this.thumbnail = "";
+      this.genre = "";
+      this.volume = "";
+      this.instagram_author = "";
+
+      // Addons
       this.image64Foto = "";
       this.fotoError = false;
       this.selectedFile = null; // Store the selected file
