@@ -147,7 +147,7 @@
                   >
                 </template>
                 <template v-slot:[`footer.page-text`]="items">
-                  {{ items.pageStart }} - {{ items.pageStop }} from
+                  {{ items.pageStart }} - {{ items.pageStop }} of
                   {{ items.itemsLength }}
                 </template>
                 <template v-slot:no-data>
@@ -220,7 +220,7 @@
                   <v-icon
                     dense
                     color="#36abcf"
-                    @click="editHandlerComic(item)"
+                    @click="detailhandlerComic(item)"
                     class="data-table-icon mr-3"
                     >mdi-information</v-icon
                   >
@@ -240,7 +240,7 @@
                   >
                 </template>
                 <template v-slot:[`footer.page-text`]="items">
-                  {{ items.pageStart }} - {{ items.pageStop }} from
+                  {{ items.pageStart }} - {{ items.pageStop }} of
                   {{ items.itemsLength }}
                 </template>
                 <template v-slot:no-data>
@@ -369,6 +369,42 @@
       </v-card>
     </v-dialog>
     <!-- End Dialog Delete Comic Handler -->
+
+    <!-- Dialog Delete Sub Comic Handler -->
+    <v-dialog v-model="dialogConfirmDeleteSubComic" persistent max-width="400px">
+      <v-card>
+        <v-card-title class="dialog-confirm-title">
+          <span class="headline white--text">Delete Comic</span>
+        </v-card-title>
+        <v-card-text class="dialog-confirm-text">
+          <span
+            >Are you sure want to delete
+            <b style="text-transform: capitalize">{{ judul }}</b
+            >'s Sub Comic?</span
+          >
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            class="ma-1"
+            color="grey"
+            plain
+            @click="dialogConfirmDeleteSubComic = false"
+            style="text-transform: unset !important"
+            >Cancel</v-btn
+          >
+          <v-btn
+            class="ma-1"
+            color="error"
+            plain
+            @click="deleteDataSubComic()"
+            style="text-transform: unset !important"
+            >Delete</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Delete Sub Comic Handler -->
 
     <!-- Dialog Add and Edit NPC -->
     <v-dialog
@@ -946,6 +982,446 @@
     </v-dialog>
     <!-- End Dialog Add and Edit Comic -->
 
+    <!-- Dialog Detail to Sub Comic -->
+    <v-dialog
+      transition="dialog-top-transition"
+      max-width="full"
+      v-model="dialogDetailComic"
+      persistent
+    >
+      <v-card
+        style="min-height: 700px"
+        class="position-relative m-x-auto p-x-25 p-y-50 br-10 bs-none min-w-full min-w-lg-full"
+      >
+        <v-card-actions class="justify-end mb-5">
+          <v-btn
+            style="text-transform: unset !important"
+            plain
+            text
+            @click="dialogDetailComic = false"
+            ><v-icon
+              dense
+              color="#FF0000"
+              @click="snackbar = false"
+              class="data-table-icon"
+              >mdi-close</v-icon
+            ></v-btn
+          >
+        </v-card-actions>
+        <h3
+          class="f-24 f-md-20 f-secondary text-center m-b-50"
+          style="
+            margin-bottom: 50px;
+            padding-top: 30px;
+            font-family: 'Georgia';
+            font-weight: bold;
+          "
+        >
+          {{ judulComic }}'s Sub Comic
+        </h3>
+
+        <template>
+          <v-container class="conatiner-size-my-profile p-0">
+            <b-container class="bv-example-row">
+              <b-row>
+                <b-col
+                  ><!-- SEARCH -->
+                  <div class="form-input" style="margin-left: 10px">
+                    <v-text-field
+                      v-model="list.search_subcomic"
+                      class="p-0 m-0"
+                      append-icon="mdi-magnify"
+                      label="Search Sub Comic"
+                      single-line
+                      hide-details
+                    ></v-text-field></div
+                ></b-col>
+                <b-col
+                  ><v-btn
+                    small
+                    color="primary"
+                    dark
+                    class="mb-2"
+                    style="text-transform: unset !important"
+                    @click="addHandlerSubComic(itemComic)"
+                  >
+                    Add Sub Comic
+                  </v-btn></b-col
+                >
+              </b-row>
+            </b-container>
+
+            <v-data-table
+              :headers="list.headersSubComic"
+              :items="list.subcomics"
+              :search="list.search_subcomic"
+            >
+              <template v-slot:[`item.no`]="{ item }">
+                <template>{{ list.subcomics.indexOf(item) + 1 }}</template>
+              </template>
+
+              <template v-slot:[`item.thumbnail`]="{ item }">
+                <div
+                  class="w-img-oval m-2"
+                  @click="zoom($baseUrl + '/storage/' + item.thumbnail)"
+                >
+                  <img
+                    :src="$baseUrl + '/storage/' + item.thumbnail"
+                    class="img-oval"
+                  />
+                  <a class="img-oval-zoom">
+                    <i class="mdi mdi-eye f-28 text-white"></i>
+                  </a>
+                </div>
+              </template>
+
+              <template v-slot:[`item.actions`]="{ item }">
+                <v-icon
+                  dense
+                  color="#ffbd03"
+                  @click="editHandlerSubComic(item, itemComic)"
+                  class="data-table-icon mr-3"
+                  >mdi-pencil</v-icon
+                >
+                <v-icon
+                  dense
+                  color="#FF0000"
+                  @click="deleteHandlerSubComic(item, itemComic)"
+                  class="data-table-icon"
+                  >mdi-delete</v-icon
+                >
+              </template>
+              <template v-slot:[`footer.page-text`]="items">
+                {{ items.pageStart }} - {{ items.pageStop }} of
+                {{ items.itemsLength }}
+              </template>
+              <template v-slot:no-data>
+                <div color="white">
+                  <p class="p-0 m-0">Sub Comic is empty</p>
+                </div>
+              </template>
+            </v-data-table>
+          </v-container>
+        </template>
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Detail to Sub Comic -->
+
+    <!-- Dialog Add and Edit Sub Comic -->
+    <v-dialog
+      transition="dialog-top-transition"
+      max-width="1000px"
+      v-model="dialogSubComic"
+      persistent
+    >
+      <v-card
+        class="position-relative m-x-auto p-x-25 p-y-50 br-10 bs-none min-w-full min-w-lg-full"
+      >
+        <h3
+          class="f-24 f-md-20 f-secondary text-center m-b-50"
+          style="
+            margin-bottom: 50px;
+            padding-top: 30px;
+            font-family: 'Georgia';
+            font-weight: bold;
+          "
+        >
+          {{
+            inputType == "AddSubComic"
+              ? "Add New Sub Comic"
+              : "Update Sub Comic"
+          }}
+          in {{ judulComic }}
+        </h3>
+        <v-form
+          ref="form"
+          class="w-full"
+          @submit.prevent="
+            inputType == 'AddSubComic'
+              ? submitNPC('AddSubComic')
+              : submitComic('UpdateSubComic')
+          "
+        >
+          <div
+            class="h-auto w-full d-flex align-center justify-center flex-column m-b-25 mt-5"
+          >
+            <label
+              for="file-foto"
+              class="br-full position-relative p-all-10"
+              :class="{ 'border-error-file': fotoError }"
+            >
+              <v-img
+                v-if="image64Foto != '' || inputType == 'AddSubComic'"
+                :src="image64Foto"
+                class="img-profil border"
+                cover
+              ></v-img>
+              <div v-else>
+                <v-img
+                  v-if="thumbnail != null"
+                  :src="$baseUrl + '/storage/' + thumbnail"
+                  class="img-profil"
+                  cover
+                ></v-img>
+              </div>
+              <input
+                type="file"
+                id="file-foto"
+                ref="fileFoto"
+                accept="image/*"
+                hidden
+                @change="handleFileChange"
+                v-on:change="onFotoChange"
+              />
+              <a class="btn-img-profil cp">
+                <i class="icon mdi mdi-pencil f-18"></i>
+              </a>
+            </label>
+            <div style="height: 15px">
+              <v-slide-y-transition>
+                <div
+                  v-if="!isFileSelected"
+                  transition="scroll-y-transition"
+                  style="
+                    font-size: 12px;
+                    text-align: left;
+                    color: red;
+                    min-height: 14px;
+                    font-weight: lighter;
+                  "
+                >
+                  This field is required
+                </div>
+              </v-slide-y-transition>
+            </div>
+          </div>
+          <div
+            style="padding-left: 50px; padding-right: 50px; margin-top: 50px"
+          >
+            <label
+              style="
+                justify-content: start;
+                display: grid;
+                margin-bottom: 10px;
+                font-family: 'Georgia';
+              "
+              >Sub Comic Title</label
+            >
+            <v-text-field
+              @keyup="uppercaseComic"
+              solo
+              v-model="judul"
+              type="text"
+              class="input-form-primary"
+              placeholder="Fill the Comic Title"
+              variant="underline"
+              autocomplete="false"
+              hide-details="true"
+            >
+            </v-text-field>
+            <div style="height: 15px">
+              <v-slide-y-transition>
+                <div
+                  v-if="!isSubComicTitleValid"
+                  transition="scroll-y-transition"
+                  style="
+                    margin-top: 1px;
+                    font-size: 12px;
+                    text-align: left;
+                    color: red;
+                    margin-left: 15px;
+                    min-height: 14px;
+                    font-weight: lighter;
+                  "
+                >
+                  This field is required
+                </div>
+              </v-slide-y-transition>
+            </div>
+          </div>
+          <div
+            style="padding-left: 50px; padding-right: 50px; margin-top: 15px"
+          >
+            <div id="app">
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Content</label
+                  >
+                  <div
+                    class="h-auto w-full d-flex align-center justify-center flex-column"
+                  >
+                    <label
+                      for="file-foto-content"
+                      class="br-full position-relative p-all-10"
+                      :class="{ 'border-error-file': fotoError }"
+                    >
+                      <v-img
+                      style="border-radius: 20%; !important"
+                        v-if="image64FotoSubComic != '' || inputType == 'AddSubComic'"
+                        :src="image64FotoSubComic"
+                        class="img-profil border"
+                        cover
+                      ></v-img>
+                      <div v-else>
+                        <v-img
+                        style="border-radius: 20%; !important"
+                          v-if="content != null"
+                          :src="$baseUrl + '/storage/' + content"
+                          class="img-profil"
+                          cover
+                        ></v-img>
+                      </div>
+                      <input
+                        type="file"
+                        id="file-foto-content"
+                        ref="fileFotoContent"
+                        accept="image/*"
+                        hidden
+                        @change="handleFileChangeSubComic"
+                        v-on:change="onFotoChangeSubComic"
+                      />
+                      <a class="btn-img-profil cp">
+                        <i class="icon mdi mdi-pencil f-18"></i>
+                      </a>
+                    </label>
+                    <div style="height: 15px">
+                      <v-slide-y-transition>
+                        <div
+                          v-if="!isFileContentSelected"
+                          transition="scroll-y-transition"
+                          style="
+                            font-size: 12px;
+                            text-align: left;
+                            color: red;
+                            min-height: 14px;
+                            font-weight: lighter;
+                          "
+                        >
+                          This field is required
+                        </div>
+                      </v-slide-y-transition>
+                    </div>
+                  </div>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Chapter</label
+                  >
+                  <v-text-field
+                    solo
+                    v-model="chapter"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="Fill with number only"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isSubComicChapterValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                        This field is required and must be a number
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+              </v-row>
+            </div>
+          </div>
+        </v-form>
+
+        <v-card-actions class="justify-end mt-5">
+          <div
+            v-if="
+              !isSubComicTitleValid ||
+              !isSubComicChapterValid ||
+              !isFileContentSelected ||
+              !isFileSelected
+            "
+          >
+            <v-btn
+              style="text-transform: unset !important"
+              rounded
+              outlined
+              disabled
+              color="indigo"
+              class="btn-form-primary m-t-35"
+              :loading="loading"
+              @click="
+                inputType == 'AddSubComic'
+                  ? submitSubComic('AddSubComic')
+                  : submitSubComic('UpdateSubComic')
+              "
+              >{{
+                inputType == "AddSubComic"
+                  ? "Add Sub Comic"
+                  : "Update Sub Comic"
+              }}</v-btn
+            >
+          </div>
+          <div
+            v-if="
+              isSubComicTitleValid &&
+              isSubComicChapterValid &&
+              isFileContentSelected &&
+              isFileSelected
+            "
+          >
+            <v-btn
+              style="text-transform: unset !important"
+              rounded
+              outlined
+              color="indigo"
+              class="m-t-35"
+              :loading="loading"
+              @click="
+                inputType == 'AddSubComic'
+                  ? submitSubComic('AddSubComic')
+                  : submitSubComic('UpdateSubComic')
+              "
+              >{{
+                inputType == "AddSubComic"
+                  ? "Add Sub Comic"
+                  : "Update Sub Comic"
+              }}</v-btn
+            >
+          </div>
+
+          <v-btn
+            style="text-transform: unset !important"
+            plain
+            text
+            @click="closeDialogAddandEditSubComic"
+            >Close</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Add and Edit Sub Comic -->
+
     <!-- Snackbar -->
     <v-snackbar v-model="snackbar" :color="color" text>
       {{ textMessage }}
@@ -993,14 +1469,29 @@ export default {
     items: ["foo", "bar", "fizz", "buzz"],
     dialogComic: false,
     dialogConfirmDeleteComic: false,
-    judul: "",
-    thumbnail: "",
+    dialogDetailComic: false,
     genre: "",
     volume: "",
     instagram_author: "",
 
+    // Comic & Sub Comic
+    judul: "",
+    thumbnail: "",
+
+    // Sub Comic
+    dialogSubComic: false,
+    dialogConfirmDeleteSubComic: false,
+    content: "",
+    chapter: "",
+    image64FotoSubComic: "",
+
     // Form Comic
     ComicForm: new FormData(),
+
+    // Form Sub Comic
+    SubComicForm: new FormData(),
+    judulComic: "",
+    selectedFileSubComic: null,
 
     // Forms
     inputType: "",
@@ -1029,10 +1520,13 @@ export default {
     list: {
       headersNPC: [],
       headersComic: [],
+      headersSubComic: [],
       npcs: [],
       comics: [],
+      subcomics: [],
       search_npc: "",
       search_comic: "",
+      search_subcomic: "",
     },
   }),
   created() {
@@ -1081,6 +1575,22 @@ export default {
       return urlPattern.test(this.instagram_author);
     },
 
+    // Validation for Sub Comic
+    isSubComicTitleValid() {
+      return this.judul.trim() !== ""; // Content is required (not empty)
+    },
+    isSubComicContentValid() {
+      return this.content.trim() !== ""; // Content is required (not empty)
+    },
+    isSubComicChapterValid() {
+      const chapter = this.chapter.trim();
+      return chapter !== "" && /^\d+$/.test(chapter); // Content is required (not empty) and contains only numbers
+    },
+    isFileContentSelected() {
+      // Custom validation logic
+      return this.selectedFileSubComic !== null; // File is required (not null)
+    },
+
     // VAlidator for File required
     isFileSelected() {
       // Custom validation logic
@@ -1096,8 +1606,292 @@ export default {
     },
   },
   methods: {
-    // For Comic
+    // For Sub Comic
 
+    editHandlerSubComic(item, itemComic) {
+      this.clearForm();
+      this.inputType = "UpdateComic";
+      this.dialogSubComic = true;
+      this.judulComic = itemComic.judul;
+      this.detailIdComic = itemComic.id;
+      this.editUuidSubComic = item.uuid;
+      this.judul = item.judul;
+      this.thumbnail = item.thumbnail;
+      this.content = item.content;
+      this.chapter = item.chapter;
+      this.instagram_author = item.instagram_author;
+      this.selectedFile = item.thumbnail;
+      this.selectedFileSubComic = item.content;
+    },
+
+    deleteHandlerSubComic(item, itemComic) {
+      this.deleteUuidSubComic = item.uuid;
+      this.judul = item.judul;
+      this.detailIdComic = itemComic.id;
+      this.dialogConfirmDeleteSubComic = true;
+    },
+
+    addHandlerSubComic(itemComic) {
+      this.clearForm();
+      this.addIdComic = itemComic.id;
+      this.judulComic = itemComic.judul;
+      this.inputType = "AddSubComic";
+      this.dialogSubComic = true;
+    },
+
+    closeDialogAddandEditSubComic() {
+      this.dialogSubComic = false;
+    },
+
+    handleFileChangeSubComic(event) {
+      // Update the selectedFile data property when a file is selected
+      this.selectedFileSubComic = event.target.files[0];
+    },
+
+    onFotoChangeSubComic(e) {
+      let file = e.target.files[0];
+      if (
+        file["type"] != "image/jpeg" &&
+        file["type"] != "image/jpg" &&
+        file["type"] != "image/png"
+      ) {
+        this.textMessage = "Format image only accepted for jpg, png, dan jpeg.";
+        this.snackbar = true;
+        this.color = "secondary";
+      } else {
+        let fotoDataContent = new FileReader();
+
+        fotoDataContent.onloadend = () => {
+          this.image64FotoSubComic = fotoDataContent.result;
+          this.fotoError = false;
+        };
+
+        fotoDataContent.readAsDataURL(file);
+      }
+    },
+
+    initializeSubComic(detailIdComic) {
+      this.list.headersSubComic = [
+        {
+          text: "Number",
+          value: "no",
+          filterable: false,
+          width: "10%",
+          align: "center",
+          sortable: false,
+        },
+        {
+          text: "Thumbnail",
+          value: "thumbnail",
+          align: "center",
+          filterable: false,
+          sortable: false,
+        },
+        {
+          text: "Judul",
+          value: "judul",
+          sortable: false,
+          align: "center",
+          width: "10%",
+        },
+        {
+          text: "Status",
+          value: "status",
+          align: "center",
+          filterable: false,
+          sortable: false,
+        },
+        {
+          text: "Published Date",
+          value: "created_at",
+          filterable: false,
+          align: "center",
+          sortable: true,
+        },
+        { text: "Actions", value: "actions", align: "center", sortable: false },
+      ];
+      this.axioDataSubComic(detailIdComic);
+    },
+
+    axioDataSubComic(detailIdComic) {
+      this.loadingScreen = true;
+      let id = detailIdComic;
+      var url = this.$api + "/show-all-subcomic/" + id;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          // Memformat data NPC dan menyimpannya dalam this.list.npcs
+          this.list.subcomics = response.data.data.map((x) => {
+            return {
+              ...x,
+              created_at: moment(x.created_at).format("MMMM D, YYYY, h:mm a"),
+            };
+          });
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching SubComic data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    deleteDataSubComic() {
+      this.loadingScreen = true;
+      let id = this.detailIdComic;
+      let uuid = this.deleteUuidSubComic;
+      var url = this.$api + "/delete-subkomik/" + uuid;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      this.$http
+        .delete(url, { headers: headers })
+        .then((response) => {
+          this.error_message = response.data.message;
+          console.log(this.error);
+          this.dialogConfirmDeleteSubComic = false;
+          this.textMessage = "Sub Comic Succesfully Deleted";
+          this.snackbar = true;
+          this.color = "green";
+          this.axioDataSubComic(id);
+        })
+        .catch((error) => {
+          this.error_message = error.response.data.message;
+          console.log(this.error);
+          this.textMessage = "Sub Comic Unsuccesfully Deletet";
+          this.snackbar = true;
+          this.color = "green";
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+          this.dialogConfirmDeleteSubComic = false;
+        });
+    },
+
+    submitSubComic(val) {
+      if (this.$refs.form.validate()) {
+        // Set the headers
+        var headers = {
+          Authorization: "Bearer " + this.userLogin.token,
+        };
+        let id = this.addIdComic;
+        let idComic = this.detailIdComic;
+        let uuid = this.editUuidSubComic;
+
+        var inputFotoComic = document.getElementById("file-foto"),
+        dataFileFotoComic = inputFotoComic.files[0];
+        // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+        document.getElementById("file-foto").value = "";
+
+        var inputContentComic = document.getElementById("file-foto-content"),
+        dataFileContentComic = inputContentComic.files[0];
+        // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+        document.getElementById("file-foto-content").value = "";
+
+
+
+        this.SubComicForm = new FormData();
+
+        this.SubComicForm.append("judul", this.judul);
+        this.SubComicForm.append("chapter", this.chapter);
+
+        this.loadingScreen = true;
+
+        if (val == "AddSubComic") {
+          var urlAddSubComic = this.$api + "/create-subkomik/" + id;
+
+          if (dataFileFotoComic) {
+            this.SubComicForm.append("thumbnail", dataFileFotoComic);
+          }
+
+          if (dataFileContentComic) {
+            this.SubComicForm.append("content", dataFileContentComic);
+          }
+
+          this.$http
+            .post(urlAddSubComic, this.SubComicForm, { headers: headers })
+            .then((response) => {
+              this.error_message = response.data.message;
+              console.log(this.error_message);
+
+              this.closeDialogAddandEditSubComic();
+              this.axioDataSubComic(idComic);
+
+              this.textMessage = "Sub Comic Succesfully Created";
+              this.snackbar = true;
+              this.color = "green";
+              setTimeout(() => {
+                this.loadingScreen = false;
+              }, 300);
+            })
+            .catch((error) => {
+              console.log(error);
+
+              this.snackbar = true;
+              this.textMessage = "Sub Comic Unsuccesfully Created";
+              this.color = "secondary";
+              setTimeout(() => {
+                this.loadingScreen = false;
+              }, 300);
+            });
+        } else {
+          var urlEditSubComic = this.$api + "/update-subkomik/" + uuid;
+          if (dataFileFotoComic) {
+            this.SubComicForm.append("thumbnail", dataFileFotoComic);
+          }
+
+          if (dataFileContentComic) {
+            this.SubComicForm.append("content", dataFileContentComic);
+          }
+
+          this.$http
+            .post(urlEditSubComic, this.SubComicForm, { headers: headers })
+            .then((response) => {
+              this.error_message = response.data.message;
+              console.log(this.error_message);
+
+              this.closeDialogAddandEditSubComic();
+              this.axioDataSubComic(idComic);
+
+              this.textMessage = "Sub Comic Succesfully Updated";
+              this.snackbar = true;
+              this.color = "green";
+              setTimeout(() => {
+                this.loadingScreen = false;
+              }, 300);
+            })
+            .catch((error) => {
+              console.log(error);
+
+              this.snackbar = true;
+              this.textMessage = "Sub Comic Unsuccesfully updated";
+              this.color = "secondary";
+              setTimeout(() => {
+                this.loadingScreen = false;
+              }, 300);
+            });
+        }
+
+        setTimeout(() => {
+          this.loadingScreen = false;
+        }, 300);
+      }
+    },
+    // End For Sub Comic
+
+    // For Comic
     // For Uppercase Form
     uppercaseComic() {
       const words = this.judul.split(" ");
@@ -1106,6 +1900,15 @@ export default {
           words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
       }
       this.judul = words.join(" ");
+    },
+
+    detailhandlerComic(item) {
+      this.dialogDetailComic = true;
+      this.itemComic = item;
+      this.detailUuidComic = item.uuid;
+      this.detailIdComic = item.id;
+      this.judulComic = item.judul;
+      this.initializeSubComic(this.detailIdComic);
     },
 
     editHandlerComic(item) {
@@ -1119,7 +1922,7 @@ export default {
       this.volume = item.volume;
       this.instagram_author = item.instagram_author;
       this.selectedFile = item.thumbnail;
-      console.log(this.image64Foto)
+      console.log(this.image64Foto);
     },
 
     deleteHandlerComic(item) {
@@ -1157,7 +1960,7 @@ export default {
         .catch((error) => {
           this.error_message = error.response.data.message;
           console.log(this.error);
-          this.textMessage = "Comic Unsuccesfully Created";
+          this.textMessage = "Comic Unsuccesfully Deleted";
           this.snackbar = true;
           this.color = "green";
           setTimeout(() => {
@@ -1237,7 +2040,7 @@ export default {
         })
         .catch((error) => {
           // Menangani kesalahan jika terjadi
-          console.error("Error fetching NPC data:", error);
+          console.error("Error fetching Comic data:", error);
           this.loadingScreen = false;
         });
     },
@@ -1251,7 +2054,7 @@ export default {
         let uuid = this.editUuidComic;
 
         var inputFotoComic = document.getElementById("file-foto"),
-        dataFileFotoComic = inputFotoComic.files[0];
+          dataFileFotoComic = inputFotoComic.files[0];
         // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
         document.getElementById("file-foto").value = "";
 
@@ -1337,7 +2140,7 @@ export default {
       }
     },
 
-    closeDialogAddandEditComic(){
+    closeDialogAddandEditComic() {
       this.dialogComic = false;
     },
 
@@ -1371,7 +2174,7 @@ export default {
       this.npc_profile = item.npc_profile;
       this.npc_story = item.npc_story;
       this.selectedFile = item.image_npc;
-      console.log(this.image64Foto)
+      console.log(this.image64Foto);
     },
 
     deleteHandlerNPC(item) {
@@ -1490,7 +2293,7 @@ export default {
         let uuid = this.editUuidNPC;
 
         var inputFoto = document.getElementById("file-foto"),
-        dataFileFoto = inputFoto.files[0];
+          dataFileFoto = inputFoto.files[0];
         // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
         document.getElementById("file-foto").value = "";
 
@@ -1498,7 +2301,7 @@ export default {
 
         this.NPCForm.append("npc_name", this.npc_name);
         this.NPCForm.append("npc_profile", this.npc_profile);
-        this.NPCForm.append("npc_story", this.npc_story);        
+        this.NPCForm.append("npc_story", this.npc_story);
 
         this.loadingScreen = true;
 
@@ -1575,7 +2378,7 @@ export default {
       }
     },
 
-    closeDialogAddandEditNPC(){
+    closeDialogAddandEditNPC() {
       this.dialogNPC = false;
     },
 
@@ -1604,8 +2407,6 @@ export default {
       }
     },
 
-    
-
     // For zoom image
     zoom(img) {
       this.getImage = img;
@@ -1627,11 +2428,18 @@ export default {
       this.npc_story = "";
 
       // Comic
-      this.judul = "";
-      this.thumbnail = "";
       this.genre = "";
       this.volume = "";
       this.instagram_author = "";
+
+      // Comic & Sub Comic
+      this.judul = "";
+      this.thumbnail = "";
+
+      // Sub Comic
+      this.content = "";
+      this.chapter = "";
+      this.image64FotoSubComic = "";
 
       // Addons
       this.image64Foto = "";
@@ -1675,9 +2483,6 @@ export default {
 </script>
 
 <style scoped>
-.tab-title-class {
-  color: #ff0000 !important;
-}
 .btn-img-profil {
   position: absolute;
   display: flex;
