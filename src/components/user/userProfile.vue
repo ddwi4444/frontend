@@ -202,6 +202,7 @@
                 </template>
 
                 <template v-slot:[`item.thumbnail`]="{ item }">
+                  <div style="display: grid; justify-content: center;">
                   <div
                     class="w-img-oval m-2"
                     @click="zoom($baseUrl + '/storage/' + item.thumbnail)"
@@ -214,6 +215,7 @@
                       <i class="mdi mdi-eye f-28 text-white"></i>
                     </a>
                   </div>
+                </div>
                 </template>
 
                 <template v-slot:[`item.actions`]="{ item }">
@@ -254,7 +256,74 @@
 
         <!-- Portfolio -->
         <b-tab title="Portfolio">
-          <div></div>
+          <template>
+            <v-container class="conatiner-size-my-profile p-0">
+              <b-container class="bv-example-row">
+                <b-row style="justify-content: center;">
+                  <v-btn
+                      small
+                      color="primary"
+                      dark
+                      class="mb-2 w-2"
+                      style="text-transform: unset !important; width: 30%;"
+                      @click="addHandlerPortfolio"
+                    >
+                      Add Portfolio
+                    </v-btn>
+                </b-row>
+              </b-container>
+
+              <v-data-table
+                :headers="list.headersPortfolio"
+                :items="list.portfolios"            
+              >
+                <template v-slot:[`item.no`]="{ item }">
+                  <template>{{ list.portfolios.indexOf(item) + 1 }}</template>
+                </template>
+
+                <template v-slot:[`item.thumbnail`]="{ item }">
+                  <div style="display: grid; justify-content: center;">
+                  <div
+                    class="w-img-oval m-2"
+                    @click="zoom($baseUrl + '/storage/' + item.thumbnail)"
+                  >
+                    <img
+                      :src="$baseUrl + '/storage/' + item.thumbnail"
+                      class="img-oval"
+                    />
+                    <a class="img-oval-zoom">
+                      <i class="mdi mdi-eye f-28 text-white"></i>
+                    </a>
+                  </div>
+                  </div>
+                </template>
+
+                <template v-slot:[`item.actions`]="{ item }">
+                  <v-icon
+                    dense
+                    color="#ffbd03"
+                    @click="editHandlerPortfolio(item)"
+                    class="data-table-icon mr-3"
+                    >mdi-pencil</v-icon
+                  >
+                  <v-icon
+                    dense
+                    color="#FF0000"
+                    @click="deleteHandlerPortfolio(item)"
+                    class="data-table-icon"
+                    >mdi-delete</v-icon
+                  >
+                </template>
+                <template v-slot:[`footer.page-text`]="items">
+                  {{ items.pageStart }} - {{ items.pageStop }} of
+                  {{ items.itemsLength }}
+                </template>
+                <template v-slot:no-data>
+                  <div color="white"><p class="p-0 m-0">Portfolio is empty</p></div>
+                </template>
+              </v-data-table>
+            </v-container>
+          </template>
         </b-tab>
         <!-- End Portfolio -->
 
@@ -405,6 +474,40 @@
       </v-card>
     </v-dialog>
     <!-- End Dialog Delete Sub Comic Handler -->
+
+    <!-- Dialog Delete Portfolio -->
+    <v-dialog v-model="dialogConfirmDeletePortfolio" persistent max-width="400px">
+      <v-card>
+        <v-card-title class="dialog-confirm-title">
+          <span class="headline white--text">Delete Portfolio</span>
+        </v-card-title>
+        <v-card-text class="dialog-confirm-text">
+          <span
+            >Are you sure want to delete Portfolio?</span
+          >
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            class="ma-1"
+            color="grey"
+            plain
+            @click="dialogConfirmDeletePortfolio = false"
+            style="text-transform: unset !important"
+            >Cancel</v-btn
+          >
+          <v-btn
+            class="ma-1"
+            color="error"
+            plain
+            @click="deleteDataPortfolio()"
+            style="text-transform: unset !important"
+            >Delete</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Delete Portfolio -->
 
     <!-- Dialog Add and Edit NPC -->
     <v-dialog
@@ -1061,6 +1164,7 @@
               </template>
 
               <template v-slot:[`item.thumbnail`]="{ item }">
+                <div style="display: grid; justify-content: center;">
                 <div
                   class="w-img-oval m-2"
                   @click="zoom($baseUrl + '/storage/' + item.thumbnail)"
@@ -1073,6 +1177,7 @@
                     <i class="mdi mdi-eye f-28 text-white"></i>
                   </a>
                 </div>
+              </div>
               </template>
 
               <template v-slot:[`item.actions`]="{ item }">
@@ -1422,6 +1527,160 @@
     </v-dialog>
     <!-- End Dialog Add and Edit Sub Comic -->
 
+    <!-- Dialog Add and Edit Portfolio -->
+    <v-dialog
+      transition="dialog-top-transition"
+      max-width="1000px"
+      v-model="dialogPortfolio"
+      persistent
+    >
+      <v-card
+        class="position-relative m-x-auto p-x-25 p-y-50 br-10 bs-none min-w-full min-w-lg-full"
+      >
+        <h3
+          class="f-24 f-md-20 f-secondary text-center m-b-50"
+          style="
+            margin-bottom: 50px;
+            padding-top: 30px;
+            font-family: 'Georgia';
+            font-weight: bold;
+          "
+        >
+          {{
+            inputType == "AddPortfolio"
+              ? "Add New Portfolio"
+              : "Update Portfolio"
+          }}
+        </h3>
+        <v-form
+          ref="form"
+          class="w-full"
+          @submit.prevent="
+            inputType == 'AddPortfolio'
+              ? submitNPC('AddPortfolio')
+              : submitComic('UpdatePortfolio')
+          "
+        >
+          <div
+            class="h-auto w-full d-flex align-center justify-center flex-column m-b-25 mt-5"
+          >
+            <label
+              for="file-foto"
+              class="br-full position-relative p-all-10"
+              :class="{ 'border-error-file': fotoError }"
+            >
+              <v-img
+                style="border-radius: 20%; !important"
+                v-if="image64Foto != '' || inputType == 'AddPortfolio'"
+                :src="image64Foto"
+                class="img-profil border"
+                cover
+              ></v-img>
+              <div v-else>
+                <v-img
+                  style="border-radius: 20%; !important"
+                  v-if="thumbnail != null"
+                  :src="$baseUrl + '/storage/' + thumbnail"
+                  class="img-profil"
+                  cover
+                ></v-img>
+              </div>
+              <input
+                type="file"
+                id="file-foto"
+                ref="fileFoto"
+                accept="image/*"
+                hidden
+                @change="handleFileChange"
+                v-on:change="onFotoChange"
+              />
+              <a class="btn-img-profil cp">
+                <i class="icon mdi mdi-pencil f-18"></i>
+              </a>
+            </label>
+            <div style="height: 15px">
+              <v-slide-y-transition>
+                <div
+                  v-if="!isFileSelected"
+                  transition="scroll-y-transition"
+                  style="
+                    font-size: 12px;
+                    text-align: left;
+                    color: red;
+                    min-height: 14px;
+                    font-weight: lighter;
+                  "
+                >
+                  This field is required
+                </div>
+              </v-slide-y-transition>
+            </div>
+          </div>
+        </v-form>
+
+        <v-card-actions class="justify-end mt-5">
+          <div
+            v-if="
+              !isFileSelected
+            "
+          >
+            <v-btn
+              style="text-transform: unset !important"
+              rounded
+              outlined
+              disabled
+              color="indigo"
+              class="btn-form-primary m-t-35"
+              :loading="loading"
+              @click="
+                inputType == 'AddPortfolio'
+                  ? submitPortfolio('AddPortfolio')
+                  : submitPortfolio('UpdatePortfolio')
+              "
+              >{{
+                inputType == "AddPortfolio"
+                  ? "Add Portfolio"
+                  : "Update Portfolio"
+              }}</v-btn
+            >
+          </div>
+          <div
+            v-if="
+              isFileSelected
+            "
+          >
+            <v-btn
+              style="text-transform: unset !important"
+              rounded
+              outlined
+              color="indigo"
+              class="m-t-35"
+              :loading="loading"
+              @click="
+                inputType == 'AddPortfolio'
+                  ? submitPortfolio('AddPortfolio')
+                  : submitPortfolio('UpdatePOrtfolio')
+              "
+              >{{
+                inputType == "AddPortfolio"
+                  ? "Add Portfolio"
+                  : "Update Portfolio"
+              }}</v-btn
+            >
+          </div>
+
+          <v-btn
+            style="text-transform: unset !important"
+            plain
+            text
+            @click="dialogPortfolio = false"
+            >Close</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Add and Edit Portfolio -->
+
     <!-- Snackbar -->
     <v-snackbar v-model="snackbar" :color="color" text>
       {{ textMessage }}
@@ -1474,16 +1733,20 @@ export default {
     volume: "",
     instagram_author: "",
 
-    // Comic & Sub Comic
-    judul: "",
-    thumbnail: "",
-
     // Sub Comic
     dialogSubComic: false,
     dialogConfirmDeleteSubComic: false,
     content: "",
     chapter: "",
     image64FotoSubComic: "",
+
+    // Portfolio
+    dialogPortfolio: false,
+    dialogConfirmDeletePortfolio: false,
+
+    // Comic & Sub Comic & Portfolio 
+    judul: "",
+    thumbnail: "",
 
     // Form Comic
     ComicForm: new FormData(),
@@ -1492,6 +1755,9 @@ export default {
     SubComicForm: new FormData(),
     judulComic: "",
     selectedFileSubComic: null,
+
+    // From Portfolio
+    PortfolioForm : new FormData(),
 
     // Forms
     inputType: "",
@@ -1521,17 +1787,21 @@ export default {
       headersNPC: [],
       headersComic: [],
       headersSubComic: [],
+      headersPortfolio: [],
       npcs: [],
       comics: [],
       subcomics: [],
+      portfolios: [],
       search_npc: "",
       search_comic: "",
       search_subcomic: "",
+      search_portfolio: "",
     },
   }),
   created() {
     this.initializeNPC();
     this.initializeComic();
+    this.initializePortfolio();
   },
   computed: {
     getNamaPersona() {
@@ -1606,6 +1876,216 @@ export default {
     },
   },
   methods: {
+
+    // For Portfolio
+
+    editHandlerPortfolio(item) {
+      this.clearForm();
+      this.dialogPortfolio = true;
+      this.inputType = "UpdatePortfolio";
+      this.editUuidPortfolio = item.uuid;
+      this.thumbnail = item.thumbnail;
+      this.selectedFile= item.thumbnail;
+    },
+
+    deleteHandlerPortfolio(item) {
+      this.deleteUuidPortfolio = item.uuid;
+      this.dialogConfirmDeletePortfolio = true;
+    },
+
+    addHandlerPortfolio() {
+      this.clearForm();
+      this.inputType = "AddPortfolio";
+      this.dialogPortfolio = true;
+    },
+
+    initializePortfolio() {
+      this.list.headersPortfolio = [
+        {
+          text: "Number",
+          value: "no",
+          filterable: false,
+          width: "10%",
+          align: "center",
+          sortable: false,
+        },
+        {
+          text: "Thumbnail",
+          value: "thumbnail",
+          align: "center",
+          filterable: false,
+          sortable: false,
+        },
+        {
+          text: "Published Date",
+          value: "created_at",
+          filterable: false,
+          align: 'center',
+          sortable: true,
+        },
+        { text: "Actions", value: "actions", align: "center", sortable: false },
+      ];
+      this.axioDataPortfolio();
+    },
+
+    axioDataPortfolio() {
+      this.loadingScreen = true;
+      var url = this.$api + "/show-all-portfolio";
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          // Memformat data NPC dan menyimpannya dalam this.list.npcs
+          this.list.portfolios = response.data.data.map((x) => {
+            return {
+              ...x,
+              created_at: moment(x.created_at).format("YYYY-MM-DD h:mm a"),
+            };
+          });
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching SubComic data:", error);
+          this.loadingScreen = false;
+        });
+    },
+    deleteDataPortfolio() {
+      this.loadingScreen = true;
+      let uuid = this.deleteUuidPortfolio;
+      var url = this.$api + "/delete-portfolio/" + uuid;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      this.$http
+        .delete(url, { headers: headers })
+        .then((response) => {
+          this.error_message = response.data.message;
+          console.log(this.error);
+          this.dialogConfirmDeletePortfolio = false;
+          this.textMessage = "Portfolio Succesfully Deleted";
+          this.snackbar = true;
+          this.color = "green";
+          this.axioDataPortfolio();
+        })
+        .catch((error) => {
+          this.error_message = error.response.data.message;
+          console.log(this.error);
+          this.textMessage = "Portfolio Unsuccesfully Deleted";
+          this.snackbar = true;
+          this.color = "green";
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+          this.dialogConfirmDeleteSubComic = false;
+        });
+    },
+
+    submitPortfolio(val) {
+      if (this.$refs.form.validate()) {
+        // Set the headers
+        var headers = {
+          Authorization: "Bearer " + this.userLogin.token,
+        };
+        let uuid = this.editUuidPortfolio;
+
+        var inputFotoPortfolio = document.getElementById("file-foto"),
+        dataFileFotoPortfolio = inputFotoPortfolio.files[0];
+        // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+        document.getElementById("file-foto").value = "";
+
+
+        this.PortfolioFrom = new FormData();
+
+        this.loadingScreen = true;
+
+        if (val == "AddPortfolio") {
+          var urlAddPortfolio = this.$api + "/create-portfolio";
+
+          if (dataFileFotoPortfolio) {
+            this.PortfolioForm.append("thumbnail", dataFileFotoPortfolio);
+          }
+
+          this.$http
+            .post(urlAddPortfolio, this.PortfolioForm, { headers: headers })
+            .then((response) => {
+              this.error_message = response.data.message;
+              console.log(this.error_message);
+
+              this.dialogPortfolio = false;
+              this.axioDataPortfolio();
+
+              this.textMessage = "Portfolio Succesfully Created";
+              this.snackbar = true;
+              this.color = "green";
+              setTimeout(() => {
+                this.loadingScreen = false;
+              }, 300);
+            })
+            .catch((error) => {
+              console.log(error);
+
+              this.snackbar = true;
+              this.textMessage = "Portfolio Unsuccesfully Created";
+              this.color = "secondary";
+              setTimeout(() => {
+                this.loadingScreen = false;
+              }, 300);
+            });
+        } else {
+          var urlEditPortfolio = this.$api + "/update-portfolio/" + uuid;
+          if (dataFileFotoPortfolio) {
+            this.PortfolioForm.append("thumbnail", dataFileFotoPortfolio);
+          }
+
+          this.$http
+            .post(urlEditPortfolio, this.PortfolioForm, { headers: headers })
+            .then((response) => {
+              this.error_message = response.data.message;
+              console.log(this.error_message);
+
+              this.dialogPortfolio = false;
+              this.axioDataPortfolio();
+
+              this.textMessage = "Portfolio Succesfully Updated";
+              this.snackbar = true;
+              this.color = "green";
+              setTimeout(() => {
+                this.loadingScreen = false;
+              }, 300);
+            })
+            .catch((error) => {
+              console.log(error);
+
+              this.snackbar = true;
+              this.textMessage = "Portfolio Unsuccesfully updated";
+              this.color = "secondary";
+              setTimeout(() => {
+                this.loadingScreen = false;
+              }, 300);
+            });
+        }
+
+        setTimeout(() => {
+          this.loadingScreen = false;
+        }, 300);
+      }
+    },
+    // End For Portfolio
+
+
+
     // For Sub Comic
 
     editHandlerSubComic(item, itemComic) {
@@ -1692,7 +2172,7 @@ export default {
           value: "judul",
           sortable: false,
           align: "center",
-          width: "10%",
+          width: "30%",
         },
         {
           text: "Status",
@@ -1706,7 +2186,7 @@ export default {
           value: "created_at",
           filterable: false,
           align: "center",
-          sortable: true,
+          sortable: true,         
         },
         { text: "Actions", value: "actions", align: "center", sortable: false },
       ];
@@ -1730,7 +2210,7 @@ export default {
           this.list.subcomics = response.data.data.map((x) => {
             return {
               ...x,
-              created_at: moment(x.created_at).format("MMMM D, YYYY, h:mm a"),
+              created_at: moment(x.created_at).format("YYYY-MM-DD h:mm a"),
             };
           });
 
@@ -1770,7 +2250,7 @@ export default {
         .catch((error) => {
           this.error_message = error.response.data.message;
           console.log(this.error);
-          this.textMessage = "Sub Comic Unsuccesfully Deletet";
+          this.textMessage = "Sub Comic Unsuccesfully Deleted";
           this.snackbar = true;
           this.color = "green";
           setTimeout(() => {
@@ -1992,7 +2472,7 @@ export default {
           value: "judul",
           sortable: false,
           align: "center",
-          width: "10%",
+          width: "30%",
         },
         {
           text: "Status",
@@ -2029,7 +2509,7 @@ export default {
           this.list.comics = response.data.data.map((x) => {
             return {
               ...x,
-              updated_at: moment(x.updated_at).format("MMMM D, YYYY, h:mm a"),
+              updated_at: moment(x.updated_at).format("YYYY-MM-DD h:mm a"),
             };
           });
 
@@ -2238,6 +2718,7 @@ export default {
           text: "NPC Name",
           value: "npc_name",
           align: "center",
+          width: "30%",
           sortable: false,
         },
         {
@@ -2268,7 +2749,7 @@ export default {
           this.list.npcs = response.data.data.map((x) => {
             return {
               ...x,
-              updated_at: moment(x.updated_at).format("MMMM D, YYYY, h:mm a"),
+              updated_at: moment(x.updated_at).format("YYYY-MM-DD h:mm a"),
             };
           });
 
@@ -2483,6 +2964,7 @@ export default {
 </script>
 
 <style scoped>
+
 .btn-img-profil {
   position: absolute;
   display: flex;
