@@ -327,6 +327,93 @@
         </b-tab>
         <!-- End Portfolio -->
 
+        <!-- Merchandise -->
+        <b-tab title="Merchandise">
+          <template>
+            <v-container class="conatiner-size-my-profile p-0">
+              <b-container class="bv-example-row">
+                <b-row>
+                  <b-col
+                    ><!-- SEARCH -->
+                    <div class="form-input" style="margin-left: 10px">
+                      <v-text-field
+                        v-model="list.search_merchandise"
+                        class="p-0 m-0"
+                        append-icon="mdi-magnify"
+                        label="Search Merchandise"
+                        single-line
+                        hide-details
+                      ></v-text-field></div
+                  ></b-col>
+                  <b-col
+                    ><v-btn
+                      small
+                      color="primary"
+                      dark
+                      class="mb-2"
+                      style="text-transform: unset !important"
+                      @click="addHandlerMerchandise"
+                    >
+                      Add Merchandise
+                    </v-btn></b-col
+                  >
+                </b-row>
+              </b-container>
+
+              <v-data-table
+                :headers="list.headersMerchandise"
+                :items="list.merchandises"            
+              >
+                <template v-slot:[`item.no`]="{ item }">
+                  <template>{{ list.merchandises.indexOf(item) + 1 }}</template>
+                </template>
+
+                <template v-slot:[`item.thumbnail`]="{ item }">
+                  <div style="display: grid; justify-content: center;">
+                  <div
+                    class="w-img-oval m-2"
+                    @click="zoom($baseUrl + '/storage/' + item.thumbnail)"
+                  >
+                    <img
+                      :src="$baseUrl + '/storage/' + item.thumbnail"
+                      class="img-oval"
+                    />
+                    <a class="img-oval-zoom">
+                      <i class="mdi mdi-eye f-28 text-white"></i>
+                    </a>
+                  </div>
+                  </div>
+                </template>
+
+                <template v-slot:[`item.actions`]="{ item }">
+                  <v-icon
+                    dense
+                    color="#ffbd03"
+                    @click="editHandlerMerchandise(item)"
+                    class="data-table-icon mr-3"
+                    >mdi-pencil</v-icon
+                  >
+                  <v-icon
+                    dense
+                    color="#FF0000"
+                    @click="deleteHandlerMerchandise(item)"
+                    class="data-table-icon"
+                    >mdi-delete</v-icon
+                  >
+                </template>
+                <template v-slot:[`footer.page-text`]="items">
+                  {{ items.pageStart }} - {{ items.pageStop }} of
+                  {{ items.itemsLength }}
+                </template>
+                <template v-slot:no-data>
+                  <div color="white"><p class="p-0 m-0">Merchandise is empty</p></div>
+                </template>
+              </v-data-table>
+            </v-container>
+          </template>
+        </b-tab>
+        <!-- End Merchandise -->
+
         <!-- Your Order -->
         <b-tab title="Your Order">
           <div></div>
@@ -509,6 +596,42 @@
     </v-dialog>
     <!-- End Dialog Delete Portfolio -->
 
+    <!-- Dialog Delete Merchandise Handler -->
+    <v-dialog v-model="dialogConfirmDeleteMerchandise" persistent max-width="400px">
+      <v-card>
+        <v-card-title class="dialog-confirm-title">
+          <span class="headline white--text">Delete Merchandise</span>
+        </v-card-title>
+        <v-card-text class="dialog-confirm-text">
+          <span
+            >Are you sure want to delete
+            <b style="text-transform: capitalize">{{ nama }}</b
+            >'s Merchandise?</span
+          >
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            class="ma-1"
+            color="grey"
+            plain
+            @click="dialogConfirmDeleteMerchandise = false"
+            style="text-transform: unset !important"
+            >Cancel</v-btn
+          >
+          <v-btn
+            class="ma-1"
+            color="error"
+            plain
+            @click="deleteDataMerchandise()"
+            style="text-transform: unset !important"
+            >Delete</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Delete Merchandise Handler -->
+
     <!-- Dialog Add and Edit NPC -->
     <v-dialog
       transition="dialog-top-transition"
@@ -544,12 +667,19 @@
               for="file-foto"
               class="br-full position-relative p-all-10"
               :class="{ 'border-error-file': fotoError }"
-            >
+              style="
+                justify-content: start;
+                display: grid;
+                margin-bottom: 10px;
+                font-family: 'Georgia';
+              "
+            > NPC Image
               <v-img
                 v-if="image64Foto != '' || inputType == 'AddNPC'"
                 :src="image64Foto"
                 class="img-profil border"
                 cover
+                style="margin-top: 10px;"
               ></v-img>
               <div v-else>
                 <v-img
@@ -557,6 +687,7 @@
                   :src="$baseUrl + '/storage/' + image_npc"
                   class="img-profil"
                   cover
+                  style="margin-top: 10px;"
                 ></v-img>
               </div>
               <input
@@ -802,12 +933,19 @@
               for="file-foto"
               class="br-full position-relative p-all-10"
               :class="{ 'border-error-file': fotoError }"
-            >
+              style="
+                justify-content: start;
+                display: grid;
+                margin-bottom: 10px;
+                font-family: 'Georgia';
+              "
+            > Comic Thumbnail
               <v-img
                 v-if="image64Foto != '' || inputType == 'AddComic'"
                 :src="image64Foto"
                 class="img-profil border"
                 cover
+                style="margin-top: 10px;"
               ></v-img>
               <div v-else>
                 <v-img
@@ -815,6 +953,7 @@
                   :src="$baseUrl + '/storage/' + thumbnail"
                   class="img-profil"
                   cover
+                  style="margin-top: 10px;"
                 ></v-img>
               </div>
               <input
@@ -1120,7 +1259,7 @@
             font-weight: bold;
           "
         >
-          {{ judulComic }}'s Sub Comic
+          {{ judulComic }}'s Comic
         </h3>
 
         <template>
@@ -1254,12 +1393,19 @@
               for="file-foto"
               class="br-full position-relative p-all-10"
               :class="{ 'border-error-file': fotoError }"
-            >
+              style="
+                justify-content: start;
+                display: grid;
+                margin-bottom: 10px;
+                font-family: 'Georgia';
+              "
+            > Sub Comic Thumbnail
               <v-img
                 v-if="image64Foto != '' || inputType == 'AddSubComic'"
                 :src="image64Foto"
                 class="img-profil border"
                 cover
+                style="margin-top: 10px;"
               ></v-img>
               <div v-else>
                 <v-img
@@ -1267,6 +1413,7 @@
                   :src="$baseUrl + '/storage/' + thumbnail"
                   class="img-profil"
                   cover
+                  style="margin-top: 10px;"
                 ></v-img>
               </div>
               <input
@@ -1568,9 +1715,15 @@
               for="file-foto"
               class="br-full position-relative p-all-10"
               :class="{ 'border-error-file': fotoError }"
-            >
+              style="
+                justify-content: start;
+                display: grid;
+                margin-bottom: 10px;
+                font-family: 'Georgia';
+              "
+            > Portfolio Image
               <v-img
-                style="border-radius: 20%; !important"
+                style="border-radius: 20%; margin-top: 10px; !important"
                 v-if="image64Foto != '' || inputType == 'AddPortfolio'"
                 :src="image64Foto"
                 class="img-profil border"
@@ -1578,7 +1731,7 @@
               ></v-img>
               <div v-else>
                 <v-img
-                  style="border-radius: 20%; !important"
+                  style="border-radius: 20%; margin-top: 10px;  !important "
                   v-if="thumbnail != null"
                   :src="$baseUrl + '/storage/' + thumbnail"
                   class="img-profil"
@@ -1681,6 +1834,372 @@
     </v-dialog>
     <!-- End Dialog Add and Edit Portfolio -->
 
+    <!-- Dialog Add and Edit Merchandise -->
+    <v-dialog
+      transition="dialog-top-transition"
+      max-width="1000"
+      v-model="dialogMerchandise"
+      persistent
+    >
+      <v-card
+        class="position-relative m-x-auto p-x-25 p-y-50 br-10 bs-none min-w-full min-w-lg-full"
+      >
+        <h3
+          class="f-24 f-md-20 f-secondary text-center m-b-50"
+          style="
+            margin-bottom: 50px;
+            padding-top: 30px;
+            font-family: 'Georgia';
+            font-weight: bold;
+          "
+        >
+          {{ inputType == "AddMerchandise" ? "Add New Merchandise" : "Update Merchandise" }}
+        </h3>
+        <v-form
+          ref="form"
+          class="w-full"
+          @submit.prevent="
+            inputType == 'AddMerchandise'
+              ? submitNPC('AddMerchandise')
+              : submitComic('UpdateMerchandise')
+          "
+        >
+          <div
+            class="h-auto w-full d-flex align-center justify-center flex-column m-b-25 mt-5"
+          >
+            <label
+              for="file-foto"
+              class="br-full position-relative p-all-10"
+              :class="{ 'border-error-file': fotoError }"
+              style="
+                justify-content: start;
+                display: grid;
+                margin-bottom: 10px;
+                font-family: 'Georgia';
+              "
+            > Product Thumbnail
+              <v-img
+                v-if="image64Foto != '' || inputType == 'AddMerchandise'"
+                :src="image64Foto"
+                class="img-profil border"
+                style="margin-top: 10px;"
+                cover
+              ></v-img>
+              <div v-else>
+                <v-img
+                  v-if="thumbnail != null"
+                  :src="$baseUrl + '/storage/' + thumbnail"
+                  class="img-profil"
+                  cover
+                  style="margin-top: 10px;"
+                ></v-img>
+              </div>
+              <input
+                type="file"
+                id="file-foto"
+                ref="fileFoto"
+                accept="image/*"
+                hidden
+                @change="handleFileChange"
+                v-on:change="onFotoChange"
+              />
+              <a class="btn-img-profil cp">
+                <i class="icon mdi mdi-pencil f-18"></i>
+              </a>
+            </label>
+            <div style="height: 15px">
+              <v-slide-y-transition>
+                <div
+                  v-if="!isFileSelected"
+                  transition="scroll-y-transition"
+                  style="
+                    font-size: 12px;
+                    text-align: left;
+                    color: red;
+                    min-height: 14px;
+                    font-weight: lighter;
+                  "
+                >
+                  This field is required
+                </div>
+              </v-slide-y-transition>
+            </div>
+          </div>
+          <div
+            style="padding-left: 50px; padding-right: 50px; margin-top: 50px"
+          >
+            <label
+              style="
+                justify-content: start;
+                display: grid;
+                margin-bottom: 10px;
+                font-family: 'Georgia';
+              "
+              >Product Name</label
+            >
+            <v-text-field
+              @keyup="uppercaseMerchandise"
+              solo
+              v-model="nama"
+              type="text"
+              class="input-form-primary"
+              placeholder="Fill the Comic Title"
+              variant="underline"
+              autocomplete="false"
+              hide-details="true"
+            >
+            </v-text-field>
+            <div style="height: 15px">
+              <v-slide-y-transition>
+                <div
+                  v-if="!isMerchandiseProductTitleValid"
+                  transition="scroll-y-transition"
+                  style="
+                    margin-top: 1px;
+                    font-size: 12px;
+                    text-align: left;
+                    color: red;
+                    margin-left: 15px;
+                    min-height: 14px;
+                    font-weight: lighter;
+                  "
+                >
+                  This field is required
+                </div>
+              </v-slide-y-transition>
+            </div>
+          </div>
+          <div
+            style="padding-left: 50px; padding-right: 50px; margin-top: 30px"
+          >
+            <label
+              style="
+                justify-content: start;
+                display: grid;
+                margin-bottom: 10px;
+                font-family: 'Georgia';
+              "
+              >Product Description</label
+            >
+            <div id="app">
+              <vue-editor id="editor3" v-model="deskripsi" />
+              <div style="height: 15px">
+                <v-slide-y-transition>
+                  <div
+                    v-if="!isMerchandiseDescriptionValid"
+                    transition="scroll-y-transition"
+                    style="
+                      font-size: 12px;
+                      text-align: left;
+                      color: red;
+                      margin-left: 15px;
+                      min-height: 14px;
+                      font-weight: lighter;
+                    "
+                  >
+                    This field is required
+                  </div>
+                </v-slide-y-transition>
+              </div>
+            </div>
+          </div>
+          <div
+            style="padding-left: 50px; padding-right: 50px; margin-top: 15px"
+          >
+            <div id="app">
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Price</label
+                  >
+                  <v-text-field
+                    solo
+                    v-model="harga"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="Price ex (100.000)"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isMerchandisePriceValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                      This field is required and must be a number
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Stock</label
+                  >
+                  <v-text-field
+                    solo
+                    v-model="stok"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="Fill with number only"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isMerchandiseStockValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                        This field is required and must be a number
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+              </v-row>
+            </div>
+          </div>
+          <div
+            style="padding-left: 50px; padding-right: 50px; margin-top: 50px"
+          >
+            <label
+              style="
+                justify-content: start;
+                display: grid;
+                margin-bottom: 10px;
+                font-family: 'Georgia';
+              "
+              >Merchandise Images</label
+            >
+            <v-file-input
+              chips
+              multiple
+              solo
+              hide-details="true"
+              accept="image/*"
+              id="images_merchandise_path"
+              v-model="images_merchandise_path"
+              :clearable="false"
+            ></v-file-input>
+            <div style="height: 15px">
+              <v-slide-y-transition>
+                <div
+                  v-if="!isFileSelectedImagesMerchandise"
+                  transition="scroll-y-transition"
+                  style="
+                    margin-top: 1px;
+                    font-size: 12px;
+                    text-align: left;
+                    color: red;
+                    margin-left: 15px;
+                    min-height: 14px;
+                    font-weight: lighter;
+                  "
+                >
+                  This field is required
+                </div>
+              </v-slide-y-transition>
+            </div>
+          </div>
+        </v-form>
+
+        <v-card-actions class="justify-end mt-5">
+          <div
+            v-if="
+              !isMerchandiseProductTitleValid ||
+              !isMerchandiseDescriptionValid ||
+              !isMerchandisePriceValid ||
+              !isMerchandiseStockValid ||
+              !isFileSelectedImagesMerchandise ||
+              !isFileSelected
+            "
+          >
+            <v-btn
+              style="text-transform: unset !important"
+              rounded
+              outlined
+              disabled
+              color="indigo"
+              class="btn-form-primary m-t-35"
+              :loading="loading"
+              @click="
+                inputType == 'AddMerchandise'
+                  ? submitMerchandise('AddMerchandise')
+                  : submitMerchandise('UpdateMerchandise')
+              "
+              >{{
+                inputType == "AddMerchandise" ? "Add Merchandise" : "Update Merchandise"
+              }}</v-btn
+            >
+          </div>
+          <div
+            v-if="
+              isMerchandiseProductTitleValid &&
+              isMerchandiseDescriptionValid &&
+              isMerchandisePriceValid &&
+              isMerchandiseStockValid &&
+              isFileSelectedImagesMerchandise &&
+              isFileSelected
+            "
+          >
+            <v-btn
+              style="text-transform: unset !important"
+              rounded
+              outlined
+              color="indigo"
+              class="m-t-35"
+              :loading="loading"
+              @click="
+                inputType == 'AddMerchandise'
+                  ? submitMerchandise('AddMerchandise')
+                  : submitMerchandise('UpdateMerchandise')
+              "
+              >{{
+                inputType == "AddMerchandise" ? "Add Merchandise" : "Update Merchandise"
+              }}</v-btn
+            >
+          </div>
+
+          <v-btn
+            style="text-transform: unset !important"
+            plain
+            text
+            @click="dialogMerchandise = false"
+            >Close</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Add and Edit Merchandise -->
+
     <!-- Snackbar -->
     <v-snackbar v-model="snackbar" :color="color" text>
       {{ textMessage }}
@@ -1712,17 +2231,12 @@ export default {
   },
   data: () => ({
     // NPC
-    deleteIdNPC: "",
     dialogConfirmDeleteNPC: false,
-    editIdNPC: "",
     dialogNPC: false,
     image_npc: "",
     npc_name: "",
     npc_profile: "",
     npc_story: "",
-
-    // FORM NPC
-    NPCForm: new FormData(),
 
     // Comic
     items: ["foo", "bar", "fizz", "buzz"],
@@ -1744,9 +2258,20 @@ export default {
     dialogPortfolio: false,
     dialogConfirmDeletePortfolio: false,
 
-    // Comic & Sub Comic & Portfolio 
+    // Merchandise
+    dialogMerchandise: false,
+    dialogConfirmDeleteMerchandise: false,
+    nama: "",
+    deskripsi: "",
+    harga: "",
+    stok: "",
+
+    // Comic & Sub Comic & Portfolio & Merchandise
     judul: "",
     thumbnail: "",
+
+    // FORM NPC
+    NPCForm: new FormData(),
 
     // Form Comic
     ComicForm: new FormData(),
@@ -1758,6 +2283,10 @@ export default {
 
     // From Portfolio
     PortfolioForm : new FormData(),
+
+    // Form Merchandise
+    MerchandiseForm : new FormData(),
+    images_merchandise_path: [],
 
     // Forms
     inputType: "",
@@ -1788,20 +2317,24 @@ export default {
       headersComic: [],
       headersSubComic: [],
       headersPortfolio: [],
+      headersMerchandise: [],
       npcs: [],
       comics: [],
       subcomics: [],
       portfolios: [],
+      merchandises: [],
       search_npc: "",
       search_comic: "",
       search_subcomic: "",
       search_portfolio: "",
+      search_merchandise: "",
     },
   }),
   created() {
     this.initializeNPC();
     this.initializeComic();
     this.initializePortfolio();
+    this.initializeMerchandise();
   },
   computed: {
     getNamaPersona() {
@@ -1861,7 +2394,27 @@ export default {
       return this.selectedFileSubComic !== null; // File is required (not null)
     },
 
-    // VAlidator for File required
+    // Validation for Merchandise
+    isMerchandiseProductTitleValid() {
+      return this.nama.trim() !== ""; // Content is required (not empty)
+    },
+    isMerchandiseDescriptionValid() {
+      return this.deskripsi.trim() !== ""; // Content is required (not empty)
+    },
+    isMerchandisePriceValid() {
+      const harga = this.harga.trim();
+      return harga !== "" && /^(\d+|\d+\.\d*|\d+,\d*)$/.test(harga);
+    },
+    isMerchandiseStockValid() {
+      const stok = this.stok.trim();
+      return stok !== "" && /^\d+$/.test(stok); // Content is required (not empty) and contains only numbers
+    },
+    isFileSelectedImagesMerchandise() {
+      console.log(this.images_merchandise_path);
+      return this.images_merchandise_path !== null && this.images_merchandise_path.length > 0;
+    },
+
+    // Validator for File required
     isFileSelected() {
       // Custom validation logic
       return this.selectedFile !== null; // File is required (not null)
@@ -1877,8 +2430,262 @@ export default {
   },
   methods: {
 
-    // For Portfolio
+    // For Merchandise    
+    // For Uppercase Form
+    uppercaseMerchandise() {
+      const words = this.nama.split(" ");
+      for (let i = 0; i < words.length; i++) {
+        words[i] =
+          words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
+      }
+      this.nama = words.join(" ");
+    },
 
+    editHandlerMerchandise(item) {
+      this.clearForm();
+      this.dialogMerchandise = true;
+      this.inputType = "UpdateMerchandise";
+      this.editUuidMerchandise = item.uuid;
+      this.thumbnail = item.thumbnail;
+      this.nama = item.nama;
+      this.deskripsi = item.deskripsi;
+      this.harga = item.harga;
+      this.stok = item.stok;
+      this.selectedFile= item.thumbnail;
+    },
+
+    deleteHandlerMerchandise(item) {
+      this.deleteUuidMerchandise = item.uuid;
+      this.dialogConfirmDeleteMerchandise = true;
+      this.nama = item.nama;
+    },
+
+    addHandlerMerchandise() {
+      this.clearForm();
+      this.inputType = "AddMerchandise";
+      this.dialogMerchandise = true;
+    },
+
+    deleteDataMerchandise() {
+      this.loadingScreen = true;
+      let uuid = this.deleteUuidMerchandise;
+      var url = this.$api + "/delete-merchandise/" + uuid;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      this.$http
+        .delete(url, { headers: headers })
+        .then((response) => {
+          this.error_message = response.data.message;
+          console.log(this.error);
+          this.dialogConfirmDeleteMerchandise = false;
+          this.textMessage = "Merchandise Succesfully Deleted";
+          this.snackbar = true;
+          this.color = "green";
+          this.axioDataMerchandise();
+        })
+        .catch((error) => {
+          this.error_message = error.response.data.message;
+          console.log(this.error);
+          this.textMessage = "Merchandise Unsuccesfully Deleted";
+          this.snackbar = true;
+          this.color = "green";
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+          this.dialogConfirmDeleteMerchandise = false;
+        });
+    },
+
+    initializeMerchandise() {
+      this.list.headersMerchandise = [
+        {
+          text: "Number",
+          value: "no",
+          filterable: false,
+          width: "10%",
+          align: "center",
+          sortable: false,
+        },
+        {
+          text: "Thumbnail",
+          value: "thumbnail",
+          align: "center",
+          filterable: false,
+          sortable: false,
+        },
+        {
+          text: "Product Name",
+          value: "nama",
+          align: "center",
+          sortable: false,
+        },
+        {
+          text: "Price",
+          value: "harga",
+          align: "center",
+          filterable: false,
+        },
+        {
+          text: "Stock",
+          value: "stok",
+          align: "center",
+          filterable: false,
+        },
+        {
+          text: "Published Date",
+          value: "created_at",
+          filterable: false,
+          align: 'center',
+          sortable: true,
+        },
+        { text: "Actions", value: "actions", align: "center", sortable: false },
+      ];
+      this.axioDataMerchandise();
+    },
+
+    axioDataMerchandise() {
+      this.loadingScreen = true;
+      var url = this.$api + "/show-all-merchandise";
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          // Memformat data NPC dan menyimpannya dalam this.list.npcs
+          this.list.merchandises = response.data.data.map((x) => {
+            return {
+              ...x,
+              created_at: moment(x.created_at).format("YYYY-MM-DD h:mm a"),
+            };
+          });
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching SubComic data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    submitMerchandise(val) {
+      if (this.$refs.form.validate()) {
+        // Set the headers
+        var headers = {
+          Authorization: "Bearer " + this.userLogin.token,
+        };
+        let uuid = this.editUuidMerchandise;
+
+        var inputFoto = document.getElementById("file-foto"),
+        dataFileFoto = inputFoto.files[0];
+        // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+        document.getElementById("file-foto").value = "";
+
+        var inputImagesMerchandisePath = document.getElementById("images_merchandise_path");
+        var dataFileImagesMerchandisePath = inputImagesMerchandisePath.files;
+
+        this.MerchandiseForm = new FormData();
+
+        this.MerchandiseForm.append("nama", this.nama);
+        this.MerchandiseForm.append("deskripsi", this.deskripsi);
+        this.MerchandiseForm.append("stok", this.stok);
+        this.MerchandiseForm.append("harga", this.harga);
+
+        this.loadingScreen = true;
+
+        if (val == "AddMerchandise") {
+          var urlAddMerchandise = this.$api + "/create-merchandise";
+
+          if (dataFileFoto) {
+            this.MerchandiseForm.append("thumbnail", dataFileFoto);
+          }
+
+          if (dataFileImagesMerchandisePath.length > 0) {
+            // Iterate through selected files and append them to the FormData
+            for (let i = 0; i < dataFileImagesMerchandisePath.length; i++) {
+              this.MerchandiseForm.append("images_merchandise_path[]", dataFileImagesMerchandisePath[i]);
+            }
+          }
+
+          this.$http
+            .post(urlAddMerchandise, this.MerchandiseForm, { headers: headers })
+            .then((response) => {
+              this.error_message = response.data.message;
+              console.log(this.error_message);
+
+              this.dialogMerchandise = false;
+              this.axioDataMerchandise();
+
+              this.textMessage = "Merchandise Succesfully Created";
+              this.snackbar = true;
+              this.color = "green";
+              setTimeout(() => {
+                this.loadingScreen = false;
+              }, 300);
+            })
+            .catch((error) => {
+              console.log(error);
+
+              this.snackbar = true;
+              this.textMessage = "Merchandise Unsuccesfully Created";
+              this.color = "secondary";
+              setTimeout(() => {
+                this.loadingScreen = false;
+              }, 300);
+            });
+        } else {
+          var urlEditMerchandise = this.$api + "/update-merchandise/" + uuid;
+          if (dataFileFoto) {
+            this.MerchandiseForm.append("thumbnail", dataFileFoto);
+          }
+
+          this.$http
+            .post(urlEditMerchandise, this.MerchandiseForm, { headers: headers })
+            .then((response) => {
+              this.error_message = response.data.message;
+              console.log(this.error_message);
+
+              this.dialogMerchandise = false;
+              this.axioDataMerchandise();
+
+              this.textMessage = "Merchandise Succesfully Updated";
+              this.snackbar = true;
+              this.color = "green";
+              setTimeout(() => {
+                this.loadingScreen = false;
+              }, 300);
+            })
+            .catch((error) => {
+              console.log(error);
+
+              this.snackbar = true;
+              this.textMessage = "Merchandise Unsuccesfully Updated";
+              this.color = "secondary";
+              setTimeout(() => {
+                this.loadingScreen = false;
+              }, 300);
+            });
+        }
+
+        setTimeout(() => {
+          this.loadingScreen = false;
+        }, 300);
+      }
+    },
+
+    // End For Merchandise
+
+    // For Portfolio
     editHandlerPortfolio(item) {
       this.clearForm();
       this.dialogPortfolio = true;
@@ -1959,6 +2766,7 @@ export default {
           this.loadingScreen = false;
         });
     },
+
     deleteDataPortfolio() {
       this.loadingScreen = true;
       let uuid = this.deleteUuidPortfolio;
@@ -2087,7 +2895,6 @@ export default {
 
 
     // For Sub Comic
-
     editHandlerSubComic(item, itemComic) {
       this.clearForm();
       this.inputType = "UpdateComic";
@@ -2168,7 +2975,7 @@ export default {
           sortable: false,
         },
         {
-          text: "Judul",
+          text: "Sub Comic Title",
           value: "judul",
           sortable: false,
           align: "center",
@@ -2468,7 +3275,7 @@ export default {
           sortable: false,
         },
         {
-          text: "Judul",
+          text: "Comic Title",
           value: "judul",
           sortable: false,
           align: "center",
@@ -2921,6 +3728,13 @@ export default {
       this.content = "";
       this.chapter = "";
       this.image64FotoSubComic = "";
+
+      // Merchandise
+      this.nama = "";
+      this.deskripsi = "";
+      this.harga = "";
+      this.stok = "";
+      this.images_merchandise_path = [];
 
       // Addons
       this.image64Foto = "";
