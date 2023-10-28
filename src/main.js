@@ -6,8 +6,11 @@ import axios from 'axios';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import Vue2Editor from "vue2-editor";
 import moment from 'moment';
-
-
+import CKEditor from '@ckeditor/ckeditor5-vue2';
+import VueLazyload from 'vue-lazyload'
+ 
+Vue.use(VueLazyload)
+Vue.use( CKEditor );
 
 // Moment untuk format tanggal
 Vue.use(moment);

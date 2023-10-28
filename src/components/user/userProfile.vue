@@ -18,7 +18,16 @@
     </v-card-title>
 
     <v-card-text>
-      <h4 style="text-transform: capitalize">{{ getNamaPersona }}</h4>
+      <h4 style="text-transform: capitalize">{{ getNamaPersona }} 
+        <v-btn
+        @click="editHandlerProfile"
+          icon
+          x-small
+          color="primary"
+        >
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+      </h4>
       <p class="ma-0 pa-0 bold" style="font-weight: 100">Your bio is here</p>
     </v-card-text>
 
@@ -2390,7 +2399,6 @@ export default {
       return chapter !== "" && /^\d+$/.test(chapter); // Content is required (not empty) and contains only numbers
     },
     isFileContentSelected() {
-      // Custom validation logic
       return this.selectedFileSubComic !== null; // File is required (not null)
     },
 
@@ -2589,7 +2597,6 @@ export default {
         var inputFoto = document.getElementById("file-foto"),
         dataFileFoto = inputFoto.files[0];
         // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
-        document.getElementById("file-foto").value = "";
 
         var inputImagesMerchandisePath = document.getElementById("images_merchandise_path");
         var dataFileImagesMerchandisePath = inputImagesMerchandisePath.files;
@@ -2623,6 +2630,8 @@ export default {
               this.error_message = response.data.message;
               console.log(this.error_message);
 
+              document.getElementById("file-foto").value = "";
+
               this.dialogMerchandise = false;
               this.axioDataMerchandise();
 
@@ -2654,6 +2663,8 @@ export default {
             .then((response) => {
               this.error_message = response.data.message;
               console.log(this.error_message);
+
+              document.getElementById("file-foto").value = "";
 
               this.dialogMerchandise = false;
               this.axioDataMerchandise();
@@ -2810,9 +2821,6 @@ export default {
 
         var inputFotoPortfolio = document.getElementById("file-foto"),
         dataFileFotoPortfolio = inputFotoPortfolio.files[0];
-        // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
-        document.getElementById("file-foto").value = "";
-
 
         this.PortfolioFrom = new FormData();
 
@@ -2830,6 +2838,9 @@ export default {
             .then((response) => {
               this.error_message = response.data.message;
               console.log(this.error_message);
+
+              // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+              document.getElementById("file-foto").value = "";
 
               this.dialogPortfolio = false;
               this.axioDataPortfolio();
@@ -2862,6 +2873,8 @@ export default {
             .then((response) => {
               this.error_message = response.data.message;
               console.log(this.error_message);
+
+              document.getElementById("file-foto").value = "";
 
               this.dialogPortfolio = false;
               this.axioDataPortfolio();
@@ -3079,14 +3092,9 @@ export default {
 
         var inputFotoComic = document.getElementById("file-foto"),
         dataFileFotoComic = inputFotoComic.files[0];
-        // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
-        document.getElementById("file-foto").value = "";
-
+        
         var inputContentComic = document.getElementById("file-foto-content"),
         dataFileContentComic = inputContentComic.files[0];
-        // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
-        document.getElementById("file-foto-content").value = "";
-
 
 
         this.SubComicForm = new FormData();
@@ -3112,6 +3120,13 @@ export default {
             .then((response) => {
               this.error_message = response.data.message;
               console.log(this.error_message);
+
+              // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+              document.getElementById("file-foto").value = "";
+
+              // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+              document.getElementById("file-foto-content").value = "";
+
 
               this.closeDialogAddandEditSubComic();
               this.axioDataSubComic(idComic);
@@ -3148,6 +3163,12 @@ export default {
             .then((response) => {
               this.error_message = response.data.message;
               console.log(this.error_message);
+
+              // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+              document.getElementById("file-foto").value = "";
+
+              // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+              document.getElementById("file-foto-content").value = "";
 
               this.closeDialogAddandEditSubComic();
               this.axioDataSubComic(idComic);
@@ -3342,8 +3363,7 @@ export default {
 
         var inputFotoComic = document.getElementById("file-foto"),
           dataFileFotoComic = inputFotoComic.files[0];
-        // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
-        document.getElementById("file-foto").value = "";
+        
 
         this.ComicForm = new FormData();
 
@@ -3366,6 +3386,9 @@ export default {
             .then((response) => {
               this.error_message = response.data.message;
               console.log(this.error_message);
+
+              // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+              document.getElementById("file-foto").value = "";
 
               this.closeDialog();
               this.axioDataComic();
@@ -3398,6 +3421,9 @@ export default {
             .then((response) => {
               this.error_message = response.data.message;
               console.log(this.error_message);
+
+              // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+              document.getElementById("file-foto").value = "";
 
               this.closeDialog();
               this.axioDataComic();
@@ -3582,8 +3608,6 @@ export default {
 
         var inputFoto = document.getElementById("file-foto"),
           dataFileFoto = inputFoto.files[0];
-        // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
-        document.getElementById("file-foto").value = "";
 
         this.NPCForm = new FormData();
 
@@ -3605,6 +3629,9 @@ export default {
             .then((response) => {
               this.error_message = response.data.message;
               console.log(this.error_message);
+
+              // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+              document.getElementById("file-foto").value = "";
 
               this.closeDialog();
               this.axioDataNPC();
@@ -3637,6 +3664,9 @@ export default {
             .then((response) => {
               this.error_message = response.data.message;
               console.log(this.error_message);
+
+              // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+              document.getElementById("file-foto").value = "";
 
               this.closeDialog();
               this.axioDataNPC();
