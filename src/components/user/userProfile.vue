@@ -660,7 +660,7 @@
                 font-weight: bold;
               "
             >
-              Edit Profile
+              Edit Profil
             </h3>
             <v-form
               ref="form"

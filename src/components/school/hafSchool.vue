@@ -202,7 +202,7 @@
                     v-for="(dataForum, index) in dataForums"
                     :key="dataForum.id"
                   >
-                    <div v-if="dataImagesForums[index]">
+                    <div>
                       <div class="comment-container-school">
                         <div class="user">
                           <div class="user-pic">
@@ -304,7 +304,7 @@
                         ></div>
                         <template>
                           <center>
-                            <v-row>
+                            <v-row v-if="dataImagesForums[index]">
                               <!-- eslint-disable vue/no-use-v-if-with-v-for,vue/no-confusing-v-for-v-if -->
                               <v-col
                                 v-for="dataImagesForum in dataImagesForums"
@@ -573,7 +573,7 @@
                     v-for="(dataAnnouncement, index) in dataAnnouncements"
                     :key="dataAnnouncement.id"
                   >
-                    <div v-if="dataImagesAnnouncements[index]">
+                    <div>
                       <div class="comment-container-school">
                         <div class="user">
                           <div class="user-pic">
@@ -675,7 +675,7 @@
                         ></div>
                         <template>
                           <center>
-                            <v-row>
+                            <v-row v-if="dataImagesAnnouncements[index]">
                               <!-- eslint-disable vue/no-use-v-if-with-v-for,vue/no-confusing-v-for-v-if -->
                               <v-col
                                 v-for="dataImagesAnnouncement in dataImagesAnnouncements"
