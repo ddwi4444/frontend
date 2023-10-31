@@ -641,6 +641,718 @@
     </v-dialog>
     <!-- End Dialog Delete Merchandise Handler -->
 
+    <!-- Dialog Edit Profile -->
+    <v-dialog
+          transition="dialog-top-transition"
+          max-width="1000"
+          v-model="dialogEditProfile"
+          persistent
+        >
+          <v-card
+            class="position-relative m-x-auto p-x-25 p-y-50 br-10 bs-none min-w-full min-w-lg-full"
+          >
+            <h3
+              class="f-24 f-md-20 f-secondary text-center m-b-50"
+              style="
+                margin-bottom: 50px;
+                padding-top: 30px;
+                font-family: 'Georgia';
+                font-weight: bold;
+              "
+            >
+              Edit Profile
+            </h3>
+            <v-form
+              ref="form"
+              class="w-full"
+              @submit.prevent="
+                inputType == 'AddMerchandise'
+                  ? submitNPC('AddMerchandise')
+                  : submitComic('UpdateMerchandise')
+              "
+            >
+              <div
+                class="h-auto w-full d-flex align-center justify-center flex-column m-b-25 mt-5"
+              >
+                <label
+                  for="file-foto"
+                  class="br-full position-relative p-all-10"
+                  :class="{ 'border-error-file': fotoError }"
+                  style="
+                    justify-content: start;
+                    display: grid;
+                    margin-bottom: 10px;
+                    font-family: 'Georgia';
+                  "
+                > Photo Profile
+                  <v-img
+                    v-if="image64Foto != '' || inputType == 'UpdateProfile'"
+                    :src="image64Foto"
+                    class="img-profil border"
+                    style="margin-top: 10px;"
+                    cover
+                  ></v-img>
+                  <div v-else>
+                    <v-img
+                      v-if="thumbnail != null"
+                      :src="$baseUrl + '/storage/' + thumbnail"
+                      class="img-profil"
+                      cover
+                      style="margin-top: 10px;"
+                    ></v-img>
+                  </div>
+                  <input
+                    type="file"
+                    id="file-foto"
+                    ref="fileFoto"
+                    accept="image/*"
+                    hidden
+                    @change="handleFileChange"
+                    v-on:change="onFotoChange"
+                  />
+                  <a class="btn-img-profil cp">
+                    <i class="icon mdi mdi-pencil f-18"></i>
+                  </a>
+                </label>
+                <div style="height: 15px">
+                  <v-slide-y-transition>
+                    <div
+                      v-if="!isFileSelected"
+                      transition="scroll-y-transition"
+                      style="
+                        font-size: 12px;
+                        text-align: left;
+                        color: red;
+                        min-height: 14px;
+                        font-weight: lighter;
+                      "
+                    >
+                      This field is required
+                    </div>
+                  </v-slide-y-transition>
+                </div>
+              </div>
+              <div
+                style="padding-left: 50px; padding-right: 50px; margin-top: 15px"
+              >
+                <div id="app">
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <label
+                        style="
+                          justify-content: start;
+                          display: grid;
+                          margin-bottom: 10px;
+                          font-family: 'Georgia';
+                        "
+                        >Persona Name</label
+                      >
+                      <v-text-field
+                        solo
+                        v-model="harga"
+                        type="text"
+                        class="input-form-primary"
+                        placeholder="Price ex (100.000)"
+                        variant="underline"
+                        hide-details="true"
+                      ></v-text-field>
+                      <div style="height: 15px">
+                        <v-slide-y-transition>
+                          <div
+                            v-if="!isMerchandisePriceValid"
+                            transition="scroll-y-transition"
+                            style="
+                              font-size: 12px;
+                              text-align: left;
+                              color: red;
+                              margin-left: 15px;
+                              min-height: 14px;
+                              font-weight: lighter;
+                            "
+                          >
+                          This field is required and must be a number
+                          </div>
+                        </v-slide-y-transition>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <label
+                        style="
+                          justify-content: start;
+                          display: grid;
+                          margin-bottom: 10px;
+                          font-family: 'Georgia';
+                        "
+                        >Age</label
+                      >
+                      <v-text-field
+                        solo
+                        v-model="stok"
+                        type="text"
+                        class="input-form-primary"
+                        placeholder="Fill with number only"
+                        variant="underline"
+                        hide-details="true"
+                      ></v-text-field>
+                      <div style="height: 15px">
+                        <v-slide-y-transition>
+                          <div
+                            v-if="!isMerchandiseStockValid"
+                            transition="scroll-y-transition"
+                            style="
+                              font-size: 12px;
+                              text-align: left;
+                              color: red;
+                              margin-left: 15px;
+                              min-height: 14px;
+                              font-weight: lighter;
+                            "
+                          >
+                            This field is required and must be a number
+                          </div>
+                        </v-slide-y-transition>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <label
+                        style="
+                          justify-content: start;
+                          display: grid;
+                          margin-bottom: 10px;
+                          font-family: 'Georgia';
+                        "
+                        >Racial</label
+                      >
+                      <v-text-field
+                        solo
+                        v-model="harga"
+                        type="text"
+                        class="input-form-primary"
+                        placeholder="Price ex (100.000)"
+                        variant="underline"
+                        hide-details="true"
+                      ></v-text-field>
+                      <div style="height: 15px">
+                        <v-slide-y-transition>
+                          <div
+                            v-if="!isMerchandisePriceValid"
+                            transition="scroll-y-transition"
+                            style="
+                              font-size: 12px;
+                              text-align: left;
+                              color: red;
+                              margin-left: 15px;
+                              min-height: 14px;
+                              font-weight: lighter;
+                            "
+                          >
+                          This field is required and must be a number
+                          </div>
+                        </v-slide-y-transition>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <label
+                        style="
+                          justify-content: start;
+                          display: grid;
+                          margin-bottom: 10px;
+                          font-family: 'Georgia';
+                        "
+                        >Birth Date</label
+                      >
+                      <v-text-field
+                        solo
+                        v-model="stok"
+                        type="text"
+                        class="input-form-primary"
+                        placeholder="Fill with number only"
+                        variant="underline"
+                        hide-details="true"
+                      ></v-text-field>
+                      <div style="height: 15px">
+                        <v-slide-y-transition>
+                          <div
+                            v-if="!isMerchandiseStockValid"
+                            transition="scroll-y-transition"
+                            style="
+                              font-size: 12px;
+                              text-align: left;
+                              color: red;
+                              margin-left: 15px;
+                              min-height: 14px;
+                              font-weight: lighter;
+                            "
+                          >
+                            This field is required and must be a number
+                          </div>
+                        </v-slide-y-transition>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <label
+                        style="
+                          justify-content: start;
+                          display: grid;
+                          margin-bottom: 10px;
+                          font-family: 'Georgia';
+                        "
+                        >Zodiac</label
+                      >
+                      <v-text-field
+                        solo
+                        v-model="harga"
+                        type="text"
+                        class="input-form-primary"
+                        placeholder="Price ex (100.000)"
+                        variant="underline"
+                        hide-details="true"
+                      ></v-text-field>
+                      <div style="height: 15px">
+                        <v-slide-y-transition>
+                          <div
+                            v-if="!isMerchandisePriceValid"
+                            transition="scroll-y-transition"
+                            style="
+                              font-size: 12px;
+                              text-align: left;
+                              color: red;
+                              margin-left: 15px;
+                              min-height: 14px;
+                              font-weight: lighter;
+                            "
+                          >
+                          This field is required and must be a number
+                          </div>
+                        </v-slide-y-transition>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <label
+                        style="
+                          justify-content: start;
+                          display: grid;
+                          margin-bottom: 10px;
+                          font-family: 'Georgia';
+                        "
+                        >MBTI</label
+                      >
+                      <v-text-field
+                        solo
+                        v-model="stok"
+                        type="text"
+                        class="input-form-primary"
+                        placeholder="Fill with number only"
+                        variant="underline"
+                        hide-details="true"
+                      ></v-text-field>
+                      <div style="height: 15px">
+                        <v-slide-y-transition>
+                          <div
+                            v-if="!isMerchandiseStockValid"
+                            transition="scroll-y-transition"
+                            style="
+                              font-size: 12px;
+                              text-align: left;
+                              color: red;
+                              margin-left: 15px;
+                              min-height: 14px;
+                              font-weight: lighter;
+                            "
+                          >
+                            This field is required and must be a number
+                          </div>
+                        </v-slide-y-transition>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <label
+                        style="
+                          justify-content: start;
+                          display: grid;
+                          margin-bottom: 10px;
+                          font-family: 'Georgia';
+                        "
+                        >Body Wight</label
+                      >
+                      <v-text-field
+                        solo
+                        v-model="harga"
+                        type="text"
+                        class="input-form-primary"
+                        placeholder="Price ex (100.000)"
+                        variant="underline"
+                        hide-details="true"
+                      ></v-text-field>
+                      <div style="height: 15px">
+                        <v-slide-y-transition>
+                          <div
+                            v-if="!isMerchandisePriceValid"
+                            transition="scroll-y-transition"
+                            style="
+                              font-size: 12px;
+                              text-align: left;
+                              color: red;
+                              margin-left: 15px;
+                              min-height: 14px;
+                              font-weight: lighter;
+                            "
+                          >
+                          This field is required and must be a number
+                          </div>
+                        </v-slide-y-transition>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <label
+                        style="
+                          justify-content: start;
+                          display: grid;
+                          margin-bottom: 10px;
+                          font-family: 'Georgia';
+                        "
+                        >Body Tall</label
+                      >
+                      <v-text-field
+                        solo
+                        v-model="stok"
+                        type="text"
+                        class="input-form-primary"
+                        placeholder="Fill with number only"
+                        variant="underline"
+                        hide-details="true"
+                      ></v-text-field>
+                      <div style="height: 15px">
+                        <v-slide-y-transition>
+                          <div
+                            v-if="!isMerchandiseStockValid"
+                            transition="scroll-y-transition"
+                            style="
+                              font-size: 12px;
+                              text-align: left;
+                              color: red;
+                              margin-left: 15px;
+                              min-height: 14px;
+                              font-weight: lighter;
+                            "
+                          >
+                            This field is required and must be a number
+                          </div>
+                        </v-slide-y-transition>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <label
+                        style="
+                          justify-content: start;
+                          display: grid;
+                          margin-bottom: 10px;
+                          font-family: 'Georgia';
+                        "
+                        >Like</label
+                      >
+                      <v-text-field
+                        solo
+                        v-model="harga"
+                        type="text"
+                        class="input-form-primary"
+                        placeholder="Price ex (100.000)"
+                        variant="underline"
+                        hide-details="true"
+                      ></v-text-field>
+                      <div style="height: 15px">
+                        <v-slide-y-transition>
+                          <div
+                            v-if="!isMerchandisePriceValid"
+                            transition="scroll-y-transition"
+                            style="
+                              font-size: 12px;
+                              text-align: left;
+                              color: red;
+                              margin-left: 15px;
+                              min-height: 14px;
+                              font-weight: lighter;
+                            "
+                          >
+                          This field is required and must be a number
+                          </div>
+                        </v-slide-y-transition>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <label
+                        style="
+                          justify-content: start;
+                          display: grid;
+                          margin-bottom: 10px;
+                          font-family: 'Georgia';
+                        "
+                        >Didn't Like</label
+                      >
+                      <v-text-field
+                        solo
+                        v-model="stok"
+                        type="text"
+                        class="input-form-primary"
+                        placeholder="Fill with number only"
+                        variant="underline"
+                        hide-details="true"
+                      ></v-text-field>
+                      <div style="height: 15px">
+                        <v-slide-y-transition>
+                          <div
+                            v-if="!isMerchandiseStockValid"
+                            transition="scroll-y-transition"
+                            style="
+                              font-size: 12px;
+                              text-align: left;
+                              color: red;
+                              margin-left: 15px;
+                              min-height: 14px;
+                              font-weight: lighter;
+                            "
+                          >
+                            This field is required and must be a number
+                          </div>
+                        </v-slide-y-transition>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <label
+                        style="
+                          justify-content: start;
+                          display: grid;
+                          margin-bottom: 10px;
+                          font-family: 'Georgia';
+                        "
+                        >Hobby</label
+                      >
+                      <v-text-field
+                        solo
+                        v-model="harga"
+                        type="text"
+                        class="input-form-primary"
+                        placeholder="Price ex (100.000)"
+                        variant="underline"
+                        hide-details="true"
+                      ></v-text-field>
+                      <div style="height: 15px">
+                        <v-slide-y-transition>
+                          <div
+                            v-if="!isMerchandisePriceValid"
+                            transition="scroll-y-transition"
+                            style="
+                              font-size: 12px;
+                              text-align: left;
+                              color: red;
+                              margin-left: 15px;
+                              min-height: 14px;
+                              font-weight: lighter;
+                            "
+                          >
+                          This field is required and must be a number
+                          </div>
+                        </v-slide-y-transition>
+                      </div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <label
+                        style="
+                          justify-content: start;
+                          display: grid;
+                          margin-bottom: 10px;
+                          font-family: 'Georgia';
+                        "
+                        >Quotes</label
+                      >
+                      <v-text-field
+                        solo
+                        v-model="stok"
+                        type="text"
+                        class="input-form-primary"
+                        placeholder="Fill with number only"
+                        variant="underline"
+                        hide-details="true"
+                      ></v-text-field>
+                      <div style="height: 15px">
+                        <v-slide-y-transition>
+                          <div
+                            v-if="!isMerchandiseStockValid"
+                            transition="scroll-y-transition"
+                            style="
+                              font-size: 12px;
+                              text-align: left;
+                              color: red;
+                              margin-left: 15px;
+                              min-height: 14px;
+                              font-weight: lighter;
+                            "
+                          >
+                            This field is required and must be a number
+                          </div>
+                        </v-slide-y-transition>
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <div
+            style="padding-left: 50px; padding-right: 50px; margin-top: 30px"
+          >
+            <label
+              style="
+                justify-content: start;
+                display: grid;
+                margin-bottom: 10px;
+                font-family: 'Georgia';
+              "
+              >Story Character</label
+            >
+            <div id="app">
+              <vue-editor id="editor2" v-model="npc_story" />
+              <div style="height: 15px">
+                <v-slide-y-transition>
+                  <div
+                    v-if="!isNPCStoryValid"
+                    transition="scroll-y-transition"
+                    style="
+                      font-size: 12px;
+                      text-align: left;
+                      color: red;
+                      margin-left: 15px;
+                      min-height: 14px;
+                      font-weight: lighter;
+                    "
+                  >
+                    This field is required
+                  </div>
+                </v-slide-y-transition>
+              </div>
+            </div>
+                  </div>
+                  <div
+            style="padding-left: 50px; padding-right: 50px; margin-top: 30px"
+          >
+            <label
+              style="
+                justify-content: start;
+                display: grid;
+                margin-bottom: 10px;
+                font-family: 'Georgia';
+              "
+              >Instagram Account</label
+            >
+            <div id="app">
+              <v-text-field
+                solo
+                v-model="instagram_author"
+                type="text"
+                class="input-form-primary"
+                placeholder="Fill your instagram profile url"
+                variant="underline"
+                hide-details="true"
+              ></v-text-field>
+              <div style="height: 15px">
+                <v-slide-y-transition>
+                  <div
+                    v-if="!isComicInstagramAuthorValid"
+                    transition="scroll-y-transition"
+                    style="
+                      font-size: 12px;
+                      text-align: left;
+                      color: red;
+                      margin-left: 15px;
+                      min-height: 14px;
+                      font-weight: lighter;
+                    "
+                  >
+                    Invalid Instagram URL
+                  </div>
+                </v-slide-y-transition>
+              </div>
+            </div>
+          </div>
+                </div>
+              </div>
+            </v-form>
+
+            <v-card-actions class="justify-end mt-5">
+              <div
+                v-if="
+                  !isMerchandiseProductTitleValid ||
+                  !isMerchandiseDescriptionValid ||
+                  !isMerchandisePriceValid ||
+                  !isMerchandiseStockValid ||
+                  !isFileSelectedImagesMerchandise ||
+                  !isFileSelected
+                "
+              >
+                <v-btn
+                  style="text-transform: unset !important"
+                  rounded
+                  outlined
+                  disabled
+                  color="indigo"
+                  class="btn-form-primary m-t-35"
+                  :loading="loading"
+                  @click="
+                    inputType == 'AddMerchandise'
+                      ? submitMerchandise('AddMerchandise')
+                      : submitMerchandise('UpdateMerchandise')
+                  "
+                  >{{
+                    inputType == "AddMerchandise" ? "Add Merchandise" : "Update Merchandise"
+                  }}</v-btn
+                >
+              </div>
+              <div
+                v-if="
+                  isMerchandiseProductTitleValid &&
+                  isMerchandiseDescriptionValid &&
+                  isMerchandisePriceValid &&
+                  isMerchandiseStockValid &&
+                  isFileSelectedImagesMerchandise &&
+                  isFileSelected
+                "
+              >
+                <v-btn
+                  style="text-transform: unset !important"
+                  rounded
+                  outlined
+                  color="indigo"
+                  class="m-t-35"
+                  :loading="loading"
+                  @click="
+                    inputType == 'AddMerchandise'
+                      ? submitMerchandise('AddMerchandise')
+                      : submitMerchandise('UpdateMerchandise')
+                  "
+                  >{{
+                    inputType == "AddMerchandise" ? "Add Merchandise" : "Update Merchandise"
+                  }}</v-btn
+                >
+              </div>
+
+              <v-btn
+                style="text-transform: unset !important"
+                plain
+                text
+                @click="dialogEditProfile = false"
+                >Close</v-btn
+              >
+            </v-card-actions>
+          </v-card>
+    </v-dialog>
+    <!-- End Dialog Edit Profile-->
+
     <!-- Dialog Add and Edit NPC -->
     <v-dialog
       transition="dialog-top-transition"
@@ -2239,6 +2951,9 @@ export default {
     VueEditor,
   },
   data: () => ({
+    // Profile
+    dialogEditProfile: false,
+    
     // NPC
     dialogConfirmDeleteNPC: false,
     dialogNPC: false,
@@ -2437,6 +3152,23 @@ export default {
     },
   },
   methods: {
+    // For Profile
+    editHandlerProfile(item, itemComic) {
+      this.clearForm();
+      this.inputType = "UpdateProfile";
+      this.dialogEditProfile = true;
+      this.judulComic = itemComic.judul;
+      this.detailIdComic = itemComic.id;
+      this.editUuidSubComic = item.uuid;
+      this.judul = item.judul;
+      this.thumbnail = item.thumbnail;
+      this.content = item.content;
+      this.chapter = item.chapter;
+      this.instagram_author = item.instagram_author;
+      this.selectedFile = item.thumbnail;
+      this.selectedFileSubComic = item.content;
+    },
+    // End For Profile
 
     // For Merchandise    
     // For Uppercase Form
