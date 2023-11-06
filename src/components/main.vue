@@ -37,9 +37,9 @@
               style="margin-right: 5px"
               badge
               badge-variant="success"
-              src="https://placekitten.com/300/300"
-            ></b-avatar
-            ><span
+              :src="$baseUrl + '/storage/' + image">
+              </b-avatar>
+              <span
               class="mr-auto"
               style="display: inline-block; text-transform: capitalize"
             >
@@ -78,6 +78,7 @@ export default {
   data: () => ({
     isMenuOpen: false,
     loadingScreen: false,
+    image: localStorage.getItem("image"),
 
     userLogin: {
       token: localStorage.getItem("token"), // initialize with a valid token or empty string

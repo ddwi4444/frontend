@@ -127,7 +127,8 @@ export default Vue.extend({
               response.data.data.user.nama_persona
             );
             localStorage.setItem("role", response.data.data.user.role);
-            localStorage.setItem("image", response.data.data.user.uuid);
+            localStorage.setItem("image", response.data.data.user.image);
+            localStorage.setItem("uuid", response.data.data.user.uuid);
             localStorage.setItem("token", response.data.data.token);
 
             this.$router.push({

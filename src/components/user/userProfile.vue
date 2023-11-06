@@ -5,26 +5,24 @@
       class="lighten-2"
       style="margin-top: 0px; padding-top: 0px; justify-content: center"
     >
-      <img
-        style="
-          border-radius: 50%;
-          height: 100px;
-          width: 100px;
-          object-fit: cover;
-        "
-        src="https://cdn1.katadata.co.id/media/images/thumb/2022/11/10/Ilustrasi_Ciri-ciri_Orang_Yang_Bersyukur-2022_11_10-13_22_48_d368708753bdc5c3131472013522d76c_960x640_thumb.jpg"
-        alt="Avatar"
-      />
+      <div @click="zoom($baseUrl + '/storage/' + imageProfile)" style="cursor: zoom-in;">
+        <img
+          style="
+            border-radius: 50%;
+            height: 100px;
+            width: 100px;
+            object-fit: cover;
+          "
+          :src="$baseUrl + '/storage/' + imageProfile"        
+          alt="Avatar"
+        />
+      </div>
     </v-card-title>
 
     <v-card-text>
-      <h4 style="text-transform: capitalize">{{ getNamaPersona }} 
-        <v-btn
-        @click="editHandlerProfile"
-          icon
-          x-small
-          color="primary"
-        >
+      <h4 style="text-transform: capitalize">
+        {{ getNamaPersona }}
+        <v-btn @click="editHandlerProfile" icon x-small color="primary">
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
       </h4>
@@ -211,20 +209,20 @@
                 </template>
 
                 <template v-slot:[`item.thumbnail`]="{ item }">
-                  <div style="display: grid; justify-content: center;">
-                  <div
-                    class="w-img-oval m-2"
-                    @click="zoom($baseUrl + '/storage/' + item.thumbnail)"
-                  >
-                    <img
-                      :src="$baseUrl + '/storage/' + item.thumbnail"
-                      class="img-oval"
-                    />
-                    <a class="img-oval-zoom">
-                      <i class="mdi mdi-eye f-28 text-white"></i>
-                    </a>
+                  <div style="display: grid; justify-content: center">
+                    <div
+                      class="w-img-oval m-2"
+                      @click="zoom($baseUrl + '/storage/' + item.thumbnail)"
+                    >
+                      <img
+                        :src="$baseUrl + '/storage/' + item.thumbnail"
+                        class="img-oval"
+                      />
+                      <a class="img-oval-zoom">
+                        <i class="mdi mdi-eye f-28 text-white"></i>
+                      </a>
+                    </div>
                   </div>
-                </div>
                 </template>
 
                 <template v-slot:[`item.actions`]="{ item }">
@@ -268,42 +266,42 @@
           <template>
             <v-container class="conatiner-size-my-profile p-0">
               <b-container class="bv-example-row">
-                <b-row style="justify-content: center;">
+                <b-row style="justify-content: center">
                   <v-btn
-                      small
-                      color="primary"
-                      dark
-                      class="mb-2 w-2"
-                      style="text-transform: unset !important; width: 30%;"
-                      @click="addHandlerPortfolio"
-                    >
-                      Add Portfolio
-                    </v-btn>
+                    small
+                    color="primary"
+                    dark
+                    class="mb-2 w-2"
+                    style="text-transform: unset !important; width: 30%"
+                    @click="addHandlerPortfolio"
+                  >
+                    Add Portfolio
+                  </v-btn>
                 </b-row>
               </b-container>
 
               <v-data-table
                 :headers="list.headersPortfolio"
-                :items="list.portfolios"            
+                :items="list.portfolios"
               >
                 <template v-slot:[`item.no`]="{ item }">
                   <template>{{ list.portfolios.indexOf(item) + 1 }}</template>
                 </template>
 
                 <template v-slot:[`item.thumbnail`]="{ item }">
-                  <div style="display: grid; justify-content: center;">
-                  <div
-                    class="w-img-oval m-2"
-                    @click="zoom($baseUrl + '/storage/' + item.thumbnail)"
-                  >
-                    <img
-                      :src="$baseUrl + '/storage/' + item.thumbnail"
-                      class="img-oval"
-                    />
-                    <a class="img-oval-zoom">
-                      <i class="mdi mdi-eye f-28 text-white"></i>
-                    </a>
-                  </div>
+                  <div style="display: grid; justify-content: center">
+                    <div
+                      class="w-img-oval m-2"
+                      @click="zoom($baseUrl + '/storage/' + item.thumbnail)"
+                    >
+                      <img
+                        :src="$baseUrl + '/storage/' + item.thumbnail"
+                        class="img-oval"
+                      />
+                      <a class="img-oval-zoom">
+                        <i class="mdi mdi-eye f-28 text-white"></i>
+                      </a>
+                    </div>
                   </div>
                 </template>
 
@@ -328,7 +326,9 @@
                   {{ items.itemsLength }}
                 </template>
                 <template v-slot:no-data>
-                  <div color="white"><p class="p-0 m-0">Portfolio is empty</p></div>
+                  <div color="white">
+                    <p class="p-0 m-0">Portfolio is empty</p>
+                  </div>
                 </template>
               </v-data-table>
             </v-container>
@@ -371,26 +371,26 @@
 
               <v-data-table
                 :headers="list.headersMerchandise"
-                :items="list.merchandises"            
+                :items="list.merchandises"
               >
                 <template v-slot:[`item.no`]="{ item }">
                   <template>{{ list.merchandises.indexOf(item) + 1 }}</template>
                 </template>
 
                 <template v-slot:[`item.thumbnail`]="{ item }">
-                  <div style="display: grid; justify-content: center;">
-                  <div
-                    class="w-img-oval m-2"
-                    @click="zoom($baseUrl + '/storage/' + item.thumbnail)"
-                  >
-                    <img
-                      :src="$baseUrl + '/storage/' + item.thumbnail"
-                      class="img-oval"
-                    />
-                    <a class="img-oval-zoom">
-                      <i class="mdi mdi-eye f-28 text-white"></i>
-                    </a>
-                  </div>
+                  <div style="display: grid; justify-content: center">
+                    <div
+                      class="w-img-oval m-2"
+                      @click="zoom($baseUrl + '/storage/' + item.thumbnail)"
+                    >
+                      <img
+                        :src="$baseUrl + '/storage/' + item.thumbnail"
+                        class="img-oval"
+                      />
+                      <a class="img-oval-zoom">
+                        <i class="mdi mdi-eye f-28 text-white"></i>
+                      </a>
+                    </div>
                   </div>
                 </template>
 
@@ -415,7 +415,9 @@
                   {{ items.itemsLength }}
                 </template>
                 <template v-slot:no-data>
-                  <div color="white"><p class="p-0 m-0">Merchandise is empty</p></div>
+                  <div color="white">
+                    <p class="p-0 m-0">Merchandise is empty</p>
+                  </div>
                 </template>
               </v-data-table>
             </v-container>
@@ -536,7 +538,11 @@
     <!-- End Dialog Delete Comic Handler -->
 
     <!-- Dialog Delete Sub Comic Handler -->
-    <v-dialog v-model="dialogConfirmDeleteSubComic" persistent max-width="400px">
+    <v-dialog
+      v-model="dialogConfirmDeleteSubComic"
+      persistent
+      max-width="400px"
+    >
       <v-card>
         <v-card-title class="dialog-confirm-title">
           <span class="headline white--text">Delete Comic</span>
@@ -572,15 +578,17 @@
     <!-- End Dialog Delete Sub Comic Handler -->
 
     <!-- Dialog Delete Portfolio -->
-    <v-dialog v-model="dialogConfirmDeletePortfolio" persistent max-width="400px">
+    <v-dialog
+      v-model="dialogConfirmDeletePortfolio"
+      persistent
+      max-width="400px"
+    >
       <v-card>
         <v-card-title class="dialog-confirm-title">
           <span class="headline white--text">Delete Portfolio</span>
         </v-card-title>
         <v-card-text class="dialog-confirm-text">
-          <span
-            >Are you sure want to delete Portfolio?</span
-          >
+          <span>Are you sure want to delete Portfolio?</span>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -606,7 +614,11 @@
     <!-- End Dialog Delete Portfolio -->
 
     <!-- Dialog Delete Merchandise Handler -->
-    <v-dialog v-model="dialogConfirmDeleteMerchandise" persistent max-width="400px">
+    <v-dialog
+      v-model="dialogConfirmDeleteMerchandise"
+      persistent
+      max-width="400px"
+    >
       <v-card>
         <v-card-title class="dialog-confirm-title">
           <span class="headline white--text">Delete Merchandise</span>
@@ -643,713 +655,717 @@
 
     <!-- Dialog Edit Profile -->
     <v-dialog
-          transition="dialog-top-transition"
-          max-width="1000"
-          v-model="dialogEditProfile"
-          persistent
+      transition="dialog-top-transition"
+      max-width="1000"
+      v-model="dialogEditProfile"
+      persistent
+    >
+      <v-card
+        class="position-relative m-x-auto p-x-25 p-y-50 br-10 bs-none min-w-full min-w-lg-full"
+      >
+        <h3
+          class="f-24 f-md-20 f-secondary text-center m-b-50"
+          style="
+            margin-bottom: 50px;
+            padding-top: 30px;
+            font-family: 'Georgia';
+            font-weight: bold;
+          "
         >
-          <v-card
-            class="position-relative m-x-auto p-x-25 p-y-50 br-10 bs-none min-w-full min-w-lg-full"
+          Edit Profile
+        </h3>
+        <v-form
+          ref="form"
+          class="w-full"
+          @submit.prevent
+        >
+          <div
+            class="h-auto w-full d-flex align-center justify-center flex-column m-b-25 mt-5"
           >
-            <h3
-              class="f-24 f-md-20 f-secondary text-center m-b-50"
+            <label
+              for="file-foto-profile"
+              class="br-full position-relative p-all-10"
+              :class="{ 'border-error-file': fotoError }"
               style="
-                margin-bottom: 50px;
-                padding-top: 30px;
+                justify-content: start;
+                display: grid;
+                margin-bottom: 10px;
                 font-family: 'Georgia';
-                font-weight: bold;
               "
             >
-              Edit Profil
-            </h3>
-            <v-form
-              ref="form"
-              class="w-full"
-              @submit.prevent="
-                inputType == 'AddMerchandise'
-                  ? submitNPC('AddMerchandise')
-                  : submitComic('UpdateMerchandise')
-              "
-            >
+              Photo Profile
+              <v-img
+                v-if="image64Foto != '' || inputType == 'UpdateProfile'"
+                :src="image64Foto"
+                class="img-profil border"
+                style="margin-top: 10px"
+                cover
+              ></v-img>
+              <div v-else>
+                <v-img
+                  v-if="thumbnail != null"
+                  :src="$baseUrl + '/storage/' + image"
+                  class="img-profil"
+                  cover
+                  style="margin-top: 10px"
+                ></v-img>
+              </div>
+              <input
+                type="file"
+                id="file-foto-profile"
+                ref="fileFotoprofile"
+                accept="image/*"
+                hidden
+                @change="handleFileChange"
+                v-on:change="onFotoChange"
+              />
+              <a class="btn-img-profil cp">
+                <i class="icon mdi mdi-pencil f-18"></i>
+              </a>
+            </label>
+            <div style="height: 15px">
+              <v-slide-y-transition>
+                <div
+                  v-if="!isFileSelected"
+                  transition="scroll-y-transition"
+                  style="
+                    font-size: 12px;
+                    text-align: left;
+                    color: red;
+                    min-height: 14px;
+                    font-weight: lighter;
+                  "
+                >
+                  This field is required
+                </div>
+              </v-slide-y-transition>
+            </div>
+          </div>
+          <div
+            style="padding-left: 50px; padding-right: 50px; margin-top: 15px"
+          >
+            <div id="app">
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Persona Name</label
+                  >
+                  <v-text-field
+                    @keyup="uppercaseProfile"
+                    solo
+                    v-model="persona_name"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="e.g. Arga"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isPersonaNameValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                      This field is required                      
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Age</label
+                  >
+                  <v-text-field
+                    solo
+                    v-model="age"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="e.g. 17 "
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isAgeValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                      This field is required and must be a number                       
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Racial</label
+                  >
+                  <v-text-field
+                    solo
+                    v-model="racial"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="e.g. Half Demon-Vampire"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isRacialValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                        This field is required
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Birth Date</label
+                  >
+                  <v-date-picker v-model="birth_date"></v-date-picker>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isBirthDateValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                      This field is required
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Zodiac</label
+                  >
+                  <v-text-field
+                    solo
+                    v-model="zodiac"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="e.g. Taurus"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isZodiacValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                      This field is required
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >MBTI</label
+                  >
+                  <v-text-field
+                    solo
+                    v-model="mbti"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="e.g. INFJ-T"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isMBTIValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                      This field is required
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Body Weight</label
+                  >
+                  <v-text-field
+                    solo
+                    v-model="body_weight"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="e.g. 55"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isBodyWeightValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                      This field is required and must be a number   
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Body Tall</label
+                  >
+                  <v-text-field
+                    solo
+                    v-model="body_tall"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="e.g. 185"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isBodyTallValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                      This field is required and must be a number   
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Like</label
+                  >
+                  <v-text-field
+                    solo
+                    v-model="like"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="e.g. Flowers, Meatball, etc"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isLikeValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                      This field is required 
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Didn't Like</label
+                  >
+                  <v-text-field
+                    solo
+                    v-model="did_not_like"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="e.g. Bold Book, Vampire, etc"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isDidNotLikeValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                      This field is required 
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Hobby</label
+                  >
+                  <v-text-field
+                    solo
+                    v-model="hobby"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="e.g. Writing, Reading, etc"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isHobbyValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                      This field is required 
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <label
+                    style="
+                      justify-content: start;
+                      display: grid;
+                      margin-bottom: 10px;
+                      font-family: 'Georgia';
+                    "
+                    >Quotes</label
+                  >
+                  <v-text-field
+                    solo
+                    v-model="quotes"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="Your best quotes"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isQuotesValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                      This field is required 
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </v-col>
+              </v-row>
               <div
-                class="h-auto w-full d-flex align-center justify-center flex-column m-b-25 mt-5"
+                style="
+                  padding-left: 50px;
+                  padding-right: 50px;
+                  margin-top: 30px;
+                "
               >
                 <label
-                  for="file-foto"
-                  class="br-full position-relative p-all-10"
-                  :class="{ 'border-error-file': fotoError }"
                   style="
                     justify-content: start;
                     display: grid;
                     margin-bottom: 10px;
                     font-family: 'Georgia';
                   "
-                > Photo Profile
-                  <v-img
-                    v-if="image64Foto != '' || inputType == 'UpdateProfile'"
-                    :src="image64Foto"
-                    class="img-profil border"
-                    style="margin-top: 10px;"
-                    cover
-                  ></v-img>
-                  <div v-else>
-                    <v-img
-                      v-if="thumbnail != null"
-                      :src="$baseUrl + '/storage/' + thumbnail"
-                      class="img-profil"
-                      cover
-                      style="margin-top: 10px;"
-                    ></v-img>
+                  >Instagram Account</label
+                >
+                <div id="app">
+                  <v-text-field
+                    solo
+                    v-model="ig_acc"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="Fill your instagram profile url"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isIgAccValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                        Invalid Instagram URL
+                      </div>
+                    </v-slide-y-transition>
                   </div>
-                  <input
-                    type="file"
-                    id="file-foto"
-                    ref="fileFoto"
-                    accept="image/*"
-                    hidden
-                    @change="handleFileChange"
-                    v-on:change="onFotoChange"
-                  />
-                  <a class="btn-img-profil cp">
-                    <i class="icon mdi mdi-pencil f-18"></i>
-                  </a>
-                </label>
-                <div style="height: 15px">
-                  <v-slide-y-transition>
-                    <div
-                      v-if="!isFileSelected"
-                      transition="scroll-y-transition"
-                      style="
-                        font-size: 12px;
-                        text-align: left;
-                        color: red;
-                        min-height: 14px;
-                        font-weight: lighter;
-                      "
-                    >
-                      This field is required
-                    </div>
-                  </v-slide-y-transition>
                 </div>
               </div>
               <div
-                style="padding-left: 50px; padding-right: 50px; margin-top: 15px"
+                style="
+                  padding-left: 50px;
+                  padding-right: 50px;
+                  margin-top: 30px;
+                "
               >
+                <label
+                  style="
+                    justify-content: start;
+                    display: grid;
+                    margin-bottom: 10px;
+                    font-family: 'Georgia';
+                  "
+                  >Story Character</label
+                >
                 <div id="app">
-                  <v-row>
-                    <v-col cols="12" sm="6">
-                      <label
+                  <vue-editor id="editor1" v-model="story_character" />
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isStoryCharacterValid"
+                        transition="scroll-y-transition"
                         style="
-                          justify-content: start;
-                          display: grid;
-                          margin-bottom: 10px;
-                          font-family: 'Georgia';
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
                         "
-                        >Persona Name</label
                       >
-                      <v-text-field
-                        solo
-                        v-model="harga"
-                        type="text"
-                        class="input-form-primary"
-                        placeholder="Price ex (100.000)"
-                        variant="underline"
-                        hide-details="true"
-                      ></v-text-field>
-                      <div style="height: 15px">
-                        <v-slide-y-transition>
-                          <div
-                            v-if="!isMerchandisePriceValid"
-                            transition="scroll-y-transition"
-                            style="
-                              font-size: 12px;
-                              text-align: left;
-                              color: red;
-                              margin-left: 15px;
-                              min-height: 14px;
-                              font-weight: lighter;
-                            "
-                          >
-                          This field is required and must be a number
-                          </div>
-                        </v-slide-y-transition>
+                        This field is required
                       </div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <label
-                        style="
-                          justify-content: start;
-                          display: grid;
-                          margin-bottom: 10px;
-                          font-family: 'Georgia';
-                        "
-                        >Age</label
-                      >
-                      <v-text-field
-                        solo
-                        v-model="stok"
-                        type="text"
-                        class="input-form-primary"
-                        placeholder="Fill with number only"
-                        variant="underline"
-                        hide-details="true"
-                      ></v-text-field>
-                      <div style="height: 15px">
-                        <v-slide-y-transition>
-                          <div
-                            v-if="!isMerchandiseStockValid"
-                            transition="scroll-y-transition"
-                            style="
-                              font-size: 12px;
-                              text-align: left;
-                              color: red;
-                              margin-left: 15px;
-                              min-height: 14px;
-                              font-weight: lighter;
-                            "
-                          >
-                            This field is required and must be a number
-                          </div>
-                        </v-slide-y-transition>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" sm="6">
-                      <label
-                        style="
-                          justify-content: start;
-                          display: grid;
-                          margin-bottom: 10px;
-                          font-family: 'Georgia';
-                        "
-                        >Racial</label
-                      >
-                      <v-text-field
-                        solo
-                        v-model="harga"
-                        type="text"
-                        class="input-form-primary"
-                        placeholder="Price ex (100.000)"
-                        variant="underline"
-                        hide-details="true"
-                      ></v-text-field>
-                      <div style="height: 15px">
-                        <v-slide-y-transition>
-                          <div
-                            v-if="!isMerchandisePriceValid"
-                            transition="scroll-y-transition"
-                            style="
-                              font-size: 12px;
-                              text-align: left;
-                              color: red;
-                              margin-left: 15px;
-                              min-height: 14px;
-                              font-weight: lighter;
-                            "
-                          >
-                          This field is required and must be a number
-                          </div>
-                        </v-slide-y-transition>
-                      </div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <label
-                        style="
-                          justify-content: start;
-                          display: grid;
-                          margin-bottom: 10px;
-                          font-family: 'Georgia';
-                        "
-                        >Birth Date</label
-                      >
-                      <v-text-field
-                        solo
-                        v-model="stok"
-                        type="text"
-                        class="input-form-primary"
-                        placeholder="Fill with number only"
-                        variant="underline"
-                        hide-details="true"
-                      ></v-text-field>
-                      <div style="height: 15px">
-                        <v-slide-y-transition>
-                          <div
-                            v-if="!isMerchandiseStockValid"
-                            transition="scroll-y-transition"
-                            style="
-                              font-size: 12px;
-                              text-align: left;
-                              color: red;
-                              margin-left: 15px;
-                              min-height: 14px;
-                              font-weight: lighter;
-                            "
-                          >
-                            This field is required and must be a number
-                          </div>
-                        </v-slide-y-transition>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" sm="6">
-                      <label
-                        style="
-                          justify-content: start;
-                          display: grid;
-                          margin-bottom: 10px;
-                          font-family: 'Georgia';
-                        "
-                        >Zodiac</label
-                      >
-                      <v-text-field
-                        solo
-                        v-model="harga"
-                        type="text"
-                        class="input-form-primary"
-                        placeholder="Price ex (100.000)"
-                        variant="underline"
-                        hide-details="true"
-                      ></v-text-field>
-                      <div style="height: 15px">
-                        <v-slide-y-transition>
-                          <div
-                            v-if="!isMerchandisePriceValid"
-                            transition="scroll-y-transition"
-                            style="
-                              font-size: 12px;
-                              text-align: left;
-                              color: red;
-                              margin-left: 15px;
-                              min-height: 14px;
-                              font-weight: lighter;
-                            "
-                          >
-                          This field is required and must be a number
-                          </div>
-                        </v-slide-y-transition>
-                      </div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <label
-                        style="
-                          justify-content: start;
-                          display: grid;
-                          margin-bottom: 10px;
-                          font-family: 'Georgia';
-                        "
-                        >MBTI</label
-                      >
-                      <v-text-field
-                        solo
-                        v-model="stok"
-                        type="text"
-                        class="input-form-primary"
-                        placeholder="Fill with number only"
-                        variant="underline"
-                        hide-details="true"
-                      ></v-text-field>
-                      <div style="height: 15px">
-                        <v-slide-y-transition>
-                          <div
-                            v-if="!isMerchandiseStockValid"
-                            transition="scroll-y-transition"
-                            style="
-                              font-size: 12px;
-                              text-align: left;
-                              color: red;
-                              margin-left: 15px;
-                              min-height: 14px;
-                              font-weight: lighter;
-                            "
-                          >
-                            This field is required and must be a number
-                          </div>
-                        </v-slide-y-transition>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" sm="6">
-                      <label
-                        style="
-                          justify-content: start;
-                          display: grid;
-                          margin-bottom: 10px;
-                          font-family: 'Georgia';
-                        "
-                        >Body Wight</label
-                      >
-                      <v-text-field
-                        solo
-                        v-model="harga"
-                        type="text"
-                        class="input-form-primary"
-                        placeholder="Price ex (100.000)"
-                        variant="underline"
-                        hide-details="true"
-                      ></v-text-field>
-                      <div style="height: 15px">
-                        <v-slide-y-transition>
-                          <div
-                            v-if="!isMerchandisePriceValid"
-                            transition="scroll-y-transition"
-                            style="
-                              font-size: 12px;
-                              text-align: left;
-                              color: red;
-                              margin-left: 15px;
-                              min-height: 14px;
-                              font-weight: lighter;
-                            "
-                          >
-                          This field is required and must be a number
-                          </div>
-                        </v-slide-y-transition>
-                      </div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <label
-                        style="
-                          justify-content: start;
-                          display: grid;
-                          margin-bottom: 10px;
-                          font-family: 'Georgia';
-                        "
-                        >Body Tall</label
-                      >
-                      <v-text-field
-                        solo
-                        v-model="stok"
-                        type="text"
-                        class="input-form-primary"
-                        placeholder="Fill with number only"
-                        variant="underline"
-                        hide-details="true"
-                      ></v-text-field>
-                      <div style="height: 15px">
-                        <v-slide-y-transition>
-                          <div
-                            v-if="!isMerchandiseStockValid"
-                            transition="scroll-y-transition"
-                            style="
-                              font-size: 12px;
-                              text-align: left;
-                              color: red;
-                              margin-left: 15px;
-                              min-height: 14px;
-                              font-weight: lighter;
-                            "
-                          >
-                            This field is required and must be a number
-                          </div>
-                        </v-slide-y-transition>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" sm="6">
-                      <label
-                        style="
-                          justify-content: start;
-                          display: grid;
-                          margin-bottom: 10px;
-                          font-family: 'Georgia';
-                        "
-                        >Like</label
-                      >
-                      <v-text-field
-                        solo
-                        v-model="harga"
-                        type="text"
-                        class="input-form-primary"
-                        placeholder="Price ex (100.000)"
-                        variant="underline"
-                        hide-details="true"
-                      ></v-text-field>
-                      <div style="height: 15px">
-                        <v-slide-y-transition>
-                          <div
-                            v-if="!isMerchandisePriceValid"
-                            transition="scroll-y-transition"
-                            style="
-                              font-size: 12px;
-                              text-align: left;
-                              color: red;
-                              margin-left: 15px;
-                              min-height: 14px;
-                              font-weight: lighter;
-                            "
-                          >
-                          This field is required and must be a number
-                          </div>
-                        </v-slide-y-transition>
-                      </div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <label
-                        style="
-                          justify-content: start;
-                          display: grid;
-                          margin-bottom: 10px;
-                          font-family: 'Georgia';
-                        "
-                        >Didn't Like</label
-                      >
-                      <v-text-field
-                        solo
-                        v-model="stok"
-                        type="text"
-                        class="input-form-primary"
-                        placeholder="Fill with number only"
-                        variant="underline"
-                        hide-details="true"
-                      ></v-text-field>
-                      <div style="height: 15px">
-                        <v-slide-y-transition>
-                          <div
-                            v-if="!isMerchandiseStockValid"
-                            transition="scroll-y-transition"
-                            style="
-                              font-size: 12px;
-                              text-align: left;
-                              color: red;
-                              margin-left: 15px;
-                              min-height: 14px;
-                              font-weight: lighter;
-                            "
-                          >
-                            This field is required and must be a number
-                          </div>
-                        </v-slide-y-transition>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <v-row>
-                    <v-col cols="12" sm="6">
-                      <label
-                        style="
-                          justify-content: start;
-                          display: grid;
-                          margin-bottom: 10px;
-                          font-family: 'Georgia';
-                        "
-                        >Hobby</label
-                      >
-                      <v-text-field
-                        solo
-                        v-model="harga"
-                        type="text"
-                        class="input-form-primary"
-                        placeholder="Price ex (100.000)"
-                        variant="underline"
-                        hide-details="true"
-                      ></v-text-field>
-                      <div style="height: 15px">
-                        <v-slide-y-transition>
-                          <div
-                            v-if="!isMerchandisePriceValid"
-                            transition="scroll-y-transition"
-                            style="
-                              font-size: 12px;
-                              text-align: left;
-                              color: red;
-                              margin-left: 15px;
-                              min-height: 14px;
-                              font-weight: lighter;
-                            "
-                          >
-                          This field is required and must be a number
-                          </div>
-                        </v-slide-y-transition>
-                      </div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                      <label
-                        style="
-                          justify-content: start;
-                          display: grid;
-                          margin-bottom: 10px;
-                          font-family: 'Georgia';
-                        "
-                        >Quotes</label
-                      >
-                      <v-text-field
-                        solo
-                        v-model="stok"
-                        type="text"
-                        class="input-form-primary"
-                        placeholder="Fill with number only"
-                        variant="underline"
-                        hide-details="true"
-                      ></v-text-field>
-                      <div style="height: 15px">
-                        <v-slide-y-transition>
-                          <div
-                            v-if="!isMerchandiseStockValid"
-                            transition="scroll-y-transition"
-                            style="
-                              font-size: 12px;
-                              text-align: left;
-                              color: red;
-                              margin-left: 15px;
-                              min-height: 14px;
-                              font-weight: lighter;
-                            "
-                          >
-                            This field is required and must be a number
-                          </div>
-                        </v-slide-y-transition>
-                      </div>
-                    </v-col>
-                  </v-row>
-                  <div
-            style="padding-left: 50px; padding-right: 50px; margin-top: 30px"
-          >
-            <label
-              style="
-                justify-content: start;
-                display: grid;
-                margin-bottom: 10px;
-                font-family: 'Georgia';
-              "
-              >Story Character</label
-            >
-            <div id="app">
-              <vue-editor id="editor2" v-model="npc_story" />
-              <div style="height: 15px">
-                <v-slide-y-transition>
-                  <div
-                    v-if="!isNPCStoryValid"
-                    transition="scroll-y-transition"
-                    style="
-                      font-size: 12px;
-                      text-align: left;
-                      color: red;
-                      margin-left: 15px;
-                      min-height: 14px;
-                      font-weight: lighter;
-                    "
-                  >
-                    This field is required
+                    </v-slide-y-transition>
                   </div>
-                </v-slide-y-transition>
-              </div>
-            </div>
-                  </div>
-                  <div
-            style="padding-left: 50px; padding-right: 50px; margin-top: 30px"
-          >
-            <label
-              style="
-                justify-content: start;
-                display: grid;
-                margin-bottom: 10px;
-                font-family: 'Georgia';
-              "
-              >Instagram Account</label
-            >
-            <div id="app">
-              <v-text-field
-                solo
-                v-model="instagram_author"
-                type="text"
-                class="input-form-primary"
-                placeholder="Fill your instagram profile url"
-                variant="underline"
-                hide-details="true"
-              ></v-text-field>
-              <div style="height: 15px">
-                <v-slide-y-transition>
-                  <div
-                    v-if="!isComicInstagramAuthorValid"
-                    transition="scroll-y-transition"
-                    style="
-                      font-size: 12px;
-                      text-align: left;
-                      color: red;
-                      margin-left: 15px;
-                      min-height: 14px;
-                      font-weight: lighter;
-                    "
-                  >
-                    Invalid Instagram URL
-                  </div>
-                </v-slide-y-transition>
+                </div>
               </div>
             </div>
           </div>
-                </div>
-              </div>
-            </v-form>
+        </v-form>
 
-            <v-card-actions class="justify-end mt-5">
-              <div
-                v-if="
-                  !isMerchandiseProductTitleValid ||
-                  !isMerchandiseDescriptionValid ||
-                  !isMerchandisePriceValid ||
-                  !isMerchandiseStockValid ||
-                  !isFileSelectedImagesMerchandise ||
-                  !isFileSelected
-                "
-              >
-                <v-btn
-                  style="text-transform: unset !important"
-                  rounded
-                  outlined
-                  disabled
-                  color="indigo"
-                  class="btn-form-primary m-t-35"
-                  :loading="loading"
-                  @click="
-                    inputType == 'AddMerchandise'
-                      ? submitMerchandise('AddMerchandise')
-                      : submitMerchandise('UpdateMerchandise')
-                  "
-                  >{{
-                    inputType == "AddMerchandise" ? "Add Merchandise" : "Update Merchandise"
-                  }}</v-btn
-                >
-              </div>
-              <div
-                v-if="
-                  isMerchandiseProductTitleValid &&
-                  isMerchandiseDescriptionValid &&
-                  isMerchandisePriceValid &&
-                  isMerchandiseStockValid &&
-                  isFileSelectedImagesMerchandise &&
-                  isFileSelected
-                "
-              >
-                <v-btn
-                  style="text-transform: unset !important"
-                  rounded
-                  outlined
-                  color="indigo"
-                  class="m-t-35"
-                  :loading="loading"
-                  @click="
-                    inputType == 'AddMerchandise'
-                      ? submitMerchandise('AddMerchandise')
-                      : submitMerchandise('UpdateMerchandise')
-                  "
-                  >{{
-                    inputType == "AddMerchandise" ? "Add Merchandise" : "Update Merchandise"
-                  }}</v-btn
-                >
-              </div>
+        <v-card-actions class="justify-end mt-5">
+          <div
+            v-if="
+              !isPersonaNameValid ||
+              !isAgeValid ||
+              !isRacialValid ||
+              !isBirthDateValid ||
+              !isZodiacValid ||
+              !isMBTIValid ||
+              !isBodyWeightValid ||
+              !isBodyTallValid ||
+              !isLikeValid ||
+              !isDidNotLikeValid ||
+              !isHobbyValid ||
+              !isQuotesValid ||
+              !isIgAccValid ||
+              !isStoryCharacterValid ||
+              !isFileSelected
+            "
+          >
+            <v-btn
+              style="text-transform: unset !important"
+              rounded
+              outlined
+              disabled
+              color="indigo"
+              class="btn-form-primary m-t-35"
+              :loading="loading"
+              @click="submitUpdateProfile(getUUIDProfile)"
+              >Update Profile</v-btn
+            >
+          </div>
+          <div
+            v-if="
+              isPersonaNameValid &&
+              isAgeValid &&
+              isRacialValid &&
+              isBirthDateValid &&
+              isZodiacValid &&
+              isMBTIValid &&
+              isBodyWeightValid &&
+              isBodyTallValid &&
+              isLikeValid &&
+              isDidNotLikeValid &&
+              isHobbyValid &&
+              isQuotesValid &&
+              isIgAccValid &&
+              isStoryCharacterValid &&
+              isFileSelected
+            "
+          >
+            <v-btn
+              style="text-transform: unset !important"
+              rounded
+              outlined
+              color="indigo"
+              class="m-t-35"
+              :loading="loading"
+              @click="submitUpdateProfile(getUUIDProfile)"
+              >Update Profile</v-btn
+            >
+          </div>
 
-              <v-btn
-                style="text-transform: unset !important"
-                plain
-                text
-                @click="dialogEditProfile = false"
-                >Close</v-btn
-              >
-            </v-card-actions>
-          </v-card>
+          <v-btn
+            style="text-transform: unset !important"
+            plain
+            text
+            @click="dialogEditProfile = false"
+            >Close</v-btn
+          >
+        </v-card-actions>
+      </v-card>
     </v-dialog>
     <!-- End Dialog Edit Profile-->
 
@@ -1394,13 +1410,14 @@
                 margin-bottom: 10px;
                 font-family: 'Georgia';
               "
-            > NPC Image
+            >
+              NPC Image
               <v-img
                 v-if="image64Foto != '' || inputType == 'AddNPC'"
                 :src="image64Foto"
                 class="img-profil border"
                 cover
-                style="margin-top: 10px;"
+                style="margin-top: 10px"
               ></v-img>
               <div v-else>
                 <v-img
@@ -1408,7 +1425,7 @@
                   :src="$baseUrl + '/storage/' + image_npc"
                   class="img-profil"
                   cover
-                  style="margin-top: 10px;"
+                  style="margin-top: 10px"
                 ></v-img>
               </div>
               <input
@@ -1660,13 +1677,14 @@
                 margin-bottom: 10px;
                 font-family: 'Georgia';
               "
-            > Comic Thumbnail
+            >
+              Comic Thumbnail
               <v-img
                 v-if="image64Foto != '' || inputType == 'AddComic'"
                 :src="image64Foto"
                 class="img-profil border"
                 cover
-                style="margin-top: 10px;"
+                style="margin-top: 10px"
               ></v-img>
               <div v-else>
                 <v-img
@@ -1674,7 +1692,7 @@
                   :src="$baseUrl + '/storage/' + thumbnail"
                   class="img-profil"
                   cover
-                  style="margin-top: 10px;"
+                  style="margin-top: 10px"
                 ></v-img>
               </div>
               <input
@@ -2024,20 +2042,20 @@
               </template>
 
               <template v-slot:[`item.thumbnail`]="{ item }">
-                <div style="display: grid; justify-content: center;">
-                <div
-                  class="w-img-oval m-2"
-                  @click="zoom($baseUrl + '/storage/' + item.thumbnail)"
-                >
-                  <img
-                    :src="$baseUrl + '/storage/' + item.thumbnail"
-                    class="img-oval"
-                  />
-                  <a class="img-oval-zoom">
-                    <i class="mdi mdi-eye f-28 text-white"></i>
-                  </a>
+                <div style="display: grid; justify-content: center">
+                  <div
+                    class="w-img-oval m-2"
+                    @click="zoom($baseUrl + '/storage/' + item.thumbnail)"
+                  >
+                    <img
+                      :src="$baseUrl + '/storage/' + item.thumbnail"
+                      class="img-oval"
+                    />
+                    <a class="img-oval-zoom">
+                      <i class="mdi mdi-eye f-28 text-white"></i>
+                    </a>
+                  </div>
                 </div>
-              </div>
               </template>
 
               <template v-slot:[`item.actions`]="{ item }">
@@ -2120,13 +2138,14 @@
                 margin-bottom: 10px;
                 font-family: 'Georgia';
               "
-            > Sub Comic Thumbnail
+            >
+              Sub Comic Thumbnail
               <v-img
                 v-if="image64Foto != '' || inputType == 'AddSubComic'"
                 :src="image64Foto"
                 class="img-profil border"
                 cover
-                style="margin-top: 10px;"
+                style="margin-top: 10px"
               ></v-img>
               <div v-else>
                 <v-img
@@ -2134,7 +2153,7 @@
                   :src="$baseUrl + '/storage/' + thumbnail"
                   class="img-profil"
                   cover
-                  style="margin-top: 10px;"
+                  style="margin-top: 10px"
                 ></v-img>
               </div>
               <input
@@ -2236,15 +2255,18 @@
                       :class="{ 'border-error-file': fotoError }"
                     >
                       <v-img
-                      style="border-radius: 20%; !important"
-                        v-if="image64FotoSubComic != '' || inputType == 'AddSubComic'"
+                        style="border-radius: 20%; !important"
+                        v-if="
+                          image64FotoSubComic != '' ||
+                          inputType == 'AddSubComic'
+                        "
                         :src="image64FotoSubComic"
                         class="img-profil border"
                         cover
                       ></v-img>
                       <div v-else>
                         <v-img
-                        style="border-radius: 20%; !important"
+                          style="border-radius: 20%; !important"
                           v-if="content != null"
                           :src="$baseUrl + '/storage/' + content"
                           class="img-profil"
@@ -2442,7 +2464,8 @@
                 margin-bottom: 10px;
                 font-family: 'Georgia';
               "
-            > Portfolio Image
+            >
+              Portfolio Image
               <v-img
                 style="border-radius: 20%; margin-top: 10px; !important"
                 v-if="image64Foto != '' || inputType == 'AddPortfolio'"
@@ -2493,11 +2516,7 @@
         </v-form>
 
         <v-card-actions class="justify-end mt-5">
-          <div
-            v-if="
-              !isFileSelected
-            "
-          >
+          <div v-if="!isFileSelected">
             <v-btn
               style="text-transform: unset !important"
               rounded
@@ -2518,11 +2537,7 @@
               }}</v-btn
             >
           </div>
-          <div
-            v-if="
-              isFileSelected
-            "
-          >
+          <div v-if="isFileSelected">
             <v-btn
               style="text-transform: unset !important"
               rounded
@@ -2574,7 +2589,11 @@
             font-weight: bold;
           "
         >
-          {{ inputType == "AddMerchandise" ? "Add New Merchandise" : "Update Merchandise" }}
+          {{
+            inputType == "AddMerchandise"
+              ? "Add New Merchandise"
+              : "Update Merchandise"
+          }}
         </h3>
         <v-form
           ref="form"
@@ -2598,12 +2617,13 @@
                 margin-bottom: 10px;
                 font-family: 'Georgia';
               "
-            > Product Thumbnail
+            >
+              Product Thumbnail
               <v-img
                 v-if="image64Foto != '' || inputType == 'AddMerchandise'"
                 :src="image64Foto"
                 class="img-profil border"
-                style="margin-top: 10px;"
+                style="margin-top: 10px"
                 cover
               ></v-img>
               <div v-else>
@@ -2612,7 +2632,7 @@
                   :src="$baseUrl + '/storage/' + thumbnail"
                   class="img-profil"
                   cover
-                  style="margin-top: 10px;"
+                  style="margin-top: 10px"
                 ></v-img>
               </div>
               <input
@@ -2762,7 +2782,7 @@
                           font-weight: lighter;
                         "
                       >
-                      This field is required and must be a number
+                        This field is required and must be a number
                       </div>
                     </v-slide-y-transition>
                   </div>
@@ -2877,7 +2897,9 @@
                   : submitMerchandise('UpdateMerchandise')
               "
               >{{
-                inputType == "AddMerchandise" ? "Add Merchandise" : "Update Merchandise"
+                inputType == "AddMerchandise"
+                  ? "Add Merchandise"
+                  : "Update Merchandise"
               }}</v-btn
             >
           </div>
@@ -2904,7 +2926,9 @@
                   : submitMerchandise('UpdateMerchandise')
               "
               >{{
-                inputType == "AddMerchandise" ? "Add Merchandise" : "Update Merchandise"
+                inputType == "AddMerchandise"
+                  ? "Add Merchandise"
+                  : "Update Merchandise"
               }}</v-btn
             >
           </div>
@@ -2953,7 +2977,26 @@ export default {
   data: () => ({
     // Profile
     dialogEditProfile: false,
-    
+    image: "",
+    persona_name: "",
+    age: "",
+    racial: "",
+    birth_date: "",
+    zodiac: "",
+    mbti: "",
+    body_weight: "",
+    body_tall: "",
+    like: "",
+    did_not_like: "",
+    hobby: "",
+    quotes: "",
+    ig_acc: "",
+    story_character: "",
+    ProfileForm: new FormData(),
+    picker: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+    imageProfile: localStorage.getItem("image"),
+
+
     // NPC
     dialogConfirmDeleteNPC: false,
     dialogNPC: false,
@@ -3006,10 +3049,10 @@ export default {
     selectedFileSubComic: null,
 
     // From Portfolio
-    PortfolioForm : new FormData(),
+    PortfolioForm: new FormData(),
 
     // Form Merchandise
-    MerchandiseForm : new FormData(),
+    MerchandiseForm: new FormData(),
     images_merchandise_path: [],
 
     // Forms
@@ -3064,11 +3107,65 @@ export default {
     getNamaPersona() {
       return localStorage.getItem("nama_persona");
     },
+    getUUIDProfile() {
+      return localStorage.getItem("uuid");
+    },
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
     loggedIn() {
       return localStorage.getItem("token") != null;
+    },
+
+    // Validate for Profile
+    isPersonaNameValid() {
+      return this.persona_name.trim() !== ""; // Content is required (not empty)
+    },
+    isAgeValid() {
+      const age = this.age.trim();
+      return age !== "" && /^\d+$/.test(age); // Content is required (not empty) and contains only numbers
+    },
+    isRacialValid() {
+      return this.racial.trim() !== ""; // Content is required (not empty)
+    },
+    isBirthDateValid() {
+      return this.birth_date.trim() !== ""; // Content is required (not empty)
+    },
+    isZodiacValid() {
+      return this.zodiac.trim() !== ""; // Content is required (not empty)
+    },
+    isMBTIValid() {
+      return this.mbti.trim() !== ""; // Content is required (not empty)
+    },
+    isBodyWeightValid() {
+      const body_weight = this.body_weight.trim();
+      return body_weight !== "" && /^\d+$/.test(body_weight);
+    },
+    isBodyTallValid() {
+      const body_tall = this.body_tall.trim();
+      return body_tall !== "" && /^\d+$/.test(body_tall);
+    },
+    isLikeValid() {
+      return this.like.trim() !== ""; // Content is required (not empty)
+    },
+    isDidNotLikeValid() {
+      return this.did_not_like.trim() !== ""; // Content is required (not empty)
+    },
+    isHobbyValid() {
+      return this.hobby.trim() !== ""; // Content is required (not empty)
+    },
+    isQuotesValid() {
+      return this.quotes.trim() !== ""; // Content is required (not empty)
+    },
+    isIgAccValid() {
+      // Regular expression to match a valid URL
+      const urlPattern =
+        /^(http|https):\/\/(www\.)?instagram\.com\/[\w-]+\/?$/i;
+
+      // Use test method to check if input matches the URL pattern
+      return urlPattern.test(this.ig_acc);    },
+    isStoryCharacterValid() {
+      return this.story_character.trim() !== ""; // Content is required (not empty)
     },
 
     // Validation for NPC
@@ -3134,7 +3231,10 @@ export default {
     },
     isFileSelectedImagesMerchandise() {
       console.log(this.images_merchandise_path);
-      return this.images_merchandise_path !== null && this.images_merchandise_path.length > 0;
+      return (
+        this.images_merchandise_path !== null &&
+        this.images_merchandise_path.length > 0
+      );
     },
 
     // Validator for File required
@@ -3153,24 +3253,93 @@ export default {
   },
   methods: {
     // For Profile
-    editHandlerProfile(item, itemComic) {
+    allowedDates: val => parseInt(val.split('-')[2], 10) % 2 === 0,
+
+    uppercaseProfile() {
+      const words = this.persona_name.split(" ");
+      for (let i = 0; i < words.length; i++) {
+        words[i] =
+          words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
+      }
+      this.persona_name = words.join(" ");
+    },
+
+    editHandlerProfile(itemProfile) {
       this.clearForm();
-      this.inputType = "UpdateProfile";
+      this.inputType = 'UpdateProfile'
       this.dialogEditProfile = true;
-      this.judulComic = itemComic.judul;
-      this.detailIdComic = itemComic.id;
-      this.editUuidSubComic = item.uuid;
-      this.judul = item.judul;
-      this.thumbnail = item.thumbnail;
-      this.content = item.content;
-      this.chapter = item.chapter;
-      this.instagram_author = item.instagram_author;
-      this.selectedFile = item.thumbnail;
-      this.selectedFileSubComic = item.content;
+      this.nama_persona = itemProfile.nama_persona;
+      console.log(itemProfile)
+    },
+
+    submitUpdateProfile(uuid) {
+      if (this.$refs.form.validate()) {
+        // Set the headers
+        var headers = {
+          Authorization: "Bearer " + this.userLogin.token,
+        };
+
+        var inputFoto = document.getElementById("file-foto-profile"),
+          dataFileFoto = inputFoto.files[0];
+        // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+
+        this.ProfileForm = new FormData();
+
+        this.ProfileForm.append("nama_persona", this.persona_name);
+        this.ProfileForm.append("umur", this.age);
+        this.ProfileForm.append("ras", this.racial);
+        this.ProfileForm.append("tanggal_lahir", this.birth_date);
+        this.ProfileForm.append("zodiak", this.zodiac);
+        this.ProfileForm.append("MBTI", this.mbti);
+        this.ProfileForm.append("berat_badan", this.body_weight);
+        this.ProfileForm.append("tinggi_badan", this.body_tall);
+        this.ProfileForm.append("like", this.like);
+        this.ProfileForm.append("did_not_like", this.did_not_like);
+        this.ProfileForm.append("hobi", this.hobby);
+        this.ProfileForm.append("quotes", this.quotes);
+        this.ProfileForm.append("ig_acc", this.ig_acc);
+        this.ProfileForm.append("story_character", this.story_character);
+
+        if (dataFileFoto) {
+          this.ProfileForm.append("image", dataFileFoto);
+        }
+
+        this.loadingScreen = true;
+
+        var urlAddProfile = this.$api + "/update-user/" + uuid;  
+
+        this.$http
+          .post(urlAddProfile, this.ProfileForm, { headers: headers })
+          .then((response) => {
+            this.error_message = response.data.message;
+            console.log(this.error_message);
+
+            document.getElementById("file-foto-profile").value = "";
+
+            this.dialogEditProfile = false;
+
+            this.textMessage = "Profile Succesfully Updated";
+            this.snackbar = true;
+            this.color = "green";
+            setTimeout(() => {
+              this.loadingScreen = false;
+            }, 300);
+          })
+          .catch((error) => {
+            console.log(error);
+
+            this.snackbar = true;
+            this.textMessage = "Profile Unsuccesfully Updated";
+            this.color = "secondary";
+            setTimeout(() => {
+              this.loadingScreen = false;
+            }, 300);
+          });
+      }
     },
     // End For Profile
 
-    // For Merchandise    
+    // For Merchandise
     // For Uppercase Form
     uppercaseMerchandise() {
       const words = this.nama.split(" ");
@@ -3191,7 +3360,7 @@ export default {
       this.deskripsi = item.deskripsi;
       this.harga = item.harga;
       this.stok = item.stok;
-      this.selectedFile= item.thumbnail;
+      this.selectedFile = item.thumbnail;
     },
 
     deleteHandlerMerchandise(item) {
@@ -3278,7 +3447,7 @@ export default {
           text: "Published Date",
           value: "created_at",
           filterable: false,
-          align: 'center',
+          align: "center",
           sortable: true,
         },
         { text: "Actions", value: "actions", align: "center", sortable: false },
@@ -3327,10 +3496,12 @@ export default {
         let uuid = this.editUuidMerchandise;
 
         var inputFoto = document.getElementById("file-foto"),
-        dataFileFoto = inputFoto.files[0];
+          dataFileFoto = inputFoto.files[0];
         // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
 
-        var inputImagesMerchandisePath = document.getElementById("images_merchandise_path");
+        var inputImagesMerchandisePath = document.getElementById(
+          "images_merchandise_path"
+        );
         var dataFileImagesMerchandisePath = inputImagesMerchandisePath.files;
 
         this.MerchandiseForm = new FormData();
@@ -3352,7 +3523,10 @@ export default {
           if (dataFileImagesMerchandisePath.length > 0) {
             // Iterate through selected files and append them to the FormData
             for (let i = 0; i < dataFileImagesMerchandisePath.length; i++) {
-              this.MerchandiseForm.append("images_merchandise_path[]", dataFileImagesMerchandisePath[i]);
+              this.MerchandiseForm.append(
+                "images_merchandise_path[]",
+                dataFileImagesMerchandisePath[i]
+              );
             }
           }
 
@@ -3391,7 +3565,9 @@ export default {
           }
 
           this.$http
-            .post(urlEditMerchandise, this.MerchandiseForm, { headers: headers })
+            .post(urlEditMerchandise, this.MerchandiseForm, {
+              headers: headers,
+            })
             .then((response) => {
               this.error_message = response.data.message;
               console.log(this.error_message);
@@ -3435,7 +3611,7 @@ export default {
       this.inputType = "UpdatePortfolio";
       this.editUuidPortfolio = item.uuid;
       this.thumbnail = item.thumbnail;
-      this.selectedFile= item.thumbnail;
+      this.selectedFile = item.thumbnail;
     },
 
     deleteHandlerPortfolio(item) {
@@ -3470,7 +3646,7 @@ export default {
           text: "Published Date",
           value: "created_at",
           filterable: false,
-          align: 'center',
+          align: "center",
           sortable: true,
         },
         { text: "Actions", value: "actions", align: "center", sortable: false },
@@ -3552,7 +3728,7 @@ export default {
         let uuid = this.editUuidPortfolio;
 
         var inputFotoPortfolio = document.getElementById("file-foto"),
-        dataFileFotoPortfolio = inputFotoPortfolio.files[0];
+          dataFileFotoPortfolio = inputFotoPortfolio.files[0];
 
         this.PortfolioFrom = new FormData();
 
@@ -3636,8 +3812,6 @@ export default {
       }
     },
     // End For Portfolio
-
-
 
     // For Sub Comic
     editHandlerSubComic(item, itemComic) {
@@ -3738,7 +3912,7 @@ export default {
           value: "created_at",
           filterable: false,
           align: "center",
-          sortable: true,         
+          sortable: true,
         },
         { text: "Actions", value: "actions", align: "center", sortable: false },
       ];
@@ -3823,11 +3997,10 @@ export default {
         let uuid = this.editUuidSubComic;
 
         var inputFotoComic = document.getElementById("file-foto"),
-        dataFileFotoComic = inputFotoComic.files[0];
-        
-        var inputContentComic = document.getElementById("file-foto-content"),
-        dataFileContentComic = inputContentComic.files[0];
+          dataFileFotoComic = inputFotoComic.files[0];
 
+        var inputContentComic = document.getElementById("file-foto-content"),
+          dataFileContentComic = inputContentComic.files[0];
 
         this.SubComicForm = new FormData();
 
@@ -3858,7 +4031,6 @@ export default {
 
               // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
               document.getElementById("file-foto-content").value = "";
-
 
               this.closeDialogAddandEditSubComic();
               this.axioDataSubComic(idComic);
@@ -4095,7 +4267,6 @@ export default {
 
         var inputFotoComic = document.getElementById("file-foto"),
           dataFileFotoComic = inputFotoComic.files[0];
-        
 
         this.ComicForm = new FormData();
 
@@ -4540,7 +4711,6 @@ export default {
 </script>
 
 <style scoped>
-
 .btn-img-profil {
   position: absolute;
   display: flex;
