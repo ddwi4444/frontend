@@ -402,7 +402,7 @@
                 ><a href="#"
                   ><b-icon icon="youtube" aria-hidden="true"></b-icon></a
                 ><a href="#"
-                  ><b-icon icon="tiktok" aria-hidden="true"></b-icon></a
+                  ><b-icon icon="bi:tiktok" aria-hidden="true"></b-icon></a
                 ><a href="#">
                   <b-icon icon="mailbox" aria-hidden="true"></b-icon></a>
               </div>

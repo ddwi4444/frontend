@@ -5,17 +5,26 @@
       class="lighten-2"
       style="margin-top: 0px; padding-top: 0px; justify-content: center"
     >
-      <div @click="zoom($baseUrl + '/storage/' + imageProfile)" style="cursor: zoom-in;">
-        <img
-          style="
-            border-radius: 50%;
-            height: 100px;
-            width: 100px;
-            object-fit: cover;
-          "
-          :src="$baseUrl + '/storage/' + imageProfile"        
-          alt="Avatar"
-        />
+      <div
+        @click="zoom($baseUrl + '/storage/' + imageProfile)"
+        style="cursor: zoom-in"
+      >
+      <img
+              v-if="image == null"
+              src="@/assets/userImage.jpg"
+                class="img-profil border"
+                style="margin-top: 10px"
+                cover
+              />
+              <div v-else>
+                <v-img
+                  v-if="image != null"
+                  :src="$baseUrl + '/storage/' + imageProfile"
+                  class="img-profil"
+                  cover
+                  style="margin-top: 10px"
+                ></v-img>
+                </div>
       </div>
     </v-card-title>
 
@@ -674,11 +683,7 @@
         >
           Edit Profile
         </h3>
-        <v-form
-          ref="form"
-          class="w-full"
-          @submit.prevent
-        >
+        <v-form ref="form" class="w-full" @submit.prevent>
           <div
             class="h-auto w-full d-flex align-center justify-center flex-column m-b-25 mt-5"
           >
@@ -695,17 +700,16 @@
             >
               Photo Profile
               <v-img
-                v-if="image64Foto != '' || inputType == 'UpdateProfile'"
-                :src="image64Foto"
+              v-if="image == null || image64FotoProfile != ''"
+                :src="image64FotoProfile"
                 class="img-profil border"
                 style="margin-top: 10px"
                 cover
               ></v-img>
               <div v-else>
                 <v-img
-                  v-if="thumbnail != null"
                   :src="$baseUrl + '/storage/' + image"
-                  class="img-profil"
+                  class="img-profil border"
                   cover
                   style="margin-top: 10px"
                 ></v-img>
@@ -716,8 +720,8 @@
                 ref="fileFotoprofile"
                 accept="image/*"
                 hidden
-                @change="handleFileChange"
-                v-on:change="onFotoChange"
+                @change="handleFileChangeProfile"
+                v-on:change="onFotoChangeProfile"
               />
               <a class="btn-img-profil cp">
                 <i class="icon mdi mdi-pencil f-18"></i>
@@ -726,7 +730,7 @@
             <div style="height: 15px">
               <v-slide-y-transition>
                 <div
-                  v-if="!isFileSelected"
+                  v-if="!isFileProfileSelected"
                   transition="scroll-y-transition"
                   style="
                     font-size: 12px;
@@ -780,7 +784,7 @@
                           font-weight: lighter;
                         "
                       >
-                      This field is required                      
+                        This field is required
                       </div>
                     </v-slide-y-transition>
                   </div>
@@ -818,7 +822,7 @@
                           font-weight: lighter;
                         "
                       >
-                      This field is required and must be a number                       
+                        This field is required and must be a number
                       </div>
                     </v-slide-y-transition>
                   </div>
@@ -888,7 +892,7 @@
                           font-weight: lighter;
                         "
                       >
-                      This field is required
+                        This field is required
                       </div>
                     </v-slide-y-transition>
                   </div>
@@ -928,7 +932,7 @@
                           font-weight: lighter;
                         "
                       >
-                      This field is required
+                        This field is required
                       </div>
                     </v-slide-y-transition>
                   </div>
@@ -966,7 +970,7 @@
                           font-weight: lighter;
                         "
                       >
-                      This field is required
+                        This field is required
                       </div>
                     </v-slide-y-transition>
                   </div>
@@ -1006,7 +1010,7 @@
                           font-weight: lighter;
                         "
                       >
-                      This field is required and must be a number   
+                        This field is required and must be a number
                       </div>
                     </v-slide-y-transition>
                   </div>
@@ -1044,7 +1048,7 @@
                           font-weight: lighter;
                         "
                       >
-                      This field is required and must be a number   
+                        This field is required and must be a number
                       </div>
                     </v-slide-y-transition>
                   </div>
@@ -1084,7 +1088,7 @@
                           font-weight: lighter;
                         "
                       >
-                      This field is required 
+                        This field is required
                       </div>
                     </v-slide-y-transition>
                   </div>
@@ -1122,7 +1126,7 @@
                           font-weight: lighter;
                         "
                       >
-                      This field is required 
+                        This field is required
                       </div>
                     </v-slide-y-transition>
                   </div>
@@ -1162,7 +1166,7 @@
                           font-weight: lighter;
                         "
                       >
-                      This field is required 
+                        This field is required
                       </div>
                     </v-slide-y-transition>
                   </div>
@@ -1200,7 +1204,7 @@
                           font-weight: lighter;
                         "
                       >
-                      This field is required 
+                        This field is required
                       </div>
                     </v-slide-y-transition>
                   </div>
@@ -1311,7 +1315,7 @@
               !isQuotesValid ||
               !isIgAccValid ||
               !isStoryCharacterValid ||
-              !isFileSelected
+              !isFileProfileSelected
             "
           >
             <v-btn
@@ -1323,7 +1327,7 @@
               class="btn-form-primary m-t-35"
               :loading="loading"
               @click="submitUpdateProfile(getUUIDProfile)"
-              >Update Profile</v-btn
+              >Save Profile</v-btn
             >
           </div>
           <div
@@ -1342,7 +1346,7 @@
               isQuotesValid &&
               isIgAccValid &&
               isStoryCharacterValid &&
-              isFileSelected
+              isFileProfileSelected
             "
           >
             <v-btn
@@ -1353,7 +1357,7 @@
               class="m-t-35"
               :loading="loading"
               @click="submitUpdateProfile(getUUIDProfile)"
-              >Update Profile</v-btn
+              >Save Profile</v-btn
             >
           </div>
 
@@ -2976,8 +2980,11 @@ export default {
   },
   data: () => ({
     // Profile
+    myProfile: [],
     dialogEditProfile: false,
-    image: "",
+    image: null,
+    image64FotoProfile: "",
+    selectedFileProfile: null,
     persona_name: "",
     age: "",
     racial: "",
@@ -2993,9 +3000,10 @@ export default {
     ig_acc: "",
     story_character: "",
     ProfileForm: new FormData(),
-    picker: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+    picker: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+      .toISOString()
+      .substr(0, 10),
     imageProfile: localStorage.getItem("image"),
-
 
     // NPC
     dialogConfirmDeleteNPC: false,
@@ -3070,6 +3078,7 @@ export default {
     // Addons
     userLogin: {
       token: localStorage.getItem("token"), // initialize with a valid token or empty string
+      uuid: localStorage.getItem("uuid"),
     },
     multiLine: true,
     dialogZoom: false,
@@ -3102,6 +3111,7 @@ export default {
     this.initializeComic();
     this.initializePortfolio();
     this.initializeMerchandise();
+    this.axioDataMyProfile();
   },
   computed: {
     getNamaPersona() {
@@ -3163,9 +3173,13 @@ export default {
         /^(http|https):\/\/(www\.)?instagram\.com\/[\w-]+\/?$/i;
 
       // Use test method to check if input matches the URL pattern
-      return urlPattern.test(this.ig_acc);    },
+      return urlPattern.test(this.ig_acc);
+    },
     isStoryCharacterValid() {
       return this.story_character.trim() !== ""; // Content is required (not empty)
+    },
+    isFileProfileSelected() {
+      return this.selectedFileProfile !== null; // File is required (not null)
     },
 
     // Validation for NPC
@@ -3253,7 +3267,7 @@ export default {
   },
   methods: {
     // For Profile
-    allowedDates: val => parseInt(val.split('-')[2], 10) % 2 === 0,
+    allowedDates: (val) => parseInt(val.split("-")[2], 10) % 2 === 0,
 
     uppercaseProfile() {
       const words = this.persona_name.split(" ");
@@ -3264,13 +3278,56 @@ export default {
       this.persona_name = words.join(" ");
     },
 
-    editHandlerProfile(itemProfile) {
+    editHandlerProfile() {
       this.clearForm();
-      this.inputType = 'UpdateProfile'
+      this.axioDataMyProfile();
       this.dialogEditProfile = true;
-      this.nama_persona = itemProfile.nama_persona;
-      console.log(itemProfile)
+      this.image = this.myProfile.image;
+      this.selectedFileProfile = this.myProfile.image;
+      this.persona_name = this.myProfile.nama_persona;
+      this.age = this.myProfile.umur;
+      this.racial = this.myProfile.ras;
+      this.birth_date = this.myProfile.tanggal_lahir;
+      this.zodiac = this.myProfile.zodiak;
+      this.mbti = this.myProfile.MBTI;
+      this.body_weight = this.myProfile.berat_badan;
+      this.body_tall = this.myProfile.tinggi_badan;
+      this.like = this.myProfile.like;
+      this.did_not_like = this.myProfile.did_not_like;
+      this.hobby = this.myProfile.hobi;
+      this.quotes = this.myProfile.quotes;      
+      this.ig_acc = this.myProfile.ig_acc;
+      this.story_character = this.myProfile.story_character;
+      console.log(this.myProfile.nama_persona, 'editprofile', this.myProfile.image, 'haha', this.myProfile.image);
     },
+
+    handleFileChangeProfile(event) {
+      // Update the selectedFile data property when a file is selected
+      this.selectedFileProfile = event.target.files[0];
+    },
+
+    onFotoChangeProfile(e) {
+      let file = e.target.files[0];
+      if (
+        file["type"] != "image/jpeg" &&
+        file["type"] != "image/jpg" &&
+        file["type"] != "image/png"
+      ) {
+        this.textMessage = "Format image only accepted for jpg, png, dan jpeg.";
+        this.snackbar = true;
+        this.color = "secondary";
+      } else {
+        let fotoDataProfile = new FileReader();
+
+        fotoDataProfile.onloadend = () => {
+          this.image64FotoProfile = fotoDataProfile.result;
+          this.fotoError = false;
+        };
+
+        fotoDataProfile.readAsDataURL(file);
+      }
+    },
+
 
     submitUpdateProfile(uuid) {
       if (this.$refs.form.validate()) {
@@ -3282,6 +3339,9 @@ export default {
         var inputFoto = document.getElementById("file-foto-profile"),
           dataFileFoto = inputFoto.files[0];
         // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
+
+        localStorage.removeItem("image");
+        localStorage.removeItem("nama_persona");
 
         this.ProfileForm = new FormData();
 
@@ -3306,21 +3366,29 @@ export default {
 
         this.loadingScreen = true;
 
-        var urlAddProfile = this.$api + "/update-user/" + uuid;  
+        var urlAddProfile = this.$api + "/update-user/" + uuid;
 
         this.$http
           .post(urlAddProfile, this.ProfileForm, { headers: headers })
           .then((response) => {
             this.error_message = response.data.message;
+            this.myProfile = response.data.myProfile;
             console.log(this.error_message);
 
             document.getElementById("file-foto-profile").value = "";
+            this.image64FotoProfile = null;
 
             this.dialogEditProfile = false;
 
             this.textMessage = "Profile Succesfully Updated";
             this.snackbar = true;
             this.color = "green";
+
+            localStorage.setItem("nama_persona", this.myProfile.nama_persona);
+            localStorage.setItem("image", this.myProfile.image);
+
+            this.reloadPage(); 
+
             setTimeout(() => {
               this.loadingScreen = false;
             }, 300);
@@ -3336,6 +3404,35 @@ export default {
             }, 300);
           });
       }
+    },
+
+    axioDataMyProfile() {
+      this.loadingScreen = true;
+      var url = this.$api + "/get-my-profile/" + this.userLogin.uuid;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          this.myProfile = response.data.myProfile;
+          this.image = response.data.myProfile.image
+
+          console.log(response.data.myProfile, "myProfile", response.data.myProfile.image, this.image);
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching myprofile data:", error);
+          this.loadingScreen = false;
+        });
     },
     // End For Profile
 
@@ -4604,6 +4701,11 @@ export default {
     },
 
     // End For NPC
+
+    // Reload Page
+    reloadPage() {
+      window.location.reload();
+    },
 
     // FILE
     onFotoChange(e) {
