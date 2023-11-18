@@ -1,15 +1,32 @@
 <template>
   <v-main>
+    <loading-screen :value="loadingScreen"></loading-screen>
+
     <div class="container">
       <div class="row">
         <div class="row" style="margin-top: 30px; justify-content: center">
           <h4>Recommended</h4>
-          <div class="card-service">
-            <div class="card-details">
-              <div class="image-service-size" style="height: 100%; width: 100%">
+          <div
+            v-for="dataServicer in dataServicers"
+            :key="dataServicer.id"
+            class="card-service"
+          >
+            <div
+              class="card-details"
+              @click="handlerDetailServicer(dataServicer)"
+            >
+              <div class="image-service-size" style="height: 120px">
                 <img
+                  v-if="dataServicer.image != null"
+                  style="object-fit: cover"
                   class="card__img-service"
-                  src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60"
+                  :src="$baseUrl + '/storage/' + dataServicer.image"
+                  alt=""
+                />
+                <img
+                  v-else
+                  class="card__img-service"
+                  src="@/assets/userImage.jpg"
                   alt=""
                 />
               </div>
@@ -17,11 +34,14 @@
                 class="text-title"
                 style="margin-bottom: 0px; margin-top: 10px"
               >
-                Vishnji Kiyokama
+                {{ dataServicer.nama_persona }}
               </p>
               <p>30 Projects</p>
             </div>
-            <button @click="dialogDetail = true" class="card-button-service">
+            <button
+              @click="handlerDetailServicer(dataServicer)"
+              class="card-button-service"
+            >
               More info
             </button>
           </div>
@@ -65,12 +85,23 @@
                 width: 100px;
                 object-fit: cover;
               "
-              src="https://cdn1.katadata.co.id/media/images/thumb/2022/11/10/Ilustrasi_Ciri-ciri_Orang_Yang_Bersyukur-2022_11_10-13_22_48_d368708753bdc5c3131472013522d76c_960x640_thumb.jpg"
+              :src="$baseUrl + '/storage/' + this.imageServicer"
               alt="Avatar"
             />
           </v-card-title>
 
           <v-card-text>
+            <p
+              class="text-title"
+              style="
+                margin-bottom: 0px;
+                margin-top: 10px;
+                font-size: 18px;
+                color: black;
+              "
+            >
+              {{ this.nama_persona }}
+            </p>
             <v-row align="center" class="">
               <v-rating
                 :value="4.5"
@@ -90,34 +121,36 @@
               align="center"
               style="padding-left: 0px"
             >
+              <!-- v-for="dataPortfolio in dataPortfolios"
+                      :key="dataPortfolio.id"  -->
               <b-tab title="Portfolio" active>
                 <b-container fluid class="p-4 bg-transparent">
-                  <b-row>
-                    <b-col>
-                      <b-img
-                        thumbnail
-                        fluid
-                        src="https://picsum.photos/250/250/?image=54"
-                        alt="Image 1"
-                      ></b-img>
-                    </b-col>
-                    <b-col>
-                      <b-img
-                        thumbnail
-                        fluid
-                        src="https://picsum.photos/250/250/?image=58"
-                        alt="Image 2"
-                      ></b-img>
-                    </b-col>
-                    <b-col>
-                      <b-img
-                        thumbnail
-                        fluid
-                        src="https://picsum.photos/250/250/?image=59"
-                        alt="Image 3"
-                      ></b-img>
-                    </b-col>
-                  </b-row>
+                  <center>
+                    <v-row>
+                      <!-- eslint-disable vue/no-use-v-if-with-v-for,vue/no-confusing-v-for-v-if -->
+                      <v-col
+                        v-for="dataPortfolio in dataPortfolios"
+                        :key="dataPortfolio.id"
+                        class="d-flex child-flex"
+                        cols="4"
+                      >
+                        <v-img
+                          style="cursor: zoom-in"
+                          :src="
+                            $baseUrl + '/storage/' + dataPortfolio.thumbnail
+                          "
+                          aspect-ratio="1"
+                          class="grey lighten-2"
+                          @click="
+                            zoom(
+                              $baseUrl + '/storage/' + dataPortfolio.thumbnail
+                            )
+                          "
+                        >
+                        </v-img>
+                      </v-col>
+                    </v-row>
+                  </center>
                 </b-container>
               </b-tab>
               <b-tab title="Review">
@@ -252,90 +285,154 @@
               </b-tab>
               <b-tab title="Order">
                 <div>
-                  <div class="row" style="margin: 0px">
-                    <div
-                      class="col-sm-4"
-                      style="
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                      "
-                    >
-                      Project Name
-                    </div>
-                    <div class="col-sm-7">
-                      <b-form-input
-                        id="input-1"
-                        v-model="name"
-                        :state="state"
-                        trim
-                      ></b-form-input>
-                    </div>
-                  </div>
-                  <div class="row" style="margin: 0px">
-                    <div
-                      class="col-sm-4"
-                      style="
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                      "
-                    >
-                      Offering Cost
-                    </div>
-                    <div class="col-sm-7">
-                      <b-form-input
-                        id="input-1"
-                        v-model="name"
-                        :state="state"
-                        trim
-                      ></b-form-input>
-                    </div>
-                  </div>
-                  <div class="row" style="margin: 0px">
-                    <div
-                      class="col-sm-4"
-                      style="
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                      "
-                    >
-                      Description of Task
-                    </div>
-                    <div class="col-sm-7">
-                      <b-form-input
-                        id="input-1"
-                        v-model="name"
-                        :state="state"
-                        trim
-                      ></b-form-input>
-                    </div>
-                  </div>
-                  <div class="row" style="margin: 0px">
-                    <div
-                      class="col-sm-4"
-                      style="
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                      "
-                    >
-                      Storyboard
-                    </div>
-                    <div class="col-sm-7" style="text-align: start">
-                      <b-form-file
-                        style="width: 300px"
-                        v-model="file2"
-                        class="mt-3"
-                        plain
-                      ></b-form-file>
-                      <div class="mt-3">
-                        Selected file: {{ file2 ? file2 : "" }}
+                  <v-form class="form"
+                        ref="form"
+                        @submit.prevent>
+                    <div class="row" style="margin: 0px">
+                      <div
+                        class="col-sm-4"
+                        style="
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                        "
+                      >
+                        Project Name
+                      </div>
+                      <div class="col-sm-7">
+                        <b-form-input
+                          id="input-1"
+                          v-model="project_name"
+                          trim
+                          placeholder="e.g. Coloring Manga"
+                        ></b-form-input>
+                        <v-slide-y-transition>
+                          <div
+                            v-if="!isProjectNameValid"
+                            transition="scroll-y-transition"
+                            style="
+                              font-size: 12px;
+                              text-align: left;
+                              color: red;
+                              margin-left: 15px;
+                              margin-top: 1px;
+                              min-height: 14px;
+                              font-weight: lighter;
+                            "
+                          >
+                          This field is required
+                          </div>
+                        </v-slide-y-transition>
                       </div>
                     </div>
-                  </div>
-                  <div class="row" style="margin: 0px">
+                    <div class="row" style="margin: 0px">
+                      <div
+                        class="col-sm-4"
+                        style="
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                        "
+                      >
+                        Offering Cost
+                      </div>
+                      <div class="col-sm-7">
+                        <b-form-input
+                          id="input-1"
+                          v-model="offering_cost"
+                          trim
+                          placeholder="e.g. 10000000"
+                        ></b-form-input>
+                        <v-slide-y-transition>
+                          <div
+                            v-if="!isOfferingCostValid"
+                            transition="scroll-y-transition"
+                            style="
+                              font-size: 12px;
+                              text-align: left;
+                              color: red;
+                              margin-left: 15px;
+                              margin-top: 1px;
+                              min-height: 14px;
+                              font-weight: lighter;
+                            "
+                          >
+                            This field is required and must be a number
+                          </div>
+                        </v-slide-y-transition>
+                      </div>
+                    </div>
+                    <div class="row" style="margin: 0px">
+                      <div
+                        class="col-sm-4"
+                        style="
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                        "
+                      >
+                        Description of Task
+                      </div>
+                      <div class="col-sm-7">
+                        <b-form-input
+                          id="input-1"
+                          v-model="desc"
+                          trim
+                          placeholder="Describe what you want to servicer do"
+                        ></b-form-input>
+                        <v-slide-y-transition>
+                          <div
+                            v-if="!isDescValid"
+                            transition="scroll-y-transition"
+                            style="
+                              font-size: 12px;
+                              text-align: left;
+                              color: red;
+                              margin-left: 15px;
+                              margin-top: 1px;
+                              min-height: 14px;
+                              font-weight: lighter;
+                            "
+                          >
+                          This field is required
+                          </div>
+                        </v-slide-y-transition>
+                      </div>
+                    </div>
+                    <div class="row" style="margin: 0px">
+                      <div
+                        class="col-sm-4"
+                        style="
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                        "
+                      >
+                        Storyboard
+                        <span
+                          style="
+                            position: relative;
+                            top: -0.5rem;
+                            font-size: 10px;
+                            color: red;
+                          "
+                          >*Optional</span
+                        >
+                      </div>
+                      <div class="col-sm-7" style="text-align: start">
+                        <b-form-file
+                          style="width: 300px"
+                          id="storyboard"
+                          v-model="storyboard"
+                          class="mt-3"
+                          plain
+                          accept="image/*"
+                        ></b-form-file>
+                      </div>
+                    </div>
+                  
+
+                  <v-card-actions class="row" style="margin: 0px">
                     <div
                       class="col-sm-4"
                       style="
@@ -344,10 +441,49 @@
                         justify-content: center;
                       "
                     ></div>
-                    <div class="col-sm-7" style="text-align: start">
-                      <v-btn small color="primary" dark> Order </v-btn>
+                    <div
+                      class="col-sm-7"
+                      style="text-align: start"
+                      v-if="
+                        !isProjectNameValid ||
+                        !isOfferingCostValid ||
+                        !isDescValid
+                      "
+                    >
+                      <v-btn
+                        style="text-transform: unset !important"
+                        rounded
+                        outlined
+                        small
+                        disabled
+                        color="indigo"
+                        class="btn-form-primary m-t-35"
+                        :loading="loading"
+                        @click="submitServiceTransaction(user_id_servicer)"
+                        >Order</v-btn
+                      >
                     </div>
-                  </div>
+                    <div
+                      class="col-sm-7"
+                      style="text-align: start"
+                      v-if="
+                        isProjectNameValid && isOfferingCostValid && isDescValid
+                      "
+                    >
+                      <v-btn
+                        style="text-transform: unset !important"
+                        rounded
+                        small
+                        outlined
+                        color="indigo"
+                        class="m-t-35"
+                        :loading="loading"
+                        @click="submitServiceTransaction(user_id_servicer)"
+                        >Order</v-btn
+                      >
+                    </div>
+                  </v-card-actions>
+                </v-form>
                 </div>
               </b-tab>
             </b-tabs>
@@ -355,8 +491,213 @@
         </v-card>
       </v-dialog>
     </div>
+
+    <!-- Dialog Zooom Image -->
+    <v-dialog v-model="dialogZoom" width="600" style="max-height: none">
+      <v-card style="max-height: none">
+        <v-card-actions style="max-height: none">
+          <a class="btn-close" @click="dialogZoom = false"> </a>
+        </v-card-actions>
+
+        <v-card-text class="m-0" style="max-height: none">
+          <img
+            :src="getImage"
+            class="img-zoom-full of-cover"
+            style="width: 100%"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Zooom Image -->
+
+    <!-- Snackbar -->
+    <v-snackbar v-model="snackbar" :color="color" text>
+      {{ textMessage }}
+      <template v-slot:action="{ attrs }">
+        <v-btn plain color="red" text v-bind="attrs" @click="snackbar = false">
+          <v-icon
+            dense
+            color="#FF0000"
+            @click="snackbar = false"
+            class="data-table-icon"
+            >mdi-close</v-icon
+          >
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-main>
 </template>
+
+<script>
+import LoadingScreen from "@/components/loading-screen.vue";
+
+export default {
+  components: {
+    "loading-screen": LoadingScreen,
+  },
+  data: () => ({
+    // Portfolio
+    dataPortfolios: [],
+
+    // Servicer
+    dataServicers: [],
+    nama_persona: "",
+    imageServicer: "",
+    user_id_servicer: "",
+    TranskasiLayananForm: new FormData(),
+
+    dialogDetail: false,
+
+    // Form Project Service
+    project_name: "",
+    offering_cost: "",
+    desc: "",
+    storyboard: null,
+
+    // Snackbar
+    snackbar: false,
+    textMessage: "",
+    color: "",
+
+    // Add ons
+    loadingScreen: true,
+    dialogZoom: false,
+    getImage: null, // initialize getImage property here
+    loading: false,
+    userLogin: {
+      token: localStorage.getItem("token"), // initialize with a valid token or empty string
+      uuid: localStorage.getItem("uuid"),
+    },
+  }),
+  created() {
+    this.axioDataServicer();
+  },
+  computed: {
+    isProjectNameValid() {
+      return this.project_name.trim() !== ""; // Content is required (not empty)
+    },
+    isOfferingCostValid() {
+      const offering_cost = this.offering_cost.trim();
+      return offering_cost !== "" && /^\d+$/.test(offering_cost); // Content is required (not empty) and contains only numbers
+    },
+    isDescValid() {
+      return this.desc.trim() !== ""; // Content is required (not empty)
+    },
+  },
+  methods: {
+    handlerDetailServicer(dataServicer) {
+      this.dialogDetail = true;
+      this.axioDataPortfolio(dataServicer.id);
+      console.log("tes apakah berhasil memanggil axiodata");
+      this.nama_persona = dataServicer.nama_persona;
+      this.imageServicer = dataServicer.image;
+      this.user_id_servicer = dataServicer.id;
+      console.log(this.user_id_servicer);
+    },
+
+    axioDataServicer() {
+      this.loadingScreen = true;
+      var url = this.$api + "/get-servicer";
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url)
+        .then((response) => {
+          this.dataServicers = response.data.dataServicer;
+
+          console.log("tes");
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching myprofile data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    axioDataPortfolio(user_id) {
+      this.loadingScreen = true;
+      var url = this.$api + "/get-dataPortfolio/" + user_id;
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url)
+        .then((response) => {
+          this.dataPortfolios = response.data.dataPortfolio;
+
+          console.log(response.data.dataPortfolio, "dataPortfolio");
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching portfolio data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    submitServiceTransaction(user_id_servicer){
+      this.loadingScreen = true;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+      var url = this.$api + "/create-transaksiLayanan/" + user_id_servicer;
+
+      var inputStoryboard = document.getElementById("storyboard"),
+      dataFileStoryboard = inputStoryboard.files[0];
+
+      this.TranskasiLayananForm = new FormData();
+
+      this.TranskasiLayananForm.append("project_name", this.project_name);
+      this.TranskasiLayananForm.append("offering_cost", this.offering_cost);
+      this.TranskasiLayananForm.append("description", this.desc);
+      
+      if (dataFileStoryboard) {
+        this.TranskasiLayananForm.append("storyboard", dataFileStoryboard);
+      }
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .post(url, this.TranskasiLayananForm, { headers: headers })
+        .then((response) => {
+          this.dataPortfolios = response.data.dataPortfolio;
+
+          document.getElementById("storyboard").value = "";
+
+              this.textMessage = "Merchandise Succesfully Created";
+              this.snackbar = true;
+              this.color = "green";
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching portfolio data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    // Addons
+
+    // For zoom image
+    zoom(img) {
+      this.getImage = img;
+      this.dialogZoom = true;
+    },
+  },
+};
+</script>
 
 <style>
 /* Card */
@@ -545,26 +886,3 @@
 }
 /* /Testimonial/Review */
 </style>
-
-<script lang="ts">
-export default {
-  computed: {
-    state() {
-      return this.name.length >= 4;
-    },
-    invalidFeedback() {
-      if (this.name.length > 0) {
-        return "Enter at least 4 characters.";
-      }
-      return "Please enter something.";
-    },
-  },
-  data() {
-    return {
-      dialogDetail: false,
-      name: "",
-      file2: null,
-    };
-  },
-};
-</script>

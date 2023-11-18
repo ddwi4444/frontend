@@ -3281,23 +3281,30 @@ export default {
     editHandlerProfile() {
       this.clearForm();
       this.axioDataMyProfile();
-      this.dialogEditProfile = true;
-      this.image = this.myProfile.image;
-      this.selectedFileProfile = this.myProfile.image;
-      this.persona_name = this.myProfile.nama_persona;
-      this.age = this.myProfile.umur;
-      this.racial = this.myProfile.ras;
-      this.birth_date = this.myProfile.tanggal_lahir;
-      this.zodiac = this.myProfile.zodiak;
-      this.mbti = this.myProfile.MBTI;
-      this.body_weight = this.myProfile.berat_badan;
-      this.body_tall = this.myProfile.tinggi_badan;
-      this.like = this.myProfile.like;
-      this.did_not_like = this.myProfile.did_not_like;
-      this.hobby = this.myProfile.hobi;
-      this.quotes = this.myProfile.quotes;      
-      this.ig_acc = this.myProfile.ig_acc;
-      this.story_character = this.myProfile.story_character;
+      if (this.myProfile.umur != null) {
+        this.dialogEditProfile = true;
+        this.image = this.myProfile.image;
+        this.selectedFileProfile = this.myProfile.image;
+        this.persona_name = this.myProfile.nama_persona;
+        this.age = this.myProfile.umur;
+        this.racial = this.myProfile.ras;
+        this.birth_date = this.myProfile.tanggal_lahir;
+        this.zodiac = this.myProfile.zodiak;
+        this.mbti = this.myProfile.MBTI;
+        this.body_weight = this.myProfile.berat_badan;
+        this.body_tall = this.myProfile.tinggi_badan;
+        this.like = this.myProfile.like;
+        this.did_not_like = this.myProfile.did_not_like;
+        this.hobby = this.myProfile.hobi;
+        this.quotes = this.myProfile.quotes;      
+        this.ig_acc = this.myProfile.ig_acc;
+        this.story_character = this.myProfile.story_character;        
+      }
+      else{
+        this.dialogEditProfile = true;
+        this.persona_name = this.myProfile.nama_persona;
+      }
+      
       console.log(this.myProfile.nama_persona, 'editprofile', this.myProfile.image, 'haha', this.myProfile.image);
     },
 
