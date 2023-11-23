@@ -75,6 +75,8 @@
               <b-col sm="5">
                 <b-img
                   fluid
+                  style="cursor: zoom-in;"
+                  @click="zoom($baseUrl + '/storage/' + imageProfile)"
                   src="https://historicalartfantasia.files.wordpress.com/2022/11/fullbody-gilang-1-b-ilkom-m.-rafael-indrawan.png"
                   alt="Character"
                 ></b-img>
@@ -442,7 +444,79 @@
 
         <!-- Your Activity -->
         <b-tab title="Your Activity">
-          <div></div>
+          <template>
+            <v-container class="conatiner-size-my-profile p-0">
+              <b-container class="bv-example-row">
+                <b-row>
+                  <b-col
+                    ><!-- SEARCH -->
+                    <div class="form-input" style="margin-left: 10px">
+                      <v-text-field
+                        v-model="list.search_servicesTransaction"
+                        class="p-0 m-0"
+                        append-icon="mdi-magnify"
+                        label="Search Transactions"
+                        single-line
+                        hide-details
+                      ></v-text-field></div
+                  ></b-col>
+                  <b-col
+                    ></b-col
+                  >
+                </b-row>
+              </b-container>
+
+              <v-data-table
+                :headers="list.headersServicesTransaction"
+                :items="list.servicesTransactions"
+                :search="list.search_servicesTransaction"
+              >
+                <template v-slot:[`item.no`]="{ item }">
+                  <template>{{ list.servicesTransactions.indexOf(item) + 1 }}</template>
+                </template>
+
+                <template v-slot:[`item.offering_cost`]="{ item }">
+                  <template>
+                    <template>Rp. {{ formatPrice(item.offering_cost) }}</template>
+                  </template>
+                </template>
+
+                <template v-slot:[`item.is_deal`]="{ item }">
+                  <template>
+                    <div style="color: gray;" v-if="item.is_deal == '0' && item.is_done == '0'">Delivered</div>
+                    <div style="color: blue;" v-else-if="item.is_deal == '1' && item.is_done == '0'">On-Process</div>
+                    <div style="color: green;" v-else-if="item.is_done == '1'">Done</div>
+                  </template>
+                </template>
+
+                <template v-slot:[`item.actions`]="{ item }">
+                  <v-icon
+                    dense
+                    color="#36abcf"
+                    @click="detailHandlerServicesTransaction(item)"
+                    class="data-table-icon mr-3"
+                    >mdi-information</v-icon
+                  >
+                  <v-icon
+                    dense
+                    color="#FF0000"
+                    @click="deleteHandlerMerchandise(item)"
+                    class="data-table-icon"
+                    >mdi-delete</v-icon
+                  >
+                </template>
+                <template v-slot:[`footer.page-text`]="items">
+                  {{ items.pageStart }} - {{ items.pageStop }} of
+                  {{ items.itemsLength }}
+                </template>
+                <template v-slot:no-data>
+                  <div color="white">
+                    <p class="p-0 m-0">Services Transaction is empty</p>
+                  </div>
+                </template>
+              </v-data-table>
+            </v-container>
+          </template>
         </b-tab>
 
         <!-- Logout -->
@@ -749,6 +823,53 @@
             style="padding-left: 50px; padding-right: 50px; margin-top: 15px"
           >
             <div id="app">
+              <div
+                style="
+                  padding-left: 50px;
+                  padding-right: 50px;
+                  margin-top: 30px;
+                "
+              >
+                <label
+                  style="
+                    justify-content: start;
+                    display: grid;
+                    margin-bottom: 10px;
+                    font-family: 'Georgia';
+                  "
+                  >Persona Name</label
+                >
+                <div id="app">
+                  <v-text-field
+                    @keyup="uppercaseProfile"
+                    solo
+                    v-model="persona_name"
+                    type="text"
+                    class="input-form-primary"
+                    placeholder="Fill your instagram profile url"
+                    variant="underline"
+                    hide-details="true"
+                  ></v-text-field>
+                  <div style="height: 15px">
+                    <v-slide-y-transition>
+                      <div
+                        v-if="!isPersonaNameValid"
+                        transition="scroll-y-transition"
+                        style="
+                          font-size: 12px;
+                          text-align: left;
+                          color: red;
+                          margin-left: 15px;
+                          min-height: 14px;
+                          font-weight: lighter;
+                        "
+                      >
+                      This field is required
+                      </div>
+                    </v-slide-y-transition>
+                  </div>
+                </div>
+              </div>
               <v-row>
                 <v-col cols="12" sm="6">
                   <label
@@ -761,19 +882,18 @@
                     >Persona Name</label
                   >
                   <v-text-field
-                    @keyup="uppercaseProfile"
                     solo
-                    v-model="persona_name"
+                    v-model="bio"
                     type="text"
                     class="input-form-primary"
-                    placeholder="e.g. Arga"
+                    placeholder="Describe your bio here"
                     variant="underline"
                     hide-details="true"
                   ></v-text-field>
                   <div style="height: 15px">
                     <v-slide-y-transition>
                       <div
-                        v-if="!isPersonaNameValid"
+                        v-if="!isBioValid"
                         transition="scroll-y-transition"
                         style="
                           font-size: 12px;
@@ -1302,6 +1422,7 @@
           <div
             v-if="
               !isPersonaNameValid ||
+              !isBioValid ||
               !isAgeValid ||
               !isRacialValid ||
               !isBirthDateValid ||
@@ -1333,6 +1454,7 @@
           <div
             v-if="
               isPersonaNameValid &&
+              isBioValid &&
               isAgeValid &&
               isRacialValid &&
               isBirthDateValid &&
@@ -2949,6 +3071,148 @@
     </v-dialog>
     <!-- End Dialog Add and Edit Merchandise -->
 
+    <!-- Dialog Detail Services Transaction -->
+    <v-dialog
+      transition="dialog-top-transition"
+      max-width="1000"
+      v-model="dialogDetailServicesTransaction"
+    >
+    <v-card>
+            <v-toolbar
+              color="primary"
+              dark
+            >Detail Transaction</v-toolbar>    
+            <v-row style="margin: 0px;">
+                <v-col cols="12" sm="8" class="mt-5">
+                  <div class="style-transaksi-layanan-1">
+                    <p class="text-h5 pa-5" style="color: black; margin: 0px;">Thank you, {{ this.customer_name }}</p>
+                    <p style="color: black; margin: 0px;">Your order transaction services with the order number :</p> 
+                    <p style="color: rgb(205,133,63); margin: 5px;">{{ this.order_number }} 
+                      <span>                  
+                        <div style="color: gray;" v-if="this.is_deal == '0' && this.is_done == '0'"><span style="color: black; margin: 0px">is</span> <span style="text-decoration: underline; font-weight: bold;">delivered</span></div>
+                        <div style="color: blue;" v-else-if="this.is_deal == '1' && this.is_done == '0'"><span style="color: black; margin: 0px">is</span> <span style="text-decoration: underline; font-weight: bold;">on-process</span></div>
+                        <div style="color: green;" v-else-if="this.is_done == '1'"><span style="color: black; margin: 0px">is</span> <span style="text-decoration: underline; font-weight: bold;">done</span></div>
+                      </span>
+                    </p>
+                  </div>
+                </v-col>
+                <v-col class="style-transaksi-layanan-2 mt-5" cols="12" sm="3">
+                  <div>
+                    <img
+                      v-if="this.is_deal == '0' && this.is_done == '0'"
+                      src="@/assets/Buy Online.gif"
+                      class="d-inline-block align-top"
+                      alt="Logo HAF"
+                      style="height: 140px"
+                    />
+                    <img
+                      v-else-if="this.is_deal == '1' && this.is_done == '0'"
+                      src="@/assets/Online Sales.gif"
+                      class="d-inline-block align-top"
+                      alt="Logo HAF"
+                      style="height: 140px"
+                    />
+                    <img
+                      v-else-if="this.is_done == '1'"
+                      src="@/assets/Packaging For Delivery.gif"
+                      class="d-inline-block align-top"
+                      alt="Logo HAF"
+                      style="height: 140px"
+                    />
+                    </div>
+                </v-col>
+              </v-row>   
+
+            <v-card-text>
+              <center>
+                <div class="ma-5 div-detail-order-services" style="width: 50%; text-align: start;">
+                  <p style="font-size: 19px; color: black; margin: 0px;">{{ this.project_name }}</p>
+                  <p style="color: black; margin: 0px;">Rp. {{ formatPrice(this.offering_cost) }}</p>
+                  <p style="color: black; margin: 0px; text-align: justify;">{{ this.description }}</p>
+                </div>
+
+                <hr style="width: 40%;">
+                <p style="color: black; margin: 0px;">
+                Rate services
+                <v-btn v-if="this.canEditReview != null || this.is_done == '1'" @click="clickEditReview" icon x-small style="font-size: .875rem;" color="primary">
+                  <v-icon style="font-size: .875rem;">mdi-pencil</v-icon>
+                </v-btn>
+                </p>
+
+
+                <div v-if="this.is_done == '1' && this.editReview =='1'">
+                  
+                  <v-form class="form div-detail-order-services" ref="form" @submit.prevent>
+                    <div class="text-center">
+                      
+                      <v-rating
+                        v-model="rating"
+                        color="orange"
+                        icon-label="custom icon label text {0} of {1}"
+                      ></v-rating>
+                      <center>
+                      <div style="width: 60%; margin-top: 10px; margin-top: 7px;">
+                        <v-textarea                      
+                          placeholder="Share your experience with our order services here."
+                          auto-grow
+                          outlined
+                          rows="4"
+                          row-height="30"
+                          shaped
+                          hide-details
+                          v-model="isi"
+                        ></v-textarea>
+                      </div>
+                    </center>
+                    </div>
+                  
+                    <v-btn
+                          style="text-transform: unset !important"
+                          rounded
+                          outlined
+                          small
+                          color="indigo"
+                          class="btn-form-primary mt-3"
+                          :loading="loading"
+                          @click="submitReviewLayanan(idTransaksiLayanan)"
+                          >Send Review</v-btn
+                        >
+                  </v-form>
+                </div>
+                <div class="div-detail-order-services" v-else disabled style="pointer-events:none; filter:alpha(opacity=50); opacity:0.5;">
+                  <div class="text-center">
+                    <v-rating
+                      v-model="rating"
+                      color="orange"
+                      icon-label="custom icon label text {0} of {1}"
+                    ></v-rating>
+                    <center>
+                    <div style="width: 60%; margin-top: 10px">
+                      <v-textarea                      
+                        placeholder="Write your experience order services here"
+                        auto-grow
+                        outlined
+                        rows="4"
+                        row-height="30"
+                        shaped
+                        v-model="isi"
+                      ></v-textarea>
+                    </div>
+                  </center>
+                  </div>
+                </div>
+              </center>
+            </v-card-text>
+            <v-card-actions class="justify-end">
+              <v-btn
+                text
+                @click="closeDialogDetailServicesTransaction"
+              >Close</v-btn>
+            </v-card-actions>
+          </v-card>
+    </v-dialog>
+    <!-- End Detail Services Transaction -->
+
     <!-- Snackbar -->
     <v-snackbar v-model="snackbar" :color="color" text>
       {{ textMessage }}
@@ -2986,6 +3250,7 @@ export default {
     image64FotoProfile: "",
     selectedFileProfile: null,
     persona_name: "",
+    bio: "",
     age: "",
     racial: "",
     birth_date: "",
@@ -3041,6 +3306,27 @@ export default {
     harga: "",
     stok: "",
 
+    // Transkasi Layanan
+    project_name: "",
+    offering_cost: "",
+    description: "",
+    dialogDetailServicesTransaction: false,
+    customer_name: "",
+    order_number: "",
+    is_deal: "",
+    is_done: "",
+    idTransaksiLayanan: "",
+    ReviewLayananForm: new FormData(),
+
+    // Transkasi Layanan
+    
+
+    // Review Layanan
+    rating: null,
+    isi: "",
+    editReview: null,
+    canEditReview: null,
+
     // Comic & Sub Comic & Portfolio & Merchandise
     judul: "",
     thumbnail: "",
@@ -3079,6 +3365,8 @@ export default {
     userLogin: {
       token: localStorage.getItem("token"), // initialize with a valid token or empty string
       uuid: localStorage.getItem("uuid"),
+      role: localStorage.getItem("role"),
+      id: localStorage.getItem("id"),
     },
     multiLine: true,
     dialogZoom: false,
@@ -3094,16 +3382,19 @@ export default {
       headersSubComic: [],
       headersPortfolio: [],
       headersMerchandise: [],
+      headersServicesTransaction: [],
       npcs: [],
       comics: [],
       subcomics: [],
       portfolios: [],
       merchandises: [],
+      servicesTransactions: [],
       search_npc: "",
       search_comic: "",
       search_subcomic: "",
       search_portfolio: "",
       search_merchandise: "",
+      search_servicesTransaction: "",
     },
   }),
   created() {
@@ -3111,6 +3402,7 @@ export default {
     this.initializeComic();
     this.initializePortfolio();
     this.initializeMerchandise();
+    this.initializeServicesTranscation();
     this.axioDataMyProfile();
   },
   computed: {
@@ -3130,6 +3422,9 @@ export default {
     // Validate for Profile
     isPersonaNameValid() {
       return this.persona_name.trim() !== ""; // Content is required (not empty)
+    },
+    isBioValid() {
+      return this.bio.trim() !== ""; // Content is required (not empty)
     },
     isAgeValid() {
       const age = this.age.trim();
@@ -3266,6 +3561,212 @@ export default {
     },
   },
   methods: {
+    // Review Layanan\
+    closeDialogDetailServicesTransaction(){
+      this.dialogDetailServicesTransaction = false;
+      this.editReview = 0;
+      this.canEditReview = 0;
+    },
+
+    clickEditReview(){
+      this.editReview = 1;
+    },
+
+    axioGetDataServiceReview(id) {
+      this.loadingScreen = true;
+      var url;
+
+      url = this.$api + "/get-reviewLayanan/" + id;
+
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          this.dataServiceReview = response.data.data;
+
+          if(this.dataServiceReview != null){
+            this.rating= this.dataServiceReview.rating;
+            this.isi = this.dataServiceReview.isi;
+            this.canEditReview = this.dataServiceReview.rating;
+          }
+          else if(this.dataServiceReview == null){
+            this.rating= null;
+            this.isi = "";
+            this.canEditReview = null;
+          }
+
+          console.log(this.dataServiceReview, this.canEditReview, 'tes canedit review')
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching myprofile data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    submitReviewLayanan(idTransaksiLayanan) {
+      if (this.$refs.form.validate()) {
+        // Set the headers
+        var headers = {
+          Authorization: "Bearer " + this.userLogin.token,
+        };
+
+        this.ReviewLayananForm = new FormData();
+
+        this.ReviewLayananForm.append("rating", this.rating);
+        this.ReviewLayananForm.append("isi", this.isi);
+
+        this.loadingScreen = true;
+
+        var url = this.$api + "/create-reviewLayanan/" + idTransaksiLayanan;
+
+        this.$http
+          .post(url, this.ReviewLayananForm, { headers: headers })
+          .then((response) => {
+            this.error_message = response.data.message;
+            console.log(this.error_message);
+
+            this.canEditReview = null;
+            this.editReview = null;
+
+            this.textMessage = "Succes added review service transaction";
+            this.snackbar = true;
+            this.color = "green";      
+
+            setTimeout(() => {
+              this.loadingScreen = false;
+            }, 300);
+          })
+          .catch((error) => {
+            console.log(error);
+
+            this.snackbar = true;
+            this.textMessage = "Unsucces added review service transaction";
+            this.color = "secondary";
+            setTimeout(() => {
+              this.loadingScreen = false;
+            }, 300);
+          });
+      }
+    },
+    // End Review Layanan
+
+    // Services Transaction
+    detailHandlerServicesTransaction(item){
+      this.dialogDetailServicesTransaction = true;
+
+      this.idTransaksiLayanan = item.id;
+      this.project_name = item.project_name;
+      this.customer_name = item.customer_name;
+      this.order_number = item.uuid;
+      this.is_deal = item.is_deal;
+      this.is_done = item.is_done;
+      this.offering_cost = item.offering_cost;
+      this.description = item.description;
+
+      // Review
+      this.axioGetDataServiceReview(item.id);      
+      
+    },
+
+    axioDataServicesTransaction() {
+      this.loadingScreen = true;
+      var url;
+
+      if(this.userLogin.role == 'admin'){
+        url = this.$api + "/show-all-transkasiLayanan";
+      }
+      else{
+        url = this.$api + "/show-transkasiLayanan/" + this.userLogin.id;
+      }
+
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          this.list.servicesTransactions = response.data.data.map((x) => {
+            return {
+              ...x,
+              created_at: moment(x.created_at).format("YYYY-MM-DD h:mm a"),
+            };
+          });
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching myprofile data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    initializeServicesTranscation() {
+      this.list.headersServicesTransaction = [
+        {
+          text: "Number",
+          value: "no",
+          filterable: false,
+          width: "10%",
+          align: "center",
+          sortable: false,
+        },
+        {
+          text: "Project Name",
+          value: "project_name",
+          align: "center",
+          sortable: false,
+        },
+        {
+          text: "Offering Cost",
+          value: "offering_cost",
+          align: "center",
+          sortable: false,
+        },
+        {
+          text: "Description",
+          value: "description",
+          align: "center",
+          filterable: false,
+          sortable: false,
+        },
+        {
+          text: "Published Date",
+          value: "created_at",
+          filterable: false,
+          align: "center",
+          sortable: true,
+        },
+        {
+          text: "Status",
+          value: "is_deal",
+          filterable: false,
+          align: "center",
+          sortable: false,
+        },
+        { text: "Actions", value: "actions", align: "center", sortable: false, width: "10%" },
+      ];
+      this.axioDataServicesTransaction();
+    },
+    // End for Services Transaction
+
     // For Profile
     allowedDates: (val) => parseInt(val.split("-")[2], 10) % 2 === 0,
 
@@ -3286,6 +3787,7 @@ export default {
         this.image = this.myProfile.image;
         this.selectedFileProfile = this.myProfile.image;
         this.persona_name = this.myProfile.nama_persona;
+        this.bio = this.myProfile.bio;
         this.age = this.myProfile.umur;
         this.racial = this.myProfile.ras;
         this.birth_date = this.myProfile.tanggal_lahir;
@@ -3353,6 +3855,7 @@ export default {
         this.ProfileForm = new FormData();
 
         this.ProfileForm.append("nama_persona", this.persona_name);
+        this.ProfileForm.append("bio", this.bio);
         this.ProfileForm.append("umur", this.age);
         this.ProfileForm.append("ras", this.racial);
         this.ProfileForm.append("tanggal_lahir", this.birth_date);
@@ -4784,6 +5287,12 @@ export default {
       this.selectedFile = null; // Store the selected file
     },
 
+    // For changing the format of currency
+    formatPrice(value) {
+        let val = (value/1).toFixed(2).replace('.', ',')
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    },
+
     // For chech file is empty or not
     handleFileChange(event) {
       // Update the selectedFile data property when a file is selected
@@ -4807,6 +5316,7 @@ export default {
           localStorage.removeItem("nama_persona");
           localStorage.removeItem("role");
           localStorage.removeItem("token");
+          localStorage.removeItem("uuid");
           setTimeout(() => {
             this.loadingScreenLogout = false;
           }, 5000);
@@ -4916,15 +5426,48 @@ export default {
   margin: 10px;
 }
 
+.style-transaksi-layanan-1{
+  justify-content: end; 
+  display: grid;
+}
+
+.style-transaksi-layanan-2{
+  justify-content: start; 
+  display: grid;
+}
+
 @media only screen and (min-width: 601px) {
   .conatiner-size-my-profile {
-    width: 60%;
+    width: 80%;
   }
+
+  .style-transaksi-layanan-1{
+  justify-content: none; 
+  display: grid;
+}
+
+.style-transaksi-layanan-2{
+  justify-content: none; 
+  display: grid;
+}
 }
 
 @media only screen and (max-width: 600px) {
+  .div-detail-order-services{
+    width: 80% !important;
+  } 
+  
+  .style-transaksi-layanan-1{
+  justify-content: none; 
+  display: block;
+}
+
+.style-transaksi-layanan-2{
+  justify-content: none; 
+  display: block;
+}
   .conatiner-size-my-profile {
-    width: 90%;
+    width: 100%;
   }
 }
 </style>

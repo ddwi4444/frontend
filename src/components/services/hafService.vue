@@ -104,7 +104,7 @@
             </p>
             <v-row align="center" class="">
               <v-rating
-                :value="4.5"
+                :value=ratingAverage
                 color="amber"
                 dense
                 half-increments
@@ -112,7 +112,7 @@
                 size="14"
               ></v-rating>
             </v-row>
-            <div class="grey--text mt-3">4.5 (413)</div>
+            <div class="grey--text mt-3">{{ratingAverage.toFixed(2)}} ({{countReviews}})</div>
           </v-card-text>
 
           <div>
@@ -135,7 +135,7 @@
                         cols="4"
                       >
                         <v-img
-                          style="cursor: zoom-in"
+                          style="cursor: zoom-in; border-radius: 15px;"
                           :src="
                             $baseUrl + '/storage/' + dataPortfolio.thumbnail
                           "
@@ -154,30 +154,32 @@
                 </b-container>
               </b-tab>
               <b-tab title="Review">
-                <div style="display: flex">
+                <div style="display: grid">
                   <center>
-                    <!--BOX-1-------------->
+                    <!-- Review -->
+                    <div v-for="dataReview in dataReviews"
+                    :key="dataReview.id">
                     <div class="testimonial-box">
                       <!--top------------------------->
                       <div class="box-top">
                         <!--profile----->
                         <div class="profile">
                           <!--img---->
-                          <div class="profile-img">
-                            <img
-                              src="https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Ninja-2-512.png"
-                            />
-                          </div>
+                          <div v-for="dataReviewer in dataReviewers" :key="dataReviewer.id">
+  <div class="profile-img" v-if="dataReviewer.id === dataReview.user_id_customer">
+    <img :src="$baseUrl + '/storage/' + dataReviewer.image" />
+  </div>
+</div>
                           <!--name-and-username-->
                           <div class="name-user">
-                            <strong>Liam mendes</strong>
-                            <span>20 May 2012</span>
+                            <strong>{{ dataReview.post_by }}</strong>
+                            <span>{{ dataReview.created_at }}</span>
                           </div>
                         </div>
                         <!--reviews------>
                         <div class="reviews">
                           <v-rating
-                            :value="3.8"
+                            :value= dataReview.rating
                             color="amber"
                             dense
                             half-increments
@@ -190,96 +192,11 @@
                       <!--Comments---------------------------------------->
                       <div class="client-comment" style="text-align: justify">
                         <p>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Exercitationem, quaerat quis? Provident
-                          temporibus architecto asperiores nobis maiores nisi a.
-                          Quae doloribus ipsum aliquam tenetur voluptates
-                          incidunt blanditiis sed atque cumque.
+                          {{ dataReview.isi }}
                         </p>
                       </div>
                     </div>
-                    <div class="testimonial-box">
-                      <!--top------------------------->
-                      <div class="box-top">
-                        <!--profile----->
-                        <div class="profile">
-                          <!--img---->
-                          <div class="profile-img">
-                            <img
-                              src="https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Ninja-2-512.png"
-                            />
-                          </div>
-                          <!--name-and-username-->
-                          <div class="name-user">
-                            <strong>Liam mendes</strong>
-                            <span>20 May 2012</span>
-                          </div>
-                        </div>
-                        <!--reviews------>
-                        <div class="reviews">
-                          <v-rating
-                            :value="3.8"
-                            color="amber"
-                            dense
-                            half-increments
-                            readonly
-                            size="14"
-                          ></v-rating
-                          ><!--Empty star-->
-                        </div>
-                      </div>
-                      <!--Comments---------------------------------------->
-                      <div class="client-comment" style="text-align: justify">
-                        <p>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Exercitationem, quaerat quis? Provident
-                          temporibus architecto asperiores nobis maiores nisi a.
-                          Quae doloribus ipsum aliquam tenetur voluptates
-                          incidunt blanditiis sed atque cumque.
-                        </p>
-                      </div>
-                    </div>
-                    <div class="testimonial-box">
-                      <!--top------------------------->
-                      <div class="box-top">
-                        <!--profile----->
-                        <div class="profile">
-                          <!--img---->
-                          <div class="profile-img">
-                            <img
-                              src="https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Ninja-2-512.png"
-                            />
-                          </div>
-                          <!--name-and-username-->
-                          <div class="name-user">
-                            <strong>Liam mendes</strong>
-                            <span>20 May 2012</span>
-                          </div>
-                        </div>
-                        <!--reviews------>
-                        <div class="reviews">
-                          <v-rating
-                            :value="3.8"
-                            color="amber"
-                            dense
-                            half-increments
-                            readonly
-                            size="14"
-                          ></v-rating
-                          ><!--Empty star-->
-                        </div>
-                      </div>
-                      <!--Comments---------------------------------------->
-                      <div class="client-comment" style="text-align: justify">
-                        <p>
-                          Lorem ipsum dolor sit amet consectetur adipisicing
-                          elit. Exercitationem, quaerat quis? Provident
-                          temporibus architecto asperiores nobis maiores nisi a.
-                          Quae doloribus ipsum aliquam tenetur voluptates
-                          incidunt blanditiis sed atque cumque.
-                        </p>
-                      </div>
-                    </div>
+                  </div>
                   </center>
                 </div>
               </b-tab>
@@ -378,7 +295,7 @@
                           id="input-1"
                           v-model="desc"
                           trim
-                          placeholder="Describe what you want to servicer do"
+                          placeholder="Describe shortly what you want to servicer do"
                         ></b-form-input>
                         <v-slide-y-transition>
                           <div
@@ -530,6 +447,7 @@
 
 <script>
 import LoadingScreen from "@/components/loading-screen.vue";
+import moment from "moment";
 
 export default {
   components: {
@@ -547,6 +465,12 @@ export default {
     TranskasiLayananForm: new FormData(),
 
     dialogDetail: false,
+
+    // Review
+    dataReviews: [],
+    dataReviewers: [],
+    ratingAverage: 0,
+    countReviews: 0,
 
     // Form Project Service
     project_name: "",
@@ -588,6 +512,7 @@ export default {
     handlerDetailServicer(dataServicer) {
       this.dialogDetail = true;
       this.axioDataPortfolio(dataServicer.id);
+      this.axioDataReview(dataServicer.id)
       console.log("tes apakah berhasil memanggil axiodata");
       this.nama_persona = dataServicer.nama_persona;
       this.imageServicer = dataServicer.image;
@@ -615,6 +540,41 @@ export default {
         .catch((error) => {
           // Menangani kesalahan jika terjadi
           console.error("Error fetching myprofile data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    axioDataReview(idServicer) {
+      this.loadingScreen = true;
+      var url = this.$api + "/show-all-reviewLayanan/" + idServicer;
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url)
+        .then((response) => {
+          this.dataReviews = response.data.dataReview.map((x) => {
+            return {
+              ...x,
+              created_at: moment(x.created_at).format("YYYY-MM-DD h:mm a"),
+            };
+          });
+          this.dataReviewers = response.data.dataReviewers;
+          this.ratingAverage = response.data.rerataRating;
+
+          // Convert rerataRating to decimal format
+          this.ratingAverage = parseFloat(response.data.rerataRating);
+
+          // Total data review
+          this.countReviews = this.dataReviews.length;
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("hahah:", error);
           this.loadingScreen = false;
         });
     },
@@ -671,8 +631,12 @@ export default {
           this.dataPortfolios = response.data.dataPortfolio;
 
           document.getElementById("storyboard").value = "";
+          this.project_name = "";
+          this.offering_cost = "";
+          this.desc = "";
+          this.storyboard = null;
 
-              this.textMessage = "Merchandise Succesfully Created";
+              this.textMessage = "Successfully send offering services";
               this.snackbar = true;
               this.color = "green";
 
@@ -811,7 +775,7 @@ export default {
   background-color: #ffffff;
   padding: 20px;
   margin: 15px;
-  cursor: pointer;
+  border-radius: 15px;
 }
 .profile-img {
   width: 50px;
@@ -855,10 +819,6 @@ export default {
 .client-comment p {
   font-size: 0.9rem;
   color: #4b4b4b;
-}
-.testimonial-box:hover {
-  transform: translateY(-10px);
-  transition: all ease 0.3s;
 }
 
 @media (max-width: 1060px) {
