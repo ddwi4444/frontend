@@ -160,7 +160,11 @@
                   <center>
                     <!-- Review -->
                     <div v-if="dataReviews.length > 0">
-                      <div v-for="dataReview in dataReviews" :key="dataReview.id" style="min-height: 350px;">
+                      <div
+                        v-for="dataReview in dataReviews"
+                        :key="dataReview.id"
+                        style="min-height: 350px"
+                      >
                         <div class="testimonial-box">
                           <!--top------------------------->
                           <div class="box-top">
@@ -180,7 +184,9 @@
                                 >
                                   <img
                                     :src="
-                                      $baseUrl + '/storage/' + dataReviewer.image
+                                      $baseUrl +
+                                      '/storage/' +
+                                      dataReviewer.image
                                     "
                                   />
                                 </div>
@@ -205,7 +211,10 @@
                             </div>
                           </div>
                           <!--Comments---------------------------------------->
-                          <div class="client-comment" style="text-align: justify">
+                          <div
+                            class="client-comment"
+                            style="text-align: justify"
+                          >
                             <p>
                               {{ dataReview.isi }}
                             </p>
@@ -213,7 +222,7 @@
                         </div>
                       </div>
                     </div>
-                    <div v-else style="min-height: 350px;">
+                    <div v-else style="min-height: 350px">
                       <p>No reviews available</p>
                     </div>
                   </center>

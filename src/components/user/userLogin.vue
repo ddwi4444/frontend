@@ -13,7 +13,7 @@
 
           <p class="title" style="margin-bottom: 0px">Login</p>
           <p class="message" style="margin-bottom: 0px">
-            Signup now and get full access to our app.
+            Signup now and get full access to our app. 
           </p>
           <label>
             <v-text-field

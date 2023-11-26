@@ -3119,7 +3119,7 @@
                     style="color: gray"
                     v-if="this.is_deal == '0' && this.is_done == '0'"
                   >
-                    <span style="color: black; margin: 0px; ">is </span>
+                    <span style="color: black; margin: 0px">is </span>
                     <span style="text-decoration: underline; font-weight: bold"
                       >delivered</span
                     >
@@ -3190,7 +3190,7 @@
             <hr style="width: 40%" />
 
             <v-btn
-            v-if="this.idServicer == this.userLogin.id && this.is_deal == '0'"
+              v-if="this.idServicer == this.userLogin.id && this.is_deal == '0'"
               style="text-transform: unset !important"
               rounded
               outlined
@@ -3203,7 +3203,7 @@
             >
 
             <v-btn
-            v-if="this.idServicer == this.userLogin.id && this.is_deal == '1'"
+              v-if="this.idServicer == this.userLogin.id && this.is_deal == '1'"
               style="text-transform: unset !important"
               rounded
               disabled
@@ -3216,7 +3216,7 @@
             >
 
             <v-btn
-            v-if="this.idCustomer == this.userLogin.id && this.is_done == '0'"
+              v-if="this.idCustomer == this.userLogin.id && this.is_done == '0'"
               style="text-transform: unset !important"
               rounded
               outlined
@@ -3228,22 +3228,29 @@
               >Mark as Done</v-btn
             >
 
-            <div v-if="this.is_done == '1' && this.editReview == '1' && this.idCustomer == this.userLogin.id && this.is_deal == '1'">
+            <div
+              v-if="
+                this.is_done == '1' &&
+                this.editReview == '1' &&
+                this.idCustomer == this.userLogin.id &&
+                this.is_deal == '1'
+              "
+            >
               <div v-if="this.idCustomer == this.userLogin.id">
-              <p style="color: black; margin: 0px">
-                Rate services
-                <v-btn
-                  v-if="this.canEditReview == null && this.is_done == '1'"
-                  @click="clickEditReview"
-                  icon
-                  x-small
-                  style="font-size: 0.875rem"
-                  color="primary"
-                >
-                  <v-icon style="font-size: 0.875rem">mdi-pencil</v-icon>
-                </v-btn>
-              </p>
-            </div>
+                <p style="color: black; margin: 0px">
+                  Rate services
+                  <v-btn
+                    v-if="this.canEditReview == null && this.is_done == '1'"
+                    @click="clickEditReview"
+                    icon
+                    x-small
+                    style="font-size: 0.875rem"
+                    color="primary"
+                  >
+                    <v-icon style="font-size: 0.875rem">mdi-pencil</v-icon>
+                  </v-btn>
+                </p>
+              </div>
               <v-form
                 class="form div-detail-order-services"
                 ref="form"
@@ -3278,7 +3285,12 @@
                   color="indigo"
                   class="btn-form-primary mt-3"
                   :loading="loading"
-                  @click="submitReviewLayanan(uuidTransaksiLayanan, idTransaksiLayanan)"
+                  @click="
+                    submitReviewLayanan(
+                      uuidTransaksiLayanan,
+                      idTransaksiLayanan
+                    )
+                  "
                   >Send Review</v-btn
                 >
               </v-form>
@@ -3309,7 +3321,7 @@
                     filter: alpha(opacity=50);
                     opacity: 0.5;
                   "
-                >                
+                >
                   <v-form
                     class="form div-detail-order-services"
                     ref="form"
@@ -3322,7 +3334,9 @@
                         icon-label="custom icon label text {0} of {1}"
                       ></v-rating>
                       <center>
-                        <div style="width: 60%; margin-top: 10px; margin-top: 7px">
+                        <div
+                          style="width: 60%; margin-top: 10px; margin-top: 7px"
+                        >
                           <v-textarea
                             placeholder="Share your experience with our order services here."
                             auto-grow
@@ -3344,7 +3358,12 @@
                       color="indigo"
                       class="btn-form-primary mt-3"
                       :loading="loading"
-                      @click="submitReviewLayanan(uuidTransaksiLayanan, idTransaksiLayanan)"
+                      @click="
+                        submitReviewLayanan(
+                          uuidTransaksiLayanan,
+                          idTransaksiLayanan
+                        )
+                      "
                       >Send Review</v-btn
                     >
                   </v-form>
@@ -3783,7 +3802,12 @@ export default {
 
         this.loadingScreen = true;
 
-        var url = this.$api + "/create-reviewLayanan/" + uuidTransaksiLayanan + "/" + idTransaksiLayanan ;
+        var url =
+          this.$api +
+          "/create-reviewLayanan/" +
+          uuidTransaksiLayanan +
+          "/" +
+          idTransaksiLayanan;
 
         this.$http
           .post(url, this.ReviewLayananForm, { headers: headers })
@@ -3837,9 +3861,9 @@ export default {
           this.is_deal = 1;
           this.initializeServicesTranscation();
 
-            this.textMessage = "Order taken successfully";
-            this.snackbar = true;
-            this.color = "green";
+          this.textMessage = "Order taken successfully";
+          this.snackbar = true;
+          this.color = "green";
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
@@ -3873,9 +3897,9 @@ export default {
           this.is_done = 1;
           this.initializeServicesTranscation();
 
-            this.textMessage = "Order marked as done";
-            this.snackbar = true;
-            this.color = "green";
+          this.textMessage = "Order marked as done";
+          this.snackbar = true;
+          this.color = "green";
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {

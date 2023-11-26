@@ -69,7 +69,7 @@
             >Register</v-btn
           >
           <p class="signin">
-            Already have an acount ?
+            Already have an acount?
             <router-link style="color: blue" to="login">Sign In </router-link>
           </p>
         </v-form>
