@@ -104,7 +104,7 @@
             </p>
             <v-row align="center" class="">
               <v-rating
-                :value=ratingAverage
+                :value="ratingAverage"
                 color="amber"
                 dense
                 half-increments
@@ -112,7 +112,9 @@
                 size="14"
               ></v-rating>
             </v-row>
-            <div class="grey--text mt-3">{{ratingAverage.toFixed(2)}} ({{countReviews}})</div>
+            <div class="grey--text mt-3">
+              {{ ratingAverage.toFixed(2) }} ({{ countReviews }})
+            </div>
           </v-card-text>
 
           <div>
@@ -135,7 +137,7 @@
                         cols="4"
                       >
                         <v-img
-                          style="cursor: zoom-in; border-radius: 15px;"
+                          style="cursor: zoom-in; border-radius: 15px"
                           :src="
                             $baseUrl + '/storage/' + dataPortfolio.thumbnail
                           "
@@ -157,54 +159,69 @@
                 <div style="display: grid">
                   <center>
                     <!-- Review -->
-                    <div v-for="dataReview in dataReviews"
-                    :key="dataReview.id">
-                    <div class="testimonial-box">
-                      <!--top------------------------->
-                      <div class="box-top">
-                        <!--profile----->
-                        <div class="profile">
-                          <!--img---->
-                          <div v-for="dataReviewer in dataReviewers" :key="dataReviewer.id">
-  <div class="profile-img" v-if="dataReviewer.id === dataReview.user_id_customer">
-    <img :src="$baseUrl + '/storage/' + dataReviewer.image" />
-  </div>
-</div>
-                          <!--name-and-username-->
-                          <div class="name-user">
-                            <strong>{{ dataReview.post_by }}</strong>
-                            <span>{{ dataReview.created_at }}</span>
+                    <div v-if="dataReviews.length > 0">
+                      <div v-for="dataReview in dataReviews" :key="dataReview.id" style="min-height: 350px;">
+                        <div class="testimonial-box">
+                          <!--top------------------------->
+                          <div class="box-top">
+                            <!--profile----->
+                            <div class="profile">
+                              <!--img---->
+                              <div
+                                v-for="dataReviewer in dataReviewers"
+                                :key="dataReviewer.id"
+                              >
+                                <div
+                                  class="profile-img"
+                                  v-if="
+                                    dataReviewer.id ===
+                                    dataReview.user_id_customer
+                                  "
+                                >
+                                  <img
+                                    :src="
+                                      $baseUrl + '/storage/' + dataReviewer.image
+                                    "
+                                  />
+                                </div>
+                              </div>
+                              <!--name-and-username-->
+                              <div class="name-user">
+                                <strong>{{ dataReview.post_by }}</strong>
+                                <span>{{ dataReview.created_at }}</span>
+                              </div>
+                            </div>
+                            <!--reviews------>
+                            <div class="reviews">
+                              <v-rating
+                                :value="dataReview.rating"
+                                color="amber"
+                                dense
+                                half-increments
+                                readonly
+                                size="14"
+                              ></v-rating
+                              ><!--Empty star-->
+                            </div>
+                          </div>
+                          <!--Comments---------------------------------------->
+                          <div class="client-comment" style="text-align: justify">
+                            <p>
+                              {{ dataReview.isi }}
+                            </p>
                           </div>
                         </div>
-                        <!--reviews------>
-                        <div class="reviews">
-                          <v-rating
-                            :value= dataReview.rating
-                            color="amber"
-                            dense
-                            half-increments
-                            readonly
-                            size="14"
-                          ></v-rating
-                          ><!--Empty star-->
-                        </div>
-                      </div>
-                      <!--Comments---------------------------------------->
-                      <div class="client-comment" style="text-align: justify">
-                        <p>
-                          {{ dataReview.isi }}
-                        </p>
                       </div>
                     </div>
-                  </div>
+                    <div v-else style="min-height: 350px;">
+                      <p>No reviews available</p>
+                    </div>
                   </center>
                 </div>
               </b-tab>
               <b-tab title="Order">
-                <div>
-                  <v-form class="form"
-                        ref="form"
-                        @submit.prevent>
+                <div v-if="user_id_servicer != userLogin.id">
+                  <v-form class="form" ref="form" @submit.prevent>
                     <div class="row" style="margin: 0px">
                       <div
                         class="col-sm-4"
@@ -237,7 +254,7 @@
                               font-weight: lighter;
                             "
                           >
-                          This field is required
+                            This field is required
                           </div>
                         </v-slide-y-transition>
                       </div>
@@ -311,7 +328,7 @@
                               font-weight: lighter;
                             "
                           >
-                          This field is required
+                            This field is required
                           </div>
                         </v-slide-y-transition>
                       </div>
@@ -347,60 +364,270 @@
                         ></b-form-file>
                       </div>
                     </div>
-                  
 
-                  <v-card-actions class="row" style="margin: 0px">
-                    <div
-                      class="col-sm-4"
-                      style="
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                      "
-                    ></div>
-                    <div
-                      class="col-sm-7"
-                      style="text-align: start"
-                      v-if="
-                        !isProjectNameValid ||
-                        !isOfferingCostValid ||
-                        !isDescValid
-                      "
-                    >
-                      <v-btn
-                        style="text-transform: unset !important"
-                        rounded
-                        outlined
-                        small
-                        disabled
-                        color="indigo"
-                        class="btn-form-primary m-t-35"
-                        :loading="loading"
-                        @click="submitServiceTransaction(user_id_servicer)"
-                        >Order</v-btn
+                    <v-card-actions class="row" style="margin: 0px">
+                      <div
+                        class="col-sm-4"
+                        style="
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                        "
+                      ></div>
+                      <div
+                        class="col-sm-7"
+                        style="text-align: start"
+                        v-if="
+                          !isProjectNameValid ||
+                          !isOfferingCostValid ||
+                          !isDescValid
+                        "
                       >
-                    </div>
-                    <div
-                      class="col-sm-7"
-                      style="text-align: start"
-                      v-if="
-                        isProjectNameValid && isOfferingCostValid && isDescValid
-                      "
-                    >
-                      <v-btn
-                        style="text-transform: unset !important"
-                        rounded
-                        small
-                        outlined
-                        color="indigo"
-                        class="m-t-35"
-                        :loading="loading"
-                        @click="submitServiceTransaction(user_id_servicer)"
-                        >Order</v-btn
+                        <v-btn
+                          style="text-transform: unset !important"
+                          rounded
+                          outlined
+                          small
+                          disabled
+                          color="indigo"
+                          class="btn-form-primary m-t-35"
+                          :loading="loading"
+                          @click="submitServiceTransaction(user_id_servicer)"
+                          >Order</v-btn
+                        >
+                      </div>
+                      <div
+                        class="col-sm-7"
+                        style="text-align: start"
+                        v-if="
+                          isProjectNameValid &&
+                          isOfferingCostValid &&
+                          isDescValid
+                        "
                       >
-                    </div>
-                  </v-card-actions>
-                </v-form>
+                        <v-btn
+                          style="text-transform: unset !important"
+                          rounded
+                          small
+                          outlined
+                          color="indigo"
+                          class="m-t-35"
+                          :loading="loading"
+                          @click="submitServiceTransaction(user_id_servicer)"
+                          >Order</v-btn
+                        >
+                      </div>
+                    </v-card-actions>
+                  </v-form>
+                </div>
+                <div v-else>
+                  <div
+                    disabled
+                    style="
+                      pointer-events: none;
+                      filter: alpha(opacity=50);
+                      opacity: 0.5;
+                    "
+                  >
+                    <v-form class="form" ref="form" @submit.prevent>
+                      <div class="row" style="margin: 0px">
+                        <div
+                          class="col-sm-4"
+                          style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                          "
+                        >
+                          Project Name
+                        </div>
+                        <div class="col-sm-7">
+                          <b-form-input
+                            id="input-1"
+                            v-model="project_name"
+                            trim
+                            placeholder="e.g. Coloring Manga"
+                          ></b-form-input>
+                          <v-slide-y-transition>
+                            <div
+                              v-if="!isProjectNameValid"
+                              transition="scroll-y-transition"
+                              style="
+                                font-size: 12px;
+                                text-align: left;
+                                color: red;
+                                margin-left: 15px;
+                                margin-top: 1px;
+                                min-height: 14px;
+                                font-weight: lighter;
+                              "
+                            >
+                              This field is required
+                            </div>
+                          </v-slide-y-transition>
+                        </div>
+                      </div>
+                      <div class="row" style="margin: 0px">
+                        <div
+                          class="col-sm-4"
+                          style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                          "
+                        >
+                          Offering Cost
+                        </div>
+                        <div class="col-sm-7">
+                          <b-form-input
+                            id="input-1"
+                            v-model="offering_cost"
+                            trim
+                            placeholder="e.g. 10000000"
+                          ></b-form-input>
+                          <v-slide-y-transition>
+                            <div
+                              v-if="!isOfferingCostValid"
+                              transition="scroll-y-transition"
+                              style="
+                                font-size: 12px;
+                                text-align: left;
+                                color: red;
+                                margin-left: 15px;
+                                margin-top: 1px;
+                                min-height: 14px;
+                                font-weight: lighter;
+                              "
+                            >
+                              This field is required and must be a number
+                            </div>
+                          </v-slide-y-transition>
+                        </div>
+                      </div>
+                      <div class="row" style="margin: 0px">
+                        <div
+                          class="col-sm-4"
+                          style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                          "
+                        >
+                          Description of Task
+                        </div>
+                        <div class="col-sm-7">
+                          <b-form-input
+                            id="input-1"
+                            v-model="desc"
+                            trim
+                            placeholder="Describe shortly what you want to servicer do"
+                          ></b-form-input>
+                          <v-slide-y-transition>
+                            <div
+                              v-if="!isDescValid"
+                              transition="scroll-y-transition"
+                              style="
+                                font-size: 12px;
+                                text-align: left;
+                                color: red;
+                                margin-left: 15px;
+                                margin-top: 1px;
+                                min-height: 14px;
+                                font-weight: lighter;
+                              "
+                            >
+                              This field is required
+                            </div>
+                          </v-slide-y-transition>
+                        </div>
+                      </div>
+                      <div class="row" style="margin: 0px">
+                        <div
+                          class="col-sm-4"
+                          style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                          "
+                        >
+                          Storyboard
+                          <span
+                            style="
+                              position: relative;
+                              top: -0.5rem;
+                              font-size: 10px;
+                              color: red;
+                            "
+                            >*Optional</span
+                          >
+                        </div>
+                        <div class="col-sm-7" style="text-align: start">
+                          <b-form-file
+                            style="width: 300px"
+                            id="storyboard"
+                            v-model="storyboard"
+                            class="mt-3"
+                            plain
+                            accept="image/*"
+                          ></b-form-file>
+                        </div>
+                      </div>
+
+                      <v-card-actions class="row" style="margin: 0px">
+                        <div
+                          class="col-sm-4"
+                          style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                          "
+                        ></div>
+                        <div
+                          class="col-sm-7"
+                          style="text-align: start"
+                          v-if="
+                            !isProjectNameValid ||
+                            !isOfferingCostValid ||
+                            !isDescValid
+                          "
+                        >
+                          <v-btn
+                            style="text-transform: unset !important"
+                            rounded
+                            outlined
+                            small
+                            disabled
+                            color="indigo"
+                            class="btn-form-primary m-t-35"
+                            :loading="loading"
+                            @click="submitServiceTransaction(user_id_servicer)"
+                            >Order</v-btn
+                          >
+                        </div>
+                        <div
+                          class="col-sm-7"
+                          style="text-align: start"
+                          v-if="
+                            isProjectNameValid &&
+                            isOfferingCostValid &&
+                            isDescValid
+                          "
+                        >
+                          <v-btn
+                            style="text-transform: unset !important"
+                            rounded
+                            small
+                            outlined
+                            color="indigo"
+                            class="m-t-35"
+                            :loading="loading"
+                            @click="submitServiceTransaction(user_id_servicer)"
+                            >Order</v-btn
+                          >
+                        </div>
+                      </v-card-actions>
+                    </v-form>
+                  </div>
                 </div>
               </b-tab>
             </b-tabs>
@@ -491,6 +718,7 @@ export default {
     userLogin: {
       token: localStorage.getItem("token"), // initialize with a valid token or empty string
       uuid: localStorage.getItem("uuid"),
+      id: localStorage.getItem("id"),
     },
   }),
   created() {
@@ -512,7 +740,7 @@ export default {
     handlerDetailServicer(dataServicer) {
       this.dialogDetail = true;
       this.axioDataPortfolio(dataServicer.id);
-      this.axioDataReview(dataServicer.id)
+      this.axioDataReview(dataServicer.id);
       console.log("tes apakah berhasil memanggil axiodata");
       this.nama_persona = dataServicer.nama_persona;
       this.imageServicer = dataServicer.image;
@@ -574,7 +802,7 @@ export default {
         })
         .catch((error) => {
           // Menangani kesalahan jika terjadi
-          console.error("hahah:", error);
+          console.error("Error fetching review data", error);
           this.loadingScreen = false;
         });
     },
@@ -603,7 +831,7 @@ export default {
         });
     },
 
-    submitServiceTransaction(user_id_servicer){
+    submitServiceTransaction(user_id_servicer) {
       this.loadingScreen = true;
       // Set the headers
       var headers = {
@@ -612,14 +840,14 @@ export default {
       var url = this.$api + "/create-transaksiLayanan/" + user_id_servicer;
 
       var inputStoryboard = document.getElementById("storyboard"),
-      dataFileStoryboard = inputStoryboard.files[0];
+        dataFileStoryboard = inputStoryboard.files[0];
 
       this.TranskasiLayananForm = new FormData();
 
       this.TranskasiLayananForm.append("project_name", this.project_name);
       this.TranskasiLayananForm.append("offering_cost", this.offering_cost);
       this.TranskasiLayananForm.append("description", this.desc);
-      
+
       if (dataFileStoryboard) {
         this.TranskasiLayananForm.append("storyboard", dataFileStoryboard);
       }
@@ -636,9 +864,9 @@ export default {
           this.desc = "";
           this.storyboard = null;
 
-              this.textMessage = "Successfully send offering services";
-              this.snackbar = true;
-              this.color = "green";
+          this.textMessage = "Successfully send offering services";
+          this.snackbar = true;
+          this.color = "green";
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {

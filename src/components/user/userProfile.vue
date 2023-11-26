@@ -9,22 +9,22 @@
         @click="zoom($baseUrl + '/storage/' + imageProfile)"
         style="cursor: zoom-in"
       >
-      <img
-              v-if="image == null"
-              src="@/assets/userImage.jpg"
-                class="img-profil border"
-                style="margin-top: 10px"
-                cover
-              />
-              <div v-else>
-                <v-img
-                  v-if="image != null"
-                  :src="$baseUrl + '/storage/' + imageProfile"
-                  class="img-profil"
-                  cover
-                  style="margin-top: 10px"
-                ></v-img>
-                </div>
+        <img
+          v-if="image == null"
+          src="@/assets/userImage.jpg"
+          class="img-profil border"
+          style="margin-top: 10px"
+          cover
+        />
+        <div v-else>
+          <v-img
+            v-if="image != null"
+            :src="$baseUrl + '/storage/' + imageProfile"
+            class="img-profil"
+            cover
+            style="margin-top: 10px"
+          ></v-img>
+        </div>
       </div>
     </v-card-title>
 
@@ -75,7 +75,7 @@
               <b-col sm="5">
                 <b-img
                   fluid
-                  style="cursor: zoom-in;"
+                  style="cursor: zoom-in"
                   @click="zoom($baseUrl + '/storage/' + imageProfile)"
                   src="https://historicalartfantasia.files.wordpress.com/2022/11/fullbody-gilang-1-b-ilkom-m.-rafael-indrawan.png"
                   alt="Character"
@@ -460,9 +460,7 @@
                         hide-details
                       ></v-text-field></div
                   ></b-col>
-                  <b-col
-                    ></b-col
-                  >
+                  <b-col></b-col>
                 </b-row>
               </b-container>
 
@@ -472,20 +470,36 @@
                 :search="list.search_servicesTransaction"
               >
                 <template v-slot:[`item.no`]="{ item }">
-                  <template>{{ list.servicesTransactions.indexOf(item) + 1 }}</template>
+                  <template>{{
+                    list.servicesTransactions.indexOf(item) + 1
+                  }}</template>
                 </template>
 
                 <template v-slot:[`item.offering_cost`]="{ item }">
                   <template>
-                    <template>Rp. {{ formatPrice(item.offering_cost) }}</template>
+                    <template
+                      >Rp. {{ formatPrice(item.offering_cost) }}</template
+                    >
                   </template>
                 </template>
 
                 <template v-slot:[`item.is_deal`]="{ item }">
                   <template>
-                    <div style="color: gray;" v-if="item.is_deal == '0' && item.is_done == '0'">Delivered</div>
-                    <div style="color: blue;" v-else-if="item.is_deal == '1' && item.is_done == '0'">On-Process</div>
-                    <div style="color: green;" v-else-if="item.is_done == '1'">Done</div>
+                    <div
+                      style="color: gray"
+                      v-if="item.is_deal == '0' && item.is_done == '0'"
+                    >
+                      Delivered
+                    </div>
+                    <div
+                      style="color: blue"
+                      v-else-if="item.is_deal == '1' && item.is_done == '0'"
+                    >
+                      On-Process
+                    </div>
+                    <div style="color: green" v-else-if="item.is_done == '1'">
+                      Done
+                    </div>
                   </template>
                 </template>
 
@@ -498,6 +512,16 @@
                     >mdi-information</v-icon
                   >
                   <v-icon
+                    v-if="item.is_deal == 0"
+                    dense
+                    color="#FF0000"
+                    @click="deleteHandlerMerchandise(item)"
+                    class="data-table-icon"
+                    >mdi-delete</v-icon
+                  >
+                  <v-icon
+                    v-else
+                    disabled
                     dense
                     color="#FF0000"
                     @click="deleteHandlerMerchandise(item)"
@@ -774,7 +798,7 @@
             >
               Photo Profile
               <v-img
-              v-if="image == null || image64FotoProfile != ''"
+                v-if="image == null || image64FotoProfile != ''"
                 :src="image64FotoProfile"
                 class="img-profil border"
                 style="margin-top: 10px"
@@ -864,7 +888,7 @@
                           font-weight: lighter;
                         "
                       >
-                      This field is required
+                        This field is required
                       </div>
                     </v-slide-y-transition>
                   </div>
@@ -3077,139 +3101,264 @@
       max-width="1000"
       v-model="dialogDetailServicesTransaction"
     >
-    <v-card>
-            <v-toolbar
-              color="primary"
-              dark
-            >Detail Transaction</v-toolbar>    
-            <v-row style="margin: 0px;">
-                <v-col cols="12" sm="8" class="mt-5">
-                  <div class="style-transaksi-layanan-1">
-                    <p class="text-h5 pa-5" style="color: black; margin: 0px;">Thank you, {{ this.customer_name }}</p>
-                    <p style="color: black; margin: 0px;">Your order transaction services with the order number :</p> 
-                    <p style="color: rgb(205,133,63); margin: 5px;">{{ this.order_number }} 
-                      <span>                  
-                        <div style="color: gray;" v-if="this.is_deal == '0' && this.is_done == '0'"><span style="color: black; margin: 0px">is</span> <span style="text-decoration: underline; font-weight: bold;">delivered</span></div>
-                        <div style="color: blue;" v-else-if="this.is_deal == '1' && this.is_done == '0'"><span style="color: black; margin: 0px">is</span> <span style="text-decoration: underline; font-weight: bold;">on-process</span></div>
-                        <div style="color: green;" v-else-if="this.is_done == '1'"><span style="color: black; margin: 0px">is</span> <span style="text-decoration: underline; font-weight: bold;">done</span></div>
-                      </span>
-                    </p>
+      <v-card>
+        <v-toolbar color="primary" dark>Detail Transaction</v-toolbar>
+        <v-row style="margin: 0px">
+          <v-col cols="12" sm="8" class="mt-5">
+            <div class="style-transaksi-layanan-1">
+              <p class="text-h5 pa-5" style="color: black; margin: 0px">
+                Thank you, {{ this.customer_name }}
+              </p>
+              <p style="color: black; margin: 0px">
+                Your order transaction services with the order number :
+              </p>
+              <p style="color: rgb(205, 133, 63); margin: 5px">
+                {{ this.order_number }}
+                <span>
+                  <div
+                    style="color: gray"
+                    v-if="this.is_deal == '0' && this.is_done == '0'"
+                  >
+                    <span style="color: black; margin: 0px; ">is </span>
+                    <span style="text-decoration: underline; font-weight: bold"
+                      >delivered</span
+                    >
                   </div>
-                </v-col>
-                <v-col class="style-transaksi-layanan-2 mt-5" cols="12" sm="3">
-                  <div>
-                    <img
-                      v-if="this.is_deal == '0' && this.is_done == '0'"
-                      src="@/assets/Buy Online.gif"
-                      class="d-inline-block align-top"
-                      alt="Logo HAF"
-                      style="height: 140px"
-                    />
-                    <img
-                      v-else-if="this.is_deal == '1' && this.is_done == '0'"
-                      src="@/assets/Online Sales.gif"
-                      class="d-inline-block align-top"
-                      alt="Logo HAF"
-                      style="height: 140px"
-                    />
-                    <img
-                      v-else-if="this.is_done == '1'"
-                      src="@/assets/Packaging For Delivery.gif"
-                      class="d-inline-block align-top"
-                      alt="Logo HAF"
-                      style="height: 140px"
-                    />
-                    </div>
-                </v-col>
-              </v-row>   
+                  <div
+                    style="color: blue"
+                    v-else-if="this.is_deal == '1' && this.is_done == '0'"
+                  >
+                    <span style="color: black; margin: 0px">is </span>
+                    <span style="text-decoration: underline; font-weight: bold"
+                      >on-process</span
+                    >
+                  </div>
+                  <div style="color: green" v-else-if="this.is_done == '1'">
+                    <span style="color: black; margin: 0px">is </span>
+                    <span style="text-decoration: underline; font-weight: bold"
+                      >done</span
+                    >
+                  </div>
+                </span>
+              </p>
+            </div>
+          </v-col>
+          <v-col class="style-transaksi-layanan-2 mt-5" cols="12" sm="3">
+            <div>
+              <img
+                v-if="this.is_deal == '0' && this.is_done == '0'"
+                src="@/assets/Buy Online.gif"
+                class="d-inline-block align-top"
+                alt="Logo HAF"
+                style="height: 140px"
+              />
+              <img
+                v-else-if="this.is_deal == '1' && this.is_done == '0'"
+                src="@/assets/Online Sales.gif"
+                class="d-inline-block align-top"
+                alt="Logo HAF"
+                style="height: 140px"
+              />
+              <img
+                v-else-if="this.is_done == '1'"
+                src="@/assets/Packaging For Delivery.gif"
+                class="d-inline-block align-top"
+                alt="Logo HAF"
+                style="height: 140px"
+              />
+            </div>
+          </v-col>
+        </v-row>
 
-            <v-card-text>
-              <center>
-                <div class="ma-5 div-detail-order-services" style="width: 50%; text-align: start;">
-                  <p style="font-size: 19px; color: black; margin: 0px;">{{ this.project_name }}</p>
-                  <p style="color: black; margin: 0px;">Rp. {{ formatPrice(this.offering_cost) }}</p>
-                  <p style="color: black; margin: 0px; text-align: justify;">{{ this.description }}</p>
-                </div>
+        <v-card-text>
+          <center>
+            <div
+              class="ma-5 div-detail-order-services"
+              style="width: 50%; text-align: start"
+            >
+              <p style="font-size: 19px; color: black; margin: 0px">
+                {{ this.project_name }}
+              </p>
+              <p style="color: black; margin: 0px">
+                Rp. {{ formatPrice(this.offering_cost) }}
+              </p>
+              <p style="color: black; margin: 0px; text-align: justify">
+                {{ this.description }}
+              </p>
+            </div>
 
-                <hr style="width: 40%;">
-                <p style="color: black; margin: 0px;">
+            <hr style="width: 40%" />
+
+            <v-btn
+            v-if="this.idServicer == this.userLogin.id && this.is_deal == '0'"
+              style="text-transform: unset !important"
+              rounded
+              outlined
+              small
+              color="indigo"
+              class="btn-form-primary mt-3"
+              :loading="loading"
+              @click="takeOrder(uuidTransaksiLayanan)"
+              >Take Order</v-btn
+            >
+
+            <v-btn
+            v-if="this.idServicer == this.userLogin.id && this.is_deal == '1'"
+              style="text-transform: unset !important"
+              rounded
+              disabled
+              outlined
+              small
+              color="indigo"
+              class="btn-form-primary mt-3"
+              :loading="loading"
+              >Order Taken</v-btn
+            >
+
+            <v-btn
+            v-if="this.idCustomer == this.userLogin.id && this.is_done == '0'"
+              style="text-transform: unset !important"
+              rounded
+              outlined
+              small
+              color="indigo"
+              class="btn-form-primary mt-3"
+              :loading="loading"
+              @click="doneOrder(uuidTransaksiLayanan)"
+              >Mark as Done</v-btn
+            >
+
+            <div v-if="this.is_done == '1' && this.editReview == '1' && this.idCustomer == this.userLogin.id && this.is_deal == '1'">
+              <div v-if="this.idCustomer == this.userLogin.id">
+              <p style="color: black; margin: 0px">
                 Rate services
-                <v-btn v-if="this.canEditReview != null || this.is_done == '1'" @click="clickEditReview" icon x-small style="font-size: .875rem;" color="primary">
-                  <v-icon style="font-size: .875rem;">mdi-pencil</v-icon>
+                <v-btn
+                  v-if="this.canEditReview == null && this.is_done == '1'"
+                  @click="clickEditReview"
+                  icon
+                  x-small
+                  style="font-size: 0.875rem"
+                  color="primary"
+                >
+                  <v-icon style="font-size: 0.875rem">mdi-pencil</v-icon>
                 </v-btn>
-                </p>
-
-
-                <div v-if="this.is_done == '1' && this.editReview =='1'">
-                  
-                  <v-form class="form div-detail-order-services" ref="form" @submit.prevent>
+              </p>
+            </div>
+              <v-form
+                class="form div-detail-order-services"
+                ref="form"
+                @submit.prevent
+              >
+                <div class="text-center">
+                  <v-rating
+                    v-model="rating"
+                    color="orange"
+                    icon-label="custom icon label text {0} of {1}"
+                  ></v-rating>
+                  <center>
+                    <div style="width: 60%; margin-top: 10px; margin-top: 7px">
+                      <v-textarea
+                        placeholder="Share your experience with our order services here."
+                        auto-grow
+                        outlined
+                        rows="4"
+                        row-height="30"
+                        shaped
+                        hide-details
+                        v-model="isi"
+                      ></v-textarea>
+                    </div>
+                  </center>
+                </div>
+                <v-btn
+                  style="text-transform: unset !important"
+                  rounded
+                  outlined
+                  small
+                  color="indigo"
+                  class="btn-form-primary mt-3"
+                  :loading="loading"
+                  @click="submitReviewLayanan(uuidTransaksiLayanan, idTransaksiLayanan)"
+                  >Send Review</v-btn
+                >
+              </v-form>
+            </div>
+            <div v-else>
+              <div v-if="this.is_deal == '1' && this.is_done == '1'">
+                <div v-if="this.idCustomer == this.userLogin.id">
+                  <p style="color: black; margin: 0px">
+                    Rate services
+                    <v-btn
+                      v-if="this.canEditReview == null && this.is_done == '1'"
+                      @click="clickEditReview"
+                      icon
+                      x-small
+                      style="font-size: 0.875rem"
+                      color="primary"
+                    >
+                      <v-icon style="font-size: 0.875rem">mdi-pencil</v-icon>
+                    </v-btn>
+                  </p>
+                </div>
+                <div
+                  class="div-detail-order-services"
+                  v-if="this.idCustomer == this.userLogin.id"
+                  disabled
+                  style="
+                    pointer-events: none;
+                    filter: alpha(opacity=50);
+                    opacity: 0.5;
+                  "
+                >                
+                  <v-form
+                    class="form div-detail-order-services"
+                    ref="form"
+                    @submit.prevent
+                  >
                     <div class="text-center">
-                      
                       <v-rating
                         v-model="rating"
                         color="orange"
                         icon-label="custom icon label text {0} of {1}"
                       ></v-rating>
                       <center>
-                      <div style="width: 60%; margin-top: 10px; margin-top: 7px;">
-                        <v-textarea                      
-                          placeholder="Share your experience with our order services here."
-                          auto-grow
-                          outlined
-                          rows="4"
-                          row-height="30"
-                          shaped
-                          hide-details
-                          v-model="isi"
-                        ></v-textarea>
-                      </div>
-                    </center>
+                        <div style="width: 60%; margin-top: 10px; margin-top: 7px">
+                          <v-textarea
+                            placeholder="Share your experience with our order services here."
+                            auto-grow
+                            outlined
+                            rows="4"
+                            row-height="30"
+                            shaped
+                            hide-details
+                            v-model="isi"
+                          ></v-textarea>
+                        </div>
+                      </center>
                     </div>
-                  
                     <v-btn
-                          style="text-transform: unset !important"
-                          rounded
-                          outlined
-                          small
-                          color="indigo"
-                          class="btn-form-primary mt-3"
-                          :loading="loading"
-                          @click="submitReviewLayanan(idTransaksiLayanan)"
-                          >Send Review</v-btn
-                        >
+                      style="text-transform: unset !important"
+                      rounded
+                      outlined
+                      small
+                      color="indigo"
+                      class="btn-form-primary mt-3"
+                      :loading="loading"
+                      @click="submitReviewLayanan(uuidTransaksiLayanan, idTransaksiLayanan)"
+                      >Send Review</v-btn
+                    >
                   </v-form>
                 </div>
-                <div class="div-detail-order-services" v-else disabled style="pointer-events:none; filter:alpha(opacity=50); opacity:0.5;">
-                  <div class="text-center">
-                    <v-rating
-                      v-model="rating"
-                      color="orange"
-                      icon-label="custom icon label text {0} of {1}"
-                    ></v-rating>
-                    <center>
-                    <div style="width: 60%; margin-top: 10px">
-                      <v-textarea                      
-                        placeholder="Write your experience order services here"
-                        auto-grow
-                        outlined
-                        rows="4"
-                        row-height="30"
-                        shaped
-                        v-model="isi"
-                      ></v-textarea>
-                    </div>
-                  </center>
-                  </div>
-                </div>
-              </center>
-            </v-card-text>
-            <v-card-actions class="justify-end">
-              <v-btn
-                text
-                @click="closeDialogDetailServicesTransaction"
-              >Close</v-btn>
-            </v-card-actions>
-          </v-card>
+              </div>
+            </div>
+          </center>
+        </v-card-text>
+        <v-card-actions class="justify-end">
+          <v-btn text @click="closeDialogDetailServicesTransaction"
+            >Close</v-btn
+          >
+        </v-card-actions>
+      </v-card>
     </v-dialog>
     <!-- End Detail Services Transaction -->
 
@@ -3316,16 +3465,19 @@ export default {
     is_deal: "",
     is_done: "",
     idTransaksiLayanan: "",
+    uuidTransaksiLayanan: "",
     ReviewLayananForm: new FormData(),
 
     // Transkasi Layanan
-    
 
     // Review Layanan
+    idServiceLayanan: "",
     rating: null,
     isi: "",
     editReview: null,
     canEditReview: null,
+    idCustomer: "",
+    idServicer: "",
 
     // Comic & Sub Comic & Portfolio & Merchandise
     judul: "",
@@ -3562,13 +3714,13 @@ export default {
   },
   methods: {
     // Review Layanan\
-    closeDialogDetailServicesTransaction(){
+    closeDialogDetailServicesTransaction() {
       this.dialogDetailServicesTransaction = false;
       this.editReview = 0;
       this.canEditReview = 0;
     },
 
-    clickEditReview(){
+    clickEditReview() {
       this.editReview = 1;
     },
 
@@ -3589,18 +3741,21 @@ export default {
         .then((response) => {
           this.dataServiceReview = response.data.data;
 
-          if(this.dataServiceReview != null){
-            this.rating= this.dataServiceReview.rating;
+          if (this.dataServiceReview != null) {
+            this.rating = this.dataServiceReview.rating;
             this.isi = this.dataServiceReview.isi;
             this.canEditReview = this.dataServiceReview.rating;
-          }
-          else if(this.dataServiceReview == null){
-            this.rating= null;
+          } else if (this.dataServiceReview == null) {
+            this.rating = null;
             this.isi = "";
             this.canEditReview = null;
           }
 
-          console.log(this.dataServiceReview, this.canEditReview, 'tes canedit review')
+          console.log(
+            this.dataServiceReview,
+            this.canEditReview,
+            "tes canedit review"
+          );
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
@@ -3614,7 +3769,7 @@ export default {
         });
     },
 
-    submitReviewLayanan(idTransaksiLayanan) {
+    submitReviewLayanan(uuidTransaksiLayanan, idTransaksiLayanan) {
       if (this.$refs.form.validate()) {
         // Set the headers
         var headers = {
@@ -3628,7 +3783,7 @@ export default {
 
         this.loadingScreen = true;
 
-        var url = this.$api + "/create-reviewLayanan/" + idTransaksiLayanan;
+        var url = this.$api + "/create-reviewLayanan/" + uuidTransaksiLayanan + "/" + idTransaksiLayanan ;
 
         this.$http
           .post(url, this.ReviewLayananForm, { headers: headers })
@@ -3636,12 +3791,12 @@ export default {
             this.error_message = response.data.message;
             console.log(this.error_message);
 
-            this.canEditReview = null;
+            this.canEditReview = 1;
             this.editReview = null;
 
             this.textMessage = "Succes added review service transaction";
             this.snackbar = true;
-            this.color = "green";      
+            this.color = "green";
 
             setTimeout(() => {
               this.loadingScreen = false;
@@ -3662,9 +3817,81 @@ export default {
     // End Review Layanan
 
     // Services Transaction
-    detailHandlerServicesTransaction(item){
-      this.dialogDetailServicesTransaction = true;
+    takeOrder(uuidTransaction) {
+      this.loadingScreen = true;
+      var url;
 
+      url = this.$api + "/takeOrder/" + uuidTransaction;
+
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .post(url, { headers: headers })
+        .then((response) => {
+          this.error_message = response.data.message;
+
+          this.is_deal = 1;
+          this.initializeServicesTranscation();
+
+            this.textMessage = "Order taken successfully";
+            this.snackbar = true;
+            this.color = "green";
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error taking order", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    doneOrder(uuidTransaction) {
+      this.loadingScreen = true;
+      var url;
+
+      url = this.$api + "/doneOrder/" + uuidTransaction;
+
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .post(url, { headers: headers })
+        .then((response) => {
+          this.error_message = response.data.message;
+
+          this.is_done = 1;
+          this.initializeServicesTranscation();
+
+            this.textMessage = "Order marked as done";
+            this.snackbar = true;
+            this.color = "green";
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error taking order", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    detailHandlerServicesTransaction(item) {
+      this.dialogDetailServicesTransaction = true;
+      this.uuidTransaksiLayanan = item.uuid;
       this.idTransaksiLayanan = item.id;
       this.project_name = item.project_name;
       this.customer_name = item.customer_name;
@@ -3673,20 +3900,20 @@ export default {
       this.is_done = item.is_done;
       this.offering_cost = item.offering_cost;
       this.description = item.description;
+      this.idCustomer = item.user_id_customer;
+      this.idServicer = item.user_id_servicer;
 
       // Review
-      this.axioGetDataServiceReview(item.id);      
-      
+      this.axioGetDataServiceReview(item.id);
     },
 
     axioDataServicesTransaction() {
       this.loadingScreen = true;
       var url;
 
-      if(this.userLogin.role == 'admin'){
+      if (this.userLogin.role == "admin") {
         url = this.$api + "/show-all-transkasiLayanan";
-      }
-      else{
+      } else {
         url = this.$api + "/show-transkasiLayanan/" + this.userLogin.id;
       }
 
@@ -3761,7 +3988,13 @@ export default {
           align: "center",
           sortable: false,
         },
-        { text: "Actions", value: "actions", align: "center", sortable: false, width: "10%" },
+        {
+          text: "Actions",
+          value: "actions",
+          align: "center",
+          sortable: false,
+          width: "10%",
+        },
       ];
       this.axioDataServicesTransaction();
     },
@@ -3798,16 +4031,21 @@ export default {
         this.like = this.myProfile.like;
         this.did_not_like = this.myProfile.did_not_like;
         this.hobby = this.myProfile.hobi;
-        this.quotes = this.myProfile.quotes;      
+        this.quotes = this.myProfile.quotes;
         this.ig_acc = this.myProfile.ig_acc;
-        this.story_character = this.myProfile.story_character;        
-      }
-      else{
+        this.story_character = this.myProfile.story_character;
+      } else {
         this.dialogEditProfile = true;
         this.persona_name = this.myProfile.nama_persona;
       }
-      
-      console.log(this.myProfile.nama_persona, 'editprofile', this.myProfile.image, 'haha', this.myProfile.image);
+
+      console.log(
+        this.myProfile.nama_persona,
+        "editprofile",
+        this.myProfile.image,
+        "haha",
+        this.myProfile.image
+      );
     },
 
     handleFileChangeProfile(event) {
@@ -3836,7 +4074,6 @@ export default {
         fotoDataProfile.readAsDataURL(file);
       }
     },
-
 
     submitUpdateProfile(uuid) {
       if (this.$refs.form.validate()) {
@@ -3897,7 +4134,7 @@ export default {
             localStorage.setItem("nama_persona", this.myProfile.nama_persona);
             localStorage.setItem("image", this.myProfile.image);
 
-            this.reloadPage(); 
+            this.reloadPage();
 
             setTimeout(() => {
               this.loadingScreen = false;
@@ -3929,9 +4166,14 @@ export default {
         .get(url, { headers: headers })
         .then((response) => {
           this.myProfile = response.data.myProfile;
-          this.image = response.data.myProfile.image
+          this.image = response.data.myProfile.image;
 
-          console.log(response.data.myProfile, "myProfile", response.data.myProfile.image, this.image);
+          console.log(
+            response.data.myProfile,
+            "myProfile",
+            response.data.myProfile.image,
+            this.image
+          );
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
@@ -5289,8 +5531,8 @@ export default {
 
     // For changing the format of currency
     formatPrice(value) {
-        let val = (value/1).toFixed(2).replace('.', ',')
-        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+      let val = (value / 1).toFixed(2).replace(".", ",");
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     },
 
     // For chech file is empty or not
@@ -5426,13 +5668,13 @@ export default {
   margin: 10px;
 }
 
-.style-transaksi-layanan-1{
-  justify-content: end; 
+.style-transaksi-layanan-1 {
+  justify-content: end;
   display: grid;
 }
 
-.style-transaksi-layanan-2{
-  justify-content: start; 
+.style-transaksi-layanan-2 {
+  justify-content: start;
   display: grid;
 }
 
@@ -5441,31 +5683,31 @@ export default {
     width: 80%;
   }
 
-  .style-transaksi-layanan-1{
-  justify-content: none; 
-  display: grid;
-}
+  .style-transaksi-layanan-1 {
+    justify-content: none;
+    display: grid;
+  }
 
-.style-transaksi-layanan-2{
-  justify-content: none; 
-  display: grid;
-}
+  .style-transaksi-layanan-2 {
+    justify-content: none;
+    display: grid;
+  }
 }
 
 @media only screen and (max-width: 600px) {
-  .div-detail-order-services{
+  .div-detail-order-services {
     width: 80% !important;
-  } 
-  
-  .style-transaksi-layanan-1{
-  justify-content: none; 
-  display: block;
-}
+  }
 
-.style-transaksi-layanan-2{
-  justify-content: none; 
-  display: block;
-}
+  .style-transaksi-layanan-1 {
+    justify-content: none;
+    display: block;
+  }
+
+  .style-transaksi-layanan-2 {
+    justify-content: none;
+    display: block;
+  }
   .conatiner-size-my-profile {
     width: 100%;
   }
