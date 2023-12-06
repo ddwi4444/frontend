@@ -75,7 +75,7 @@
               <b-col sm="5">
                 <b-img
                   fluid
-                  style="cursor: zoom-in"
+                  style="cursor: zoom-in; height: 500px;"
                   @click="zoom($baseUrl + '/storage/' + imageProfile)"
                   src="https://historicalartfantasia.files.wordpress.com/2022/11/fullbody-gilang-1-b-ilkom-m.-rafael-indrawan.png"
                   alt="Character"
@@ -1443,7 +1443,7 @@
         </v-form>
 
         <v-card-actions class="justify-end mt-5">
-          <div
+          <!-- <div
             v-if="
               !isPersonaNameValid ||
               !isBioValid ||
@@ -1474,26 +1474,8 @@
               @click="submitUpdateProfile(getUUIDProfile)"
               >Save Profile</v-btn
             >
-          </div>
+          </div> -->
           <div
-            v-if="
-              isPersonaNameValid &&
-              isBioValid &&
-              isAgeValid &&
-              isRacialValid &&
-              isBirthDateValid &&
-              isZodiacValid &&
-              isMBTIValid &&
-              isBodyWeightValid &&
-              isBodyTallValid &&
-              isLikeValid &&
-              isDidNotLikeValid &&
-              isHobbyValid &&
-              isQuotesValid &&
-              isIgAccValid &&
-              isStoryCharacterValid &&
-              isFileProfileSelected
-            "
           >
             <v-btn
               style="text-transform: unset !important"
@@ -3854,7 +3836,7 @@ export default {
 
       // Gunakan 'url' dalam permintaan POST
       this.$http
-        .post(url, { headers: headers })
+        .get(url, { headers: headers })
         .then((response) => {
           this.error_message = response.data.message;
 
@@ -3890,7 +3872,7 @@ export default {
 
       // Gunakan 'url' dalam permintaan POST
       this.$http
-        .post(url, { headers: headers })
+        .get(url, { headers: headers })
         .then((response) => {
           this.error_message = response.data.message;
 

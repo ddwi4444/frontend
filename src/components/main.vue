@@ -8,14 +8,13 @@
     <div class="app">
       <nav class="navbar padding-navbar d-flex w-full p-x-15">
         <div class="logo">
-          <router-link to="/">
             <img
+            @click="handlerGoHome"
               src="@/assets/logoHAF2.png"
               class="d-inline-block align-top"
               alt="Logo HAF"
-              style="height: 30px"
+              style="height: 30px; cursor: pointer;"
             />
-          </router-link>
         </div>
 
         <div :class="['links', { open: isMenuOpen }]">
@@ -119,6 +118,19 @@ export default {
             name: "login",
           });
         });
+    },
+
+    handlerGoHome(){
+      return this.$router.push("/").catch((error) => {
+        if (error.name != "NavigationDuplicated") {
+          throw error;
+        }
+      });
+    },
+
+    // Reload Page
+    reloadPage() {
+      window.location.reload();
     },
   },
   computed: {
@@ -229,7 +241,7 @@ export default {
   height: 3px;
   background-color: white;
   margin: 3px 0;
-  transition: transform 0.3s, opacity 0.3s;
+  transition: all 1s ease;
 }
 
 .open .bar:nth-child(1) {
@@ -286,10 +298,15 @@ export default {
     transition: ease-in-out;
     animation-duration: 4s;
     animation-delay: 2s;
+    transition: all 1s ease;
+
   }
 
   .links.open {
     display: flex;
+    border-bottom-left-radius: 15px !important;
+    border-bottom-right-radius: 15px !important;  
+    transition: all 1s ease;
   }
 
   .menu-toggle {

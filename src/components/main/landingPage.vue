@@ -1,202 +1,312 @@
 <template>
+  <div>
+    <loading-screen :value="loadingScreen"></loading-screen>
+
     <div>
-      <div>
-        <div class="d-flex mb-3 size-bar-home">
-          <div>
-            <b-nav>
-              <b-nav-item-dropdown style="list-style: none" text="Category" right>
-                <b-dropdown-item href="#">EN</b-dropdown-item>
-                <b-dropdown-item href="#">ES</b-dropdown-item>
-                <b-dropdown-item href="#">RU</b-dropdown-item>
-                <b-dropdown-item href="#">FA</b-dropdown-item>
-              </b-nav-item-dropdown>
-              <b-nav-item>Updates</b-nav-item>
-              <b-nav-item>Featured</b-nav-item>
-              <b-nav-item>Favorites</b-nav-item>
-              <b-nav-item>Favorites</b-nav-item>
-              <div class="search-box">
-                <button class="btn-search">
-                  <b-icon-search></b-icon-search>
-                </button>
-                <input
-                  type="text"
-                  class="input-search"
-                  placeholder="Type to Search..."
-                />
-              </div>
-            </b-nav>
+      <div class="d-flex mb-3 size-bar-home">
+        <div style="width: 100%">
+          <b-nav tabs style="padding: 0px; align-items: center">
+            <b-nav-item
+              v-if="isCategoryOn == 1"
+              active
+              @click="handlerClickCategory"
+              >Category</b-nav-item
+            >
+            <b-nav-item v-else @click="handlerClickCategory"
+              >Category</b-nav-item
+            >
+            <b-nav-item
+              v-if="isKomikTodayOn == 1"
+              active
+              @click="handlerClickKomikToday"
+              >Today Updates</b-nav-item
+            >
+            <b-nav-item v-else @click="handlerClickKomikToday"
+              >Today Updates</b-nav-item
+            >
+            <b-nav-item
+              v-if="isFavoriteOn == 1"
+              active
+              @click="handlerClickFavoriteLandingPage"
+              >Favorites</b-nav-item
+            >
+            <b-nav-item v-else @click="handlerClickFavoriteLandingPage"
+              >Favorites</b-nav-item
+            >
+            <transition name="fade">
+              <b-nav-item
+                v-if="
+                  isCategoryOn == 1 || isFavoriteOn == 1 || isKomikTodayOn == 1
+                "
+                @click.stop="handlerClickCloseAll"
+                ><v-icon
+                  dense
+                  color="red"
+                  class="data-table-icon hover-heart"
+                  style="cursor: pointer"
+                >
+                  mdi-close
+                </v-icon>
+              </b-nav-item>
+            </transition>
+          </b-nav>
+          <div class="search-box">
+            <button class="btn-search" @click="search">
+              <b-icon-search></b-icon-search>
+            </button>
+            <input
+              type="text"
+              class="input-search"
+              v-model="searchTerm"
+              @keyup.enter="search"
+              @input="handleInput"
+              placeholder="Type to Search..."
+            />
           </div>
         </div>
       </div>
-  
-      <div class="container">
+      <center>
+        <transition name="fade">
+          <div v-if="isCategoryOn == 1" class="mb-2">
+            <v-tabs
+              class="tabs-category"
+              show-arrows
+              style="overflow-x: auto; overflow-y: hidden; flex-wrap: nowrap"
+            >
+              <v-tabs-slider color="lighten-3"></v-tabs-slider>
+              <v-tab
+                v-for="(item, i) in itemsGenre"
+                :key="item"
+                :href="'#tab-' + i"
+                @click="handlerGetComicByCategori(item)"
+                style="text-transform: capitalize !important"
+              >
+                {{ item }}
+              </v-tab>
+            </v-tabs>
+          </div>
+        </transition>
+      </center>
+    </div>
+
+    <!-- Search -->
+    <!-- Tampilkan hasil pencarian di sini -->
+    <transition name="fade">
+    <div v-if="this.isInputOn == 1" style="margin-bottom: 70px; margin-top: 20px;">
+      <p>Result for {{ searchTerm }}</p>
+      <div class="row" v-if="searchResults.length > 0">
+          <div class="row" style="justify-content: center; max-width: none">
+            <div
+            v-for="result in searchResults" :key="result.id"
+              @click="handlerClickCategory"
+              class="card card-with-bg"
+              :style="{
+                'background-image':
+                  'url(' + $baseUrl + '/storage/' + result.thumbnail + ')',
+              }"
+            >
+              <div class="card-info" @click.stop="handlerClickCard(result)">
+                <div class="card-title" style="cursor: pointer">
+                  {{ result.judul }}
+                </div>
+                <div class="card-subtitle" style="cursor: pointer">
+                  {{ result.post_by }}
+                </div>
+                <div class="card-social">
+                  <div class="row no-gutters">
+                    <div
+                      class="col"
+                      style="
+                        font-size: 12px;
+                        color: white;
+                        align-items: center;
+                        display: flex;
+                        justify-content: center;
+                      "
+                    >
+                      <v-icon
+                        dense
+                        x-small
+                        color="#e0e0e0"
+                        class="data-table-icon"
+                        style="padding-right: 3px"
+                        >mdi-eye</v-icon
+                      >
+                      {{ result.jumlah_view }}
+                    </div>
+                    <div
+                      class="col"
+                      v-if="hasFavorite(result.uuid, userLogin.uuid)"
+                    >
+                      <!-- Display content when there is a matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFC0CB"
+                        class="data-table-icon hover-heart"
+                        @click.stop="handlerClickFavorite(result.uuid)"
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
+                    <div v-else class="col">
+                      <!-- Display content when there is no matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFFFFF"
+                        class="data-table-icon hover-heart"
+                        @click.stop="handlerClickFavorite(result.uuid)"
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <div class="row no-gutters">
+                  <div
+                    class="col"
+                    style="
+                      display: grid;
+                      align-content: center;
+                      justify-content: end;
+                    "
+                  >
+                    <p>No results found for {{ searchTerm }}</p>
+                  </div>
+                  <div
+                    class="col"
+                    style="
+                      display: grid;
+                      align-content: center;
+                      justify-content: start;
+                    "
+                  >
+                    <img
+                      src="@/assets/2953962.jpg"
+                      style="height: 150px"
+                      class="d-inline-block align-top"
+                      alt="Animation"
+                    />
+                  </div>
+                </div>
+    </div>
+    </div>
+  </transition>
+    <!-- End Serach -->
+
+
+    <!-- Landing Page -->
+    <transition name="fade">
+      <div
+        class="container"
+        v-if="isCategoryOn == 0 && isFavoriteOn == 0 && isKomikTodayOn == 0 && isKomikCategoryOn == 0"
+      >
         <h5
           style="
             text-align: center;
             color: #333333;
-            font-weight: bold;
-            font-size: 18px;
+            font-size: 20px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            font-family: 'Georgia';
           "
         >
           Latest Updates
         </h5>
+        <!-- Beri 5 card untuk terbaru -->
         <div class="row">
-          <div class="row" style="justify-content: center; max-width: none;">
-            <article class="card card--1">
-              <div class="card__img"></div>
-              <a href="#" class="card_link">
-                <div class="card__img--hover"></div>
-              </a>
-              <div class="card__info">
-                <p class="card__title" style="margin-bottom: 0px">
-                  Crisp Spanish tortilla Matzo brei
-                </p>
-                <p class="card__by" style="margin-bottom: 0px">
-                  by
-                  <a href="#" class="card__author" title="author"
-                    >Celeste Mills</a
-                  >
-                </p>
-                <div class="row" style="justify-content: center; margin-top: 0px">
-                  <div class="col-md-2">
-                    <p>
-                      <a href=""
-                        ><b-icon icon="heart" aria-hidden="true"></b-icon
-                      ></a>
-                    </p>
-                  </div>
-                  <div class="col-md-6">
-                    <p><b-icon icon="eye" aria-hidden="true"></b-icon> 100k</p>
+          <div class="row" style="justify-content: center; max-width: none">
+            <div
+              v-for="dataLatest in dataLatests"
+              :key="dataLatest.id"
+              @click="handlerClickCategory"
+              class="card card-with-bg"
+              :style="{
+                'background-image':
+                  'url(' + $baseUrl + '/storage/' + dataLatest.thumbnail + ')',
+              }"
+            >
+              <div class="card-info" @click.stop="handlerClickCard(dataLatest)">
+                <div class="card-title" style="cursor: pointer">
+                  {{ dataLatest.judul }}
+                </div>
+                <div class="card-subtitle" style="cursor: pointer">
+                  {{ dataLatest.post_by }}
+                </div>
+                <div class="card-social">
+                  <div class="row no-gutters">
+                    <div
+                      class="col"
+                      style="
+                        font-size: 12px;
+                        color: white;
+                        align-items: center;
+                        display: flex;
+                        justify-content: center;
+                      "
+                    >
+                      <v-icon
+                        dense
+                        x-small
+                        color="#e0e0e0"
+                        class="data-table-icon"
+                        style="padding-right: 3px"
+                        >mdi-eye</v-icon
+                      >
+                      {{ dataLatest.jumlah_view }}
+                    </div>
+                    <div
+                      class="col"
+                      v-if="hasFavorite(dataLatest.uuid, userLogin.uuid)"
+                    >
+                      <!-- Display content when there is a matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFC0CB"
+                        class="data-table-icon hover-heart"
+                        @click.stop="handlerClickFavorite(dataLatest.uuid)"
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
+                    <div v-else class="col">
+                      <!-- Display content when there is no matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFFFFF"
+                        class="data-table-icon hover-heart"
+                        @click.stop="handlerClickFavorite(dataLatest.uuid)"
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
                   </div>
                 </div>
               </div>
-            </article>
-            <article class="card card--1">
-              <div class="card__img"></div>
-              <a href="#" class="card_link">
-                <div class="card__img--hover"></div>
-              </a>
-              <div class="card__info">
-                <p class="card__title" style="margin-bottom: 0px">
-                  Crisp Spanish tortilla Matzo brei
-                </p>
-                <p class="card__by" style="margin-bottom: 0px">
-                  by
-                  <a href="#" class="card__author" title="author"
-                    >Celeste Mills</a
-                  >
-                </p>
-                <div class="row" style="justify-content: center; margin-top: 0px">
-                  <div class="col-md-2">
-                    <p>
-                      <a href=""
-                        ><b-icon icon="heart" aria-hidden="true"></b-icon
-                      ></a>
-                    </p>
-                  </div>
-                  <div class="col-md-6">
-                    <p><b-icon icon="eye" aria-hidden="true"></b-icon> 100k</p>
-                  </div>
-                </div>
-              </div>
-            </article>
-            <article class="card card--1">
-              <div class="card__img"></div>
-              <a href="#" class="card_link">
-                <div class="card__img--hover"></div>
-              </a>
-              <div class="card__info">
-                <p class="card__title" style="margin-bottom: 0px">
-                  Crisp Spanish tortilla Matzo brei
-                </p>
-                <p class="card__by" style="margin-bottom: 0px">
-                  by
-                  <a href="#" class="card__author" title="author"
-                    >Celeste Mills</a
-                  >
-                </p>
-                <div class="row" style="justify-content: center; margin-top: 0px">
-                  <div class="col-md-2">
-                    <p>
-                      <a href=""
-                        ><b-icon icon="heart" aria-hidden="true"></b-icon
-                      ></a>
-                    </p>
-                  </div>
-                  <div class="col-md-6">
-                    <p><b-icon icon="eye" aria-hidden="true"></b-icon> 100k</p>
-                  </div>
-                </div>
-              </div>
-            </article>
-            <article class="card card--1">
-              <div class="card__img"></div>
-              <a href="#" class="card_link">
-                <div class="card__img--hover"></div>
-              </a>
-              <div class="card__info">
-                <p class="card__title" style="margin-bottom: 0px">
-                  Crisp Spanish tortilla Matzo brei
-                </p>
-                <p class="card__by" style="margin-bottom: 0px">
-                  by
-                  <a href="#" class="card__author" title="author"
-                    >Celeste Mills</a
-                  >
-                </p>
-                <div class="row" style="justify-content: center; margin-top: 0px">
-                  <div class="col-md-2">
-                    <p>
-                      <a href=""
-                        ><b-icon icon="heart" aria-hidden="true"></b-icon
-                      ></a>
-                    </p>
-                  </div>
-                  <div class="col-md-6">
-                    <p><b-icon icon="eye" aria-hidden="true"></b-icon> 100k</p>
-                  </div>
-                </div>
-              </div>
-            </article>
-            <article class="card card--1">
-              <div class="card__img"></div>
-              <a href="#" class="card_link">
-                <div class="card__img--hover"></div>
-              </a>
-              <div class="card__info">
-                <p class="card__title" style="margin-bottom: 0px">
-                  Crisp Spanish tortilla Matzo brei
-                </p>
-                <p class="card__by" style="margin-bottom: 0px">
-                  by
-                  <a href="#" class="card__author" title="author"
-                    >Celeste Mills</a
-                  >
-                </p>
-                <div class="row" style="justify-content: center; margin-top: 0px">
-                  <div class="col-md-2">
-                    <p>
-                      <a href=""
-                        ><b-icon icon="heart" aria-hidden="true"></b-icon
-                      ></a>
-                    </p>
-                  </div>
-                  <div class="col-md-6">
-                    <p><b-icon icon="eye" aria-hidden="true"></b-icon> 100k</p>
-                  </div>
-                </div>
-              </div>
-            </article>
+            </div>
           </div>
         </div>
-  
+
         <div
           class="row"
           style="
             margin-top: 100px;
+            margin-bottom: 60px;
+            margin-left: 1px;
+            margin-right: 1px;
             border: 2px;
             border-style: solid;
             border-radius: 20;
@@ -206,482 +316,2149 @@
             style="
               text-align: center;
               color: #333333;
-              font-weight: bold;
-              font-size: 18px;
+              font-family: 'Georgia';
+              font-size: 20px;
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
               margin-top: 20px;
+              margin-bottom: 20px;
             "
           >
-            Hottest This Week
+            Popular This Week
           </h5>
           <div class="section" style="margin-bottom: 30px">
-            <div class="row" style="justify-content: center">
-              <article class="card card--1">
-                <div class="card__img"></div>
-                <a href="#" class="card_link">
-                  <div class="card__img--hover"></div>
-                </a>
-                <div class="card__info">
-                  <p class="card__title" style="margin-bottom: 0px">
-                    Crisp Spanish tortilla Matzo brei
-                  </p>
-                  <p class="card__by" style="margin-bottom: 0px">
-                    by
-                    <a href="#" class="card__author" title="author"
-                      >Celeste Mills</a
-                    >
-                  </p>
-                  <div
-                    class="row"
-                    style="justify-content: center; margin-top: 0px"
-                  >
-                    <div class="col-md-2">
-                      <p>
-                        <a href=""
-                          ><b-icon icon="heart" aria-hidden="true"></b-icon
-                        ></a>
-                      </p>
-                    </div>
-                    <div class="col-md-6">
-                      <p><b-icon icon="eye" aria-hidden="true"></b-icon> 100k</p>
+            <div class="row" style="justify-content: center; max-width: none">
+              <div
+                v-for="dataPopular in dataPopulars"
+                :key="dataPopular.id"
+                @click="handlerClickCategory"
+                class="card card-with-bg"
+                :style="{
+                  'background-image':
+                    'url(' +
+                    $baseUrl +
+                    '/storage/' +
+                    dataPopular.thumbnail +
+                    ')',
+                }"
+              >
+                <div
+                  class="card-info"
+                  @click.stop="handlerClickCard(dataPopular)"
+                >
+                  <div class="card-title" style="cursor: pointer">
+                    {{ dataPopular.judul }}
+                  </div>
+                  <div class="card-subtitle" style="cursor: pointer">
+                    {{ dataPopular.post_by }}
+                  </div>
+                  <div class="card-social">
+                    <div class="row no-gutters">
+                      <div
+                        class="col"
+                        style="
+                          font-size: 12px;
+                          color: white;
+                          align-items: center;
+                          display: flex;
+                          justify-content: center;
+                        "
+                      >
+                        <v-icon
+                          dense
+                          x-small
+                          color="#e0e0e0"
+                          class="data-table-icon"
+                          style="padding-right: 3px"
+                          >mdi-eye</v-icon
+                        >
+                        {{ dataPopular.jumlah_view }}
+                      </div>
+                      <div
+                        class="col"
+                        v-if="hasFavorite(dataPopular.uuid, userLogin.uuid)"
+                      >
+                        <!-- Display content when there is a matching favorite -->
+                        <v-icon
+                          small
+                          dense
+                          color="#FFC0CB"
+                          class="data-table-icon hover-heart"
+                          @click.stop="handlerClickFavorite(dataPopular.uuid)"
+                          style="cursor: pointer"
+                        >
+                          mdi-heart
+                        </v-icon>
+                      </div>
+                      <div v-else class="col">
+                        <!-- Display content when there is no matching favorite -->
+                        <v-icon
+                          small
+                          dense
+                          color="#FFFFFF"
+                          class="data-table-icon hover-heart"
+                          @click.stop="handlerClickFavorite(dataPopular.uuid)"
+                          style="cursor: pointer"
+                        >
+                          mdi-heart
+                        </v-icon>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </article>
-              <article class="card card--1">
-                <div class="card__img"></div>
-                <a href="#" class="card_link">
-                  <div class="card__img--hover"></div>
-                </a>
-                <div class="card__info">
-                  <p class="card__title" style="margin-bottom: 0px">
-                    Crisp Spanish tortilla Matzo brei
-                  </p>
-                  <p class="card__by" style="margin-bottom: 0px">
-                    by
-                    <a href="#" class="card__author" title="author"
-                      >Celeste Mills</a
-                    >
-                  </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h5
+          style="
+            text-align: center;
+            color: #333333;
+            font-size: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-family: 'Georgia';
+          "
+        >
+          Daily Updates
+        </h5>
+        <!-- Beri 5 card untuk terbaru -->
+        <div class="row">
+          <div class="row" style="justify-content: center; max-width: none">
+            <div v-if="dataTodays.length == 0">
+              <div class="row no-gutters">
                   <div
-                    class="row"
-                    style="justify-content: center; margin-top: 0px"
+                    class="col"
+                    style="
+                      display: grid;
+                      align-content: center;
+                      justify-content: end;
+                    "
                   >
-                    <div class="col-md-2">
-                      <p>
-                        <a href=""
-                          ><b-icon icon="heart" aria-hidden="true"></b-icon
-                        ></a>
-                      </p>
+                    <p>There is no comics updates today</p>
+                  </div>
+                  <div
+                    class="col"
+                    style="
+                      display: grid;
+                      align-content: center;
+                      justify-content: start;
+                    "
+                  >
+                    <img
+                      src="@/assets/2953962.jpg"
+                      style="height: 150px"
+                      class="d-inline-block align-top"
+                      alt="Animation"
+                    />
+                  </div>
+                </div>
+            </div>
+            <div v-else class="row" style="justify-content: center; max-width: none">
+              <div
+              v-for="dataToday in dataTodays"
+              :key="dataToday.id"
+              @click="handlerClickCategory"
+              class="card card-with-bg"
+              :style="{
+                'background-image':
+                  'url(' + $baseUrl + '/storage/' + dataToday.thumbnail + ')',
+              }"
+            >
+              <div class="card-info" @click.stop="handlerClickCard(dataToday)">
+                <div class="card-title" style="cursor: pointer">
+                  {{ dataToday.judul }}
+                </div>
+                <div class="card-subtitle" style="cursor: pointer">
+                  {{ dataToday.post_by }}
+                </div>
+                <div class="card-social">
+                  <div class="row no-gutters">
+                    <div
+                      class="col"
+                      style="
+                        font-size: 12px;
+                        color: white;
+                        align-items: center;
+                        display: flex;
+                        justify-content: center;
+                      "
+                    >
+                      <v-icon
+                        dense
+                        x-small
+                        color="#e0e0e0"
+                        class="data-table-icon"
+                        style="padding-right: 3px"
+                        >mdi-eye</v-icon
+                      >
+                      {{ dataToday.jumlah_view }}
                     </div>
-                    <div class="col-md-6">
-                      <p><b-icon icon="eye" aria-hidden="true"></b-icon> 100k</p>
+                    <div
+                      class="col"
+                      v-if="hasFavorite(dataToday.uuid, userLogin.uuid)"
+                    >
+                      <!-- Display content when there is a matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFC0CB"
+                        class="data-table-icon hover-heart"
+                        @click.stop="handlerClickFavorite(dataToday.uuid)"
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
+                    <div v-else class="col">
+                      <!-- Display content when there is no matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFFFFF"
+                        class="data-table-icon hover-heart"
+                        @click.stop="handlerClickFavorite(dataToday.uuid)"
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
                     </div>
                   </div>
                 </div>
-              </article>
-              <article class="card card--1">
-                <div class="card__img"></div>
-                <a href="#" class="card_link">
-                  <div class="card__img--hover"></div>
-                </a>
-                <div class="card__info">
-                  <p class="card__title" style="margin-bottom: 0px">
-                    Crisp Spanish tortilla Matzo brei
-                  </p>
-                  <p class="card__by" style="margin-bottom: 0px">
-                    by
-                    <a href="#" class="card__author" title="author"
-                      >Celeste Mills</a
-                    >
-                  </p>
-                  <div
-                    class="row"
-                    style="justify-content: center; margin-top: 0px"
-                  >
-                    <div class="col-md-2">
-                      <p>
-                        <a href=""
-                          ><b-icon icon="heart" aria-hidden="true"></b-icon
-                        ></a>
-                      </p>
-                    </div>
-                    <div class="col-md-6">
-                      <p><b-icon icon="eye" aria-hidden="true"></b-icon> 100k</p>
-                    </div>
-                  </div>
-                </div>
-              </article>
-              <article class="card card--1">
-                <div class="card__img"></div>
-                <a href="#" class="card_link">
-                  <div class="card__img--hover"></div>
-                </a>
-                <div class="card__info">
-                  <p class="card__title" style="margin-bottom: 0px">
-                    Crisp Spanish tortilla Matzo brei
-                  </p>
-                  <p class="card__by" style="margin-bottom: 0px">
-                    by
-                    <a href="#" class="card__author" title="author"
-                      >Celeste Mills</a
-                    >
-                  </p>
-                  <div
-                    class="row"
-                    style="justify-content: center; margin-top: 0px"
-                  >
-                    <div class="col-md-2">
-                      <p>
-                        <a href=""
-                          ><b-icon icon="heart" aria-hidden="true"></b-icon
-                        ></a>
-                      </p>
-                    </div>
-                    <div class="col-md-6">
-                      <p><b-icon icon="eye" aria-hidden="true"></b-icon> 100k</p>
-                    </div>
-                  </div>
-                </div>
-              </article>
-              <article class="card card--1">
-                <div class="card__img"></div>
-                <a href="#" class="card_link">
-                  <div class="card__img--hover"></div>
-                </a>
-                <div class="card__info">
-                  <p class="card__title" style="margin-bottom: 0px">
-                    Crisp Spanish tortilla Matzo brei
-                  </p>
-                  <p class="card__by" style="margin-bottom: 0px">
-                    by
-                    <a href="#" class="card__author" title="author"
-                      >Celeste Mills</a
-                    >
-                  </p>
-                  <div
-                    class="row"
-                    style="justify-content: center; margin-top: 0px"
-                  >
-                    <div class="col-md-2">
-                      <p>
-                        <a href=""
-                          ><b-icon icon="heart" aria-hidden="true"></b-icon
-                        ></a>
-                      </p>
-                    </div>
-                    <div class="col-md-6">
-                      <p><b-icon icon="eye" aria-hidden="true"></b-icon> 100k</p>
-                    </div>
-                  </div>
-                </div>
-              </article>
+              </div>
+            </div>
             </div>
           </div>
         </div>
       </div>
-  
-      <div style="margin-top: 50px">
-        <div class="footer-dark">
+    </transition>
+    <!-- Landing Page -->
+
+    <!-- Untuk Category Card -->
+    <transition name="fade">
+      <div
+        v-if="
+          isCategoryOn == 1 && this.isFavoriteOn == 0 && isKomikTodayOn == 0 && isKomikCategoryOn == 0
+        "
+        class="container"
+        style="margin-bottom: 70px"
+      >
+        <h5
+          style="
+            text-align: center;
+            color: #333333;
+            font-size: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-family: 'Georgia';
+            cursor: pointer;
+            text-transform: capitalize;
+          "
+          onmouseover="this.style.color='#006598'; this.style.backgroundColor='transparent';"
+          onmouseout="this.style.color='#333333'; this.style.backgroundColor='transparent';"
+        >
+          {{ itemsGenre[0] }}
+        </h5>
+        <!-- Beri 5 card untuk terbaru -->
+        <div class="row">
+          <div class="row" style="justify-content: center; max-width: none">
+            <transition name="fade">
+              <div
+                v-if="dataKomikCategorys1.length == 0"
+                style="height: 200px; align-content: center; display: grid"
+              >
+                <div class="row no-gutters">
+                  <div
+                    class="col"
+                    style="
+                      display: grid;
+                      align-content: center;
+                      justify-content: end;
+                    "
+                  >
+                    <p>There is no {{itemsGenre[0]}} comics</p>
+                  </div>
+                  <div
+                    class="col"
+                    style="
+                      display: grid;
+                      align-content: center;
+                      justify-content: start;
+                    "
+                  >
+                    <img
+                      src="@/assets/2953962.jpg"
+                      style="height: 150px"
+                      class="d-inline-block align-top"
+                      alt="Animation"
+                    />
+                  </div>
+                </div>
+              </div>
+            </transition>
+            <div
+              v-for="dataKomikCategory1 in dataKomikCategorys1"
+              :key="dataKomikCategory1.id"
+              @click="handlerClickCategory"
+              class="card card-with-bg"
+              :style="{
+                'background-image':
+                  'url(' + $baseUrl + '/storage/' + dataKomikCategory1.thumbnail + ')',
+              }"
+            >
+              <div class="card-info" @click.stop="handlerClickCard(dataKomikCategory1)">
+                <div class="card-title" style="cursor: pointer">
+                  {{ dataKomikCategory1.judul }}
+                </div>
+                <div class="card-subtitle" style="cursor: pointer">
+                  {{ dataKomikCategory1.post_by }}
+                </div>
+                <div class="card-social">
+                  <div class="row no-gutters">
+                    <div
+                      class="col"
+                      style="
+                        font-size: 12px;
+                        color: white;
+                        align-items: center;
+                        display: flex;
+                        justify-content: center;
+                      "
+                    >
+                      <v-icon
+                        dense
+                        x-small
+                        color="#e0e0e0"
+                        class="data-table-icon"
+                        style="padding-right: 3px"
+                        >mdi-eye</v-icon
+                      >
+                      {{ dataKomikCategory1.jumlah_view }}
+                    </div>
+                    <div
+                      class="col"
+                      v-if="hasFavorite(dataKomikCategory1.uuid, userLogin.uuid)"
+                    >
+                      <!-- Display content when there is a matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFC0CB"
+                        class="data-table-icon hover-heart"
+                        @click.stop="handlerClickFavorite(dataKomikCategory1.uuid)"
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
+                    <div v-else class="col">
+                      <!-- Display content when there is no matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFFFFF"
+                        class="data-table-icon hover-heart"
+                        @click.stop="handlerClickFavorite(dataKomikCategory1.uuid)"
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h5
+          style="
+            margin-top: 70px;
+            text-align: center;
+            color: #333333;
+            font-size: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-family: 'Georgia';
+            cursor: pointer;
+            text-transform: capitalize;
+          "
+          onmouseover="this.style.color='#006598'; this.style.backgroundColor='transparent';"
+          onmouseout="this.style.color='#333333'; this.style.backgroundColor='transparent';"
+        >
+          {{ itemsGenre[1] }}
+        </h5>
+        <!-- Beri 5 card untuk terbaru -->
+        <div class="row">
+          <div class="row" style="justify-content: center; max-width: none">
+            <transition name="fade">
+              <div
+                v-if="dataKomikCategorys2.length == 0"
+                style="height: 200px; align-content: center; display: grid"
+              >
+                <div class="row no-gutters">
+                  <div
+                    class="col"
+                    style="
+                      display: grid;
+                      align-content: center;
+                      justify-content: end;
+                    "
+                  >
+                    <p>There is no {{itemsGenre[1]}} comics</p>
+                  </div>
+                  <div
+                    class="col"
+                    style="
+                      display: grid;
+                      align-content: center;
+                      justify-content: start;
+                    "
+                  >
+                    <img
+                      src="@/assets/2953962.jpg"
+                      style="height: 150px"
+                      class="d-inline-block align-top"
+                      alt="Animation"
+                    />
+                  </div>
+                </div>
+              </div>
+            </transition>
+            <div
+              v-for="dataKomikCategory2 in dataKomikCategorys2"
+              :key="dataKomikCategory2.id"
+              @click="handlerClickCategory"
+              class="card card-with-bg"
+              :style="{
+                'background-image':
+                  'url(' + $baseUrl + '/storage/' + dataKomikCategory2.thumbnail + ')',
+              }"
+            >
+              <div class="card-info" @click.stop="handlerClickCard(dataKomikCategory2)">
+                <div class="card-title" style="cursor: pointer">
+                  {{ dataKomikCategory2.judul }}
+                </div>
+                <div class="card-subtitle" style="cursor: pointer">
+                  {{ dataKomikCategory2.post_by }}
+                </div>
+                <div class="card-social">
+                  <div class="row no-gutters">
+                    <div
+                      class="col"
+                      style="
+                        font-size: 12px;
+                        color: white;
+                        align-items: center;
+                        display: flex;
+                        justify-content: center;
+                      "
+                    >
+                      <v-icon
+                        dense
+                        x-small
+                        color="#e0e0e0"
+                        class="data-table-icon"
+                        style="padding-right: 3px"
+                        >mdi-eye</v-icon
+                      >
+                      {{ dataKomikCategory2.jumlah_view }}
+                    </div>
+                    <div
+                      class="col"
+                      v-if="hasFavorite(dataKomikCategory2.uuid, userLogin.uuid)"
+                    >
+                      <!-- Display content when there is a matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFC0CB"
+                        class="data-table-icon hover-heart"
+                        @click.stop="handlerClickFavorite(dataKomikCategory2.uuid)"
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
+                    <div v-else class="col">
+                      <!-- Display content when there is no matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFFFFF"
+                        class="data-table-icon hover-heart"
+                        @click.stop="handlerClickFavorite(dataKomikCategory2.uuid)"
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h5
+          style="
+            margin-top: 70px;
+            text-align: center;
+            color: #333333;
+            font-size: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-family: 'Georgia';
+            cursor: pointer;
+            text-transform: capitalize;
+          "
+          onmouseover="this.style.color='#006598'; this.style.backgroundColor='transparent';"
+          onmouseout="this.style.color='#333333'; this.style.backgroundColor='transparent';"
+        >
+          {{ itemsGenre[2] }}
+        </h5>
+        <!-- Beri 5 card untuk terbaru -->
+        <div class="row">
+          <div class="row" style="justify-content: center; max-width: none">
+            <transition name="fade">
+              <div
+                v-if="dataKomikCategorys3.length == 0"
+                style="height: 200px; align-content: center; display: grid"
+              >
+                <div class="row no-gutters">
+                  <div
+                    class="col"
+                    style="
+                      display: grid;
+                      align-content: center;
+                      justify-content: end;
+                    "
+                  >
+                    <p>There is no {{itemsGenre[2]}} comics</p>
+                  </div>
+                  <div
+                    class="col"
+                    style="
+                      display: grid;
+                      align-content: center;
+                      justify-content: start;
+                    "
+                  >
+                    <img
+                      src="@/assets/2953962.jpg"
+                      style="height: 150px"
+                      class="d-inline-block align-top"
+                      alt="Animation"
+                    />
+                  </div>
+                </div>
+              </div>
+            </transition>
+            <div
+              v-for="dataKomikCategory3 in dataKomikCategorys3"
+              :key="dataKomikCategory3.id"
+              @click="handlerClickCategory"
+              class="card card-with-bg"
+              :style="{
+                'background-image':
+                  'url(' + $baseUrl + '/storage/' + dataKomikCategory3.thumbnail + ')',
+              }"
+            >
+              <div class="card-info" @click.stop="handlerClickCard(dataKomikCategory3)">
+                <div class="card-title" style="cursor: pointer">
+                  {{ dataKomikCategory3.judul }}
+                </div>
+                <div class="card-subtitle" style="cursor: pointer">
+                  {{ dataKomikCategory3.post_by }}
+                </div>
+                <div class="card-social">
+                  <div class="row no-gutters">
+                    <div
+                      class="col"
+                      style="
+                        font-size: 12px;
+                        color: white;
+                        align-items: center;
+                        display: flex;
+                        justify-content: center;
+                      "
+                    >
+                      <v-icon
+                        dense
+                        x-small
+                        color="#e0e0e0"
+                        class="data-table-icon"
+                        style="padding-right: 3px"
+                        >mdi-eye</v-icon
+                      >
+                      {{ dataKomikCategory3.jumlah_view }}
+                    </div>
+                    <div
+                      class="col"
+                      v-if="hasFavorite(dataKomikCategory3.uuid, userLogin.uuid)"
+                    >
+                      <!-- Display content when there is a matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFC0CB"
+                        class="data-table-icon hover-heart"
+                        @click.stop="handlerClickFavorite(dataKomikCategory3.uuid)"
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
+                    <div v-else class="col">
+                      <!-- Display content when there is no matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFFFFF"
+                        class="data-table-icon hover-heart"
+                        @click.stop="handlerClickFavorite(dataKomikCategory3.uuid)"
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
+    <!-- End Untuk Category Card -->
+
+    <!-- Untuk Get by Comic Category Card -->
+    <transition name="fade">
+      <div
+        v-if="
+          isCategoryOn == 1 && this.isFavoriteOn == 0 && isKomikCategoryOn == 1 && isKomikTodayOn == 0
+        "
+        class="container"
+        style="margin-bottom: 70px"
+      >
+        <h5
+          style="
+            text-align: center;
+            color: #333333;
+            font-size: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-family: 'Georgia';
+            text-transform: capitalize;
+          "
+        >
+          {{this.category}}
+        </h5>
+        <!-- Beri 5 card untuk terbaru -->
+        <div class="row">
+          <div class="row" style="justify-content: center; max-width: none">
+            <transition name="fade">
+              <div
+                v-if="dataKomiksByCategory.length == 0"
+                style="height: 200px; align-content: center; display: grid"
+              >
+                <div class="row no-gutters">
+                  <div
+                    class="col"
+                    style="
+                      display: grid;
+                      align-content: center;
+                      justify-content: end;
+                    "
+                  >
+                    <p>There is no comics {{ this.category }}</p>
+                  </div>
+                  <div
+                    class="col"
+                    style="
+                      display: grid;
+                      align-content: center;
+                      justify-content: start;
+                    "
+                  >
+                    <img
+                      src="@/assets/2953962.jpg"
+                      style="height: 150px"
+                      class="d-inline-block align-top"
+                      alt="Animation"
+                    />
+                  </div>
+                </div>
+              </div>
+            </transition>
+            <div
+              v-for="dataKomikByCategory in paginateDataKomikCategory"
+              :key="dataKomikByCategory.id"
+              @click="handlerClickCategory"
+              class="card card-with-bg"
+              :style="{
+                'background-image':
+                  'url(' +
+                  $baseUrl +
+                  '/storage/' +
+                  dataKomikByCategory.thumbnail +
+                  ')',
+              }"
+            >
+              <div
+                class="card-info"
+                @click.stop="handlerClickCard(dataKomikByCategory)"
+              >
+                <div class="card-title" style="cursor: pointer">
+                  {{ dataKomikByCategory.judul }}
+                </div>
+                <div class="card-subtitle" style="cursor: pointer">
+                  {{ dataKomikByCategory.post_by }}
+                </div>
+                <div class="card-social">
+                  <div class="row no-gutters">
+                    <div
+                      class="col"
+                      style="
+                        font-size: 12px;
+                        color: white;
+                        align-items: center;
+                        display: flex;
+                        justify-content: center;
+                      "
+                    >
+                      <v-icon
+                        dense
+                        x-small
+                        color="#e0e0e0"
+                        class="data-table-icon"
+                        style="padding-right: 3px"
+                        >mdi-eye</v-icon
+                      >
+                      {{ dataKomikByCategory.jumlah_view }}
+                    </div>
+                    <div
+                      class="col"
+                      v-if="
+                        hasFavorite(dataKomikByCategory.uuid, userLogin.uuid)
+                      "
+                    >
+                      <!-- Display content when there is a matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFC0CB"
+                        class="data-table-icon hover-heart"
+                        @click.stop="
+                          handlerClickFavorite(dataKomikByCategory.uuid)
+                        "
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
+                    <div v-else class="col">
+                      <!-- Display content when there is no matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFFFFF"
+                        class="data-table-icon hover-heart"
+                        @click.stop="
+                          handlerClickFavorite(dataKomikByCategory.uuid)
+                        "
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pagination controls with limited page numbers -->
+          <div class="pagination" v-if="paginateDataKomikCategory.length != 0">
+            <button @click="prevPageCategory" :disabled="currentPage === 1">
+              Previous
+            </button>
+            <span
+              v-for="pageNumber in visiblePageNumbersDataCategory"
+              :key="pageNumber"
+            >
+              <button
+                @click="gotoPageCategory(pageNumber)"
+                :class="{ active: pageNumber === currentPage }"
+              >
+                {{ pageNumber }}
+              </button>
+            </span>
+            <button
+              @click="nextPageCategory"
+              :disabled="currentPage * pageSize >= dataKomiksByCategory.length"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
+    <!-- Untuk Get by Comic Category Card -->
+
+    <!-- Untuk Today Card -->
+    <transition name="fade">
+      <div
+        v-if="
+          isCategoryOn == 0 && this.isFavoriteOn == 0 && isKomikCategoryOn == 0 && isKomikTodayOn == 1
+        "
+        class="container"
+        style="margin-bottom: 70px"
+      >
+        <h5
+          style="
+            text-align: center;
+            color: #333333;
+            font-size: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-family: 'Georgia';
+          "
+        >
+          Today Updates
+        </h5>
+        <!-- Beri 5 card untuk terbaru -->
+        <div class="row">
+          <div class="row" style="justify-content: center; max-width: none">
+            <transition name="fade">
+              <div
+                v-if="paginateDataKomikToday.length == 0"
+                style="height: 200px; align-content: center; display: grid"
+              >
+                <div class="row no-gutters">
+                  <div
+                    class="col"
+                    style="
+                      display: grid;
+                      align-content: center;
+                      justify-content: end;
+                    "
+                  >
+                    <p>There is no updates comic today</p>
+                  </div>
+                  <div
+                    class="col"
+                    style="
+                      display: grid;
+                      align-content: center;
+                      justify-content: start;
+                    "
+                  >
+                    <img
+                      src="@/assets/2953962.jpg"
+                      style="height: 150px"
+                      class="d-inline-block align-top"
+                      alt="Animation"
+                    />
+                  </div>
+                </div>
+              </div>
+            </transition>
+            <div
+              v-for="dataKomikTodayShow in paginateDataKomikToday"
+              :key="dataKomikTodayShow.id"
+              @click="handlerClickCategory"
+              class="card card-with-bg"
+              :style="{
+                'background-image':
+                  'url(' +
+                  $baseUrl +
+                  '/storage/' +
+                  dataKomikTodayShow.thumbnail +
+                  ')',
+              }"
+            >
+              <div
+                class="card-info"
+                @click.stop="handlerClickCard(dataKomikTodayShow)"
+              >
+                <div class="card-title" style="cursor: pointer">
+                  {{ dataKomikTodayShow.judul }}
+                </div>
+                <div class="card-subtitle" style="cursor: pointer">
+                  {{ dataKomikTodayShow.post_by }}
+                </div>
+                <div class="card-social">
+                  <div class="row no-gutters">
+                    <div
+                      class="col"
+                      style="
+                        font-size: 12px;
+                        color: white;
+                        align-items: center;
+                        display: flex;
+                        justify-content: center;
+                      "
+                    >
+                      <v-icon
+                        dense
+                        x-small
+                        color="#e0e0e0"
+                        class="data-table-icon"
+                        style="padding-right: 3px"
+                        >mdi-eye</v-icon
+                      >
+                      {{ dataKomikTodayShow.jumlah_view }}
+                    </div>
+                    <div
+                      class="col"
+                      v-if="
+                        hasFavorite(dataKomikTodayShow.uuid, userLogin.uuid)
+                      "
+                    >
+                      <!-- Display content when there is a matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFC0CB"
+                        class="data-table-icon hover-heart"
+                        @click.stop="
+                          handlerClickFavorite(dataKomikTodayShow.uuid)
+                        "
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
+                    <div v-else class="col">
+                      <!-- Display content when there is no matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFFFFF"
+                        class="data-table-icon hover-heart"
+                        @click.stop="
+                          handlerClickFavorite(dataKomikTodayShow.uuid)
+                        "
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pagination controls with limited page numbers -->
+          <div class="pagination" v-if="paginateDataKomikToday.length != 0">
+            <button @click="prevPageTodayUpdates" :disabled="currentPage === 1">
+              Previous
+            </button>
+            <span
+              v-for="pageNumber in visiblePageNumbersDataKomikToday"
+              :key="pageNumber"
+            >
+              <button
+                @click="gotoPageTodayUpdates(pageNumber)"
+                :class="{ active: pageNumber === currentPage }"
+              >
+                {{ pageNumber }}
+              </button>
+            </span>
+            <button
+              @click="nextPageTodayUpdates"
+              :disabled="currentPage * pageSize >= dataKomikTodaysShow.length"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
+    <!-- End Untuk Today Card -->
+
+    <!-- Untuk Favorite Card -->
+    <transition name="fade">
+      <div
+        v-if="isFavoriteOn == 1 && isCategoryOn == 0 && isKomikCategoryOn == 0 && isKomikTodayOn == 0"
+        class="container"
+        style="margin-bottom: 70px"
+      >
+        <h5
+          style="
+            text-align: center;
+            color: #333333;
+            font-size: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-family: 'Georgia';
+          "
+        >
+          Your Favorite
+        </h5>
+        <!-- Beri 5 card untuk terbaru -->
+        <div class="row">
+          <div class="row" style="justify-content: center; max-width: none">
+            <transition name="fade">
+              <div
+                v-if="paginateDataFavorite.length == 0"
+                style="height: 200px; align-content: center; display: grid"
+              >
+                <div class="row no-gutters">
+                  <div
+                    class="col"
+                    style="
+                      display: grid;
+                      align-content: center;
+                      justify-content: end;
+                    "
+                  >
+                    <p>There is no favorite comic</p>
+                  </div>
+                  <div
+                    class="col"
+                    style="
+                      display: grid;
+                      align-content: center;
+                      justify-content: start;
+                    "
+                  >
+                    <img
+                      src="@/assets/2953962.jpg"
+                      style="height: 150px"
+                      class="d-inline-block align-top"
+                      alt="Animation"
+                    />
+                  </div>
+                </div>
+              </div>
+            </transition>
+            <div
+              v-for="dataKomikFavoriteShow in paginateDataFavorite"
+              :key="dataKomikFavoriteShow.id"
+              @click="handlerClickCategory"
+              class="card card-with-bg"
+              :style="{
+                'background-image':
+                  'url(' +
+                  $baseUrl +
+                  '/storage/' +
+                  dataKomikFavoriteShow.thumbnail +
+                  ')',
+              }"
+            >
+              <div
+                class="card-info"
+                @click.stop="handlerClickCard(dataKomikFavoriteShow)"
+              >
+                <div class="card-title" style="cursor: pointer">
+                  {{ dataKomikFavoriteShow.judul }}
+                </div>
+                <div class="card-subtitle" style="cursor: pointer">
+                  {{ dataKomikFavoriteShow.post_by }}
+                </div>
+                <div class="card-social">
+                  <div class="row no-gutters">
+                    <div
+                      class="col"
+                      style="
+                        font-size: 12px;
+                        color: white;
+                        align-items: center;
+                        display: flex;
+                        justify-content: center;
+                      "
+                    >
+                      <v-icon
+                        dense
+                        x-small
+                        color="#e0e0e0"
+                        class="data-table-icon"
+                        style="padding-right: 3px"
+                        >mdi-eye</v-icon
+                      >
+                      {{ dataKomikFavoriteShow.jumlah_view }}
+                    </div>
+                    <div
+                      class="col"
+                      v-if="
+                        hasFavorite(dataKomikFavoriteShow.uuid, userLogin.uuid)
+                      "
+                    >
+                      <!-- Display content when there is a matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFC0CB"
+                        class="data-table-icon hover-heart"
+                        @click.stop="
+                          handlerClickFavorite(dataKomikFavoriteShow.uuid)
+                        "
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
+                    <div v-else class="col">
+                      <!-- Display content when there is no matching favorite -->
+                      <v-icon
+                        small
+                        dense
+                        color="#FFFFFF"
+                        class="data-table-icon hover-heart"
+                        @click.stop="
+                          handlerClickFavorite(dataKomikFavoriteShow.uuid)
+                        "
+                        style="cursor: pointer"
+                      >
+                        mdi-heart
+                      </v-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pagination controls with limited page numbers -->
+          <div class="pagination" v-if="paginateDataFavorite.length != 0">
+            <button @click="prevPageFavorite" :disabled="currentPage === 1">
+              Previous
+            </button>
+            <span
+              v-for="pageNumber in visiblePageNumbersDataFavorite"
+              :key="pageNumber"
+            >
+              <button
+                @click="gotoPageFavorite(pageNumber)"
+                :class="{ active: pageNumber === currentPage }"
+              >
+                {{ pageNumber }}
+              </button>
+            </span>
+            <button
+              @click="nextPageFavorite"
+              :disabled="
+                currentPage * pageSize >= dataKomikFavoritesShow.length
+              "
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
+    <!-- End Untuk Favorite Card -->
+
+    <!-- Footer -->
+    <div style="margin-top: 50px">
+      <div class="footer-dark">
+        <transition name="fade">
           <footer>
             <div class="container" style="justify-content: center; width: 50%">
               <div class="">
                 <h3>Historical Art Fantasia</h3>
                 <p>
                   Praesent sed lobortis mi. Suspendisse vel placerat ligula.
-                  Vivamus ac sem lacus. Ut vehicula rhoncus elementum. Etiam quis
-                  tristique lectus. Aliquam in arcu eget velit pulvinar dictum vel
-                  in justo.
+                  Vivamus ac sem lacus. Ut vehicula rhoncus elementum. Etiam
+                  quis tristique lectus. Aliquam in arcu eget velit pulvinar
+                  dictum vel in justo.
                 </p>
               </div>
               <div class="col item social">
                 <a href="#"
+                onmouseover="this.style.transform='translateY(-10%)';"
+                onmouseout="this.style.transform='translateY(0)';"
                   ><b-icon icon="instagram" aria-hidden="true"></b-icon></a
                 ><a href="#"
+                onmouseover="this.style.transform='translateY(-10%)';"
+                onmouseout="this.style.transform='translateY(0)';"
                   ><b-icon icon="youtube" aria-hidden="true"></b-icon></a
                 ><a href="#"
+                onmouseover="this.style.transform='translateY(-10%)';"
+                onmouseout="this.style.transform='translateY(0)';"
                   ><b-icon icon="bi:tiktok" aria-hidden="true"></b-icon></a
-                ><a href="#">
-                  <b-icon icon="mailbox" aria-hidden="true"></b-icon></a>
+                ><a href="#"
+                onmouseover="this.style.transform='translateY(-10%)';"
+                onmouseout="this.style.transform='translateY(0)';">
+                  <b-icon icon="mailbox" aria-hidden="true"></b-icon
+                ></a>
               </div>
               <p class="copyright">Historical Art Fantasia © 2023</p>
             </div>
           </footer>
-        </div>
+        </transition>
       </div>
     </div>
-  </template>
-  
-  <style>
-  /* Button Search */
-  .search-box {
-    width: fit-content;
-    height: fit-content;
-    position: relative;
+  </div>
+</template>
+
+<script>
+import LoadingScreen from "@/components/loading-screen.vue";
+import moment from "moment";
+
+export default {
+  components: {
+    "loading-screen": LoadingScreen,
+  },
+  data: () => ({
+    // Komik
+    dataComics: [],
+    dataLatests: [],
+    dataPopulars: [],
+    dataTodays: [],
+    dataKomikFavorites: [],
+    dataKomikFavoritesShow: [],
+    dataKomikTodaysShow: [],
+    dataKomiksByCategory: [],
+    dataKomikCategorys1: [],
+    dataKomikCategorys2: [],
+    dataKomikCategorys3: [],
+
+    // Pagination Favorite Card
+    currentPage: 1,
+    pageSize: 1,
+
+    // Search
+    searchTerm: '',
+    searchResults: [],
+
+    // Adds on
+    itemsGenre: [
+      "foo",
+      "bar",
+      "fizz",
+      "buzz",
+    ],
+    isCategoryOn: 0,
+    isFavoriteOn: 0,
+    isKomikTodayOn: 0,
+    isKomikCategoryOn: 0,
+    isInputOn: 0,
+    category: "",
+    loadingScreen: false,
+    userLogin: {
+      token: localStorage.getItem("token"), // initialize with a valid token or empty string
+      uuid: localStorage.getItem("uuid"),
+      role: localStorage.getItem("role"),
+      id: localStorage.getItem("id"),
+    },
+  }),
+  created() {
+    this.axioDataKomik();
+  },
+  computed: {
+    // Komik Favorite
+    paginateDataFavorite() {
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.dataKomikFavoritesShow.slice(startIndex, endIndex);
+    },
+    // Calculate the total number of pages
+    totalPagesDataFavorite() {
+      return Math.ceil(this.dataKomikFavoritesShow.length / this.pageSize);
+    },
+    // Calculate the visible page numbers based on the current page
+    visiblePageNumbersDataFavorite() {
+      const totalVisiblePages = 4;
+      const startPage = Math.max(
+        1,
+        this.currentPage - Math.floor(totalVisiblePages / 2)
+      );
+      const endPage = Math.min(
+        this.totalPagesDataFavorite,
+        startPage + totalVisiblePages - 1
+      );
+      return Array.from(
+        { length: endPage - startPage + 1 },
+        (_, i) => startPage + i
+      );
+    },
+
+    // Komik Today
+    paginateDataKomikToday() {
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.dataKomikTodaysShow.slice(startIndex, endIndex);
+    },
+    // Calculate the total number of pages
+    totalPagesDataKomikToday() {
+      return Math.ceil(this.dataKomikTodaysShow.length / this.pageSize);
+    },
+    // Calculate the visible page numbers based on the current page
+    visiblePageNumbersDataKomikToday() {
+      const totalVisiblePages = 4;
+      const startPage = Math.max(
+        1,
+        this.currentPage - Math.floor(totalVisiblePages / 2)
+      );
+      const endPage = Math.min(
+        this.totalPagesDataKomikToday,
+        startPage + totalVisiblePages - 1
+      );
+      return Array.from(
+        { length: endPage - startPage + 1 },
+        (_, i) => startPage + i
+      );
+    },
+
+    // Komik Kategori
+    paginateDataKomikCategory() {
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.dataKomiksByCategory.slice(startIndex, endIndex);
+    },
+    // Calculate the total number of pages
+    totalPagesDataCategory() {
+      return Math.ceil(this.dataKomiksByCategory.length / this.pageSize);
+    },
+    // Calculate the visible page numbers based on the current page
+    visiblePageNumbersDataCategory() {
+      const totalVisiblePages = 4;
+      const startPage = Math.max(
+        1,
+        this.currentPage - Math.floor(totalVisiblePages / 2)
+      );
+      const endPage = Math.min(
+        this.totalPagesDataCategory,
+        startPage + totalVisiblePages - 1
+      );
+      return Array.from(
+        { length: endPage - startPage + 1 },
+        (_, i) => startPage + i
+      );
+    },
+  },
+  watch: {},
+
+  methods: {
+    hasFavorite(komikUuid, userUuid) {
+      return this.dataKomikFavorites.some(
+        (favorite) =>
+          favorite.komik_uuid === komikUuid && favorite.user_uuid === userUuid
+      );
+    },
+
+    handlerClickCard(item) {
+      this.addJumlahView(item.uuid);
+    },
+
+    handlerClickCloseAll() {
+      this.isCategoryOn = 0;
+      this.isFavoriteOn = 0;
+      this.isKomikTodayOn = 0;
+      this.isKomikCategoryOn = 0;
+      this.currentPage = 1;
+      this.isInputOn = 0;
+      this.axioDataKomik();
+    },
+
+    handlerGetComicByCategori(item){
+      this.getComicByCategori(item);
+      this.isKomikCategoryOn = 1;
+      this.isCategoryOn = 1;
+      this.isFavoriteOn = 0;
+      this.isKomikTodayOn = 0;
+      this.currentPage = 1;
+      this.axioDataKomik();
+    },
+
+    handlerClickKomikToday() {
+      this.isKomikTodayOn = 1 - this.isKomikTodayOn;
+      this.isCategoryOn = 0;
+      this.isFavoriteOn = 0;
+      this.isKomikCategoryOn = 0;
+      this.currentPage = 1;
+      this.axioDataKomik();
+      this.axioDataKomikTodaysShow();
+    },
+
+    handlerClickCategory() {
+      this.isCategoryOn = 1 - this.isCategoryOn;
+      this.isFavoriteOn = 0;
+      this.isKomikTodayOn = 0;
+      this.isKomikCategoryOn = 0;
+      this.currentPage = 1;
+      this.axioDataKomik();
+      this.axioDataKomikCategorysShow();
+    },
+
+    handlerClickFavoriteLandingPage() {
+      this.isFavoriteOn = 1 - this.isFavoriteOn;
+      this.isCategoryOn = 0;
+      this.currentPage = 1;
+      this, (this.isKomikTodayOn = 0);
+      this.axioDataKomik();
+      this.axioDataKomikFavoriteShow();
+    },
+
+    handlerClickFavorite(uuidKomik) {
+      this.loadingScreen = true;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      var url =
+        this.$api + "/klikFavorite/" + uuidKomik + "/" + this.userLogin.uuid;
+
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          this.dataPortfolios = response.data.dataPortfolio;
+
+          this.axioDataKomik();
+          this.axioDataKomikFavoriteShow();
+
+          // Use $nextTick to ensure the DOM is updated before triggering the watcher
+          // this.$nextTick(() => {
+          //   // Trigger the watcher manually
+          //   this.currentPage = 1;
+          //   (this.totalPagesDataFavorite, 'total data pages')
+          // });
+
+          console.log(this.totalPagesDataFavorite, "totalpages");
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching portfolio data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    addJumlahView(uuid_komik) {
+      this.loadingScreen = true;
+
+      var url = this.$api + "/addJumlahView/" + uuid_komik;
+
+      this.$http
+        .get(url)
+        .then((response) => {
+          this.respone = response.data.response;
+
+          this.axioDataKomik();
+          this.axioDataKomikCategorysShow();
+          this.axioDataKomikFavoriteShow();
+          this.axioDataKomikTodaysShow();
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching portfolio data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    getComicByCategori(category) {
+      this.loadingScreen = true;
+
+      var url = this.$api + "/getComicByCategori/" + category;
+
+      this.$http
+        .get(url)
+        .then((response) => {
+          this.dataKomiksByCategory = response.data.dataKomiksByCategory.map(
+            (x) => {
+              return {
+                ...x,
+                created_at: moment(x.created_at).format("YYYY-MM-DD h:mm a"),
+              };
+            }
+          );
+          this.category = response.data.category;
+
+          console.log(this. dataKomiksByCategory)
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching portfolio data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    axioDataKomikCategorysShow() {
+      this.loadingScreen = true;
+
+      var url = this.$api + "/getDataKomikCategorysShow/" + this.itemsGenre[0] + "/" + this.itemsGenre[1] + "/" + this.itemsGenre[2];
+
+      this.$http
+        .get(url)
+        .then((response) => {
+          this.dataKomikCategorys1 = response.data.dataKomikCategorys1;
+          this.dataKomikCategorys2 = response.data.dataKomikCategorys2;
+          this.dataKomikCategorys3 = response.data.dataKomikCategorys3;
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching portfolio data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    axioDataKomikTodaysShow() {
+      this.loadingScreen = true;
+
+      var url = this.$api + "/getDataKomikTodayShow";
+
+      if (this.userLogin.token != null) {
+        this.axioDataKomikFavorite();
+      }
+
+      this.$http
+        .get(url)
+        .then((response) => {
+          this.dataKomikTodaysShow = response.data.dataKomikTodaysShow;
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching portfolio data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    axioDataKomikFavoriteShow() {
+      this.loadingScreen = true;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      var url = this.$api + "/getDataKomikFavoriteShow/" + this.userLogin.uuid;
+
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          this.dataKomikFavoritesShow = response.data.dataKomikFavoritesShow;
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching portfolio data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    axioDataKomikFavorite() {
+      this.loadingScreen = true;
+      var url;
+
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      url = this.$api + "/getDataKomikFavorite/" + this.userLogin.uuid;
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          this.dataKomikFavorites = response.data.dataKomikFavorites.map(
+            (x) => {
+              return {
+                ...x,
+                created_at: moment(x.created_at).format("YYYY-MM-DD h:mm a"),
+              };
+            }
+          );
+
+          console.log(this.dataKomikFavorites);
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching myprofile data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    axioDataKomik() {
+      this.loadingScreen = true;
+      var url;
+
+      url = this.$api + "/getDataKomik";
+
+      if (this.userLogin.token != null) {
+        this.axioDataKomikFavorite();
+      }
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url)
+        .then((response) => {
+          this.dataLatests = response.data.dataLatest.map((x) => {
+            return {
+              ...x,
+              created_at: moment(x.created_at).format("YYYY-MM-DD h:mm a"),
+            };
+          });
+
+          this.dataPopulars = response.data.dataPopular.map((x) => {
+            return {
+              ...x,
+              created_at: moment(x.created_at).format("YYYY-MM-DD h:mm a"),
+            };
+          });
+
+          this.dataTodays = response.data.dataToday.map((x) => {
+            return {
+              ...x,
+              created_at: moment(x.created_at).format("YYYY-MM-DD h:mm a"),
+            };
+          });
+
+          this.dataComics = response.data.dataComics.map((x) => {
+            return {
+              ...x,
+              created_at: moment(x.created_at).format("YYYY-MM-DD h:mm a"),
+            };
+          });
+
+          console.log(this.dataLatests);
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching myprofile data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
+    // Search
+    handleInput() {
+      if (this.searchTerm.trim() === '') {
+        // Jika input kosong, setel isInputOn ke 0
+        this.isInputOn = 0;
+        // Atur searchResults menjadi array kosong
+        this.searchResults = [];
+      } else {
+        // Jika input tidak kosong, setel isInputOn ke 1
+        this.isInputOn = 1;
+        // Lanjutkan dengan melakukan pencarian
+        this.search();
+      }
+    },
+    search() {
+      // Gunakan filter untuk mencari data yang sesuai dengan searchTerm
+      this.searchResults = this.dataComics.filter((comic) =>
+        comic.judul.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    },
+
+    // Adds on
+    // Handle next page  for data favorite
+    nextPageFavorite() {
+      this.loadingScreen = true;
+      if (
+        this.currentPage * this.pageSize <
+        this.dataKomikFavoritesShow.length
+      ) {
+        this.currentPage++;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle previous page
+    prevPageFavorite() {
+      this.loadingScreen = true;
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle going to a specific page
+    gotoPageFavorite(pageNumber) {
+      this.loadingScreen = true;
+      this.currentPage = pageNumber;
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+
+    // Handle next page  for data komik by category
+    nextPageCategory() {
+      this.loadingScreen = true;
+      if (
+        this.currentPage * this.pageSize <
+        this.dataKomiksByCategory.length
+      ) {
+        this.currentPage++;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle previous page
+    prevPageCategory() {
+      this.loadingScreen = true;
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle going to a specific page
+    gotoPageCategory(pageNumber) {
+      this.loadingScreen = true;
+      this.currentPage = pageNumber;
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+
+    // Handle next page  for data komik today updates
+    nextPageTodayUpdates() {
+      this.loadingScreen = true;
+      if (
+        this.currentPage * this.pageSize <
+        this.dataKomikTodaysShow.length
+      ) {
+        this.currentPage++;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle previous page
+    prevPageTodayUpdates() {
+      this.loadingScreen = true;
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle going to a specific page
+    gotoPageTodayUpdates(pageNumber) {
+      this.loadingScreen = true;
+      this.currentPage = pageNumber;
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+  },
+};
+</script>
+
+<style scoped>
+/* Paginate */
+/* Add your styling here if needed */
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination button {
+  cursor: pointer;
+  margin: 0 6px;
+  font-size: 15px;
+}
+
+.pagination button:hover {
+  cursor: pointer;
+  margin: 0 6px;
+  font-size: 15px;
+  color: #006598;
+}
+
+.pagination button.active {
+  color: #006598;
+}
+/* end Paginate */
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s ease-in-out;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
+.tabs-category {
+  width: 50%;
+}
+/* Button Search */
+.search-box {
+  width: fit-content;
+  height: fit-content;
+  position: relative;
+  padding-left: 16px;
+  margin-top: 10px !important;
+}
+.input-search {
+  height: 30px;
+  width: 30px;
+  border-style: solid;
+  padding: 10px;
+  font-size: 14px;
+  letter-spacing: 2px;
+  outline: none;
+  border-radius: 25px;
+  transition: all 0.5s ease-in-out;
+  background-color: white;
+  border-color: #006598;
+  padding-right: 40px;
+  color: #006598;
+}
+.input-search::placeholder {
+  color: white;
+  font-size: 14px;
+  letter-spacing: 2px;
+  font-weight: 100;
+}
+.btn-search {
+  width: 50px;
+  height: 30px;
+  border-style: none;
+  font-size: 20px;
+  font-weight: bold;
+  outline: none;
+  cursor: pointer;
+  border-radius: 25px;
+  position: absolute;
+  right: 0px;
+  color: #006598;
+  background-color: transparent;
+  pointer-events: painted;
+  justify-content: center;
+}
+.btn-search:focus ~ .input-search {
+  width: 350px;
+  border-radius: 0px;
+  background-color: transparent;
+  border: 0.5px solid #006598;
+  border-radius: 25px;
+  transition: all 0.5s cubic-bezier(0, 0.11, 0.35, 2);
+}
+.input-search:focus {
+  width: 350px;
+  border-radius: 0px;
+  background-color: transparent;
+  border: 0.5px solid #006598;
+  border-radius: 25px;
+  transition: all 0.5s cubic-bezier(0, 0.11, 0.35, 2);
+}
+/* /Button Search */
+
+.size-bar-home {
+  padding-right: 150px;
+  padding-left: 150px;
+}
+
+/* Card */
+/* If you want to apply additional styles to the div */
+.card-with-bg {
+  background-size: cover;
+  background-position: center;
+}
+.card img {
+  width: 100%; /* Ensure that the image takes up 100% of the container's width */
+  height: 100%; /* Ensure that the image takes up 100% of the container's height */
+  object-fit: cover; /* Apply the object-fit: cover style to handle resizing and positioning */
+}
+.card {
+  width: 165px;
+  height: 254px;
+  margin: 2px;
+  padding: 2rem 1.5rem;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  --bs-card-border-width: 0px !important;
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s ease 0s, opacity 0.2s ease 0s;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  margin-left: 0px;
+  left: 0px;
+  border-radius: 5px;
+  background: linear-gradient(
+    to bottom,
+    rgba(183, 228, 255, 0.03),
+    rgb(0, 0, 0)
+  );
+  height: 200px;
+  transition: transform 0.5s ease-in-out;
+}
+
+/*Card footer*/
+.card-social {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 8px;
+  transform: translateY(+270%);
+  transition: transform 0.5s ease-in-out;
+}
+
+.card-social__item {
+  list-style: none;
+}
+
+.card-social__item svg {
+  display: block;
+  height: 18px;
+  width: 18px;
+  fill: #ffffff;
+  cursor: pointer;
+  transition: fill 0.2s ease, transform 0.2s ease;
+}
+
+/*Text*/
+.card-title {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 2rem;
+  margin-bottom: 0px;
+  transform: translateY(+225%);
+  transition: transform 0.5s ease-in-out;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 19ch;
+}
+
+.card-subtitle {
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: bold;
+  transform: translateY(+440%);
+  transition: transform 0.5s ease-in-out;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 19ch;
+}
+
+/*Hover*/
+.card:hover {
+  box-shadow: 0 8px 50px #23232333;
+}
+
+.card::after .card-info {
+  height: 254px;
+  transition: transform 0.5s ease-in-out;
+}
+
+.card:hover .card-title {
+  transform: translateY(+205%);
+  color: #ff9f1e;
+  transition: transform 0.5s ease-in-out;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 19ch;
+}
+
+.card:hover .card-subtitle {
+  color: antiquewhite;
+  transform: translateY(+400%);
+  transition: transform 0.5s ease-in-out;
+}
+
+.card .hover-heart:hover {
+  color: pink !important;
+}
+
+/* .card:hover .card-social{
+  transform: translateY(+340%);
+  color: #ff9f1e;
+  transition: transform 0.5s ease-in-out;
+} */
+
+.card-social__item svg:hover {
+  fill: #232323;
+  transform: scale(1.1);
+}
+
+.card-avatar:hover {
+  transform: scale(1.1);
+}
+/* /Card */
+
+/* Footer */
+.footer-dark {
+  padding: 20px 0;
+  color: #f0f9ff;
+  background-color: #282d32;
+}
+
+.footer-dark h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.footer-dark ul {
+  padding: 0;
+  list-style: none;
+  line-height: 1.6;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.footer-dark ul a {
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.6;
+}
+
+.footer-dark ul a:hover {
+  opacity: 0.8;
+}
+
+.footer-dark .item.text p {
+  opacity: 0.6;
+  margin-bottom: 0;
+}
+
+.footer-dark .item.social {
+  text-align: center;
+}
+
+.footer-dark .item.text {
+  margin-bottom: 36px;
+}
+
+.footer-dark .item.social > a {
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
+  margin-left: 1.5px;
+  margin-right: 1.5px;
+  margin-top: 5px;
+  color: #fff;
+  opacity: 0.75;
+}
+
+.footer-dark .item.social > a:hover {
+  opacity: 0.9;
+}
+
+.footer-dark .copyright {
+  text-align: center;
+  padding-top: 24px;
+  opacity: 0.3;
+  font-size: 13px;
+  margin-bottom: 0;
+}
+/* /Footer */
+
+@media (min-width: 768px) {
+  .tabs-category {
+    width: 70%;
   }
-  .input-search {
-    height: 30px;
-    width: 30px;
-    border-style: none;
-    padding: 10px;
-    font-size: 18px;
-    letter-spacing: 2px;
-    outline: none;
-    border-radius: 25px;
-    transition: all 0.5s ease-in-out;
-    background-color: #2277b3;
-    padding-right: 40px;
-    color: rgb(44, 180, 243);
+}
+
+@media (max-width: 767px) {
+  .tabs-category {
+    width: 90%;
   }
-  .input-search::placeholder {
-    color: rgba(44, 180, 243, 0.5);
-    font-size: 18px;
-    letter-spacing: 2px;
-    font-weight: 100;
+  .footer-dark .item:not(.social) {
+    text-align: center;
+    padding-bottom: 20px;
   }
-  .btn-search {
-    width: 50px;
-    height: 30px;
-    border-style: none;
-    font-size: 20px;
-    font-weight: bold;
-    outline: none;
-    cursor: pointer;
-    border-radius: 50%;
-    position: absolute;
-    right: 0px;
-    color: #ffffff;
-    background-color: transparent;
-    pointer-events: painted;
-    justify-content: center;
+
+  .size-bar-home {
+    padding-right: 50px;
+    padding-left: 50px;
   }
+
+  .footer-dark .item.text {
+    margin-bottom: 0;
+  }
+
   .btn-search:focus ~ .input-search {
-    width: 300px;
+    width: 200px;
     border-radius: 0px;
     background-color: transparent;
-    border-bottom: 1px solid rgba(44, 180, 243, 0.5);
-    transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+    border: 0.5px solid #006598;
+    border-radius: 25px;
+    transition: all 0.5s cubic-bezier(0, 0.11, 0.35, 2);
   }
   .input-search:focus {
-    width: 300px;
+    width: 200px;
     border-radius: 0px;
     background-color: transparent;
-    border-bottom: 1px solid rgba(44, 180, 243, 0.5);
-    transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+    border: 0.5px solid #006598;
+    border-radius: 25px;
+    transition: all 0.5s cubic-bezier(0, 0.11, 0.35, 2);
   }
-  /* /Button Search */
-  
-  .size-bar-home {
-    padding-right: 150px;
-    padding-left: 150px;
-  }
-  
-  /* Card */
-  .cards {
-    width: 100%;
-    display: flex;
-    display: -webkit-flex;
-    justify-content: center;
-    -webkit-justify-content: center;
-    max-width: 820px;
-  }
-  
-  .card--1 .card__img,
-  .card--1 .card__img--hover {
-    background-image: url("https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg");
-  }
-  
-  .card--2 .card__img,
-  .card--2 .card__img--hover {
-    background-image: url("https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg");
-  }
-  
-  .card__like {
-    width: 18px;
-  }
-  
-  .card__clock {
-    width: 15px;
-    vertical-align: middle;
-    fill: #ad7d52;
-  }
-  .card__time {
-    font-size: 12px;
-    color: #ad7d52;
-    vertical-align: middle;
-    margin-left: 5px;
-  }
-  
-  .card__clock-info {
-    float: right;
-  }
-  
-  .card__img {
-    visibility: hidden;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 150px;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-  }
-  
-  .card__img--hover {
-    transition: 0.2s all ease-out;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 100%;
-    position: absolute;
-    height: 150px;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    top: 0;
-  }
-  .card {
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0, 1);
-    background-color: #fff;
-    width: 200px;
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    --bs-card-border-color: none;
-  }
-  
-  .card__info {
-    z-index: 2;
-    background-color: #ffffff4a;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-    padding: 10px 10px 10px 10px;
-    height: 100px;
-  }
-  
-  .card__title {
-    font-family: "Roboto Slab", serif;
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 20ch;
-  }
-  
-  .card__by {
-    font-size: 11px;
-    font-family: "Raleway", sans-serif;
-    font-weight: 500;
-  }
-  
-  .card__author {
-    font-weight: 600;
-    text-decoration: none;
-    color: #ad7d52;
-  }
-  
-  .card:hover .card__img--hover {
-    height: 100%;
-    opacity: 0.3;
-  }
-  
-  .card:hover .card__info {
-    background-color: transparent;
-    position: relative;
-  }
-  /* /Card */
-  
-  /* Footer */
-  .footer-dark {
-    padding: 20px 0;
-    color: #f0f9ff;
-    background-color: #282d32;
-  }
-  
-  .footer-dark h3 {
-    margin-top: 0;
-    margin-bottom: 12px;
-    font-weight: bold;
-    font-size: 16px;
-  }
-  
-  .footer-dark ul {
-    padding: 0;
-    list-style: none;
-    line-height: 1.6;
-    font-size: 14px;
-    margin-bottom: 0;
-  }
-  
-  .footer-dark ul a {
-    color: inherit;
-    text-decoration: none;
-    opacity: 0.6;
-  }
-  
-  .footer-dark ul a:hover {
-    opacity: 0.8;
-  }
-  
-  @media (max-width: 767px) {
-    .footer-dark .item:not(.social) {
-      text-align: center;
-      padding-bottom: 20px;
-    }
-  }
-  
-  .footer-dark .item.text {
-    margin-bottom: 36px;
-  }
-  
-  @media (max-width: 767px) {
-    .footer-dark .item.text {
-      margin-bottom: 0;
-    }
-  }
-  
-  .footer-dark .item.text p {
-    opacity: 0.6;
-    margin-bottom: 0;
-  }
-  
+}
+
+@media (max-width: 991px) {
   .footer-dark .item.social {
     text-align: center;
+    margin-top: 20px;
   }
-  
-  @media (max-width: 991px) {
-    .footer-dark .item.social {
-      text-align: center;
-      margin-top: 20px;
-    }
-  }
-  
-  .footer-dark .item.social > a {
-    font-size: 20px;
-    width: 36px;
-    height: 36px;
-    line-height: 36px;
-    display: inline-block;
-    text-align: center;
-    border-radius: 50%;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
-    margin: 0 8px;
-    color: #fff;
-    opacity: 0.75;
-  }
-  
-  .footer-dark .item.social > a:hover {
-    opacity: 0.9;
-  }
-  
-  .footer-dark .copyright {
-    text-align: center;
-    padding-top: 24px;
-    opacity: 0.3;
-    font-size: 13px;
-    margin-bottom: 0;
-  }
-  /* /Footer */
-  </style>
-  
+}
+</style>
