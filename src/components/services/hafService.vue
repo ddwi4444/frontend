@@ -3,8 +3,8 @@
     <loading-screen :value="loadingScreen"></loading-screen>
 
     <div class="container">
-      <div class="row">
-        <div class="row" style="margin-top: 30px; justify-content: center">
+      <div class="row" style="margin: 0px; padding: 0px;">
+        <div class="row" style="margin-top: 30px; justify-content: center; margin: 0px; padding: 0px;">
           <h4>Recommended</h4>
           <div
             v-for="dataServicer in dataServicers"
@@ -720,7 +720,7 @@ export default {
     color: "",
 
     // Add ons
-    loadingScreen: true,
+    loadingScreen: false,
     dialogZoom: false,
     getImage: null, // initialize getImage property here
     loading: false,
@@ -903,7 +903,7 @@ export default {
 <style>
 /* Card */
 .card-service {
-  width: 190px;
+  width: 170px;
   height: 215px;
   border-radius: 20px;
   background: #ffffff;

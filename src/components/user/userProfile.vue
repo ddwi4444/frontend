@@ -2730,11 +2730,7 @@
         <v-form
           ref="form"
           class="w-full"
-          @submit.prevent="
-            inputType == 'AddMerchandise'
-              ? submitNPC('AddMerchandise')
-              : submitComic('UpdateMerchandise')
-          "
+          @submit.prevent
         >
           <div
             class="h-auto w-full d-flex align-center justify-center flex-column m-b-25 mt-5"

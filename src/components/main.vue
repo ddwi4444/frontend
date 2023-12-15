@@ -19,18 +19,27 @@
 
         <div :class="['links', { open: isMenuOpen }]">
           <div class="show-profile-and-logout">
-            <router-link to="haf-profile">My Profile</router-link>
+            <div class="menuColor" v-if="isMyProfile == 1" @click="handlerGoMyProfile">My Profile</div>
+            <div class="menuUncolor" v-else @click="handlerGoMyProfile">My Profile</div>
           </div>
-          <router-link to="haf-service">HAF Service</router-link>
-          <router-link to="haf-merchandise">HAF Merchandise</router-link>
-          <router-link to="haf-school">HAF School</router-link>
-          <router-link to="haf-about">About</router-link>
+          <div class="menuColor" v-if="isServices==1" @click="handlerGoService">HAF Service</div>
+          <div class="menuUncolor" v-else @click="handlerGoService">HAF Service</div>
+
+          <div class="menuColor" v-if="isMerchandise==1" @click="handlerGoMerchandise">HAF Merchandise</div>
+          <div class="menuUncolor" v-else @click="handlerGoMerchandise">HAF Merchandise</div>
+
+          <div class="menuColor" v-if="isSchool==1" @click="handlerGoSchool">HAF School</div>
+          <div class="menuUncolor" v-else @click="handlerGoSchool">HAF School</div>
+
+          <div class="menuColor" v-if="isAbout==1" @click="handlerGoAbout">About</div>
+          <div class="menuUncolor" v-else @click="handlerGoAbout">About</div>
+
           <div class="show-profile-and-logout" style="margin-bottom: 15px;">
             <router-link style="margin-bottom: 10px;" to="login" @click.native="logout">Logout</router-link>
           </div>
         </div>
 
-        <div class="avatar" @click="goToMyProfile">
+        <div class="avatar" @click="handlerGoMyProfile">
           <div class="user-avatar">
             <b-avatar
               style="margin-right: 5px"
@@ -39,7 +48,15 @@
               :src="$baseUrl + '/storage/' + image">
               </b-avatar>
               <span
-              class="mr-auto"
+              v-if="isMyProfile == 1"
+              class="menuColor mr-auto"
+              style="display: inline-block; text-transform: capitalize"
+            >
+              {{ getNamaPersona }}</span
+            >
+            <span
+              v-else
+              class="menuUncolor mr-auto"
               style="display: inline-block; text-transform: capitalize"
             >
               {{ getNamaPersona }}</span
@@ -82,16 +99,42 @@ export default {
     userLogin: {
       token: localStorage.getItem("token"), // initialize with a valid token or empty string
     },
+
+    // Adds On
+    isServices: 0,
+    isMerchandise: 0,
+    isSchool: 0,
+    isAbout: 0,
+    isMyProfile: 0,
   }),
-  mounted() {},
+  mounted() {
+    // Get the current URL
+    const currentURL = window.location.href;
+
+    // Check if the current URL contains 'http://localhost:8080/haf-merchandise'
+    if (currentURL.includes('http://localhost:8080/haf-service')) {
+      // Set isMerchandise to 1
+      this.isServices = 1;
+    }
+    if (currentURL.includes('http://localhost:8080/haf-merchandise')) {
+      // Set isMerchandise to 1
+      this.isMerchandise = 1;
+    }
+    if (currentURL.includes('http://localhost:8080/haf-school')) {
+      // Set isMerchandise to 1
+      this.isSchool = 1;
+    }
+    if (currentURL.includes('http://localhost:8080/haf-about')) {
+      // Set isMerchandise to 1
+      this.isAbout = 1;
+    }
+    if (currentURL.includes('http://localhost:8080/haf-profile')) {
+      // Set isMerchandise to 1
+      this.isMyProfile = 1;
+    }
+  },
   methods: {
-    goToMyProfile() {
-      return this.$router.push("/haf-profile").catch((error) => {
-        if (error.name != "NavigationDuplicated") {
-          throw error;
-        }
-      });
-    },
+    
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
     },
@@ -120,8 +163,84 @@ export default {
         });
     },
 
+    handlerGoMyProfile() {
+      this.isMenuOpen = false;
+      this.isMyProfile = 1;
+      this.isServices = 0;
+      this.isMerchandise = 0;
+      this.isSchool = 0;
+      this.isAbout = 0;
+      return this.$router.push("/haf-profile").catch((error) => {
+        if (error.name != "NavigationDuplicated") {
+          throw error;
+        }
+      });
+    },
+
     handlerGoHome(){
+      this.isMenuOpen = false;
+      this.isServices = 0;
+      this.isMerchandise = 0;
+      this.isSchool = 0;
+      this.isAbout = 0;
+      this.isMyProfile = 0;
       return this.$router.push("/").catch((error) => {
+        if (error.name != "NavigationDuplicated") {
+          throw error;
+        }
+      });
+    },
+
+    handlerGoService(){
+      this.isMenuOpen = false;
+      this.isServices = 1;
+      this.isMerchandise = 0;
+      this.isSchool = 0;
+      this.isAbout = 0;
+      this.isMyProfile = 0;
+      return this.$router.push("/haf-service").catch((error) => {
+        if (error.name != "NavigationDuplicated") {
+          throw error;
+        }
+      });
+    },
+
+    handlerGoMerchandise(){
+      this.isMenuOpen = false;
+      this.isMerchandise = 1;
+      this.isServices = 0;
+      this.isSchool = 0;
+      this.isAbout = 0;
+      this.isMyProfile = 0;
+      return this.$router.push("/haf-merchandise").catch((error) => {
+        if (error.name != "NavigationDuplicated") {
+          throw error;
+        }
+      });
+    },
+
+    handlerGoSchool(){
+      this.isMenuOpen = false;
+      this.isSchool = 1;
+      this.isServices = 0;
+      this.isMerchandise = 0;
+      this.isAbout = 0;
+      this.isMyProfile = 0;
+      return this.$router.push("/haf-school").catch((error) => {
+        if (error.name != "NavigationDuplicated") {
+          throw error;
+        }
+      });
+    },
+
+    handlerGoAbout(){
+      this.isMenuOpen = false;
+      this.isAbout = 1;
+      this.isServices = 0;
+      this.isMerchandise = 0;
+      this.isSchool = 0;
+      this.isMyProfile = 0;
+      return this.$router.push("/haf-about").catch((error) => {
         if (error.name != "NavigationDuplicated") {
           throw error;
         }
@@ -145,6 +264,23 @@ export default {
 </script>
 
 <style scoped>
+.menuColor{
+  color: #f39c12 !important;
+  cursor: pointer;
+}
+.menuColor:hover{
+  color: #f39c12 !important;
+  cursor: pointer;
+}
+.menuUncolor{
+  cursor: pointer;
+}
+.menuUncolor:hover{
+  transition: 0.5s;
+opacity: 2; 
+color: #f39c12 !important;
+  cursor: pointer;
+}
 .show-profile-and-logout {
   display: none;
 }
@@ -257,6 +393,10 @@ export default {
 }
 
 @media (max-width: 768px) {
+  .menuColor{
+  color: #f39c12 !important;
+  cursor: pointer;
+}
   .menu-icon {
     cursor: pointer;
     transition: opacity 5s ease; /* Define the transition */

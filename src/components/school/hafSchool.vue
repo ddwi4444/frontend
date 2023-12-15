@@ -79,11 +79,12 @@
                               class="remove-button"
                               @click="removeImage(index)"
                               style="
-                                width: 30%;
-                                height: 30%;
-                                justify-content: center;
+                                width: 20px;
+                                height: 20px;
                                 display: grid;
                                 align-content: center;
+                                place-content: center;
+                                align-items: center;
                               "
                             >
                               x
@@ -375,7 +376,7 @@
 
             <!-- Announcement Tab -->
             <b-tab title="Announcement" class="cta hover-underline-animation">
-              <b-container fluid class="p-4 bg-transparent">
+              <b-container fluid class="p-4 bg-transparent" style="padding-top: 8px !important; padding-left: 12px !important; padding-right: 12px !important;">
                 <center>
                   <div
                     v-if="userLogin.role == 'admin' || userLogin.role == 'osis'"
@@ -2231,8 +2232,7 @@ label:hover {
 
 .image-item {
   position: relative;
-  margin-right: 10px;
-  margin-bottom: 10px;
+  margin: 10px;
 }
 
 .profile-pic {
@@ -2253,7 +2253,6 @@ label:hover {
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  font-weight: bold;
 }
 
 .remove-button:hover {
