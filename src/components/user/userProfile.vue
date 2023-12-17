@@ -2025,6 +2025,40 @@
                 </v-slide-y-transition>
               </div>
             </div>
+            <div
+            style="padding-left: 50px; padding-right: 50px; margin-top: 30px"
+          >
+            <label
+              style="
+                justify-content: start;
+                display: grid;
+                margin-bottom: 10px;
+                font-family: 'Georgia';
+              "
+              >Synopsys</label
+            >
+            <div id="app">
+              <vue-editor id="editor1" v-model="sinopsis" />
+              <div style="height: 15px">
+                <v-slide-y-transition>
+                  <div
+                    v-if="!isComicSinopsisValid"
+                    transition="scroll-y-transition"
+                    style="
+                      font-size: 12px;
+                      text-align: left;
+                      color: red;
+                      margin-left: 15px;
+                      min-height: 14px;
+                      font-weight: lighter;
+                    "
+                  >
+                    This field is required
+                  </div>
+                </v-slide-y-transition>
+              </div>
+            </div>
+            </div>
           </div>
         </v-form>
 
@@ -2035,7 +2069,8 @@
               !isComicGenreValid ||
               !isComicVolumeValid ||
               !isComicInstagramAuthorValid ||
-              !isFileSelected
+              !isFileSelected ||
+              !isComicSinopsisValid
             "
           >
             <v-btn
@@ -2062,6 +2097,7 @@
               isComicGenreValid &&
               isComicVolumeValid &&
               isComicInstagramAuthorValid &&
+              isComicSinopsisValid &&
               isFileSelected
             "
           >
@@ -3432,6 +3468,7 @@ export default {
     genre: "",
     volume: "",
     instagram_author: "",
+    sinopsis: "",
 
     // Sub Comic
     dialogSubComic: false,
@@ -3640,6 +3677,9 @@ export default {
     // Validation for Comic
     isComicTitleValid() {
       return this.judul.trim() !== ""; // Content is required (not empty)
+    },
+    isComicSinopsisValid() {
+      return this.sinopsis.trim() !== ""; // Content is required (not empty)
     },
     isComicGenreValid() {
       return this.genre.trim() !== ""; // Content is required (not empty)
@@ -4983,6 +5023,7 @@ export default {
       this.thumbnail = item.thumbnail;
       this.genre = item.genre;
       this.volume = item.volume;
+      this.sinopsis = item.sinopsis;
       this.instagram_author = item.instagram_author;
       this.selectedFile = item.thumbnail;
       console.log(this.image64Foto);
@@ -5125,6 +5166,7 @@ export default {
         this.ComicForm.append("genre", this.genre);
         this.ComicForm.append("volume", this.volume);
         this.ComicForm.append("instagram_author", this.instagram_author);
+        this.ComicForm.append("sinopsis", this.sinopsis);
 
         this.loadingScreen = true;
 

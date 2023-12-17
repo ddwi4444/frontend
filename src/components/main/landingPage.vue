@@ -5,7 +5,7 @@
     <div>
       <div class="d-flex mb-3 size-bar-home">
         <div style="width: 100%">
-          <b-nav tabs style="padding: 0px; align-items: center">
+          <b-nav tabs style="padding-top: 3px; align-items: center">
             <b-nav-item
               v-if="isCategoryOn == 1"
               active
@@ -1652,6 +1652,13 @@ export default {
 
     handlerClickCard(item) {
       this.addJumlahView(item.uuid);
+      this.$router.push({
+        name: 'haf-detail-comic',
+        params: {
+            slug: item.slug,
+            uuid: item.uuid
+        }
+    });
     },
 
     handlerClickCloseAll() {

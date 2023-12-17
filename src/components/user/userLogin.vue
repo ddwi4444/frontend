@@ -127,7 +127,11 @@ export default Vue.extend({
               response.data.data.user.nama_persona
             );
             localStorage.setItem("role", response.data.data.user.role);
-            localStorage.setItem("image", response.data.data.user.image);
+            if (response.data.data.user.image === null) {
+              localStorage.setItem("image", "");
+            } else {
+              localStorage.setItem("image", response.data.data.user.image);
+            }
             localStorage.setItem("uuid", response.data.data.user.uuid);
             localStorage.setItem("id", response.data.data.user.id);
             localStorage.setItem("token", response.data.data.token);

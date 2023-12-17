@@ -5,8 +5,8 @@
         <loading-screen :value="true"></loading-screen>
       </div>
     </v-fade-transition>
-    <div class="app">
-      <nav class="navbar padding-navbar d-flex w-full p-x-15">
+    <div class="app" >
+      <nav class="navbar padding-navbar d-flex w-full p-x-15" style="z-index: 100;">
         <div class="logo">
             <img
             @click="handlerGoHome"
@@ -45,8 +45,8 @@
               style="margin-right: 5px"
               badge
               badge-variant="success"
-              :src="$baseUrl + '/storage/' + image">
-              </b-avatar>
+              :src="userLogin.image ? $baseUrl + '/storage/' + userLogin.image : ''">
+            </b-avatar>
               <span
               v-if="isMyProfile == 1"
               class="menuColor mr-auto"
@@ -77,7 +77,7 @@
       </nav>
     </div>
 
-    <div class="fullheight" style="margin-top: 15px">
+    <div class="fullheight" style="">
       <router-view></router-view>
     </div>
   </div>
@@ -94,10 +94,10 @@ export default {
   data: () => ({
     isMenuOpen: false,
     loadingScreen: false,
-    image: localStorage.getItem("image"),
 
     userLogin: {
       token: localStorage.getItem("token"), // initialize with a valid token or empty string
+      image: localStorage.getItem("image"),
     },
 
     // Adds On

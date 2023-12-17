@@ -27,15 +27,31 @@ const router = new VueRouter({
       component: importComponent("user/userRegister"),
     },
     {
+      path: "/haf-detail-subcomic/:slug/:uuid",
+      name: "haf-detail-subcomic",
+      meta: {
+        title: "HAF - Comic",
+      },
+      component: importComponent("comic/hafSubComic"),
+    },
+    {
       path: "",
       component: importComponent("main"),
       children: [{
           path: "/",
           name: "home",
           meta: {
-            title: "HAF",
+            title: "Historical Art Fantasia",
           },
           component: importComponent("main/landingPage"),
+        },
+        {
+          path: "/haf-detail-comic/:slug/:uuid",
+          name: "haf-detail-comic",
+          meta: {
+            title: "HAF - Comic",
+          },
+          component: importComponent("comic/hafComic"),
         },
         {
           path: "/haf-service",

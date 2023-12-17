@@ -746,11 +746,11 @@
           <center>
             <div
               class="card-school"
-              v-for="(dataForum, index) in dataForums"
+              v-for="dataForum in dataForums"
               :key="dataForum.id"
               style="width: 100%"
             >
-              <div v-if="dataImagesForums[index]">
+              <div>
                 <div
                   class="comment-container-school"
                   style="padding-bottom: 0px"
@@ -1027,7 +1027,18 @@
               </div>
             </div>
 
-            <p
+            
+
+            <p v-if="noComments"
+              style="
+                margin-top: 16px;
+                margin-bottom: 10px;
+                font-family: 'Georgia';
+              "
+            >
+            There are no comments
+            </p>
+            <p v-else
               style="
                 margin-top: 16px;
                 margin-bottom: 10px;
@@ -1045,9 +1056,6 @@
                 class="card-school mt-5"
               >
                 <div style="padding: 20px">
-                  <div>
-                    <p>There are no comments</p>
-                  </div>
                   <div class="comment-react"></div>
                   <div class="comment-container-school">
                     <div class="user">
@@ -1378,6 +1386,9 @@ export default {
     // Validation for Isi
     isIsiValid() {
       return this.isi.trim() !== ""; // Content is required (not empty)
+    },
+    noComments() {
+      return this.dataKomenForums.filter(comment => comment.forum_id == this.idForum).length === 0;
     },
   },
   methods: {
