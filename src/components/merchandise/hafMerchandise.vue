@@ -52,19 +52,94 @@
             style="align-items: center; display: flex"
           >
             <div class="search-box">
-              <button class="btn-search" style="padding-top: 1.5px">
+              <button
+                class="btn-search"
+                style="padding-top: 1.5px"
+                @click="search"
+              >
                 <b-icon-search></b-icon-search>
               </button>
               <input
                 type="text"
                 class="input-search"
-                v-model="searchTerm"
+                v-model="searchMerchandise"
+                @keyup.enter="search"
+                @input="handleInput"
                 placeholder="Type to Search..."
               />
             </div>
           </b-nav-item>
         </b-nav>
       </div>
+
+      <!-- Search -->
+      <!-- Tampilkan hasil pencarian di sini -->
+      <transition name="fade">
+        <div
+          v-if="this.isInputOn == 1"
+          style="margin-bottom: 70px; margin-top: 20px"
+        >
+          <p>Result for {{ searchMerchandise }}</p>
+          <div class="row" v-if="searchResults.length > 0">
+            <div class="row" style="justify-content: center; max-width: none">
+              <div
+                v-for="result in searchResults"
+                :key="result.id"
+                @click="handlerDetailMerchandise(result)"
+                class="card-merchandise"
+              >
+                <div class="image-size">
+                  <img
+                    class="image-merchandise"
+                    style="
+                      width: 100%;
+                      height: 100%;
+                      object-fit: cover;
+                      border-radius: 10px;
+                    "
+                    :src="$baseUrl + '/storage/' + result.thumbnail"
+                    alt=""
+                  />
+                </div>
+                <span class="title-merchandise">{{ result.nama }}</span>
+                <span class="price-merchandise"
+                  >Rp. {{ formatPrice(result.harga) }}</span
+                >
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            <div class="row no-gutters">
+              <div
+                class="col"
+                style="
+                  display: grid;
+                  align-content: center;
+                  justify-content: end;
+                "
+              >
+                <p>No results found for {{ searchMerchandise }}</p>
+              </div>
+              <div
+                class="col"
+                style="
+                  display: grid;
+                  align-content: center;
+                  justify-content: start;
+                "
+              >
+                <img
+                  src="@/assets/2953962.jpg"
+                  style="height: 150px"
+                  class="d-inline-block align-top"
+                  alt="Animation"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+      <!-- End Serach -->
 
       <div class="row" style="margin: 0px; padding: 0px">
         <div
@@ -520,13 +595,59 @@
                 <p v-if="item.status == 0" style="color: grey; margin: 0px">
                   Waiting for payment
                 </p>
-                <p v-if="item.status == 1" style="color: blue; margin: 0px">
+                <p
+                  v-if="
+                    item.status == 1 &&
+                    item.buktiTf != null &&
+                    myProfile.role != 'admin' &&
+                    item.confirm_buktiTf == 0
+                  "
+                  style="color: rgb(0, 0, 0); margin: 0px"
+                >
+                  Waiting for confirmation payment by admin
+                </p>
+                <p
+                  v-if="
+                    item.status == 1 &&
+                    item.buktiTf != null &&
+                    myProfile.role == 'admin' &&
+                    item.confirm_buktiTf == 0
+                  "
+                  style="color: grey; margin: 0px"
+                >
+                  <v-btn
+                    text
+                    color="blue"
+                    @click.stop="handlerConfirmPayment(item)"
+                    style="text-transform: capitalize; font-size: 13px"
+                  >
+                    <v-icon small>mdi-check-all</v-icon> Confirm Payment
+                  </v-btn>
+                </p>
+                <p
+                  v-if="item.status == 1 && item.confirm_buktiTf == 1"
+                  style="color: blue; margin: 0px"
+                >
                   Order being processed
                 </p>
-                <p v-if="item.status == 2" style="color: #9d7a18; margin: 0px">
+                <p
+                  v-if="
+                    item.status == 2 &&
+                    item.confirm_buktiTf == 1 &&
+                    item.noResi != null
+                  "
+                  style="color: #9d7a18; margin: 0px"
+                >
                   Shiped
                 </p>
-                <p v-if="item.status == 3" style="color: green; margin: 0px">
+                <p
+                  v-if="
+                    item.status == 3 &&
+                    item.confirm_buktiTf == 1 &&
+                    item.noResi != null
+                  "
+                  style="color: green; margin: 0px"
+                >
                   Received
                 </p>
               </template>
@@ -550,6 +671,7 @@
                   />
                 </div>
                 <div v-else>
+                  <div v-if="myProfile.role != 'admin'">
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
                       <p
@@ -565,13 +687,42 @@
                     <span>Add Transfer Receipt</span>
                   </v-tooltip>
                 </div>
+                <div v-else>-</div>
+                </div>
               </template>
 
               <template v-slot:[`item.noResi`]="{ item }">
-                <p v-if="item.noResi == null" style="color: grey; margin: 0px">
-                  -
-                </p>
-                <p v-else style="margin: 0px">{{ item.noResi }}</p>
+                <div v-if="myProfile.role != 'admin'">
+                  <p
+                    v-if="item.noResi == null"
+                    style="color: grey; margin: 0px"
+                  >
+                    -
+                  </p>
+                  <p v-else style="margin: 0px">{{ item.noResi }}</p>
+                </div>
+                <div v-else>
+                  <div v-if="item.noResi == null">
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                          color="blue"
+                          dark
+                          icon
+                          v-bind="attrs"
+                          v-on="on"
+                          @click.stop="handleAddNoResi(item.uuid)"
+                        >
+                          <v-icon small color="">mdi-upload</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>Add Shipment Tracking Number</span>
+                    </v-tooltip>
+                  </div>
+                  <div v-else>
+                    <p style="margin: 0px">{{ item.noResi }}</p>
+                  </div>
+                </div>
               </template>
 
               <template v-slot:[`item.actions`]="{ item }">
@@ -593,7 +744,7 @@
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
-                      v-if="item.buktiTf == null"
+                      v-if="item.buktiTf === null || item.buktiTf === ''"
                       color="red"
                       dark
                       icon
@@ -603,7 +754,7 @@
                     >
                       <v-icon small>mdi-cart-remove</v-icon>
                     </v-btn>
-                    <v-btn v-if="item.buktiTf != null" icon disabled>
+                    <v-btn v-else icon disabled>
                       <v-icon small>mdi-cart-remove</v-icon>
                     </v-btn>
                   </template>
@@ -703,47 +854,91 @@
 
     <!-- Dialog Detail Order Products Merchandise -->
     <v-dialog v-model="dialogDetailOrderProducts" width="800px">
-
-      <v-card style="min-height: 600px; border-bottom-left-radius: unset !important; border-bottom-right-radius: unset !important">
+      <v-card
+        style="
+          min-height: 600px;
+          border-bottom-left-radius: unset !important;
+          border-bottom-right-radius: unset !important;
+        "
+      >
         <h5
           class="f-24 f-md-20 f-secondary text-center"
-          style="margin-bottom: 20px; font-family: 'Georgia'; font-weight: bold; padding-top: 30px;"
+          style="
+            margin-bottom: 20px;
+            font-family: 'Georgia';
+            font-weight: bold;
+            padding-top: 30px;
+          "
         >
           Detail Poduct Ordered
-        </h5>        
+        </h5>
         <center>
           <div>
             <!-- Update the v-for and :src attribute -->
-<div v-for="dataDetailOrderProductMerchandise in dataDetailOrderProductsMerchandise" :key="dataDetailOrderProductMerchandise.id">
-  <b-card no-body class="overflow-hidden" style="max-width: 540px; min-height: 130px; padding: 0px; margin: 7px; border-radius: 20px;">
-    <div class="row no-gutters">
-      <div class="col-image col">
-        <!-- Use a computed property to get the matching merchandise -->
-        <b-card-img
-          style="height: 120px; width: 120px; border-radius: 20px !important; object-fit: cover;"
-          :src="getMerchandiseThumbnail(dataDetailOrderProductMerchandise.UUIDProduk)"
-          alt="Image"
-          class="rounded-0"
-        ></b-card-img>
-      </div>
-      <div class="col" style="margin-right: 5px; margin-left: 5px;">
-        <p style="text-align: start; margin: 0px; font-size: 13px; font-weight: bold;">{{dataDetailOrderProductMerchandise.namaProduk}}</p>
-        <p style="text-align: start; margin: 0px; font-size: 13px;">Quantity : {{ dataDetailOrderProductMerchandise.quantity }}</p>
-        <p style="text-align: start; margin: 0px; font-size: 13px;">Notes:</p>
-        <div v-html="dataDetailOrderProductMerchandise.notes" style="text-align: justify"></div>
-      </div>
-    </div>
-  </b-card>
-</div>
-
-
+            <div
+              v-for="dataDetailOrderProductMerchandise in dataDetailOrderProductsMerchandise"
+              :key="dataDetailOrderProductMerchandise.id"
+            >
+              <b-card
+                no-body
+                class="overflow-hidden"
+                style="
+                  max-width: 540px;
+                  min-height: 130px;
+                  padding: 0px;
+                  margin: 7px;
+                  border-radius: 20px;
+                "
+              >
+                <div class="row no-gutters">
+                  <div class="col-image col">
+                    <!-- Use a computed property to get the matching merchandise -->
+                    <b-card-img
+                      style="
+                        height: 120px;
+                        width: 120px;
+                        border-radius: 20px !important;
+                        object-fit: cover;
+                      "
+                      :src="
+                        getMerchandiseThumbnail(
+                          dataDetailOrderProductMerchandise.UUIDProduk
+                        )
+                      "
+                      alt="Image"
+                      class="rounded-0"
+                    ></b-card-img>
+                  </div>
+                  <div class="col" style="margin-right: 5px; margin-left: 5px">
+                    <p
+                      style="
+                        text-align: start;
+                        margin: 0px;
+                        font-size: 13px;
+                        font-weight: bold;
+                      "
+                    >
+                      {{ dataDetailOrderProductMerchandise.namaProduk }}
+                    </p>
+                    <p style="text-align: start; margin: 0px; font-size: 13px">
+                      Quantity :
+                      {{ dataDetailOrderProductMerchandise.quantity }}
+                    </p>
+                    <p style="text-align: start; margin: 0px; font-size: 13px">
+                      Notes:
+                    </p>
+                    <div
+                      v-html="dataDetailOrderProductMerchandise.notes"
+                      style="text-align: justify"
+                    ></div>
+                  </div>
+                </div>
+              </b-card>
+            </div>
           </div>
-
         </center>
       </v-card>
-      <template>
-        
-      </template>
+      <template> </template>
     </v-dialog>
     <!-- End Dialog Detail Order Products Merchandise -->
 
@@ -804,6 +999,48 @@
       </v-card>
     </v-dialog>
     <!-- End Dialog Delete Comic Handler -->
+
+    <!-- Dialog add no resi -->
+    <v-dialog v-model="dialogAddNoResi" max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="text-h6">Shipment Tracking Number</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  label="e.g. 343BVYGXXXX"
+                  required
+                  v-model="shipmentTrackingNumber"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="grey"
+            text
+            style="text-transform: capitalize"
+            @click="dialogAddNoResi = false"
+          >
+            Close
+          </v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            style="text-transform: capitalize"
+            @click="submitAddNoResi(uuidAddNoResi)"
+          >
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- end dialog add no resi -->
   </v-main>
 </template>
 
@@ -823,9 +1060,12 @@ export default {
     dataOrderMerchandises: [],
     dataOrderProductsMerchandise: [],
     dataDetailOrderProductsMerchandise: [],
+    myProfile: [],
 
     // Search
-    searchTerm: "",
+    searchMerchandise: "",
+    searchResults: [],
+    isInputOn: 0,
 
     // Add To Cart
     totalPcs: 0,
@@ -841,6 +1081,10 @@ export default {
     },
     itemProductBuktiTf: [],
     BuktiTfForm: new FormData(),
+
+    // // Handle add no resi
+    uuidAddNoResi: "",
+    shipmentTrackingNumber: "",
 
     // Cancel Order
     deleteUUIDOrderMerchandise: "",
@@ -868,6 +1112,7 @@ export default {
     dialogAddBuktiTf: false,
     dialogConfirmDelete: false,
     dialogDetailOrderProducts: false,
+    dialogAddNoResi: false,
 
     // Adds On
     getImage: null,
@@ -939,6 +1184,12 @@ export default {
         sortable: false,
       },
       {
+        text: "Date",
+        align: "center",
+        value: "created_at",
+        sortable: false,
+      },
+      {
         text: "Action",
         width: "15%",
         align: "center",
@@ -957,6 +1208,7 @@ export default {
   created() {
     this.axioDataMerchandise();
     this.axioDataOrderMerchandise();
+    this.axioDataMyProfile();
   },
   watch: {
     dialogDetail(newVal) {
@@ -972,10 +1224,18 @@ export default {
     },
   },
   methods: {
-    handleOrderproducts(itemUuid){
+    handleAddNoResi(uuidAddNoResi) {
+      this.uuidAddNoResi = uuidAddNoResi;
+      this.dialogAddNoResi = true;
+    },
+
+    handlerConfirmPayment(item) {
+      this.confirmPayment(item.uuid);
+    },
+
+    handleOrderproducts(itemUuid) {
       this.axioGetDataDetailOrderProductsMerchandise(itemUuid);
       this.dialogDetailOrderProducts = true;
-      
     },
 
     handlerDeleteOrder(itemUuid) {
@@ -1013,6 +1273,29 @@ export default {
         }
       }
       console.log(item, this.totalPcs, this.detailImageMerchandise);
+    },
+
+    confirmPayment(uuidOrderMerchandise) {
+      this.dialogLoader = true;
+      var url =
+        this.$api + "/confirmPaymentMerchandise/" + uuidOrderMerchandise;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          this.error_message = response.data.message;
+          console.log(this.error);
+          this.axioDataOrderMerchandise();
+        })
+        .catch((error) => {
+          this.error_message = error.response.data.message;
+          console.log(this.error);
+          this.dialogConfirmDelete = false;
+        });
     },
 
     addToProducts(itemProduct) {
@@ -1077,6 +1360,37 @@ export default {
         });
     },
 
+    submitAddNoResi(uuidOrderMerchandise) {
+      this.dialogLoader = true;
+      var url = this.$api + "/submitAddNoResi/" + uuidOrderMerchandise;
+
+      this.BuktiTfForm = new FormData();
+
+      this.BuktiTfForm.append("noResi", this.shipmentTrackingNumber);
+
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      // Mengirim data ke backend Laravel menggunakan axios
+      this.$http
+        .post(url, this.BuktiTfForm, { headers: headers })
+        .then((response) => {
+          // Handle respon dari backend jika diperlukan
+          console.log(response.data);
+
+          this.axioDataOrderMerchandise();
+
+          this.dialogAddNoResi = false;
+          this.shipmentTrackingNumber = "";
+        })
+        .catch((error) => {
+          // Handle error jika ada
+          console.error(error);
+        });
+    },
+
     submitFileBuktiTf(uuid) {
       this.dialogLoader = true;
       var url = this.$api + "/submitFileBuktiTf/" + uuid;
@@ -1100,11 +1414,14 @@ export default {
           // Handle respon dari backend jika diperlukan
           console.log(response.data);
 
-          document.getElementById("input-file").value = "";
-          this.dialogAddBuktiTf = false;
-
-          this.axioDataMerchandise();
           this.axioDataOrderMerchandise();
+          this.axioDataMerchandise();
+
+          document.getElementById("input-file").value = "";
+          this.$refs.file.value = null;
+          this.info.images = [];
+          this.info.sizes = [];
+          this.dialogAddBuktiTf = false;
         })
         .catch((error) => {
           // Handle error jika ada
@@ -1165,7 +1482,8 @@ export default {
 
     axioGetDataDetailOrderProductsMerchandise(uuidMerchandise) {
       this.loadingScreen = true;
-      var url = this.$api + "/getDataDetailOrderProductsMerchandise/" + uuidMerchandise;
+      var url =
+        this.$api + "/getDataDetailOrderProductsMerchandise/" + uuidMerchandise;
 
       // Set the headers
       var headers = {
@@ -1177,19 +1495,14 @@ export default {
         .get(url, { headers: headers })
         .then((response) => {
           // Memformat data NPC dan menyimpannya dalam this.list.npcs
-          this.dataDetailOrderProductsMerchandise = response.data.dataDetailOrderProductsMerchandise.map(
-            (x) => {
+          this.dataDetailOrderProductsMerchandise =
+            response.data.dataDetailOrderProductsMerchandise.map((x) => {
               return {
                 ...x,
                 created_at: moment(x.created_at).format("YYYY-MM-DD h:mm a"),
               };
-            }
-          );
+            });
 
-          console.log(
-            this.dataOrderMerchandises,
-            this.dataOrderProductsMerchandise
-          );
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
             this.loadingScreen = false;
@@ -1204,7 +1517,7 @@ export default {
 
     axioDataOrderMerchandise() {
       this.loadingScreen = true;
-      var url = this.$api + "/getDataOrderMerchandise/" + this.userLogin.id;
+      var url = this.$api + "/getDataOrderMerchandise/" + this.userLogin.uuid;
 
       // Set the headers
       var headers = {
@@ -1272,6 +1585,32 @@ export default {
         });
     },
 
+    axioDataMyProfile() {
+      this.loadingScreen = true;
+      var url = this.$api + "/get-my-profile/" + this.userLogin.uuid;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          this.myProfile = response.data.myProfile;
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching myprofile data:", error);
+          this.loadingScreen = false;
+        });
+    },
+
     // Adds On
     formatPrice(value) {
       let val = (value / 1).toFixed(2).replace(".", ",");
@@ -1294,18 +1633,20 @@ export default {
     },
 
     getMerchandiseThumbnail(UUIDProduk) {
-    // Find the corresponding merchandise based on UUID
-    const matchingMerchandise = this.dataMerchandises.find(merchandise => merchandise.uuid === UUIDProduk);
+      // Find the corresponding merchandise based on UUID
+      const matchingMerchandise = this.dataMerchandises.find(
+        (merchandise) => merchandise.uuid === UUIDProduk
+      );
 
-    // Check if matching merchandise is found
-    if (matchingMerchandise) {
-      // Return the dynamically generated URL
-      return this.$baseUrl + '/storage/' + matchingMerchandise.thumbnail;
-    } else {
-      // Return a default URL or handle the case where no matching merchandise is found
-      return 'https://picsum.photos/400/400/?image=20';
-    }
-  },
+      // Check if matching merchandise is found
+      if (matchingMerchandise) {
+        // Return the dynamically generated URL
+        return this.$baseUrl + "/storage/" + matchingMerchandise.thumbnail;
+      } else {
+        // Return a default URL or handle the case where no matching merchandise is found
+        return "https://picsum.photos/400/400/?image=20";
+      }
+    },
 
     getProductNames(uuid) {
       return this.dataOrderProductsMerchandise
@@ -1350,17 +1691,48 @@ export default {
         };
       }
     },
+
     clearImages() {
       this.$refs.file.value = null;
       this.info.images = [];
       this.info.sizes = [];
+    },
+
+    // Search
+    handleInput() {
+      if (this.searchMerchandise.trim() === "") {
+        // Jika input kosong, setel isInputOn ke 0
+        this.isInputOn = 0;
+        // Atur searchResults menjadi array kosong
+        this.searchResults = [];
+      } else {
+        // Jika input tidak kosong, setel isInputOn ke 1
+        this.isInputOn = 1;
+        // Lanjutkan dengan melakukan pencarian
+        this.search();
+      }
+    },
+    search() {
+      // Gunakan filter untuk mencari data yang sesuai dengan searchTerm
+      this.searchResults = this.dataMerchandises.filter((merchandise) =>
+        merchandise.nama
+          .toLowerCase()
+          .includes(this.searchMerchandise.toLowerCase())
+      );
     },
   },
 };
 </script>
 
 <style scoped>
-.overflow-hidden .col-image{  
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s ease-in-out;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+.overflow-hidden .col-image {
   padding: 0px;
   display: flex;
   align-items: center;

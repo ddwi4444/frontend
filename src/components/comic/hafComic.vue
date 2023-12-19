@@ -276,7 +276,13 @@
           </div>
 
           <center>
-            <v-flex style="padding-top: 20px; padding-bottom: 20px; justify-content: center;">
+            <v-flex
+              style="
+                padding-top: 20px;
+                padding-bottom: 20px;
+                justify-content: center;
+              "
+            >
               <v-tooltip left>
                 <template v-slot:activator="{ on }">
                   <!-- Your existing button code -->
@@ -302,7 +308,9 @@
                       dense
                       color="#006598"
                       class="data-table-icon"
-                      v-if="hasLike(dataSubComicSinglePost.uuid, userLogin.uuid)"
+                      v-if="
+                        hasLike(dataSubComicSinglePost.uuid, userLogin.uuid)
+                      "
                       >mdi-thumb-up-outline</v-icon
                     >
                     <v-icon
@@ -392,7 +400,9 @@
                 <div class="formatting" style="display: block !important">
                   <div>
                     <v-btn
-                    @click.stop="submitCommentSubComic(dataSubComicSinglePost.uuid)"
+                      @click.stop="
+                        submitCommentSubComic(dataSubComicSinglePost.uuid)
+                      "
                       rounded
                       color="#006598"
                       dark
@@ -409,27 +419,31 @@
               Comments
             </p>
 
-            <div v-for="dataKomenSubComic in dataKomenSubComics" :key="dataKomenSubComic.id">
-    <div style="padding: 5px">
-      <div class="comment-react"></div>
-      <div class="comment-container-school">
-        <div class="user">
-          <div class="user-pic">
-            <b-avatar
-              badge
-              badge-variant="success"
-              :src="getUserImage(dataKomenSubComic.user_id)">
-            </b-avatar>
-          </div>
-          <div class="user-info">
-            <span>{{dataKomenSubComic.komen_by}}</span>
-            <p>{{ dataKomenSubComic.created_at }}</p>
-          </div>
-        </div>
-        <p class="comment-content">{{dataKomenSubComic.isi}}</p>
-      </div>
-    </div>
-  </div>
+            <div
+              v-for="dataKomenSubComic in dataKomenSubComics"
+              :key="dataKomenSubComic.id"
+            >
+              <div style="padding: 5px">
+                <div class="comment-react"></div>
+                <div class="comment-container-school">
+                  <div class="user">
+                    <div class="user-pic">
+                      <b-avatar
+                        badge
+                        badge-variant="success"
+                        :src="getUserImage(dataKomenSubComic.user_id)"
+                      >
+                      </b-avatar>
+                    </div>
+                    <div class="user-info">
+                      <span>{{ dataKomenSubComic.komen_by }}</span>
+                      <p>{{ dataKomenSubComic.created_at }}</p>
+                    </div>
+                  </div>
+                  <p class="comment-content">{{ dataKomenSubComic.isi }}</p>
+                </div>
+              </div>
+            </div>
           </div>
         </center>
       </v-card>
@@ -582,7 +596,7 @@ export default {
         });
     },
 
-    submitCommentSubComic(uuidSubComic){
+    submitCommentSubComic(uuidSubComic) {
       var url = this.$api + "/create-komen/" + uuidSubComic;
       var headers = {
         Authorization: "Bearer " + this.userLogin.token,
@@ -598,7 +612,6 @@ export default {
           this.error_message = response.data.message;
 
           this.commentSubComic = "";
-
         })
         .catch((error) => {
           // Menangani kesalahan jika terjadi
@@ -673,14 +686,14 @@ export default {
       this.$http
         .get(url)
         .then((response) => {
-          this.dataKomenSubComics = response.data.dataKomenSubKomik.map(
-            (x) => {
-              return {
-                ...x,
-                created_at: moment(x.created_at).format("dddd, MMMM D, YYYY h:mm a"),
-              };
-            }
-          );
+          this.dataKomenSubComics = response.data.dataKomenSubKomik.map((x) => {
+            return {
+              ...x,
+              created_at: moment(x.created_at).format(
+                "dddd, MMMM D, YYYY h:mm a"
+              ),
+            };
+          });
 
           this.dataUserKomenSubComics = response.data.dataUser;
 
@@ -776,15 +789,17 @@ export default {
       window.open(this.dataComic.instagram_author, "_blank");
     },
     getUserImage(userId) {
-    const user = this.dataUserKomenSubComics.find(user => user.id === userId);
+      const user = this.dataUserKomenSubComics.find(
+        (user) => user.id === userId
+      );
 
-    if (user && user.image) {
-      return `${this.$baseUrl}/storage/${user.image}`;
-    } else {
-      // You can return a default image URL or an empty string as per your requirement
-      return ''; 
-    }
-  }
+      if (user && user.image) {
+        return `${this.$baseUrl}/storage/${user.image}`;
+      } else {
+        // You can return a default image URL or an empty string as per your requirement
+        return "";
+      }
+    },
   },
 };
 </script>
