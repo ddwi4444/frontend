@@ -2,7 +2,7 @@
   <v-main>
     <loading-screen :value="loadingScreen"></loading-screen>
 
-    <div class="container searchandorder">
+    <div class="container searchandorder" style="padding-top: 0px;">
       <div class="d-flex mb-3 size-bar-home">
         <b-nav>
           <b-nav-item>
