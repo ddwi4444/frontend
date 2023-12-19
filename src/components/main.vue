@@ -77,6 +77,22 @@
       </nav>
     </div>
 
+    <!-- Snackbar -->
+    <v-snackbar v-model="snackbar" :color="color" text>
+      {{ textMessage }}
+      <template v-slot:action="{ attrs }">
+        <v-btn plain color="red" text v-bind="attrs" @click="snackbar = false">
+          <v-icon
+            dense
+            color="#FF0000"
+            @click="snackbar = false"
+            class="data-table-icon"
+            >mdi-close</v-icon
+          >
+        </v-btn>
+      </template>
+    </v-snackbar>
+
     <div class="fullheight" style="">
       <router-view></router-view>
     </div>
@@ -98,7 +114,13 @@ export default {
     userLogin: {
       token: localStorage.getItem("token"), // initialize with a valid token or empty string
       image: localStorage.getItem("image"),
+      role: localStorage.getItem("role"),
     },
+
+    // Snackbar
+    snackbar: false,
+    textMessage: "",
+    color: "",
 
     // Adds On
     isServices: 0,
@@ -220,17 +242,27 @@ export default {
     },
 
     handlerGoSchool(){
-      this.isMenuOpen = false;
-      this.isSchool = 1;
-      this.isServices = 0;
-      this.isMerchandise = 0;
-      this.isAbout = 0;
-      this.isMyProfile = 0;
-      return this.$router.push("/haf-school").catch((error) => {
-        if (error.name != "NavigationDuplicated") {
-          throw error;
-        }
-      });
+      if(this.userLogin.role == 'user'){
+        this.isMenuOpen = false;
+
+        this.textMessage = "You cannot access this page because you are not part of the HAF Community, join us soon.";
+        this.snackbar = true;
+        this.color = "grey";
+      }
+      else{
+        this.isMenuOpen = false;
+        this.isSchool = 1;
+        this.isServices = 0;
+        this.isMerchandise = 0;
+        this.isAbout = 0;
+        this.isMyProfile = 0;
+        return this.$router.push("/haf-school").catch((error) => {
+          if (error.name != "NavigationDuplicated") {
+            throw error;
+          }
+        });
+      }
+      
     },
 
     handlerGoAbout(){

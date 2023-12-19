@@ -151,7 +151,6 @@
             padding: 0px;
           "
         >
-          <h4>Recommended</h4>
           <div
             v-for="dataMerchandise in dataMerchandises"
             :key="dataMerchandise.id"

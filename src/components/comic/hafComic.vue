@@ -612,6 +612,8 @@ export default {
           this.error_message = response.data.message;
 
           this.commentSubComic = "";
+          this.axioDataKomenSubKomik(uuidSubComic);
+
         })
         .catch((error) => {
           // Menangani kesalahan jika terjadi

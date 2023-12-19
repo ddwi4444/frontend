@@ -28,8 +28,17 @@
                       <div>
                         <div class="d-flex flex-row align-items-start">
                           <img
+                            v-if="myProfile.image != null"
+                            style="width: 50px; height: 50px"
                             class="rounded-circle mx-3"
-                            src="https://i.imgur.com/RpzrMR2.jpg"
+                            :src="$baseUrl + '/storage/' + this.myProfile.image"
+                            width="40"
+                          />
+                          <img
+                            v-else
+                            style="width: 50px; height: 50px"
+                            class="rounded-circle mx-3"
+                            src="@/assets/userImage.jpg"
                             width="40"
                           />
                           <v-textarea
@@ -207,28 +216,13 @@
                       <div class="comment-container-school">
                         <div class="user">
                           <div class="user-pic">
-                            <svg
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              height="20"
-                              width="20"
-                              xmlns="http://www.w3.org/2000/svg"
+                            <b-avatar
+                              style="padding: 0px"
+                              badge
+                              badge-variant="success"
+                              :src="getUserImage(dataForum.user_id)"
                             >
-                              <path
-                                stroke-linejoin="round"
-                                fill="#707277"
-                                stroke-linecap="round"
-                                stroke-width="2"
-                                stroke="#707277"
-                                d="M6.57757 15.4816C5.1628 16.324 1.45336 18.0441 3.71266 20.1966C4.81631 21.248 6.04549 22 7.59087 22H16.4091C17.9545 22 19.1837 21.248 20.2873 20.1966C22.5466 18.0441 18.8372 16.324 17.4224 15.4816C14.1048 13.5061 9.89519 13.5061 6.57757 15.4816Z"
-                              ></path>
-                              <path
-                                stroke-width="2"
-                                fill="#707277"
-                                stroke="#707277"
-                                d="M16.5 6.5C16.5 8.98528 14.4853 11 12 11C9.51472 11 7.5 8.98528 7.5 6.5C7.5 4.01472 9.51472 2 12 2C14.4853 2 16.5 4.01472 16.5 6.5Z"
-                              ></path>
-                            </svg>
+                            </b-avatar>
                           </div>
                           <div class="user-info">
                             <span
@@ -376,10 +370,18 @@
 
             <!-- Announcement Tab -->
             <b-tab title="Announcement" class="cta hover-underline-animation">
-              <b-container fluid class="p-4 bg-transparent" style="padding-top: 8px !important; padding-left: 12px !important; padding-right: 12px !important;">
+              <b-container
+                fluid
+                class="p-4 bg-transparent"
+                style="
+                  padding-top: 8px !important;
+                  padding-left: 12px !important;
+                  padding-right: 12px !important;
+                "
+              >
                 <center>
                   <div
-                    v-if="userLogin.role == 'admin' || userLogin.role == 'osis'"
+                    v-if="myProfile.role == 'admin' || myProfile.role == 'osis'"
                     class="text-box-school"
                   >
                     <div class="box-container">
@@ -401,8 +403,19 @@
                         <div>
                           <div class="d-flex flex-row align-items-start">
                             <img
+                              v-if="myProfile.image != null"
+                              style="width: 50px; height: 50px"
                               class="rounded-circle mx-3"
-                              src="https://i.imgur.com/RpzrMR2.jpg"
+                              :src="
+                                $baseUrl + '/storage/' + this.myProfile.image
+                              "
+                              width="40"
+                            />
+                            <img
+                              v-else
+                              style="width: 50px; height: 50px"
+                              class="rounded-circle mx-3"
+                              src="@/assets/userImage.jpg"
                               width="40"
                             />
                             <v-textarea
@@ -568,74 +581,66 @@
                   </div>
 
                   <b-container fluid class="p-4 bg-transparent">
-                <center>
-                  <div
-                    class="card-school mt-5"
-                    v-for="(dataAnnouncement, index) in dataAnnouncements"
-                    :key="dataAnnouncement.id"
-                  >
-                    <div>
-                      <div class="comment-container-school">
-                        <div class="user">
-                          <div class="user-pic">
-                            <svg
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              height="20"
-                              width="20"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                stroke-linejoin="round"
-                                fill="#707277"
-                                stroke-linecap="round"
-                                stroke-width="2"
-                                stroke="#707277"
-                                d="M6.57757 15.4816C5.1628 16.324 1.45336 18.0441 3.71266 20.1966C4.81631 21.248 6.04549 22 7.59087 22H16.4091C17.9545 22 19.1837 21.248 20.2873 20.1966C22.5466 18.0441 18.8372 16.324 17.4224 15.4816C14.1048 13.5061 9.89519 13.5061 6.57757 15.4816Z"
-                              ></path>
-                              <path
-                                stroke-width="2"
-                                fill="#707277"
-                                stroke="#707277"
-                                d="M16.5 6.5C16.5 8.98528 14.4853 11 12 11C9.51472 11 7.5 8.98528 7.5 6.5C7.5 4.01472 9.51472 2 12 2C14.4853 2 16.5 4.01472 16.5 6.5Z"
-                              ></path>
-                            </svg>
-                          </div>
-                          <div class="user-info">
-                            <span
-                              style="
-                                padding: 0px;
-                                margin: 0px;
-                                text-transform: capitalize;
-                              "
-                              >{{ dataAnnouncement.post_by }}</span
-                            >
-                            <div class="row" style="padding: 0px; margin: 0px">
-                              <div
-                                class="col-sm-10 style-detail-card-forum"
-                                style="
-                                  padding: 0px;
-                                  margin: 0px;
-                                  width: 175px;
-                                  display: grid;
-                                  align-items: center;
-                                  justify-content: start;
-                                "
-                              >
-                                <p style="padding: 0px; margin: 0px">
-                                  {{ dataAnnouncement.created_at }}
-                                </p>
+                    <center>
+                      <div
+                        class="card-school mt-5"
+                        v-for="(dataAnnouncement, index) in dataAnnouncements"
+                        :key="dataAnnouncement.id"
+                      >
+                        <div>
+                          <div class="comment-container-school">
+                            <div class="user">
+                              <div class="user-pic">
+                                <b-avatar
+                                  style="padding: 0px"
+                                  badge
+                                  badge-variant="success"
+                                  :src="
+                                    getUserImageAnnouncement(
+                                      dataAnnouncement.user_id
+                                    )
+                                  "
+                                >
+                                </b-avatar>
                               </div>
-                              <div
-                                class="col"
-                                style="
-                                  padding: 0px;
-                                  margin: 0px;
-                                  align-content: center;
-                                  display: grid;
-                                "
-                              >
-                                <!-- <a
+                              <div class="user-info">
+                                <span
+                                  style="
+                                    padding: 0px;
+                                    margin: 0px;
+                                    text-transform: capitalize;
+                                  "
+                                  >{{ dataAnnouncement.post_by }}</span
+                                >
+                                <div
+                                  class="row"
+                                  style="padding: 0px; margin: 0px"
+                                >
+                                  <div
+                                    class="col-sm-10 style-detail-card-forum"
+                                    style="
+                                      padding: 0px;
+                                      margin: 0px;
+                                      width: 175px;
+                                      display: grid;
+                                      align-items: center;
+                                      justify-content: start;
+                                    "
+                                  >
+                                    <p style="padding: 0px; margin: 0px">
+                                      {{ dataAnnouncement.created_at }}
+                                    </p>
+                                  </div>
+                                  <div
+                                    class="col"
+                                    style="
+                                      padding: 0px;
+                                      margin: 0px;
+                                      align-content: center;
+                                      display: grid;
+                                    "
+                                  >
+                                    <!-- <a
                                 @click="editHandlerForum(dataForum)"
                                 style="
                                   color: #4898ff;
@@ -645,81 +650,83 @@
                                 "
                                 >Edit</a
                               > -->
-                              </div>
-                              <div
-                                class="col"
-                                style="
-                                  padding: 0px;
-                                  margin: 0px;
-                                  align-content: center;
-                                  display: grid;
-                                "
-                              >
-                                <a
-                                  @click="deleteHandlerComic(dataAnnouncement)"
-                                  style="
-                                    color: #4898ff;
-                                    font-weight: 600;
-                                    font-size: 10px;
-                                    margin-left: 10px;
-                                  "
-                                  >Delete</a
-                                >
+                                  </div>
+                                  <div
+                                    class="col"
+                                    style="
+                                      padding: 0px;
+                                      margin: 0px;
+                                      align-content: center;
+                                      display: grid;
+                                    "
+                                  >
+                                    <a
+                                      @click="
+                                        deleteHandlerComic(dataAnnouncement)
+                                      "
+                                      style="
+                                        color: #4898ff;
+                                        font-weight: 600;
+                                        font-size: 10px;
+                                        margin-left: 10px;
+                                      "
+                                      >Delete</a
+                                    >
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                        <!-- <div v-html="dataForum.isi"></div> -->
-                        <div
-                          style="font-style: none; !important align-items: none;"
-                          v-html="convertLinks(dataAnnouncement.isi)"
-                        ></div>
-                        <template>
-                          <center>
-                            <v-row v-if="dataImagesAnnouncements[index]">
-                              <!-- eslint-disable vue/no-use-v-if-with-v-for,vue/no-confusing-v-for-v-if -->
-                              <v-col
-                                v-for="dataImagesAnnouncement in dataImagesAnnouncements"
-                                :key="dataImagesAnnouncement.id"
-                                v-if="dataAnnouncement.id == dataImagesAnnouncement.announcement_id"
-                                class="d-flex child-flex"
-                                cols="4"
-                              >
-                                <v-img
-                                  style="cursor: zoom-in"
-                                  :src="
-                                    $baseUrl +
-                                    '/storage/' +
-                                    dataImagesAnnouncement.images_announcement_path
-                                  "
-                                  aspect-ratio="1"
-                                  class="grey lighten-2"
-                                  @click="
-                                    zoom(
-                                      $baseUrl +
+                            <!-- <div v-html="dataForum.isi"></div> -->
+                            <div
+                              style="font-style: none; !important align-items: none;"
+                              v-html="convertLinks(dataAnnouncement.isi)"
+                            ></div>
+                            <template>
+                              <center>
+                                <v-row v-if="dataImagesAnnouncements[index]">
+                                  <!-- eslint-disable vue/no-use-v-if-with-v-for,vue/no-confusing-v-for-v-if -->
+                                  <v-col
+                                    v-for="dataImagesAnnouncement in dataImagesAnnouncements"
+                                    :key="dataImagesAnnouncement.id"
+                                    v-if="
+                                      dataAnnouncement.id ==
+                                      dataImagesAnnouncement.announcement_id
+                                    "
+                                    class="d-flex child-flex"
+                                    cols="4"
+                                  >
+                                    <v-img
+                                      style="cursor: zoom-in"
+                                      :src="
+                                        $baseUrl +
                                         '/storage/' +
                                         dataImagesAnnouncement.images_announcement_path
-                                    )
-                                  "
-                                >
-                                </v-img>
-                              </v-col>
-                            </v-row>
-                          </center>
-                        </template>
+                                      "
+                                      aspect-ratio="1"
+                                      class="grey lighten-2"
+                                      @click="
+                                        zoom(
+                                          $baseUrl +
+                                            '/storage/' +
+                                            dataImagesAnnouncement.images_announcement_path
+                                        )
+                                      "
+                                    >
+                                    </v-img>
+                                  </v-col>
+                                </v-row>
+                              </center>
+                            </template>
+                          </div>
+
+                          <hr
+                            class="rounded"
+                            style="width: 90%; padding: 0px; margin: 0px"
+                          />
+                        </div>
                       </div>
-
-                      <hr
-                        class="rounded"
-                        style="width: 90%; padding: 0px; margin: 0px"
-                      />
-
-                    </div>
-                  </div>
-                </center>
-              </b-container>
-
-
+                    </center>
+                  </b-container>
                 </center>
               </b-container>
             </b-tab>
@@ -734,7 +741,6 @@
       transition="dialog-top-transition"
       max-width="1000"
       v-model="dialogDetailForum"
-      persistent
     >
       <v-card
         class="position-relative m-x-auto p-x-25 p-y-50 br-10 bs-none min-w-full min-w-lg-full"
@@ -769,28 +775,13 @@
                   </h3>
                   <div class="user">
                     <div class="user-pic">
-                      <svg
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        height="20"
-                        width="20"
-                        xmlns="http://www.w3.org/2000/svg"
+                      <b-avatar
+                        style="padding: 0px"
+                        badge
+                        badge-variant="success"
+                        :src="getUserImage(dataForum.user_id)"
                       >
-                        <path
-                          stroke-linejoin="round"
-                          fill="#707277"
-                          stroke-linecap="round"
-                          stroke-width="2"
-                          stroke="#707277"
-                          d="M6.57757 15.4816C5.1628 16.324 1.45336 18.0441 3.71266 20.1966C4.81631 21.248 6.04549 22 7.59087 22H16.4091C17.9545 22 19.1837 21.248 20.2873 20.1966C22.5466 18.0441 18.8372 16.324 17.4224 15.4816C14.1048 13.5061 9.89519 13.5061 6.57757 15.4816Z"
-                        ></path>
-                        <path
-                          stroke-width="2"
-                          fill="#707277"
-                          stroke="#707277"
-                          d="M16.5 6.5C16.5 8.98528 14.4853 11 12 11C9.51472 11 7.5 8.98528 7.5 6.5C7.5 4.01472 9.51472 2 12 2C14.4853 2 16.5 4.01472 16.5 6.5Z"
-                        ></path>
-                      </svg>
+                      </b-avatar>
                     </div>
                     <div class="user-info">
                       <span
@@ -930,10 +921,19 @@
                     <div>
                       <div class="d-flex flex-row align-items-start mb-2">
                         <img
-                          class="rounded-circle mx-3"
-                          src="https://i.imgur.com/RpzrMR2.jpg"
-                          width="40"
-                        /><v-textarea
+                            v-if="myProfile.image != null"
+                            style="width: 50px; height: 50px"
+                            class="rounded-circle mx-3"
+                            :src="$baseUrl + '/storage/' + myProfile.image"
+                            width="40"
+                          />
+                          <img
+                            v-else
+                            style="width: 50px; height: 50px"
+                            class="rounded-circle mx-3"
+                            src="@/assets/userImage.jpg"
+                            width="40"
+                          /><v-textarea
                           filled
                           auto-grow
                           label="Have a questions?"
@@ -1060,28 +1060,13 @@
                   <div class="comment-container-school">
                     <div class="user">
                       <div class="user-pic">
-                        <svg
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          height="20"
-                          width="20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            stroke-linejoin="round"
-                            fill="#707277"
-                            stroke-linecap="round"
-                            stroke-width="2"
-                            stroke="#707277"
-                            d="M6.57757 15.4816C5.1628 16.324 1.45336 18.0441 3.71266 20.1966C4.81631 21.248 6.04549 22 7.59087 22H16.4091C17.9545 22 19.1837 21.248 20.2873 20.1966C22.5466 18.0441 18.8372 16.324 17.4224 15.4816C14.1048 13.5061 9.89519 13.5061 6.57757 15.4816Z"
-                          ></path>
-                          <path
-                            stroke-width="2"
-                            fill="#707277"
-                            stroke="#707277"
-                            d="M16.5 6.5C16.5 8.98528 14.4853 11 12 11C9.51472 11 7.5 8.98528 7.5 6.5C7.5 4.01472 9.51472 2 12 2C14.4853 2 16.5 4.01472 16.5 6.5Z"
-                          ></path>
-                        </svg>
+                        <b-avatar
+                              style="padding: 0px"
+                              badge
+                              badge-variant="success"
+                              :src="getUserImagecomment(dataKomenForum.user_id)"
+                            >
+                            </b-avatar>
                       </div>
                       <div class="user-info">
                         <span>{{ dataKomenForum.komen_by }}</span>
@@ -1142,99 +1127,6 @@
       </v-card>
     </v-dialog>
     <!-- End Dialog Detail Forum -->
-
-    <!-- Dialog Edit Forum -->
-    <!-- <v-dialog
-      transition="dialog-top-transition"
-      max-width="1000px"
-      v-model="dialogForum"
-      persistent
-    >
-      <v-card
-        class="position-relative m-x-auto p-x-25 p-y-50 br-10 bs-none min-w-full min-w-lg-full"
-      >
-        <h3
-          class="f-24 f-md-20 f-secondary text-center m-b-50"
-          style="
-            margin-bottom: 50px;
-            padding-top: 30px;
-            font-family: 'Georgia';
-            font-weight: bold;
-          "
-        >
-          {{ "Edit Portfolio" }}
-        </h3>
-        <v-form
-          ref="form"
-          class="w-full"
-          @submit.prevent="submitForum('editPortfolio')"
-        >
-          <div class="m-3">
-            <v-textarea
-              filled
-              auto-grow
-              label="Have a questions?"
-              rows="4"
-              row-height="30"
-              v-model="isi"
-              style="margin: 0px; padding: 0px"
-              hide-details="true"
-            ></v-textarea>
-          </div>
-        </v-form>
-
-        <v-card-actions class="justify-end mt-5">
-          <div>
-            <v-btn
-              style="text-transform: unset !important"
-              rounded
-              outlined
-              disabled
-              color="indigo"
-              class="btn-form-primary m-t-35"
-              @click="
-                inputType == 'AddPortfolio'
-                  ? submitPortfolio('AddPortfolio')
-                  : submitPortfolio('UpdatePortfolio')
-              "
-              >{{
-                inputType == "AddPortfolio"
-                  ? "Add Portfolio"
-                  : "Update Portfolio"
-              }}</v-btn
-            >
-          </div>
-          <div>
-            <v-btn
-              style="text-transform: unset !important"
-              rounded
-              outlined
-              color="indigo"
-              class="m-t-35"
-              @click="
-                inputType == 'AddPortfolio'
-                  ? submitPortfolio('AddPortfolio')
-                  : submitPortfolio('UpdatePOrtfolio')
-              "
-              >{{
-                inputType == "AddPortfolio"
-                  ? "Add Portfolio"
-                  : "Update Portfolio"
-              }}</v-btn
-            >
-          </div>
-
-          <v-btn
-            style="text-transform: unset !important"
-            plain
-            text
-            @click="dialogForum = false"
-            >Close</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog> -->
-    <!-- End Dialog Edit Forum -->
 
     <!-- Snackbar -->
     <v-snackbar v-model="snackbar" :color="color" text>
@@ -1325,8 +1217,10 @@ export default {
     dataForums: [],
     dataImagesForums: [],
     dataImagesForum: [],
+    user_idDetailForum: "",
     dialogForum: false,
     dialogConfirmDeleteForum: false,
+    usersForum: [],
 
     // Form Forum
     ForumForm: new FormData(),
@@ -1365,10 +1259,12 @@ export default {
     dataUsersForum: [],
 
     // Addons
+    myProfile: [],
     inputType: "addForum",
     userLogin: {
       token: localStorage.getItem("token"), // initialize with a valid token or empty string
       role: localStorage.getItem("role"),
+      uuid: localStorage.getItem("uuid"),
     },
     getImage: null, // initialize getImage property here
     dialogZoom: false,
@@ -1381,6 +1277,7 @@ export default {
     this.axioDataForum();
     this.axioDataKomenForum();
     this.axioDataAnnouncement();
+    this.axioDataMyProfile();
   },
   computed: {
     // Validation for Isi
@@ -1388,7 +1285,11 @@ export default {
       return this.isi.trim() !== ""; // Content is required (not empty)
     },
     noComments() {
-      return this.dataKomenForums.filter(comment => comment.forum_id == this.idForum).length === 0;
+      return (
+        this.dataKomenForums.filter(
+          (comment) => comment.forum_id == this.idForum
+        ).length === 0
+      );
     },
   },
   methods: {
@@ -1723,7 +1624,6 @@ export default {
 
     // Detail Forum
     detailForumHandler(dataForum, dataImagesForum) {
-      console.log(dataImagesForum);
       this.dataForum = dataForum;
       this.dialogDetailForum = true;
       this.isiDataForum = dataForum.isi;
@@ -1731,13 +1631,7 @@ export default {
       this.created_at = dataForum.created_at;
       this.idForum = dataForum.id;
       this.imagesForum = dataImagesForum;
-      console.log(
-        this.isi,
-        this.imagesForum,
-        this.post_by,
-        this.loadingScreen,
-        "tesloading"
-      );
+      this.user_idDetailForum = dataForum.user_id;
     },
 
     handlerCloseDialogForum() {
@@ -1803,6 +1697,7 @@ export default {
           this.error_message = response.data.message;
           console.log(this.error);
           this.dialogConfirmDeleteForum = false;
+          this.dialogDetailForum = false;
           this.textMessage = "Forum Succesfully Deleted";
           this.snackbar = true;
           this.color = "green";
@@ -1843,6 +1738,8 @@ export default {
               ),
             };
           });
+          this.usersForum = response.data.userForum;
+
           console.log(this.dataForum);
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
@@ -1945,6 +1842,32 @@ export default {
         this.loadingScreen = false;
       }, 300);
     },
+
+    axioDataMyProfile() {
+      this.loadingScreen = true;
+      var url = this.$api + "/get-my-profile/" + this.userLogin.uuid;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          this.myProfile = response.data.myProfile;
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching myprofile data:", error);
+          this.loadingScreen = false;
+        });
+    },
     // End Forum
 
     // For zoom image
@@ -1959,6 +1882,41 @@ export default {
       return text.replace(regex, (url) => {
         return `<a href="${url}" target="_blank">${url}</a>`;
       });
+    },
+
+    getUserImage(userId) {
+      const user = this.usersForum.find((user) => user.id === userId);
+
+      if (user && user.image) {
+        return `${this.$baseUrl}/storage/${user.image}`;
+      } else {
+        // You can return a default image URL or an empty string as per your requirement
+        return "";
+      }
+    },
+    getUserImageAnnouncement(userId) {
+      const user = this.dataUsersAnnouncement.find(
+        (user) => user.id === userId
+      );
+
+      if (user && user.image) {
+        return `${this.$baseUrl}/storage/${user.image}`;
+      } else {
+        // You can return a default image URL or an empty string as per your requirement
+        return "";
+      }
+    },
+    getUserImagecomment(userId) {
+      const user = this.dataUsersKomen.find(
+        (user) => user.id === userId
+      );
+
+      if (user && user.image) {
+        return `${this.$baseUrl}/storage/${user.image}`;
+      } else {
+        // You can return a default image URL or an empty string as per your requirement
+        return "";
+      }
     },
   },
 };
@@ -2063,8 +2021,8 @@ export default {
 }
 
 .comment-container-school .user .user-pic {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   position: relative;
   display: flex;
   align-items: center;
@@ -2079,6 +2037,7 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+  text-align: justify;
   gap: 3px;
 }
 
