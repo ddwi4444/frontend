@@ -6,6 +6,7 @@
       <div class="d-flex mb-3 size-bar-home">
         <b-nav data-aos="fade-up" data-aos-duration="2000">
           <b-nav-item>
+            <div v-if="this.myProfile.length != 0">
             <v-btn
               @click.stop="handlerOrderServiceHistory"
               class="mx-2 button-merchan"
@@ -21,6 +22,24 @@
               ></b-icon>
             </v-btn>
             <p style="margin: 0px; font-size: 13px">Your Order</p>
+          </div>
+          <div v-else>
+            <v-btn
+              @click.stop="handlerDetailUserNotLogin"
+              class="mx-2 button-merchan"
+              fab
+              dark
+              small
+              color="rgb(22, 128, 182)"
+            >
+              <b-icon
+                class="icon-merchan"
+                icon="card-checklist"
+                aria-hidden="true"
+              ></b-icon>
+            </v-btn>
+            <p style="margin: 0px; font-size: 13px">Your Order</p>
+          </div>
           </b-nav-item>
           <b-nav-item
             class="searchDiv"
@@ -1935,7 +1954,9 @@ export default {
   }),
   created() {
     this.axioDataServicer();
-    this.axioDataMyProfile();
+    if(this.userLogin.token != null){
+      this.axioDataMyProfile();
+    }
   },
   computed: {
     isProjectNameValid() {
@@ -1953,6 +1974,13 @@ export default {
     },
   },
   methods: {
+    handlerDetailUserNotLogin(){
+      this.textMessage =
+            "You need to log in to access this feature 🤭🤭🤭";
+          this.snackbar = true;
+          this.color = "blue-grey";
+    },
+
     clickEditReview() {
       this.editReview = 1;
     },
@@ -2526,6 +2554,7 @@ export default {
       this.getImage = img;
       this.dialogZoom = true;
     },
+
     axioDataMyProfile() {
       this.loadingScreen = true;
       var url = this.$api + "/get-my-profile/" + this.userLogin.uuid;
@@ -2551,6 +2580,7 @@ export default {
           this.loadingScreen = false;
         });
     },
+    
     calculateFileSize(sizeInBytes) {
       const temp = sizeInBytes / 1024;
       if (temp < 1024) {

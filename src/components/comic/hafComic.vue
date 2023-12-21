@@ -4,7 +4,9 @@
 
     <div style="justify-content: center; display: flex">
       <div style="position: absolute; z-index: 1; width: 100%">
-        <v-parallax data-aos="fade-down" data-aos-duration="1500"
+        <v-parallax
+          data-aos="fade-down"
+          data-aos-duration="1500"
           height="700"
           :src="$baseUrl + '/storage/' + dataComic.thumbnail"
           style="filter: blur(0.8rem); object-fit: cover"
@@ -29,7 +31,9 @@
               style="width: 300px; height: 350px; border-radius: 20px"
             >
               <!-- Img error  -->
-              <img data-aos="fade-up" data-aos-duration="1500"
+              <img
+                data-aos="fade-up"
+                data-aos-duration="1500"
                 :src="$baseUrl + '/storage/' + dataComic.thumbnail"
                 style="
                   margin-top: 10px;
@@ -44,7 +48,9 @@
         </v-layout>
       </v-container>
 
-      <v-container data-aos="fade-up" data-aos-duration="1500"
+      <v-container
+        data-aos="fade-up"
+        data-aos-duration="1500"
         style="
           position: absolute;
           z-index: 3;
@@ -105,7 +111,9 @@
         </v-flex>
       </v-container>
 
-      <v-container data-aos="fade-up" data-aos-duration="1500"
+      <v-container
+        data-aos="fade-up"
+        data-aos-duration="1500"
         style="
           position: absolute;
           z-index: 2;
@@ -114,7 +122,9 @@
         "
       >
         <v-card color="white" style="min-height: 500px; border-radius: 20px">
-          <h3 data-aos="fade-up" data-aos-duration="1500"
+          <h3
+            data-aos="fade-up"
+            data-aos-duration="1500"
             class="f-24 f-md-20 f-secondary text-center m-b-50"
             style="
               padding-top: 170px;
@@ -124,16 +134,22 @@
           >
             {{ dataComic.judul }}
           </h3>
-          <p data-aos="fade-up" data-aos-duration="1500"
+          <p
+            data-aos="fade-up"
+            data-aos-duration="1500"
             style="font-family: 'Georgia'; font-size: 20px; margin-bottom: 8px"
           >
             <span style="font-family: sans-serif; font-size: 16px">by</span>
             {{ dataComic.post_by }}
           </p>
 
-          <p data-aos="fade-up" data-aos-duration="1500" style="margin: 0px">· Synopsys ·</p>
+          <p data-aos="fade-up" data-aos-duration="1500" style="margin: 0px">
+            · Synopsys ·
+          </p>
           <center style="padding-bottom: 60px">
-            <div data-aos="fade-up" data-aos-duration="1500"
+            <div
+              data-aos="fade-up"
+              data-aos-duration="1500"
               v-html="dataComic.sinopsis"
               style="
                 text-align: justify;
@@ -143,9 +159,18 @@
               "
             ></div>
 
-            <hr data-aos="fade-up" data-aos-duration="1500" style="width: 50%; border: 1px solid; border-radius: 50px" />
+            <hr
+              data-aos="fade-up"
+              data-aos-duration="1500"
+              style="width: 50%; border: 1px solid; border-radius: 50px"
+            />
 
-            <div data-aos="fade-up" data-aos-duration="1500" v-for="dataSubComic in dataSubComics" :key="dataSubComic.id">
+            <div
+              data-aos="fade-up"
+              data-aos-duration="1500"
+              v-for="dataSubComic in dataSubComics"
+              :key="dataSubComic.id"
+            >
               <b-card
                 @click.stop="
                   handlerSubComic(dataSubComic.slug, dataSubComic.uuid)
@@ -361,7 +386,7 @@
 
           <hr style="padding-bottom: 20px; margin: 0px; width: 50%" />
 
-          <div class="text-box-school">
+          <div class="text-box-school" v-if="this.myProfile.length != 0">
             <div class="box-container">
               <div>
                 <div class="d-flex flex-row align-items-start">
@@ -411,7 +436,7 @@
             </div>
 
             <p style="font-family: 'Georgia'; font-size: 17px; margin: 0px">
-              Comments
+              Comment
             </p>
 
             <div
@@ -431,8 +456,210 @@
                       </b-avatar>
                     </div>
                     <div class="user-info">
-                      <span>{{ dataKomenSubComic.komen_by }}</span>
-                      <p>{{ dataKomenSubComic.created_at }}</p>
+                      <span
+                        style="
+                          padding: 0px;
+                          margin: 0px;
+                          text-transform: capitalize;
+                        "
+                        >{{ dataKomenSubComic.komen_by }}</span
+                      >
+                      <div class="row" style="padding: 0px; margin: 0px">
+                        <div
+                          class="col-sm-10 style-detail-card-forum"
+                          style="
+                            padding: 0px;
+                            margin: 0px;
+                            width: 175px;
+                            display: grid;
+                            align-items: center;
+                            justify-content: start;
+                          "
+                        >
+                          <p style="padding: 0px; margin: 0px">
+                            {{ dataKomenSubComic.created_at }}
+                          </p>
+                        </div>
+                        <div
+                          class="col"
+                          style="
+                            padding: 0px;
+                            margin: 0px;
+                            align-content: center;
+                            display: grid;
+                          "
+                        ></div>
+                        <div
+                          class="col"
+                          style="
+                            padding: 0px;
+                            margin: 0px;
+                            align-content: center;
+                            display: grid;
+                          "
+                        >
+                          <a
+                            v-if="
+                              myProfile.id === dataSubComicSinglePost.user_id ||
+                              myProfile.role === 'admin'
+                            "
+                            @click="
+                              deleteHandleComenSubKomik(dataKomenSubComic)
+                            "
+                            style="
+                              color: #4898ff;
+                              font-weight: 600;
+                              font-size: 10px;
+                              margin-left: 10px;
+                            "
+                            >Delete</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <p class="comment-content">{{ dataKomenSubComic.isi }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="text-box-school"
+            v-else
+            style="
+              pointer-events: none; /* Prevents user interaction */
+              opacity: 0.5;
+            "
+          >
+            <div class="box-container">
+              <div>
+                <div class="d-flex flex-row align-items-start">
+                  <b-avatar
+                    style="padding: 2px"
+                    badge
+                    badge-variant="success"
+                    :src="$baseUrl + '/storage/' + this.userLogin.image"
+                  >
+                  </b-avatar>
+                  <v-textarea
+                    :counter="255"
+                    filled
+                    auto-grow
+                    label="You need to log in to left a comment 🤭🤭🤭"
+                    rows="3"
+                    row-height="30"
+                    v-model="commentSubComic"
+                    style="
+                      margin: 0px;
+                      padding: 0px;
+                      width: 100%;
+                      border-radius: 20px;
+                    "
+                  ></v-textarea>
+                </div>
+                <div class="mt-2 text-right"></div>
+              </div>
+
+              <div>
+                <div class="formatting" style="display: block !important">
+                  <div>
+                    <v-btn
+                      @click.stop="
+                        submitCommentSubComic(dataSubComicSinglePost.uuid)
+                      "
+                      rounded
+                      color="#006598"
+                      dark
+                      style="text-transform: capitalize"
+                    >
+                      Post Comment
+                    </v-btn>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p style="font-family: 'Georgia'; font-size: 17px; margin: 0px">
+              Comment
+            </p>
+
+            <div
+              v-for="dataKomenSubComic in dataKomenSubComics"
+              :key="dataKomenSubComic.id"
+            >
+              <div style="padding: 5px">
+                <div class="comment-react"></div>
+                <div class="comment-container-school">
+                  <div class="user">
+                    <div class="user-pic">
+                      <b-avatar
+                        badge
+                        badge-variant="success"
+                        :src="getUserImage(dataKomenSubComic.user_id)"
+                      >
+                      </b-avatar>
+                    </div>
+                    <div class="user-info">
+                      <span
+                        style="
+                          padding: 0px;
+                          margin: 0px;
+                          text-transform: capitalize;
+                        "
+                        >{{ dataKomenSubComic.komen_by }}</span
+                      >
+                      <div class="row" style="padding: 0px; margin: 0px">
+                        <div
+                          class="col-sm-10 style-detail-card-forum"
+                          style="
+                            padding: 0px;
+                            margin: 0px;
+                            width: 175px;
+                            display: grid;
+                            align-items: center;
+                            justify-content: start;
+                          "
+                        >
+                          <p style="padding: 0px; margin: 0px">
+                            {{ dataKomenSubComic.created_at }}
+                          </p>
+                        </div>
+                        <div
+                          class="col"
+                          style="
+                            padding: 0px;
+                            margin: 0px;
+                            align-content: center;
+                            display: grid;
+                          "
+                        ></div>
+                        <div
+                          class="col"
+                          style="
+                            padding: 0px;
+                            margin: 0px;
+                            align-content: center;
+                            display: grid;
+                          "
+                        >
+                          <a
+                            v-if="
+                              myProfile.id === dataSubComicSinglePost.user_id ||
+                              myProfile.role === 'admin'
+                            "
+                            @click="
+                              deleteHandleComenSubKomik(dataKomenSubComic)
+                            "
+                            style="
+                              color: #4898ff;
+                              font-weight: 600;
+                              font-size: 10px;
+                              margin-left: 10px;
+                            "
+                            >Delete</a
+                          >
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <p class="comment-content">{{ dataKomenSubComic.isi }}</p>
@@ -443,6 +670,38 @@
         </center>
       </v-card>
     </v-dialog>
+
+    <!-- Dialog Delete Comic Handler -->
+    <v-dialog v-model="dialogConfirmDelete" persistent max-width="400px">
+      <v-card>
+        <v-card-title class="dialog-confirm-title">
+          <span class="headline white--text">Delete Order</span>
+        </v-card-title>
+        <v-card-text class="dialog-confirm-text">
+          Are you sure want to delete this comment?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            class="ma-1"
+            color="grey"
+            plain
+            @click="dialogConfirmDelete = false"
+            style="text-transform: unset !important"
+            >Cancel</v-btn
+          >
+          <v-btn
+            class="ma-1"
+            color="error"
+            plain
+            @click="deleteKomenSubKomik"
+            style="text-transform: unset !important"
+            >Delete</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Delete Comic Handler -->
 
     <!-- Snackbar -->
     <v-snackbar v-model="snackbar" auto-height :color="color" text top right>
@@ -510,11 +769,17 @@ export default {
     textMessage: "",
     color: "",
 
+    // Delete komen
+    uuidKomenSubKomik: "",
+    subComicUUID: "",
+
     // Adds On
     loadingScreen: false,
     dialogIklan: false,
     dialogSubComic: false,
     dialogLoader: false,
+    dialogConfirmDelete: false,
+    myProfile: [],
     userLogin: {
       token: localStorage.getItem("token"), // initialize with a valid token or empty string
       uuid: localStorage.getItem("uuid"),
@@ -525,11 +790,21 @@ export default {
   computed: {},
   created() {
     this.axioDataComicSinglePost();
-    this.axioDataKomikFavorite();
-    this.axioDataLikeSubKomik();
+
+    if (this.userLogin.token != null) {
+      this.axioDataMyProfile();
+      this.axioDataKomikFavorite();
+      this.axioDataLikeSubKomik();
+    }
   },
   watch: {},
   methods: {
+    deleteHandleComenSubKomik(item) {
+      this.uuidKomenSubKomik = item.uuid;
+      this.subComicUUID = item.sub_komik_uuid;
+      this.dialogConfirmDelete = true;
+    },
+
     handlerSubComic(slugSubComic, uuidSubComic) {
       //   this.addJumlahViewSubComic(uuidSubComic);
       //   this.$router.push({
@@ -546,93 +821,95 @@ export default {
     },
 
     handlerClickFavorite(uuidKomik) {
-      this.loadingScreen = true;
-      this.dialogLoader = true;
-      // Set the headers
-      var headers = {
-        Authorization: "Bearer " + this.userLogin.token,
-      };
+      if (this.myProfile.length != 0) {
+        this.dialogLoader = true;
+        // Set the headers
+        var headers = {
+          Authorization: "Bearer " + this.userLogin.token,
+        };
 
-      var url =
-        this.$api + "/klikFavorite/" + uuidKomik + "/" + this.userLogin.uuid;
+        var url =
+          this.$api + "/klikFavorite/" + uuidKomik + "/" + this.userLogin.uuid;
 
-      this.$http
-        .get(url, { headers: headers })
-        .then((response) => {
-          this.axioDataComicSinglePost();
-          this.axioDataKomikFavorite();
+        this.$http
+          .get(url, { headers: headers })
+          .then((response) => {
+            this.axioDataComicSinglePost();
+            this.axioDataKomikFavorite();
 
-          if (response.data.iyaFavorite == 1) {
-            this.textMessage = "Comic added to favorites 😍";
-            this.snackbar = true;
-            this.color = "success";
-          } else {
-            this.textMessage = "Comic removed from favorites 😔";
-            this.snackbar = true;
-            this.color = "blue-grey";
-          }
+            if (response.data.iyaFavorite == 1) {
+              this.textMessage = "Comic added to favorites 😍";
+              this.snackbar = true;
+              this.color = "success";
+            } else {
+              this.textMessage = "Comic removed from favorites 😔";
+              this.snackbar = true;
+              this.color = "blue-grey";
+            }
 
-          // Use $nextTick to ensure the DOM is updated before triggering the watcher
-          // this.$nextTick(() => {
-          //   // Trigger the watcher manually
-          //   this.currentPage = 1;
-          //   (this.totalPagesDataFavorite, 'total data pages')
-          // });
+            console.log(this.totalPagesDataFavorite, "totalpages");
 
-          console.log(this.totalPagesDataFavorite, "totalpages");
-
-          // Menonaktifkan loading screen setelah 300ms
-          setTimeout(() => {
-            this.loadingScreen = false;
+            // Menonaktifkan loading screen setelah 300ms
+            setTimeout(() => {
+              this.loadingScreen = false;
+              this.dialogLoader = false;
+            }, 300);
+          })
+          .catch(() => {
             this.dialogLoader = false;
-          }, 300);
-        })
-        .catch((error) => {
-          // Menangani kesalahan jika terjadi
-          console.error("Error fetching portfolio data:", error);
-          this.loadingScreen = false;
-          this.dialogLoader = false;
-        });
+          });
+      } else {
+        this.textMessage =
+          "You need to log in to add favorite this comic 🤭🤭🤭";
+        this.snackbar = true;
+        this.color = "blue-grey";
+      }
     },
 
     addLikeSubComic(uuidSubComic, slugSubComic) {
-      this.dialogLoader = true;
-      var headers = {
-        Authorization: "Bearer " + this.userLogin.token,
-      };
+      if (this.myProfile.length != 0) {
+        this.dialogLoader = true;
+        var headers = {
+          Authorization: "Bearer " + this.userLogin.token,
+        };
 
-      var url =
-        this.$api + "/klikLike/" + uuidSubComic + "/" + this.userLogin.uuid;
+        var url =
+          this.$api + "/klikLike/" + uuidSubComic + "/" + this.userLogin.uuid;
 
-      this.$http
-        .get(url, { headers: headers })
-        .then((response) => {
-          this.respone = response.data.response;
+        this.$http
+          .get(url, { headers: headers })
+          .then((response) => {
+            this.respone = response.data.response;
 
-          this.axioDataLikeSubKomik();
-          this.axioGetDataSubComic(slugSubComic, uuidSubComic);
+            this.axioDataLikeSubKomik();
+            this.axioGetDataSubComic(slugSubComic, uuidSubComic);
 
-          if (response.data.iyaLike == 1) {
-            this.textMessage = "You liked this comic 😍";
-            this.snackbar = true;
-            this.color = "success";
-          } else {
-            this.textMessage =
-              "Oops, is there anything wrong with the comic? 😔";
-            this.snackbar = true;
-            this.color = "blue-grey";
-          }
+            if (response.data.iyaLike == 1) {
+              this.textMessage = "You liked this comic 😍";
+              this.snackbar = true;
+              this.color = "success";
+            } else {
+              this.textMessage =
+                "Oops, is there anything wrong with the comic? 😔";
+              this.snackbar = true;
+              this.color = "blue-grey";
+            }
 
-          // Menonaktifkan loading screen setelah 300ms
-          setTimeout(() => {
+            // Menonaktifkan loading screen setelah 300ms
+            setTimeout(() => {
+              this.dialogLoader = false;
+            }, 300);
+          })
+          .catch((error) => {
+            // Menangani kesalahan jika terjadi
+            console.error("Error fetching portfolio data:", error);
             this.dialogLoader = false;
-          }, 300);
-        })
-        .catch((error) => {
-          // Menangani kesalahan jika terjadi
-          console.error("Error fetching portfolio data:", error);
-          this.dialogLoader = false;
-        });
+          });
+      } else {
+        this.textMessage = "You need to log in to like this comic 🤭🤭🤭";
+        this.snackbar = true;
+        this.color = "blue-grey";
+      }
     },
 
     addJumlahViewSubComic(uuidSubComic) {
@@ -685,12 +962,40 @@ export default {
           }, 300);
         })
         .catch(() => {
-          if(this.commentSubComic.length>255){
+          if (this.commentSubComic.length > 255) {
             this.textMessage = "Your comment exceeds the character limit 😔 ";
             this.snackbar = true;
             this.color = "blue-grey";
           }
           this.dialogLoader = false;
+        });
+    },
+
+    deleteKomenSubKomik() {
+      this.dialogLoader = true;
+      var url = this.$api + "/delete-komenSubKomik/" + this.uuidKomenSubKomik;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      this.$http
+        .delete(url, { headers: headers })
+        .then(() => {
+          this.dialogConfirmDelete = false;
+          this.axioDataKomenSubKomik(this.subComicUUID);
+
+          this.textMessage = "The comment has been successfully deleted 😊";
+          this.snackbar = true;
+          this.color = "success";
+
+          setTimeout(() => {
+            this.dialogLoader = false;
+          }, 300);
+        })
+        .catch(() => {
+          this.dialogLoader = false;
+          this.dialogConfirmDelete = false;
         });
     },
 
@@ -764,7 +1069,7 @@ export default {
             return {
               ...x,
               created_at: moment(x.created_at).format(
-                "dddd, MMMM D, YYYY h:mm a"
+                "dddd, M/DD/YYYY, h:mm a"
               ),
             };
           });
@@ -786,7 +1091,6 @@ export default {
     axioDataLikeSubKomik() {
       this.loadingScreen = true;
       var url;
-
       var headers = {
         Authorization: "Bearer " + this.userLogin.token,
       };
@@ -833,6 +1137,30 @@ export default {
               };
             }
           );
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch(() => {
+          this.loadingScreen = false;
+        });
+    },
+
+    axioDataMyProfile() {
+      this.loadingScreen = true;
+      var url = this.$api + "/get-my-profile/" + this.userLogin.uuid;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          this.myProfile = response.data.myProfile;
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {

@@ -133,6 +133,21 @@ router.beforeEach((to, form, next) => {
       name: "home",
     });
   }
+  if (to.name == "haf-school" && localStorage.getItem('token') == null) {
+    // Store the current page information before redirecting
+    const currentPage = {
+      name: to.name,
+      // You can include other relevant information about the current page if needed
+    };
+  
+    // Save the current page information in local storage or a Vuex store
+    localStorage.setItem('currentPage', JSON.stringify(currentPage));
+  
+    // Redirect to the "home" page
+    next({
+      name: "home",
+    });
+  }
 
   document.title = to.meta.title;
   next();

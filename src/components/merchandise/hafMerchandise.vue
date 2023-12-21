@@ -8,44 +8,88 @@
       <div class="d-flex mb-3 size-bar-home">
         <b-nav data-aos="fade-up" data-aos-duration="2000">
           <b-nav-item>
-            <v-btn
-              class="mx-2 button-merchan"
-              fab
-              dark
-              small
-              color="rgb(22, 128, 182)"
-              @click="handlerOrderHistory"
-            >
-              <b-icon
-                class="icon-merchan"
-                icon="card-checklist"
-                aria-hidden="true"
-              ></b-icon>
-            </v-btn>
-            <p style="margin: 0px; font-size: 13px">Your Order</p>
-          </b-nav-item>
-          <b-nav-item>
-            <v-btn
-              class="mx-2 button-merchan"
-              fab
-              dark
-              small
-              color="rgb(22, 128, 182)"
-              @click="dialogCart = true"
-            >
-              <v-badge
-                :content="messageTotalCart"
-                :value="messageTotalCart"
-                color="rgb(212, 130, 0)"
+            <div v-if="this.myProfile.length != 0">
+              <v-btn
+                class="mx-2 button-merchan"
+                fab
+                dark
+                small
+                color="rgb(22, 128, 182)"
+                @click="handlerOrderHistory"
               >
                 <b-icon
                   class="icon-merchan"
-                  icon="cart"
+                  icon="card-checklist"
                   aria-hidden="true"
                 ></b-icon>
-              </v-badge>
-            </v-btn>
-            <p style="margin: 0px; font-size: 13px">Cart</p>
+              </v-btn>
+              <p style="margin: 0px; font-size: 13px">Your Order</p>
+            </div>
+            <div v-else>
+              <v-btn
+                class="mx-2 button-merchan"
+                fab
+                dark
+                small
+                color="rgb(22, 128, 182)"
+                @click="handlerDetailUserNotLogin"
+              >
+                <b-icon
+                  class="icon-merchan"
+                  icon="card-checklist"
+                  aria-hidden="true"
+                ></b-icon>
+              </v-btn>
+              <p style="margin: 0px; font-size: 13px">Your Order</p>
+            </div>
+          </b-nav-item>
+          <b-nav-item>
+            <div v-if="this.myProfile.length != 0">
+              <v-btn
+                class="mx-2 button-merchan"
+                fab
+                dark
+                small
+                color="rgb(22, 128, 182)"
+                @click="dialogCart = true"
+              >
+                <v-badge
+                  :content="messageTotalCart"
+                  :value="messageTotalCart"
+                  color="rgb(212, 130, 0)"
+                >
+                  <b-icon
+                    class="icon-merchan"
+                    icon="cart"
+                    aria-hidden="true"
+                  ></b-icon>
+                </v-badge>
+              </v-btn>
+              <p style="margin: 0px; font-size: 13px">Cart</p>
+            </div>
+            <div v-else>
+              <v-btn
+                class="mx-2 button-merchan"
+                fab
+                dark
+                small
+                color="rgb(22, 128, 182)"
+                @click="handlerDetailUserNotLogin"
+              >
+                <v-badge
+                  :content="messageTotalCart"
+                  :value="messageTotalCart"
+                  color="rgb(212, 130, 0)"
+                >
+                  <b-icon
+                    class="icon-merchan"
+                    icon="cart"
+                    aria-hidden="true"
+                  ></b-icon>
+                </v-badge>
+              </v-btn>
+              <p style="margin: 0px; font-size: 13px">Cart</p>
+            </div>
           </b-nav-item>
           <b-nav-item
             class="searchDiv"
@@ -75,14 +119,18 @@
       <!-- Search -->
       <!-- Tampilkan hasil pencarian di sini -->
       <transition name="fade">
-        <div data-aos="fade-up" data-aos-duration="2000"
+        <div
+          data-aos="fade-up"
+          data-aos-duration="2000"
           v-if="this.isInputOn == 1"
           style="margin-bottom: 70px; margin-top: 20px"
         >
           <p>Result for {{ searchMerchandise }}</p>
           <div class="row" v-if="searchResults.length > 0">
             <div class="row" style="justify-content: center; max-width: none">
-              <div data-aos="fade-up" data-aos-duration="2000"
+              <div
+                data-aos="fade-up"
+                data-aos-duration="2000"
                 v-for="result in searchResults"
                 :key="result.id"
                 @click="handlerDetailMerchandise(result)"
@@ -109,7 +157,11 @@
             </div>
           </div>
           <div v-else>
-            <div class="row no-gutters" data-aos="fade-up" data-aos-duration="2000">
+            <div
+              class="row no-gutters"
+              data-aos="fade-up"
+              data-aos-duration="2000"
+            >
               <div
                 class="col"
                 style="
@@ -151,7 +203,9 @@
             padding: 0px;
           "
         >
-          <div data-aos="fade-up" data-aos-duration="2000"
+          <div
+            data-aos="fade-up"
+            data-aos-duration="2000"
             v-for="dataMerchandise in dataMerchandises"
             :key="dataMerchandise.id"
             @click="handlerDetailMerchandise(dataMerchandise)"
@@ -284,15 +338,162 @@
               </div>
               <div
                 v-bind:class="{ 'disabled-div': myProfile.role == 'admin' }"
+                v-if="merchandiseStock > 0 && this.myProfile.length != 0"
                 style="margin: 5px 15px 15px"
               >
                 <hr />
                 <p>Order</p>
+                <div
+                  style="
+                    justify-content: left;
+                    display: flex;
+                    padding-bottom: 5px;
+                  "
+                >
+                  <p style="margin: 0px; text-align: left">
+                    Stock: {{ merchandiseStock }}
+                    <br />
+                    Price : Rp. {{ formatPrice(merchandisePrice) }}
+                  </p>
+                </div>
                 <b-form-spinbutton
                   id="sb-small"
                   size="sm"
                   placeholder="-"
                   v-model="totalPcs"
+                  :max="merchandiseStock"
+                ></b-form-spinbutton>
+                <v-textarea
+                  :counter="255"
+                  placeholder="Notes"
+                  required
+                  v-model="notes"
+                  auto-grow
+                  outlined
+                  style="top: 15px"
+                ></v-textarea>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    v-if="totalPcs == 0"
+                    disabled
+                    fab
+                    class="mx-2"
+                    small
+                    color="rgb(22, 128, 182)"
+                    @click.stop="addToProducts(itemProduct)"
+                  >
+                    <b-icon icon="cart-plus" aria-hidden="true"></b-icon>
+                  </v-btn>
+                  <v-btn
+                    v-else
+                    class="mx-2"
+                    fab
+                    small
+                    color="rgb(22, 128, 182)"
+                    @click.stop="addToProducts(itemProduct)"
+                  >
+                    <b-icon
+                      style="color: white"
+                      icon="cart-plus"
+                      aria-hidden="true"
+                    ></b-icon>
+                  </v-btn>
+                </v-card-actions>
+              </div>
+              <div
+                v-bind:class="{ 'disabled-div': myProfile.role == 'admin' }"
+                v-else-if="merchandiseStock < 1 && this.myProfile.length != 0"
+                class="disabled-div"
+                style="margin: 5px 15px 15px"
+              >
+                <hr />
+                <p>Order</p>
+                <div
+                  style="
+                    justify-content: left;
+                    display: flex;
+                    padding-bottom: 5px;
+                  "
+                >
+                  <p style="margin: 0px; text-align: left">
+                    Stock: <span style="color: rgb(142, 0, 0)">Sold out</span>
+                    <br />
+                    Price : Rp. {{ formatPrice(merchandisePrice) }}
+                  </p>
+                </div>
+                <b-form-spinbutton
+                  id="sb-small"
+                  size="sm"
+                  placeholder="-"
+                  v-model="totalPcs"
+                  :max="merchandiseStock"
+                ></b-form-spinbutton>
+                <v-textarea
+                  :counter="255"
+                  placeholder="Notes"
+                  required
+                  v-model="notes"
+                  auto-grow
+                  outlined
+                  style="top: 15px"
+                ></v-textarea>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    v-if="totalPcs == 0"
+                    disabled
+                    fab
+                    class="mx-2"
+                    small
+                    color="rgb(22, 128, 182)"
+                    @click.stop="addToProducts(itemProduct)"
+                  >
+                    <b-icon icon="cart-plus" aria-hidden="true"></b-icon>
+                  </v-btn>
+                  <v-btn
+                    v-else
+                    class="mx-2"
+                    fab
+                    small
+                    color="rgb(22, 128, 182)"
+                    @click.stop="addToProducts(itemProduct)"
+                  >
+                    <b-icon
+                      style="color: white"
+                      icon="cart-plus"
+                      aria-hidden="true"
+                    ></b-icon>
+                  </v-btn>
+                </v-card-actions>
+              </div>
+              <div
+                v-bind:class="{ 'disabled-div': myProfile.role == 'admin' }"
+                v-else-if="this.myProfile.length == 0"
+                class="disabled-div"
+                style="margin: 5px 15px 15px"
+              >
+                <hr />
+                <p>You need to log in to order merchandise</p>
+                <div
+                  style="
+                    justify-content: left;
+                    display: flex;
+                    padding-bottom: 5px;
+                  "
+                >
+                  <p style="margin: 0px; text-align: left">
+                    Stock: {{ merchandiseStock }}
+                    <br />
+                    Price : Rp. {{ formatPrice(merchandisePrice) }}
+                  </p>
+                </div>
+                <b-form-spinbutton
+                  id="sb-small"
+                  size="sm"
+                  placeholder="-"
+                  v-model="totalPcs"
+                  :max="merchandiseStock"
                 ></b-form-spinbutton>
                 <v-textarea
                   :counter="255"
@@ -339,7 +540,11 @@
     </div>
 
     <!-- Doalog Cart -->
-    <v-dialog v-model="dialogCart" width="1000px" transition="dialog-top-transition">
+    <v-dialog
+      v-model="dialogCart"
+      width="1000px"
+      transition="dialog-top-transition"
+    >
       <template>
         <v-stepper v-model="e6" vertical>
           <div style="justify-content: end; display: flex; padding: 8px 16px">
@@ -1078,7 +1283,12 @@
     <!-- End Snackbar -->
 
     <!-- Footer -->
-    <div style="margin-top: 50px" data-aos="fade-up" data-aos-duration="2000" data-aos-offset="0">
+    <div
+      style="margin-top: 50px"
+      data-aos="fade-up"
+      data-aos-duration="2000"
+      data-aos-offset="0"
+    >
       <div class="footer-dark">
         <transition name="fade">
           <footer>
@@ -1163,6 +1373,8 @@ export default {
     notes: "",
     merchandiseName: "",
     merchandiseDesc: "",
+    merchandisePrice: "",
+    merchandiseStock: "",
     itemProduct: [],
 
     // Handle upload bukti tf
@@ -1303,8 +1515,10 @@ export default {
   computed: {},
   created() {
     this.axioDataMerchandise();
-    this.axioDataOrderMerchandise();
-    this.axioDataMyProfile();
+    if (this.userLogin.token != null) {
+      this.axioDataMyProfile();
+      this.axioDataOrderMerchandise();
+    }
   },
   watch: {
     dialogDetail(newVal) {
@@ -1320,6 +1534,12 @@ export default {
     },
   },
   methods: {
+    handlerDetailUserNotLogin() {
+      this.textMessage = "You need to log in to access this feature 🤭🤭🤭";
+      this.snackbar = true;
+      this.color = "blue-grey";
+    },
+
     handleAddNoResi(uuidAddNoResi) {
       this.uuidAddNoResi = uuidAddNoResi;
       this.dialogAddNoResi = true;
@@ -1359,10 +1579,13 @@ export default {
     },
 
     handlerDetailMerchandise(item) {
+      console.log(this.myProfile, this.myProfile, "iniprofile");
       this.dialogDetail = true;
       this.itemProduct = item;
       this.merchandiseName = item.nama;
       this.merchandiseDesc = item.deskripsi;
+      this.merchandiseStock = item.stok;
+      this.merchandisePrice = item.harga;
 
       for (let i = 0; i < this.dataImageMerchandises.length; i++) {
         if (this.dataImageMerchandises[i].merchandise_id == item.id) {
@@ -2118,7 +2341,6 @@ export default {
   padding-right: 150px;
   padding-left: 150px;
 }
-
 
 /* Footer */
 .hoverMyName:hover {

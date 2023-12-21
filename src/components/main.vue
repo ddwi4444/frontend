@@ -6,62 +6,118 @@
       </div>
     </v-fade-transition>
     <div class="app">
-      <nav class="navbar padding-navbar d-flex w-full p-x-15" style="z-index: 100;">
+      <nav
+        class="navbar padding-navbar d-flex w-full p-x-15"
+        style="z-index: 100"
+      >
         <div class="logo">
-            <img
+          <img
             @click="handlerGoHome"
-              src="@/assets/logoHAF2.png"
-              class="d-inline-block align-top"
-              alt="Logo HAF"
-              style="height: 30px; cursor: pointer;"
-            />
+            src="@/assets/logoHAF2.png"
+            class="d-inline-block align-top"
+            alt="Logo HAF"
+            style="height: 30px; cursor: pointer"
+          />
         </div>
 
         <div :class="['links', { open: isMenuOpen }]">
           <div class="show-profile-and-logout">
-            <div class="menuColor" v-if="isMyProfile == 1" @click="handlerGoMyProfile">My Profile</div>
-            <div class="menuUncolor" v-else @click="handlerGoMyProfile">My Profile</div>
+            <div
+              class="menuColor"
+              v-if="isMyProfile == 1"
+              @click="handlerGoMyProfile"
+            >
+              My Profile
+            </div>
+            <div class="menuUncolor" v-else @click="handlerGoMyProfile">
+              My Profile
+            </div>
           </div>
-          <div class="menuColor" v-if="isServices==1" @click="handlerGoService">HAF Service</div>
-          <div class="menuUncolor" v-else @click="handlerGoService">HAF Service</div>
+          <div
+            class="menuColor"
+            v-if="isServices == 1"
+            @click="handlerGoService"
+          >
+            HAF Service
+          </div>
+          <div class="menuUncolor" v-else @click="handlerGoService">
+            HAF Service
+          </div>
 
-          <div class="menuColor" v-if="isMerchandise==1" @click="handlerGoMerchandise">HAF Merchandise</div>
-          <div class="menuUncolor" v-else @click="handlerGoMerchandise">HAF Merchandise</div>
+          <div
+            class="menuColor"
+            v-if="isMerchandise == 1"
+            @click="handlerGoMerchandise"
+          >
+            HAF Merchandise
+          </div>
+          <div class="menuUncolor" v-else @click="handlerGoMerchandise">
+            HAF Merchandise
+          </div>
 
-          <div class="menuColor" v-if="isSchool==1" @click="handlerGoSchool">HAF School</div>
-          <div class="menuUncolor" v-else @click="handlerGoSchool">HAF School</div>
+          <div class="menuColor" v-if="isSchool == 1" @click="handlerGoSchool">
+            HAF School
+          </div>
+          <div class="menuUncolor" v-else @click="handlerGoSchool">
+            HAF School
+          </div>
 
-          <div class="menuColor" v-if="isAbout==1" @click="handlerGoAbout">About</div>
+          <div class="menuColor" v-if="isAbout == 1" @click="handlerGoAbout">
+            About
+          </div>
           <div class="menuUncolor" v-else @click="handlerGoAbout">About</div>
 
-          <div class="show-profile-and-logout" style="margin-bottom: 15px;">
-            <router-link style="margin-bottom: 10px;" to="login" @click.native="logout">Logout</router-link>
+          <div class="show-profile-and-logout" style="margin-bottom: 15px">
+            <router-link
+              style="margin-bottom: 10px"
+              to="login"
+              @click.native="logout"
+              >Logout</router-link
+            >
           </div>
         </div>
 
-        <div class="avatar" @click.stop="handlerGoMyProfile">
+        <div
+          v-if="myProfile.length != 0"
+          class="avatar"
+          @click.stop="handlerGoMyProfile"
+        >
           <div class="user-avatar">
             <b-avatar
               style="margin-right: 5px"
               badge
               badge-variant="success"
-              :src="userLogin.image ? $baseUrl + '/storage/' + userLogin.image : ''">
+              :src="
+                userLogin.image ? $baseUrl + '/storage/' + userLogin.image : ''
+              "
+            >
             </b-avatar>
-              <span
+            <span
               v-if="isMyProfile == 1"
               class="menuColor mr-auto"
               style="display: inline-block; text-transform: capitalize"
             >
-              {{ getNamaPersona }} </span
-            >
+              {{ getNamaPersona }}
+            </span>
             <span
               v-else
               class="menuUncolor mr-auto"
               style="display: inline-block; text-transform: capitalize"
             >
               {{ getNamaPersona }}</span
-            > 
+            >
           </div>
+        </div>
+        <div v-else @click="goToLogin">
+          <v-btn
+            text
+            plain
+            style="text-transform: capitalize; color: white"
+            @click="goToLogin"
+          >
+            Login
+            <v-icon fade-right color="white"> mdi-login </v-icon>
+          </v-btn>
         </div>
 
         <button class="menu-toggle" @click="this.toggleMenu">
@@ -78,7 +134,7 @@
     </div>
 
     <!-- Snackbar -->
-    <v-snackbar v-model="snackbar" :color="color" text>
+    <v-snackbar v-model="snackbar" auto-height :color="color" text top right>
       {{ textMessage }}
       <template v-slot:action="{ attrs }">
         <v-btn plain color="red" text v-bind="attrs" @click="snackbar = false">
@@ -92,6 +148,7 @@
         </v-btn>
       </template>
     </v-snackbar>
+    <!-- End Snackbar -->
 
     <div class="fullheight" style="">
       <router-view></router-view>
@@ -115,6 +172,7 @@ export default {
       token: localStorage.getItem("token"), // initialize with a valid token or empty string
       image: localStorage.getItem("image"),
       role: localStorage.getItem("role"),
+      uuid: localStorage.getItem("uuid"),
     },
 
     // Snackbar
@@ -123,6 +181,7 @@ export default {
     color: "",
 
     // Adds On
+    myProfile: [],
     isServices: 0,
     isMerchandise: 0,
     isSchool: 0,
@@ -134,29 +193,33 @@ export default {
     const currentURL = window.location.href;
 
     // Check if the current URL contains 'http://localhost:8080/haf-merchandise'
-    if (currentURL.includes('http://localhost:8080/haf-service')) {
+    if (currentURL.includes("http://localhost:8080/haf-service")) {
       // Set isMerchandise to 1
       this.isServices = 1;
     }
-    if (currentURL.includes('http://localhost:8080/haf-merchandise')) {
+    if (currentURL.includes("http://localhost:8080/haf-merchandise")) {
       // Set isMerchandise to 1
       this.isMerchandise = 1;
     }
-    if (currentURL.includes('http://localhost:8080/haf-school')) {
+    if (currentURL.includes("http://localhost:8080/haf-school")) {
       // Set isMerchandise to 1
       this.isSchool = 1;
     }
-    if (currentURL.includes('http://localhost:8080/haf-about')) {
+    if (currentURL.includes("http://localhost:8080/haf-about")) {
       // Set isMerchandise to 1
       this.isAbout = 1;
     }
-    if (currentURL.includes('http://localhost:8080/haf-profile')) {
+    if (currentURL.includes("http://localhost:8080/haf-profile")) {
       // Set isMerchandise to 1
       this.isMyProfile = 1;
     }
   },
+  created() {
+    if (this.userLogin.token != null) {
+      this.axioDataMyProfile();
+    }
+  },
   methods: {
-    
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
     },
@@ -185,6 +248,14 @@ export default {
         });
     },
 
+    goToLogin() {
+      return this.$router.push("login").catch((error) => {
+        if (error.name != "NavigationDuplicated") {
+          throw error;
+        }
+      });
+    },
+
     handlerGoMyProfile() {
       this.isMenuOpen = false;
       this.isMyProfile = 1;
@@ -199,7 +270,7 @@ export default {
       });
     },
 
-    handlerGoHome(){
+    handlerGoHome() {
       this.isMenuOpen = false;
       this.isServices = 0;
       this.isMerchandise = 0;
@@ -213,7 +284,7 @@ export default {
       });
     },
 
-    handlerGoService(){
+    handlerGoService() {
       this.isMenuOpen = false;
       this.isServices = 1;
       this.isMerchandise = 0;
@@ -227,7 +298,7 @@ export default {
       });
     },
 
-    handlerGoMerchandise(){
+    handlerGoMerchandise() {
       this.isMenuOpen = false;
       this.isMerchandise = 1;
       this.isServices = 0;
@@ -241,15 +312,19 @@ export default {
       });
     },
 
-    handlerGoSchool(){
-      if(this.userLogin.role == 'user'){
+    handlerGoSchool() {
+      if (this.myProfile.role == "user") {
         this.isMenuOpen = false;
 
-        this.textMessage = "You cannot access this page because you are not part of the HAF Community, join us soon.";
+        this.textMessage =
+          "You cannot access this page because you are not part of the HAF Community, join us soon 😚🫸🫷😚";
         this.snackbar = true;
-        this.color = "grey";
-      }
-      else{
+        this.color = "blue-grey";
+      } else if (this.myProfile.length == 0) {
+        this.textMessage = "You need to log in to access this feature 🤭🤭🤭";
+        this.snackbar = true;
+        this.color = "blue-grey";
+      } else {
         this.isMenuOpen = false;
         this.isSchool = 1;
         this.isServices = 0;
@@ -262,10 +337,9 @@ export default {
           }
         });
       }
-      
     },
 
-    handlerGoAbout(){
+    handlerGoAbout() {
       this.isMenuOpen = false;
       this.isAbout = 1;
       this.isServices = 0;
@@ -277,6 +351,32 @@ export default {
           throw error;
         }
       });
+    },
+
+    axioDataMyProfile() {
+      this.loadingScreen = true;
+      var url = this.$api + "/get-my-profile/" + this.userLogin.uuid;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          this.myProfile = response.data.myProfile;
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching myprofile data:", error);
+          this.loadingScreen = false;
+        });
     },
 
     // Reload Page
@@ -296,21 +396,21 @@ export default {
 </script>
 
 <style scoped>
-.menuColor{
+.menuColor {
   color: #f39c12 !important;
   cursor: pointer;
 }
-.menuColor:hover{
+.menuColor:hover {
   color: #f39c12 !important;
   cursor: pointer;
 }
-.menuUncolor{
+.menuUncolor {
   cursor: pointer;
 }
-.menuUncolor:hover{
+.menuUncolor:hover {
   transition: 0.5s;
-opacity: 2; 
-color: #f39c12 !important;
+  opacity: 2;
+  color: #f39c12 !important;
   cursor: pointer;
 }
 .show-profile-and-logout {
@@ -425,10 +525,10 @@ color: #f39c12 !important;
 }
 
 @media (max-width: 768px) {
-  .menuColor{
-  color: #f39c12 !important;
-  cursor: pointer;
-}
+  .menuColor {
+    color: #f39c12 !important;
+    cursor: pointer;
+  }
   .menu-icon {
     cursor: pointer;
     transition: opacity 5s ease; /* Define the transition */
@@ -471,13 +571,12 @@ color: #f39c12 !important;
     animation-duration: 4s;
     animation-delay: 2s;
     transition: all 1s ease;
-
   }
 
   .links.open {
     display: flex;
     border-bottom-left-radius: 15px !important;
-    border-bottom-right-radius: 15px !important;  
+    border-bottom-right-radius: 15px !important;
     transition: all 1s ease;
   }
 
