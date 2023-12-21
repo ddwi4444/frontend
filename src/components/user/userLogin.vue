@@ -3,7 +3,7 @@
     <center>
       <div class="row" style="margin-top: 30px; justify-content: center">
         <v-form class="form" ref="form" @submit.prevent="login()">
-          <img
+          <img data-aos="zoom-in" data-aos-duration="1500"
             src="@/assets/logoHAF2.png"
             class="d-inline-block align-top"
             alt="Logo HAF"
@@ -11,11 +11,11 @@
             style="cursor: pointer"
           />
 
-          <p class="title" style="margin-bottom: 0px">Login</p>
-          <p class="message" style="margin-bottom: 0px">
+          <p data-aos="zoom-out" data-aos-duration="1500" class="title" style="margin-bottom: 0px">Login</p>
+          <p data-aos="zoom-out" data-aos-duration="1500" class="message" style="margin-bottom: 0px">
             Signup now and get full access to our app. 
           </p>
-          <label>
+          <label data-aos="fade-right" data-aos-duration="1500">
             <v-text-field
               v-model="form.email"
               :rules="emailRules"
@@ -27,7 +27,7 @@
             />
           </label>
 
-          <label>
+          <label data-aos="fade-left" data-aos-duration="1500">
             <v-text-field
               v-model="form.password"
               :rules="passwordRules"
@@ -38,8 +38,8 @@
               required
             />
           </label>
-          <div class="row" style="justify-content: center">
-            <div class="col-sm-4">
+          <div class="row no-gutters" style="justify-content: center" data-aos="fade-up" data-aos-duration="1500">
+            <div class="col" style="justify-content: end; display: flex; margin: 3px;">
               <v-btn
                 class="button-login-register primary"
                 style="text-transform: unset !important"
@@ -49,7 +49,7 @@
                 Login
               </v-btn>
             </div>
-            <div class="col-sm-4">
+            <div class="col" style="justify-content: start; display: flex; margin: 3px;">
               <router-link to="register"
                 ><v-btn
                   class="button-login-register primary"
@@ -60,7 +60,7 @@
               >
             </div>
           </div>
-          <p class="signin">Forgot Password? <a href="#">Help</a></p>
+          <p data-aos="fade-up" data-aos-duration="1500" class="signin">Forgot Password? <a href="#">Help</a></p>
         </v-form>
       </div>
     </center>

@@ -2,8 +2,8 @@
   <v-main>
     <loading-screen :value="loadingScreen"></loading-screen>
 
-    <div style="padding-top: 35px">
-      <H1 style="font-family: Georgia, serif; margin: 0px"
+    <div style="padding-top: 35px" data-aos="zoom-in" data-aos-duration="2000">
+      <H1 style="font-family: Georgia, serif; margin: 0px" 
         >Historical Art Fantasia</H1
       >
       <p style="font-family: Georgia, serif; margin: 0px; font-weight: lighter">
@@ -11,7 +11,7 @@
       </p>
     </div>
 
-    <div>
+    <div data-aos="fade-up" data-aos-duration="2000">
       <center>
         <b-nav
           tabs
@@ -59,12 +59,12 @@
       >
         <center>
           <div style="width: 60%" class="containerAboutHaf">
-            <img
+            <img data-aos="fade-up" data-aos-duration="2000"
               style="width: 250px; margin-bottom: 30px"
               src="@/assets/logoHAF2.png"
             />
 
-            <p>
+            <p data-aos="fade-up" data-aos-duration="2000">
               <span style="font-weight: bold">HAF</span> Adalah Singkatan dari
               <span style="font-weight: bold">Historical Art Fantasia</span>,
               yang Memiliki arti Historical (Sejarah), Art (Seni), Fantasia
@@ -81,7 +81,7 @@
               penjaga seluruh negri berdiam dan terus dijaga keberadaanya oleh
               seluruh siswa dan pengurus disana.
             </p>
-            <p>
+            <p data-aos="fade-up" data-aos-duration="2000">
               HAF pertamakali diresmikan pada tanggal
               <span style="font-weight: bold">02 Agustus 2019</span> oleh
               keempat pengurus awalnya. Keempatnya adalah pengurus HAF yang
@@ -91,11 +91,11 @@
               bergaya eropa dan memiliki konsep luxury & aesthetic.
             </p>
 
-            <hr
+            <hr data-aos="fade-up" data-aos-duration="2000"
               style="color: #4a1d00 !important; border: 1px solid !important"
             />
 
-            <H3
+            <H3 data-aos="fade-up" data-aos-duration="2000"
               style="
                 font-family: Georgia, serif;
                 margin: 0px;
@@ -110,7 +110,7 @@
               >Our Students Project</H3
             >
 
-            <h4
+            <h4 data-aos="fade-up" data-aos-duration="2000"
               @click="openNewPageYoutubeOtomo"
               class="hafProject"
               style="
@@ -120,10 +120,10 @@
                 margin-bottom: 20px;
               "
             >
-              HAF Otomo Game Project
+            🎮 HAF Otomo Game Project 🎮
             </h4>
 
-            <div class="youtube-container">
+            <div class="youtube-container" data-aos="fade-up" data-aos-duration="2000">
               <iframe
                 width="600"
                 height="400"
@@ -133,7 +133,7 @@
               ></iframe>
             </div>
 
-            <h4
+            <h4 data-aos="fade-up" data-aos-duration="2000"
               @click="openNewPageMVMusic"
               class="hafProject"
               style="
@@ -143,10 +143,10 @@
                 margin-bottom: 20px;
               "
             >
-              HAF MV Cover Project
+            🎶 HAF MV Cover Project 🎶
             </h4>
 
-            <div class="youtube-container">
+            <div class="youtube-container" data-aos="fade-up" data-aos-duration="2000">
               <iframe
                 width="600"
                 height="400"
@@ -170,31 +170,31 @@
       >
         <center>
           <div style="width: 60%" class="containerAboutHaf">
-            <H3 style="font-family: Georgia, serif; margin: 0px"
+            <H3 style="font-family: Georgia, serif; margin: 0px" data-aos="fade-up" data-aos-duration="2000"
               >Student Year Book · S4</H3
             >
 
             <img
-              style="width: 100%; margin-bottom: 30px; margin-top: 20px"
+              style="width: 100%; margin-bottom: 30px; margin-top: 20px" data-aos="fade-up" data-aos-duration="2000"
               src="@/assets/hafstudents.jpg"
             />
 
-            <p style="margin: 0">
+            <p style="margin: 0" data-aos="fade-up" data-aos-duration="2000">
               Selamat datang di Student Year Book HAF season 4. Segala rekam
               jejak dari para siswa HAF terkumpul disini dengan berbagai cerita
               dan juga petualangan di dalamnya.
             </p>
-            <p>
+            <p data-aos="fade-up" data-aos-duration="2000">
               Bukalah buku menuju dunia impianmu,Historical Art Fantasia akan
               membawamu menuju tempat yang indah di negeri selatan.
             </p>
 
-            <p style="font-size: 10px">
+            <p style="font-size: 10px" data-aos="fade-up" data-aos-duration="2000">
               *Silahkan click gambar karakter yang kamu ingin lihat biodata dan
               backstorynya
             </p>
 
-            <H4
+            <H4 data-aos="fade-up" data-aos-duration="2000"
               style="
                 font-family: Georgia, serif;
                 margin: 0px;
@@ -223,7 +223,7 @@
                   padding: 0px;
                 "
               >
-                <div
+                <div data-aos="fade-up" data-aos-duration="2000"
                   class="cardSNPC"
                   v-for="filteredStudent in filteredStudentsOsis"
                   :key="filteredStudent.id"
@@ -264,7 +264,7 @@
               </div>
             </div>
 
-            <H4
+            <H4 data-aos="fade-up" data-aos-duration="2000"
               style="
                 font-family: Georgia, serif;
                 margin: 0px;
@@ -289,7 +289,7 @@
                 width: 90%;
               "
             >
-              <div class="coolinput">
+              <div class="coolinput" data-aos="fade-up" data-aos-duration="2000">
                 <label for="input-name" class="text">Search student</label>
                 <input
                   type="text"
@@ -318,7 +318,7 @@
                     padding: 0px;
                   "
                 >
-                  <div
+                  <div data-aos="fade-up" data-aos-duration="2000"
                     class="cardSNPC"
                     v-for="filteredStudent in searchResultsStudent"
                     :key="filteredStudent.id"
@@ -375,7 +375,7 @@
                     padding: 0px;
                   "
                 >
-                  <div
+                  <div data-aos="fade-up" data-aos-duration="2000"
                     class="cardSNPC"
                     v-for="filteredStudent in filteredStudentsStudent"
                     :key="filteredStudent.id"
@@ -431,16 +431,16 @@
       >
         <center>
           <div style="width: 60%" class="containerAboutHaf">
-            <H3 style="font-family: Georgia, serif; margin: 0px"
+            <H3 style="font-family: Georgia, serif; margin: 0px" data-aos="fade-up" data-aos-duration="2000"
               >HAF NPC Book</H3
             >
 
             <img
-              style="width: 100%; margin-bottom: 30px; margin-top: 20px"
+              style="width: 100%; margin-bottom: 30px; margin-top: 20px" data-aos="fade-up" data-aos-duration="2000"
               src="@/assets/enemies-karzer.jpg"
             />
 
-            <p>
+            <p data-aos="fade-up" data-aos-duration="2000">
               Selamat datang di ‘HAF NPC BOOK’. Dunia HAF yang luas penuh dengan
               berbagai makhluk dan karakter yang berbeda beda. mari mengenal
               mereka dan masuk lebih jauh ke dalam dunia HAF.
@@ -449,12 +449,12 @@
               membawamu menuju tempat yang indah di dalam buku nya yang ajaib.
             </p>
 
-            <p style="font-size: 10px">
+            <p data-aos="fade-up" data-aos-duration="2000" style="font-size: 10px">
               *Silahkan click gambar karakter yang kamu ingin lihat biodata dan
               backstorynya
             </p>
 
-            <H4
+            <H4 data-aos="fade-up" data-aos-duration="2000"
               style="
                 font-family: Georgia, serif;
                 margin: 0px;
@@ -478,7 +478,7 @@
                 width: 90%;
               "
             >
-              <div class="coolinput">
+              <div class="coolinput" data-aos="fade-up" data-aos-duration="2000">
                 <label for="input-name" class="text">Search NPC</label>
                 <input
                   type="text"
@@ -506,8 +506,8 @@
                     margin: 0px;
                     padding: 0px;
                   "
-                >
-                  <div
+                > 
+                  <div data-aos="fade-up" data-aos-duration="2000"
                     class="cardSNPC"
                     v-for="npc in searchResultsNPC"
                     :key="npc.id"
@@ -557,7 +557,7 @@
                     padding: 0px;
                   "
                 >
-                  <div class="cardSNPC" v-for="npc in npcs" :key="npc.id">
+                  <div data-aos="fade-up" data-aos-duration="2000" class="cardSNPC" v-for="npc in npcs" :key="npc.id">
                     <div
                       @click.stop="
                         handlerClickDetailNPC(
@@ -794,7 +794,7 @@
     <!-- End Dialog Zooom Image -->
 
     <center>
-      <hr
+      <hr data-aos="fade-up" data-aos-duration="2000"
         style="
           color: #4a1d00 !important;
           border: 1px solid !important;
@@ -802,16 +802,16 @@
           width: 50%;
         "
       />
-      <H5 style="font-family: Georgia, serif; margin: 0px; margin-bottom: 20px"
+      <H5 data-aos="fade-up" data-aos-duration="2000" style="font-family: Georgia, serif; margin: 0px; margin-bottom: 20px"
         >Historical Art Fantasia</H5
       >
-      <p>
+      <p data-aos="fade-up" data-aos-duration="2000">
         Dilarang mengambil, meniru, mengklaim, baik itu art, peraturan, seragam,
         story, ataupun properti milik
         <br />
         <span style="font-weight: bold">HAF (seluruh siswa dan osis).</span>
       </p>
-      <hr
+      <hr data-aos="fade-up" data-aos-duration="2000"
         style="
           color: #4a1d00 !important;
           border: 1px solid !important;
@@ -821,7 +821,7 @@
     </center>
 
     <!-- Footer -->
-    <div>
+    <div style="margin-top: 50px" data-aos="fade-up" data-aos-duration="2000" data-aos-offset="0">
       <div class="footer-dark">
         <transition name="fade">
           <footer>
@@ -873,6 +873,7 @@
         </transition>
       </div>
     </div>
+    <!-- Footer -->
   </v-main>
 </template>
 

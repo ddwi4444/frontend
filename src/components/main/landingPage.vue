@@ -3,7 +3,7 @@
     <loading-screen :value="loadingScreen"></loading-screen>
 
     <div>
-      <div class="d-flex mb-3 size-bar-home">
+      <div class="d-flex mb-3 size-bar-home"  data-aos="fade-up" data-aos-duration="2000">
         <div style="width: 100%">
           <b-nav tabs style="padding-top: 3px; align-items: center">
             <b-nav-item
@@ -66,8 +66,7 @@
         </div>
       </div>
       <center>
-        <transition name="fade">
-          <div v-if="isCategoryOn == 1" class="mb-2">
+          <div v-if="isCategoryOn == 1" class="mb-2" data-aos="fade-up" data-aos-duration="1500">
             <v-tabs
               class="tabs-category"
               show-arrows
@@ -85,16 +84,15 @@
               </v-tab>
             </v-tabs>
           </div>
-        </transition>
       </center>
     </div>
 
     <!-- Search -->
     <!-- Tampilkan hasil pencarian di sini -->
-    <transition name="fade">
       <div
         v-if="this.isInputOn == 1"
         style="margin-bottom: 70px; margin-top: 20px"
+        data-aos="fade-up" data-aos-duration="2000"
       >
         <p>Result for {{ searchTerm }}</p>
         <div class="row" v-if="searchResults.length > 0">
@@ -198,12 +196,11 @@
           </div>
         </div>
       </div>
-    </transition>
     <!-- End Serach -->
 
     <!-- Landing Page -->
     <transition name="fade">
-      <div
+      <div      
         class="container"
         v-if="
           isCategoryOn == 0 &&
@@ -212,7 +209,7 @@
           isKomikCategoryOn == 0
         "
       >
-        <h5
+        <h5 data-aos="fade-up" data-aos-duration="2000"
           style="
             text-align: center;
             color: #333333;
@@ -229,6 +226,7 @@
         <div class="row">
           <div class="row" style="justify-content: center; max-width: none">
             <div
+            data-aos="fade-up" data-aos-duration="2000"
               v-for="dataLatest in dataLatests"
               :key="dataLatest.id"
               class="card card-with-bg"
@@ -302,7 +300,7 @@
           </div>
         </div>
 
-        <div
+        <div data-aos="fade-up" data-aos-duration="2000"
           class="row"
           style="
             margin-top: 100px;
@@ -314,7 +312,7 @@
             border-radius: 20;
           "
         >
-          <h5
+          <h5 data-aos="fade-up" data-aos-duration="2000"
             style="
               text-align: center;
               color: #333333;
@@ -331,7 +329,7 @@
           </h5>
           <div class="section" style="margin-bottom: 30px">
             <div class="row" style="justify-content: center; max-width: none">
-              <div
+              <div data-aos="fade-up" data-aos-duration="2000"
                 v-for="dataPopular in dataPopulars"
                 :key="dataPopular.id"
                 class="card card-with-bg"
@@ -413,7 +411,7 @@
           </div>
         </div>
 
-        <h5
+        <h5 data-aos="fade-up" data-aos-duration="2000"
           style="
             text-align: center;
             color: #333333;
@@ -463,7 +461,7 @@
               class="row"
               style="justify-content: center; max-width: none"
             >
-              <div
+              <div data-aos="fade-up" data-aos-duration="2000"
                 v-for="dataToday in dataTodays"
                 :key="dataToday.id"
                 class="card card-with-bg"
@@ -545,8 +543,8 @@
     <!-- Landing Page -->
 
     <!-- Untuk Category Card -->
-    <transition name="fade">
       <div
+      data-aos="fade-up" data-aos-duration="2000"
         v-if="
           isCategoryOn == 1 &&
           this.isFavoriteOn == 0 &&
@@ -554,9 +552,9 @@
           isKomikCategoryOn == 0
         "
         class="container"
-        style="margin-bottom: 70px"
+        style="margin-bottom: 70px; min-height: 400px;"
       >
-        <h5
+        <h5 data-aos="fade-up" data-aos-duration="1500"
           style="
             text-align: center;
             color: #333333;
@@ -577,7 +575,7 @@
         <div class="row">
           <div class="row" style="justify-content: center; max-width: none">
             <transition name="fade">
-              <div
+              <div data-aos="fade-up" data-aos-duration="1500"
                 v-if="dataKomikCategorys1.length == 0"
                 style="height: 200px; align-content: center; display: grid"
               >
@@ -610,7 +608,7 @@
                 </div>
               </div>
             </transition>
-            <div
+            <div data-aos="fade-up" data-aos-duration="2000"
               v-for="dataKomikCategory1 in dataKomikCategorys1"
               :key="dataKomikCategory1.id"
               class="card card-with-bg"
@@ -697,7 +695,7 @@
           </div>
         </div>
 
-        <h5
+        <h5 data-aos="fade-up" data-aos-duration="1500"
           style="
             margin-top: 70px;
             text-align: center;
@@ -752,7 +750,7 @@
                 </div>
               </div>
             </transition>
-            <div
+            <div data-aos="fade-up" data-aos-duration="2000"
               v-for="dataKomikCategory2 in dataKomikCategorys2"
               :key="dataKomikCategory2.id"
               class="card card-with-bg"
@@ -839,7 +837,7 @@
           </div>
         </div>
 
-        <h5
+        <h5 data-aos="fade-up" data-aos-duration="1500"
           style="
             margin-top: 70px;
             text-align: center;
@@ -894,7 +892,7 @@
                 </div>
               </div>
             </transition>
-            <div
+            <div data-aos="fade-up" data-aos-duration="2000"
               v-for="dataKomikCategory3 in dataKomikCategorys3"
               :key="dataKomikCategory3.id"
               class="card card-with-bg"
@@ -981,7 +979,6 @@
           </div>
         </div>
       </div>
-    </transition>
     <!-- End Untuk Category Card -->
 
     <!-- Untuk Get by Comic Category Card -->
@@ -996,7 +993,7 @@
         class="container"
         style="margin-bottom: 70px"
       >
-        <h5
+        <h5 data-aos="fade-up" data-aos-duration="2000" data-aos-offset="0"
           style="
             text-align: center;
             color: #333333;
@@ -1013,12 +1010,11 @@
         <!-- Beri 5 card untuk terbaru -->
         <div class="row">
           <div class="row" style="justify-content: center; max-width: none">
-            <transition name="fade">
-              <div
-                v-if="dataKomiksByCategory.length == 0"
+              <div  data-aos="fade-up" data-aos-duration="2000"
+                v-if="dataKomiksByCategory.length == 0" 
                 style="height: 200px; align-content: center; display: grid"
               >
-                <div class="row no-gutters">
+                <div class="row no-gutters" data-aos="fade-up" data-aos-duration="2000">
                   <div
                     class="col"
                     style="
@@ -1046,8 +1042,7 @@
                   </div>
                 </div>
               </div>
-            </transition>
-            <div
+            <div data-aos="fade-up" data-aos-duration="2000"
               v-for="dataKomikByCategory in paginateDataKomikCategory"
               :key="dataKomikByCategory.id"
               class="card card-with-bg"
@@ -1134,7 +1129,7 @@
           </div>
 
           <!-- Pagination controls with limited page numbers -->
-          <div class="pagination" v-if="paginateDataKomikCategory.length != 0">
+          <div class="pagination" v-if="paginateDataKomikCategory.length != 0" data-aos="fade-up" data-aos-duration="2000">
             <button @click="prevPageCategory" :disabled="currentPage === 1">
               Previous
             </button>
@@ -1173,7 +1168,7 @@
         class="container"
         style="margin-bottom: 70px"
       >
-        <h5
+        <h5 data-aos="fade-up" data-aos-duration="2000"
           style="
             text-align: center;
             color: #333333;
@@ -1189,8 +1184,7 @@
         <!-- Beri 5 card untuk terbaru -->
         <div class="row">
           <div class="row" style="justify-content: center; max-width: none">
-            <transition name="fade">
-              <div
+              <div data-aos="fade-up" data-aos-duration="2000"
                 v-if="paginateDataKomikToday.length == 0"
                 style="height: 200px; align-content: center; display: grid"
               >
@@ -1222,8 +1216,7 @@
                   </div>
                 </div>
               </div>
-            </transition>
-            <div
+            <div data-aos="fade-up" data-aos-duration="2000"
               v-for="dataKomikTodayShow in paginateDataKomikToday"
               :key="dataKomikTodayShow.id"
               class="card card-with-bg"
@@ -1310,7 +1303,7 @@
           </div>
 
           <!-- Pagination controls with limited page numbers -->
-          <div class="pagination" v-if="paginateDataKomikToday.length != 0">
+          <div class="pagination" v-if="paginateDataKomikToday.length != 0" data-aos="fade-up" data-aos-duration="2000">
             <button @click="prevPageTodayUpdates" :disabled="currentPage === 1">
               Previous
             </button>
@@ -1349,7 +1342,7 @@
         class="container"
         style="margin-bottom: 70px"
       >
-        <h5
+        <h5 data-aos="fade-up" data-aos-duration="2000"
           style="
             text-align: center;
             color: #333333;
@@ -1365,8 +1358,7 @@
         <!-- Beri 5 card untuk terbaru -->
         <div class="row">
           <div class="row" style="justify-content: center; max-width: none">
-            <transition name="fade">
-              <div
+              <div data-aos="fade-up" data-aos-duration="2000"
                 v-if="paginateDataFavorite.length == 0"
                 style="height: 200px; align-content: center; display: grid"
               >
@@ -1398,8 +1390,7 @@
                   </div>
                 </div>
               </div>
-            </transition>
-            <div
+            <div data-aos="fade-up" data-aos-duration="2000"
               v-for="dataKomikFavoriteShow in paginateDataFavorite"
               :key="dataKomikFavoriteShow.id"
               class="card card-with-bg"
@@ -1486,7 +1477,7 @@
           </div>
 
           <!-- Pagination controls with limited page numbers -->
-          <div class="pagination" v-if="paginateDataFavorite.length != 0">
+          <div class="pagination" v-if="paginateDataFavorite.length != 0" data-aos="fade-up" data-aos-duration="2000">
             <button @click="prevPageFavorite" :disabled="currentPage === 1">
               Previous
             </button>
@@ -1533,7 +1524,7 @@
     <!-- End Snackbar -->
 
     <!-- Footer -->
-    <div style="margin-top: 50px">
+    <div style="margin-top: 50px" data-aos="fade-up" data-aos-duration="2000" data-aos-offset="0">
       <div class="footer-dark">
         <transition name="fade">
           <footer>
@@ -1585,6 +1576,7 @@
         </transition>
       </div>
     </div>
+    <!-- Footer -->
   </div>
 </template>
 
@@ -2223,13 +2215,13 @@ export default {
 }
 /* end Paginate */
 
-.fade-enter-active,
+/* .fade-enter-active,
 .fade-leave-active {
   transition: all 0.5s ease-in-out;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter, .fade-leave-to .fade-leave-active below version 2.1.8 {
   opacity: 0;
-}
+} */
 
 .tabs-category {
   width: 50%;

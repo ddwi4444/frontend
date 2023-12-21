@@ -1,9 +1,9 @@
 <template>
   <div>
     <center>
-      <div class="row" style="margin-top: 30px; justify-content: center">
+      <div class="row" style="justify-content: center">
         <v-form ref="form" class="form" @submit.prevent="submit">
-          <img
+          <img data-aos="zoom-in" data-aos-duration="1500"
             src="@/assets/logoHAF2.png"
             class="d-inline-block align-top"
             alt="Logo HAF"
@@ -11,16 +11,16 @@
             style="cursor: pointer"
           />
 
-          <p class="title" style="margin-bottom: 0px">Register</p>
-          <p class="message" style="margin-bottom: 0px">
+          <p data-aos="zoom-out" data-aos-duration="1500" class="title" style="margin-bottom: 0px">Register</p>
+          <p data-aos="zoom-out" data-aos-duration="1500" class="message" style="margin-bottom: 0px">
             Signup now and get full access to our app.
           </p>
 
-          <label>
+          <label data-aos="fade-right" data-aos-duration="1500">
             <v-text-field
               v-model="nama_persona"
               :rules="namaPersonaRules"
-              placeholder="Name (Persona Name)"
+              placeholder="Name (Persona) * You can't change anymore"
               type="text"
               class="input"
               required
@@ -28,7 +28,7 @@
             />
           </label>
 
-          <label>
+          <label data-aos="fade-left" data-aos-duration="1500">
             <v-text-field
               v-model="email"
               :rules="emailRules"
@@ -39,7 +39,7 @@
             />
           </label>
 
-          <label>
+          <label data-aos="fade-right" data-aos-duration="1500">
             <v-text-field
               v-model="password"
               :rules="passwordRules"
@@ -50,7 +50,7 @@
             />
           </label>
 
-          <label>
+          <label data-aos="fade-left" data-aos-duration="1500">
             <v-text-field
               v-model="confirmPassword"
               :rules="confirmPasswordRules"
@@ -61,14 +61,14 @@
             />
           </label>
 
-          <v-btn
+          <v-btn data-aos="fade-up" data-aos-duration="1500" data-aos-offset="0"
             class="button-login-register primary"
             style="text-transform: unset !important"
             @click="submit"
             :loading="loading"
             >Register</v-btn
           >
-          <p class="signin">
+          <p data-aos="fade-up" data-aos-duration="1500" data-aos-offset="0" class="signin">
             Already have an acount?
             <router-link style="color: blue" to="login">Sign In </router-link>
           </p>

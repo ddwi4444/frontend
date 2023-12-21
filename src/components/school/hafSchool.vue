@@ -4,11 +4,11 @@
     <div>
       <div class="container">
         <div class="row">
-          <b-tabs content-class="mt-5 pa-0" align="center">
+          <b-tabs content-class="mt-5 pa-0" align="center" data-aos="fade-up" data-aos-duration="2000">
             <!-- Forum Tab -->
             <b-tab title="QnA" class="cta hover-underline-animation" active>
               <center>
-                <div class="text-box-school">
+                <div class="text-box-school" data-aos="fade-up" data-aos-duration="2000">
                   <div class="box-container">
                     <h6
                       style="
@@ -207,7 +207,7 @@
 
               <b-container fluid class="p-4 bg-transparent">
                 <center>
-                  <div
+                  <div data-aos="fade-up" data-aos-duration="2000"
                     class="card-school mt-5"
                     v-for="(dataForum, index) in dataForums"
                     :key="dataForum.id"
@@ -582,13 +582,13 @@
 
                   <b-container fluid class="p-4 bg-transparent">
                     <center>
-                      <div
+                      <div data-aos="fade-up" data-aos-duration="2000"
                         class="card-school mt-5"
                         v-for="(dataAnnouncement, index) in dataAnnouncements"
                         :key="dataAnnouncement.id"
                       >
-                        <div>
-                          <div class="comment-container-school">
+                        <div data-aos="fade-up" data-aos-duration="2000">
+                          <div class="comment-container-school" data-aos="fade-up" data-aos-duration="2000">
                             <div class="user">
                               <div class="user-pic">
                                 <b-avatar
@@ -1267,6 +1267,61 @@
     </v-dialog>
     <!-- End Dialog Loading -->
 
+
+    <!-- Footer -->
+    <div style="margin-top: 50px" data-aos="fade-up" data-aos-duration="2000" data-aos-offset="0">
+      <div class="footer-dark">
+        <transition name="fade">
+          <footer>
+            <div class="container" style="justify-content: center; width: 50%">
+              <div class="">
+                <h3>Historical Art Fantasia</h3>
+                <p>
+                  Praesent sed lobortis mi. Suspendisse vel placerat ligula.
+                  Vivamus ac sem lacus. Ut vehicula rhoncus elementum. Etiam
+                  quis tristique lectus. Aliquam in arcu eget velit pulvinar
+                  dictum vel in justo.
+                </p>
+              </div>
+              <div class="col item social">
+                <a
+                  href="#"
+                  onmouseover="this.style.transform='translateY(-10%)';"
+                  onmouseout="this.style.transform='translateY(0)';"
+                  ><b-icon icon="instagram" aria-hidden="true"></b-icon></a
+                ><a
+                  href="#"
+                  onmouseover="this.style.transform='translateY(-10%)';"
+                  onmouseout="this.style.transform='translateY(0)';"
+                  ><b-icon icon="youtube" aria-hidden="true"></b-icon></a
+                ><a
+                  href="#"
+                  onmouseover="this.style.transform='translateY(-10%)';"
+                  onmouseout="this.style.transform='translateY(0)';"
+                  ><b-icon icon="bi:tiktok" aria-hidden="true"></b-icon></a
+                ><a
+                  href="#"
+                  onmouseover="this.style.transform='translateY(-10%)';"
+                  onmouseout="this.style.transform='translateY(0)';"
+                >
+                  <b-icon icon="mailbox" aria-hidden="true"></b-icon
+                ></a>
+              </div>
+              <p class="copyright">
+                Historical Art Fantasia © 2023 || created by
+                <span
+                  @click="openNewPage"
+                  class="hoverMyName"
+                  style="cursor: pointer"
+                  >Doni Dwi Irawan</span
+                >
+              </p>
+            </div>
+          </footer>
+        </transition>
+      </div>
+    </div>
+    <!-- Footer -->
   </div>
 </template>
 
@@ -1998,6 +2053,13 @@ export default {
         return "";
       }
     },
+
+    // Adds On
+    openNewPage() {
+      const link =
+        "https://www.linkedin.com/in/doni-dwi-irawan-818029182?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app";
+      window.open(link, "_blank");
+    },
   },
 };
 </script>
@@ -2203,6 +2265,83 @@ export default {
 .text-box-school .formatting .send:hover {
   background-color: #026eda;
 }
+
+/* Footer */
+.hoverMyName:hover {
+  color: rgb(125, 213, 237);
+}
+.footer-dark {
+  padding: 20px 0;
+  color: #f0f9ff;
+  background-color: #282d32;
+}
+
+.footer-dark h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.footer-dark ul {
+  padding: 0;
+  list-style: none;
+  line-height: 1.6;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.footer-dark ul a {
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.6;
+}
+
+.footer-dark ul a:hover {
+  opacity: 0.8;
+}
+
+.footer-dark .item.text p {
+  opacity: 0.6;
+  margin-bottom: 0;
+}
+
+.footer-dark .item.social {
+  text-align: center;
+}
+
+.footer-dark .item.text {
+  margin-bottom: 36px;
+}
+
+.footer-dark .item.social > a {
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
+  margin-left: 1.5px;
+  margin-right: 1.5px;
+  margin-top: 5px;
+  color: #fff;
+  opacity: 0.75;
+}
+
+.footer-dark .item.social > a:hover {
+  opacity: 0.9;
+}
+
+.footer-dark .copyright {
+  text-align: center;
+  padding-top: 24px;
+  opacity: 0.3;
+  font-size: 13px;
+  margin-bottom: 0;
+}
+/* /Footer */
 
 @keyframes ripple {
   0% {

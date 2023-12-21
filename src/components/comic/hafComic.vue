@@ -4,7 +4,7 @@
 
     <div style="justify-content: center; display: flex">
       <div style="position: absolute; z-index: 1; width: 100%">
-        <v-parallax
+        <v-parallax data-aos="fade-down" data-aos-duration="1500"
           height="700"
           :src="$baseUrl + '/storage/' + dataComic.thumbnail"
           style="filter: blur(0.8rem); object-fit: cover"
@@ -29,7 +29,7 @@
               style="width: 300px; height: 350px; border-radius: 20px"
             >
               <!-- Img error  -->
-              <img
+              <img data-aos="fade-up" data-aos-duration="1500"
                 :src="$baseUrl + '/storage/' + dataComic.thumbnail"
                 style="
                   margin-top: 10px;
@@ -44,7 +44,7 @@
         </v-layout>
       </v-container>
 
-      <v-container
+      <v-container data-aos="fade-up" data-aos-duration="1500"
         style="
           position: absolute;
           z-index: 3;
@@ -105,7 +105,7 @@
         </v-flex>
       </v-container>
 
-      <v-container
+      <v-container data-aos="fade-up" data-aos-duration="1500"
         style="
           position: absolute;
           z-index: 2;
@@ -114,7 +114,7 @@
         "
       >
         <v-card color="white" style="min-height: 500px; border-radius: 20px">
-          <h3
+          <h3 data-aos="fade-up" data-aos-duration="1500"
             class="f-24 f-md-20 f-secondary text-center m-b-50"
             style="
               padding-top: 170px;
@@ -124,16 +124,16 @@
           >
             {{ dataComic.judul }}
           </h3>
-          <p
+          <p data-aos="fade-up" data-aos-duration="1500"
             style="font-family: 'Georgia'; font-size: 20px; margin-bottom: 8px"
           >
             <span style="font-family: sans-serif; font-size: 16px">by</span>
             {{ dataComic.post_by }}
           </p>
 
-          <p style="margin: 0px">· Synopsys ·</p>
+          <p data-aos="fade-up" data-aos-duration="1500" style="margin: 0px">· Synopsys ·</p>
           <center style="padding-bottom: 60px">
-            <div
+            <div data-aos="fade-up" data-aos-duration="1500"
               v-html="dataComic.sinopsis"
               style="
                 text-align: justify;
@@ -143,9 +143,9 @@
               "
             ></div>
 
-            <hr style="width: 50%; border: 1px solid; border-radius: 50px" />
+            <hr data-aos="fade-up" data-aos-duration="1500" style="width: 50%; border: 1px solid; border-radius: 50px" />
 
-            <div v-for="dataSubComic in dataSubComics" :key="dataSubComic.id">
+            <div data-aos="fade-up" data-aos-duration="1500" v-for="dataSubComic in dataSubComics" :key="dataSubComic.id">
               <b-card
                 @click.stop="
                   handlerSubComic(dataSubComic.slug, dataSubComic.uuid)

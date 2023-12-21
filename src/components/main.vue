@@ -5,7 +5,7 @@
         <loading-screen :value="true"></loading-screen>
       </div>
     </v-fade-transition>
-    <div class="app" >
+    <div class="app">
       <nav class="navbar padding-navbar d-flex w-full p-x-15" style="z-index: 100;">
         <div class="logo">
             <img

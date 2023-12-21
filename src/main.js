@@ -8,6 +8,8 @@ import Vue2Editor from "vue2-editor";
 import moment from 'moment';
 import CKEditor from '@ckeditor/ckeditor5-vue2';
 import VueLazyload from 'vue-lazyload'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
  
 Vue.use(VueLazyload)
 Vue.use( CKEditor );
@@ -40,5 +42,8 @@ new Vue({
   vuetify,
   router,
   BootstrapVue,
+  mounted() {
+    AOS.init()
+  },
   render: h => h(App)
 }).$mount('#app')
