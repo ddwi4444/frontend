@@ -282,7 +282,10 @@
               <div style="margin: 15px; margin-top: 5px">
                 <div v-html="merchandiseDesc" style="text-align: ''"></div>
               </div>
-              <div style="margin: 5px 15px 15px">
+              <div
+                v-bind:class="{ 'disabled-div': myProfile.role == 'admin' }"
+                style="margin: 5px 15px 15px"
+              >
                 <hr />
                 <p>Order</p>
                 <b-form-spinbutton
@@ -339,14 +342,7 @@
     <v-dialog v-model="dialogCart" width="1000px">
       <template>
         <v-stepper v-model="e6" vertical>
-          <div
-            style="
-              justify-content: end;
-              display: flex;
-              margin-top: 20px;
-              margin-right: 20px;
-            "
-          >
+          <div style="justify-content: end; display: flex; padding: 8px 16px">
             <v-btn
               @click="dialogCart = false"
               class="mx-1"
@@ -363,7 +359,7 @@
             Order Items
           </v-stepper-step>
 
-          <v-stepper-content step="1">
+          <v-stepper-content step="1" style="overflow: scroll; height: auto">
             <v-card class="mb-3">
               <template>
                 <v-data-table
@@ -547,20 +543,22 @@
       >
         <v-card-actions class="justify-end">
           <v-btn
-            style="text-transform: unset !important"
-            plain
-            text
             @click="dialogOrderHistory = false"
-            ><v-icon dense color="#FF0000" class="data-table-icon"
-              >mdi-close</v-icon
-            ></v-btn
+            class="mx-1"
+            fab
+            dark
+            small
+            color="red"
+            style="height: 20px; width: 20px"
           >
+            <b-icon icon="x-lg" aria-hidden="true"></b-icon>
+          </v-btn>
         </v-card-actions>
         <h3
           class="f-24 f-md-20 f-secondary text-center"
           style="margin-bottom: 50px; font-family: 'Georgia'; font-weight: bold"
         >
-          Your Order Tansaction
+          Your Order Transaction
         </h3>
 
         <template>
@@ -671,22 +669,22 @@
                 </div>
                 <div v-else>
                   <div v-if="myProfile.role != 'admin'">
-                  <v-tooltip top>
-                    <template v-slot:activator="{ on }">
-                      <p
-                        style="margin: 0px"
-                        @click.stop="handlerAddBuktiTf(item)"
-                        v-on="on"
-                      >
-                        <v-btn icon color="blue">
-                          <v-icon small color="#5c5c5c">mdi-upload</v-icon>
-                        </v-btn>
-                      </p>
-                    </template>
-                    <span>Add Transfer Receipt</span>
-                  </v-tooltip>
-                </div>
-                <div v-else>-</div>
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on }">
+                        <p
+                          style="margin: 0px"
+                          @click.stop="handlerAddBuktiTf(item)"
+                          v-on="on"
+                        >
+                          <v-btn icon color="blue">
+                            <v-icon small color="#5c5c5c">mdi-upload</v-icon>
+                          </v-btn>
+                        </p>
+                      </template>
+                      <span>Add Transfer Receipt</span>
+                    </v-tooltip>
+                  </div>
+                  <div v-else>-</div>
                 </div>
               </template>
 
@@ -733,7 +731,7 @@
                       icon
                       v-bind="attrs"
                       v-on="on"
-                      @click.stop="handleOrderproducts(item.uuid)"
+                      @click.stop="handleOrderproducts(item)"
                     >
                       <v-icon small color="">mdi-information-outline</v-icon>
                     </v-btn>
@@ -869,8 +867,23 @@
             padding-top: 30px;
           "
         >
-          Detail Poduct Ordered
+          Detail Order
         </h5>
+        <div>
+          <p class="ma-0 pa-0">
+            Recipient's Name : {{ dataOrderInDetailOrderProducts.nama }}
+          </p>
+          <p class="ma-0 pa-0">
+            Address : {{ dataOrderInDetailOrderProducts.alamat }}
+          </p>
+          <p class="ma-0 pa-0">
+            Phone Number : {{ dataOrderInDetailOrderProducts.tlp }}
+          </p>
+          <p class="ma-0 pa-0">
+            Total Price : Rp.
+            {{ formatPrice(dataOrderInDetailOrderProducts.total_prices) }}
+          </p>
+        </div>
         <center>
           <div>
             <!-- Update the v-for and :src attribute -->
@@ -955,17 +968,23 @@
     </v-dialog>
     <!-- End Dialog Zooom Image -->
 
-    <!-- Loading -->
-    <v-dialog v-model="dialogLoader" hide-overlay persistent width="300">
-      <v-card color="#006598" dark>
-        <v-progress-linear
-          indeterminate
-          color="white"
-          class="mb-0"
-        ></v-progress-linear>
+    <!-- Dialog Loading -->
+    <v-dialog
+      v-model="dialogLoader"
+      content-class="elevation-0"
+      persistent
+      width="300"
+    >
+      <v-card color="#fff0">
+        <img
+          src="@/assets/Spin-1s-200px.gif"
+          style="height: 150px"
+          class="d-inline-block align-top"
+          alt="Animation"
+        />
       </v-card>
     </v-dialog>
-    <!-- End Loading -->
+    <!-- End Dialog Loading -->
 
     <!-- Dialog Delete Comic Handler -->
     <v-dialog v-model="dialogConfirmDelete" persistent max-width="400px">
@@ -1040,6 +1059,23 @@
       </v-card>
     </v-dialog>
     <!-- end dialog add no resi -->
+
+    <!-- Snackbar -->
+    <v-snackbar v-model="snackbar" auto-height :color="color" text top right>
+      {{ textMessage }}
+      <template v-slot:action="{ attrs }">
+        <v-btn plain color="red" text v-bind="attrs" @click="snackbar = false">
+          <v-icon
+            dense
+            color="#FF0000"
+            @click="snackbar = false"
+            class="data-table-icon"
+            >mdi-close</v-icon
+          >
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <!-- End Snackbar -->
   </v-main>
 </template>
 
@@ -1060,6 +1096,7 @@ export default {
     dataOrderProductsMerchandise: [],
     dataDetailOrderProductsMerchandise: [],
     myProfile: [],
+    dataOrderInDetailOrderProducts: [],
 
     // Search
     searchMerchandise: "",
@@ -1087,6 +1124,11 @@ export default {
 
     // Cancel Order
     deleteUUIDOrderMerchandise: "",
+
+    // Snackbar
+    snackbar: false,
+    textMessage: "",
+    color: "",
 
     // Cart
     products: [],
@@ -1232,8 +1274,9 @@ export default {
       this.confirmPayment(item.uuid);
     },
 
-    handleOrderproducts(itemUuid) {
-      this.axioGetDataDetailOrderProductsMerchandise(itemUuid);
+    handleOrderproducts(item) {
+      this.axioGetDataDetailOrderProductsMerchandise(item.uuid);
+      this.dataOrderInDetailOrderProducts = item;
       this.dialogDetailOrderProducts = true;
     },
 
@@ -1285,38 +1328,59 @@ export default {
 
       this.$http
         .get(url, { headers: headers })
-        .then((response) => {
-          this.error_message = response.data.message;
-          console.log(this.error);
+        .then(() => {
           this.axioDataOrderMerchandise();
+
+          this.textMessage =
+            "The transfer proof has been successfully confirmed 😊";
+          this.snackbar = true;
+          this.color = "success";
+
+          setTimeout(() => {
+            this.dialogLoader = false;
+          }, 300);
         })
-        .catch((error) => {
-          this.error_message = error.response.data.message;
-          console.log(this.error);
-          this.dialogConfirmDelete = false;
+        .catch(() => {
+          this.dialogLoader = false;
         });
     },
 
     addToProducts(itemProduct) {
       this.dialogLoader = true;
 
-      // Menambahkan data baru ke dalam array products
-      const newProduct = {
-        totalPcsProduct: this.totalPcs,
-        notesProduct: this.notes === "" ? "-" : this.notes,
-        namaProduct: itemProduct.nama,
-        uuidProduct: itemProduct.uuid,
-        priceProduct: this.totalPcs * itemProduct.harga,
-        thumbnailProduct: itemProduct.thumbnail,
-      };
+      if (this.notes.length > 255) {
+        this.textMessage = "Your notes exceeds the character limit 😔";
+        this.snackbar = true;
+        this.color = "blue-grey";
+        this.dialogLoader = false;
+      } else {
+        // Menambahkan data baru ke dalam array products
+        const newProduct = {
+          totalPcsProduct: this.totalPcs,
+          notesProduct: this.notes === "" ? "-" : this.notes,
+          namaProduct: itemProduct.nama,
+          uuidProduct: itemProduct.uuid,
+          priceProduct: this.totalPcs * itemProduct.harga,
+          thumbnailProduct: itemProduct.thumbnail,
+        };
 
-      this.products.push(newProduct);
+        this.products.push(newProduct);
 
-      this.messageTotalCart = this.products.length;
+        this.messageTotalCart = this.products.length;
 
-      // Setelah menambahkan, bersihkan input
-      this.totalPcs = 0;
-      this.notes = "";
+        // Setelah menambahkan, bersihkan input
+        this.totalPcs = 0;
+        this.notes = "";
+
+        this.textMessage =
+          "The product has been successfully added to the cart 😊";
+        this.snackbar = true;
+        this.color = "success";
+
+        setTimeout(() => {
+          this.dialogLoader = false;
+        }, 300);
+      }
     },
 
     deleteHandlerItem(item) {
@@ -1331,6 +1395,15 @@ export default {
 
         // You can perform additional logic here, such as making an API call to delete the item on the server
         // or showing a confirmation message to the user.
+
+        this.textMessage =
+          "The product has been successfully removed from the cart 😊";
+        this.snackbar = true;
+        this.color = "success";
+
+        setTimeout(() => {
+          this.dialogLoader = false;
+        }, 300);
       }
 
       this.messageTotalCart = this.products.length;
@@ -1346,15 +1419,21 @@ export default {
 
       this.$http
         .delete(url, { headers: headers })
-        .then((response) => {
-          this.error_message = response.data.message;
-          console.log(this.error);
+        .then(() => {
           this.dialogConfirmDelete = false;
           this.axioDataOrderMerchandise();
+
+          this.textMessage =
+            "Ooops, you canceled or delete your order merchandise. Any problems? 😔";
+          this.snackbar = true;
+          this.color = "success";
+
+          setTimeout(() => {
+            this.dialogLoader = false;
+          }, 300);
         })
-        .catch((error) => {
-          this.error_message = error.response.data.message;
-          console.log(this.error);
+        .catch(() => {
+          this.dialogLoader = false;
           this.dialogConfirmDelete = false;
         });
     },
@@ -1375,18 +1454,23 @@ export default {
       // Mengirim data ke backend Laravel menggunakan axios
       this.$http
         .post(url, this.BuktiTfForm, { headers: headers })
-        .then((response) => {
-          // Handle respon dari backend jika diperlukan
-          console.log(response.data);
-
+        .then(() => {
           this.axioDataOrderMerchandise();
 
           this.dialogAddNoResi = false;
           this.shipmentTrackingNumber = "";
+
+          this.textMessage =
+            "The tracking number has been successfully added. 😊";
+          this.snackbar = true;
+          this.color = "success";
+
+          setTimeout(() => {
+            this.dialogLoader = false;
+          }, 300);
         })
-        .catch((error) => {
-          // Handle error jika ada
-          console.error(error);
+        .catch(() => {
+          this.dialogLoader = false;
         });
     },
 
@@ -1421,10 +1505,18 @@ export default {
           this.info.images = [];
           this.info.sizes = [];
           this.dialogAddBuktiTf = false;
+
+          this.textMessage =
+            "You have successfully uploaded the payment proof 😊";
+          this.snackbar = true;
+          this.color = "success";
+
+          setTimeout(() => {
+            this.dialogLoader = false;
+          }, 300);
         })
-        .catch((error) => {
-          // Handle error jika ada
-          console.error(error);
+        .catch(() => {
+          this.dialogLoader = false;
         });
     },
 
@@ -1467,15 +1559,36 @@ export default {
           this.totalPrices = 0;
           this.products = []; // Jika Anda ingin membersihkan array products setelah mengirim
           this.dialogCart = false;
-          this.e6 = 1;
+          (this.products = []), (this.e6 = 1);
           this.messageTotalCart = this.products.length;
+
+          this.textMessage =
+            "Your order of service has been sent, please monitor the status of your order on the 'Your Order' menu 😊";
+          this.snackbar = true;
+          this.color = "success";
 
           this.axioDataMerchandise();
           this.axioDataOrderMerchandise();
+          setTimeout(() => {
+            this.dialogLoader = false;
+          }, 300);
         })
-        .catch((error) => {
-          // Handle error jika ada
-          console.error(error);
+        .catch(() => {
+          if (this.name.length > 255) {
+            this.textMessage = "Your name exceeds the character limit 😔";
+            this.snackbar = true;
+            this.color = "blue-gray";
+          } else if (this.address.length > 255) {
+            this.textMessage = "Your address exceeds the character limit 😔";
+            this.snackbar = true;
+            this.color = "blue-grey";
+          } else if (this.telephone.length > 255) {
+            this.textMessage =
+              "Your number phone exceeds the character limit 😔";
+            this.snackbar = true;
+            this.color = "blue-grey";
+          }
+          this.dialogLoader = false;
         });
     },
 
@@ -1724,6 +1837,12 @@ export default {
 </script>
 
 <style scoped>
+.disabled-div {
+  pointer-events: none; /* Prevents user interaction */
+  opacity: 0.5; /* Visually indicates the disabled state */
+  /* Add any other styles you want for the disabled state */
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: all 0.5s ease-in-out;

@@ -39,7 +39,7 @@
           </div>
         </div>
 
-        <div class="avatar" @click="handlerGoMyProfile">
+        <div class="avatar" @click.stop="handlerGoMyProfile">
           <div class="user-avatar">
             <b-avatar
               style="margin-right: 5px"
@@ -52,7 +52,7 @@
               class="menuColor mr-auto"
               style="display: inline-block; text-transform: capitalize"
             >
-              {{ getNamaPersona }}</span
+              {{ getNamaPersona }} </span
             >
             <span
               v-else
@@ -60,7 +60,7 @@
               style="display: inline-block; text-transform: capitalize"
             >
               {{ getNamaPersona }}</span
-            >
+            > 
           </div>
         </div>
 

@@ -92,13 +92,16 @@
     <!-- Search -->
     <!-- Tampilkan hasil pencarian di sini -->
     <transition name="fade">
-    <div v-if="this.isInputOn == 1" style="margin-bottom: 70px; margin-top: 20px;">
-      <p>Result for {{ searchTerm }}</p>
-      <div class="row" v-if="searchResults.length > 0">
+      <div
+        v-if="this.isInputOn == 1"
+        style="margin-bottom: 70px; margin-top: 20px"
+      >
+        <p>Result for {{ searchTerm }}</p>
+        <div class="row" v-if="searchResults.length > 0">
           <div class="row" style="justify-content: center; max-width: none">
             <div
-            v-for="result in searchResults" :key="result.id"
-              @click="handlerClickCategory"
+              v-for="result in searchResults"
+              :key="result.id"
               class="card card-with-bg"
               :style="{
                 'background-image':
@@ -171,43 +174,43 @@
         </div>
         <div v-else>
           <div class="row no-gutters">
-                  <div
-                    class="col"
-                    style="
-                      display: grid;
-                      align-content: center;
-                      justify-content: end;
-                    "
-                  >
-                    <p>No results found for {{ searchTerm }}</p>
-                  </div>
-                  <div
-                    class="col"
-                    style="
-                      display: grid;
-                      align-content: center;
-                      justify-content: start;
-                    "
-                  >
-                    <img
-                      src="@/assets/2953962.jpg"
-                      style="height: 150px"
-                      class="d-inline-block align-top"
-                      alt="Animation"
-                    />
-                  </div>
-                </div>
-    </div>
-    </div>
-  </transition>
+            <div
+              class="col"
+              style="display: grid; align-content: center; justify-content: end"
+            >
+              <p>No results found for {{ searchTerm }}</p>
+            </div>
+            <div
+              class="col"
+              style="
+                display: grid;
+                align-content: center;
+                justify-content: start;
+              "
+            >
+              <img
+                src="@/assets/2953962.jpg"
+                style="height: 150px"
+                class="d-inline-block align-top"
+                alt="Animation"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
     <!-- End Serach -->
-
 
     <!-- Landing Page -->
     <transition name="fade">
       <div
         class="container"
-        v-if="isCategoryOn == 0 && isFavoriteOn == 0 && isKomikTodayOn == 0 && isKomikCategoryOn == 0"
+        v-if="
+          isCategoryOn == 0 &&
+          isFavoriteOn == 0 &&
+          isKomikTodayOn == 0 &&
+          isKomikCategoryOn == 0
+        "
       >
         <h5
           style="
@@ -228,7 +231,6 @@
             <div
               v-for="dataLatest in dataLatests"
               :key="dataLatest.id"
-              @click="handlerClickCategory"
               class="card card-with-bg"
               :style="{
                 'background-image':
@@ -332,7 +334,6 @@
               <div
                 v-for="dataPopular in dataPopulars"
                 :key="dataPopular.id"
-                @click="handlerClickCategory"
                 class="card card-with-bg"
                 :style="{
                   'background-image':
@@ -430,106 +431,112 @@
           <div class="row" style="justify-content: center; max-width: none">
             <div v-if="dataTodays.length == 0">
               <div class="row no-gutters">
-                  <div
-                    class="col"
-                    style="
-                      display: grid;
-                      align-content: center;
-                      justify-content: end;
-                    "
-                  >
-                    <p>There is no comics updates today</p>
-                  </div>
-                  <div
-                    class="col"
-                    style="
-                      display: grid;
-                      align-content: center;
-                      justify-content: start;
-                    "
-                  >
-                    <img
-                      src="@/assets/2953962.jpg"
-                      style="height: 150px"
-                      class="d-inline-block align-top"
-                      alt="Animation"
-                    />
-                  </div>
+                <div
+                  class="col"
+                  style="
+                    display: grid;
+                    align-content: center;
+                    justify-content: end;
+                  "
+                >
+                  <p>There is no comics updates today</p>
                 </div>
+                <div
+                  class="col"
+                  style="
+                    display: grid;
+                    align-content: center;
+                    justify-content: start;
+                  "
+                >
+                  <img
+                    src="@/assets/2953962.jpg"
+                    style="height: 150px"
+                    class="d-inline-block align-top"
+                    alt="Animation"
+                  />
+                </div>
+              </div>
             </div>
-            <div v-else class="row" style="justify-content: center; max-width: none">
-              <div
-              v-for="dataToday in dataTodays"
-              :key="dataToday.id"
-              @click="handlerClickCategory"
-              class="card card-with-bg"
-              :style="{
-                'background-image':
-                  'url(' + $baseUrl + '/storage/' + dataToday.thumbnail + ')',
-              }"
+            <div
+              v-else
+              class="row"
+              style="justify-content: center; max-width: none"
             >
-              <div class="card-info" @click.stop="handlerClickCard(dataToday)">
-                <div class="card-title" style="cursor: pointer">
-                  {{ dataToday.judul }}
-                </div>
-                <div class="card-subtitle" style="cursor: pointer">
-                  {{ dataToday.post_by }}
-                </div>
-                <div class="card-social">
-                  <div class="row no-gutters">
-                    <div
-                      class="col"
-                      style="
-                        font-size: 12px;
-                        color: white;
-                        align-items: center;
-                        display: flex;
-                        justify-content: center;
-                      "
-                    >
-                      <v-icon
-                        dense
-                        x-small
-                        color="#e0e0e0"
-                        class="data-table-icon"
-                        style="padding-right: 3px"
-                        >mdi-eye</v-icon
+              <div
+                v-for="dataToday in dataTodays"
+                :key="dataToday.id"
+                class="card card-with-bg"
+                :style="{
+                  'background-image':
+                    'url(' + $baseUrl + '/storage/' + dataToday.thumbnail + ')',
+                }"
+              >
+                <div
+                  class="card-info"
+                  @click.stop="handlerClickCard(dataToday)"
+                >
+                  <div class="card-title" style="cursor: pointer">
+                    {{ dataToday.judul }}
+                  </div>
+                  <div class="card-subtitle" style="cursor: pointer">
+                    {{ dataToday.post_by }}
+                  </div>
+                  <div class="card-social">
+                    <div class="row no-gutters">
+                      <div
+                        class="col"
+                        style="
+                          font-size: 12px;
+                          color: white;
+                          align-items: center;
+                          display: flex;
+                          justify-content: center;
+                        "
                       >
-                      {{ dataToday.jumlah_view }}
-                    </div>
-                    <div
-                      class="col"
-                      v-if="hasFavorite(dataToday.uuid, userLogin.uuid)"
-                    >
-                      <!-- Display content when there is a matching favorite -->
-                      <v-icon
-                        small
-                        dense
-                        color="#FFC0CB"
-                        class="data-table-icon hover-heart"
-                        @click.stop="handlerClickFavorite(dataToday.uuid)"
-                        style="cursor: pointer"
+                        <v-icon
+                          dense
+                          x-small
+                          color="#e0e0e0"
+                          class="data-table-icon"
+                          style="padding-right: 3px"
+                          >mdi-eye</v-icon
+                        >
+                        {{ dataToday.jumlah_view }}
+                      </div>
+                      <div
+                        class="col"
+                        v-if="hasFavorite(dataToday.uuid, userLogin.uuid)"
                       >
-                        mdi-heart
-                      </v-icon>
-                    </div>
-                    <div v-else class="col">
-                      <!-- Display content when there is no matching favorite -->
-                      <v-icon
-                        small
-                        dense
-                        color="#FFFFFF"
-                        class="data-table-icon hover-heart"
-                        @click.stop="handlerClickFavorite(dataToday.uuid)"
-                        style="cursor: pointer"
-                      >
-                        mdi-heart
-                      </v-icon>
+                        <!-- Display content when there is a matching favorite -->
+                        <v-icon
+                          small
+                          dense
+                          color="#FFC0CB"
+                          class="data-table-icon hover-heart"
+                          @click.stop="handlerClickFavorite(dataToday.uuid)"
+                          style="cursor: pointer"
+                        >
+                          mdi-heart
+                        </v-icon>
+                      </div>
+                      <div v-else class="col">
+                        <!-- Display content when there is no matching favorite -->
+                        <v-icon
+                          small
+                          dense
+                          color="#FFFFFF"
+                          class="data-table-icon hover-heart"
+                          @click.stop="handlerClickFavorite(dataToday.uuid)"
+                          style="cursor: pointer"
+                        >
+                          mdi-heart
+                        </v-icon>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
             </div>
           </div>
         </div>
@@ -541,7 +548,10 @@
     <transition name="fade">
       <div
         v-if="
-          isCategoryOn == 1 && this.isFavoriteOn == 0 && isKomikTodayOn == 0 && isKomikCategoryOn == 0
+          isCategoryOn == 1 &&
+          this.isFavoriteOn == 0 &&
+          isKomikTodayOn == 0 &&
+          isKomikCategoryOn == 0
         "
         class="container"
         style="margin-bottom: 70px"
@@ -580,7 +590,7 @@
                       justify-content: end;
                     "
                   >
-                    <p>There is no {{itemsGenre[0]}} comics</p>
+                    <p>There is no {{ itemsGenre[0] }} comics</p>
                   </div>
                   <div
                     class="col"
@@ -603,14 +613,20 @@
             <div
               v-for="dataKomikCategory1 in dataKomikCategorys1"
               :key="dataKomikCategory1.id"
-              @click="handlerClickCategory"
               class="card card-with-bg"
               :style="{
                 'background-image':
-                  'url(' + $baseUrl + '/storage/' + dataKomikCategory1.thumbnail + ')',
+                  'url(' +
+                  $baseUrl +
+                  '/storage/' +
+                  dataKomikCategory1.thumbnail +
+                  ')',
               }"
             >
-              <div class="card-info" @click.stop="handlerClickCard(dataKomikCategory1)">
+              <div
+                class="card-info"
+                @click.stop="handlerClickCard(dataKomikCategory1)"
+              >
                 <div class="card-title" style="cursor: pointer">
                   {{ dataKomikCategory1.judul }}
                 </div>
@@ -641,7 +657,9 @@
                     </div>
                     <div
                       class="col"
-                      v-if="hasFavorite(dataKomikCategory1.uuid, userLogin.uuid)"
+                      v-if="
+                        hasFavorite(dataKomikCategory1.uuid, userLogin.uuid)
+                      "
                     >
                       <!-- Display content when there is a matching favorite -->
                       <v-icon
@@ -649,7 +667,9 @@
                         dense
                         color="#FFC0CB"
                         class="data-table-icon hover-heart"
-                        @click.stop="handlerClickFavorite(dataKomikCategory1.uuid)"
+                        @click.stop="
+                          handlerClickFavorite(dataKomikCategory1.uuid)
+                        "
                         style="cursor: pointer"
                       >
                         mdi-heart
@@ -662,7 +682,9 @@
                         dense
                         color="#FFFFFF"
                         class="data-table-icon hover-heart"
-                        @click.stop="handlerClickFavorite(dataKomikCategory1.uuid)"
+                        @click.stop="
+                          handlerClickFavorite(dataKomikCategory1.uuid)
+                        "
                         style="cursor: pointer"
                       >
                         mdi-heart
@@ -710,7 +732,7 @@
                       justify-content: end;
                     "
                   >
-                    <p>There is no {{itemsGenre[1]}} comics</p>
+                    <p>There is no {{ itemsGenre[1] }} comics</p>
                   </div>
                   <div
                     class="col"
@@ -733,14 +755,20 @@
             <div
               v-for="dataKomikCategory2 in dataKomikCategorys2"
               :key="dataKomikCategory2.id"
-              @click="handlerClickCategory"
               class="card card-with-bg"
               :style="{
                 'background-image':
-                  'url(' + $baseUrl + '/storage/' + dataKomikCategory2.thumbnail + ')',
+                  'url(' +
+                  $baseUrl +
+                  '/storage/' +
+                  dataKomikCategory2.thumbnail +
+                  ')',
               }"
             >
-              <div class="card-info" @click.stop="handlerClickCard(dataKomikCategory2)">
+              <div
+                class="card-info"
+                @click.stop="handlerClickCard(dataKomikCategory2)"
+              >
                 <div class="card-title" style="cursor: pointer">
                   {{ dataKomikCategory2.judul }}
                 </div>
@@ -771,7 +799,9 @@
                     </div>
                     <div
                       class="col"
-                      v-if="hasFavorite(dataKomikCategory2.uuid, userLogin.uuid)"
+                      v-if="
+                        hasFavorite(dataKomikCategory2.uuid, userLogin.uuid)
+                      "
                     >
                       <!-- Display content when there is a matching favorite -->
                       <v-icon
@@ -779,7 +809,9 @@
                         dense
                         color="#FFC0CB"
                         class="data-table-icon hover-heart"
-                        @click.stop="handlerClickFavorite(dataKomikCategory2.uuid)"
+                        @click.stop="
+                          handlerClickFavorite(dataKomikCategory2.uuid)
+                        "
                         style="cursor: pointer"
                       >
                         mdi-heart
@@ -792,7 +824,9 @@
                         dense
                         color="#FFFFFF"
                         class="data-table-icon hover-heart"
-                        @click.stop="handlerClickFavorite(dataKomikCategory2.uuid)"
+                        @click.stop="
+                          handlerClickFavorite(dataKomikCategory2.uuid)
+                        "
                         style="cursor: pointer"
                       >
                         mdi-heart
@@ -840,7 +874,7 @@
                       justify-content: end;
                     "
                   >
-                    <p>There is no {{itemsGenre[2]}} comics</p>
+                    <p>There is no {{ itemsGenre[2] }} comics</p>
                   </div>
                   <div
                     class="col"
@@ -863,14 +897,20 @@
             <div
               v-for="dataKomikCategory3 in dataKomikCategorys3"
               :key="dataKomikCategory3.id"
-              @click="handlerClickCategory"
               class="card card-with-bg"
               :style="{
                 'background-image':
-                  'url(' + $baseUrl + '/storage/' + dataKomikCategory3.thumbnail + ')',
+                  'url(' +
+                  $baseUrl +
+                  '/storage/' +
+                  dataKomikCategory3.thumbnail +
+                  ')',
               }"
             >
-              <div class="card-info" @click.stop="handlerClickCard(dataKomikCategory3)">
+              <div
+                class="card-info"
+                @click.stop="handlerClickCard(dataKomikCategory3)"
+              >
                 <div class="card-title" style="cursor: pointer">
                   {{ dataKomikCategory3.judul }}
                 </div>
@@ -901,7 +941,9 @@
                     </div>
                     <div
                       class="col"
-                      v-if="hasFavorite(dataKomikCategory3.uuid, userLogin.uuid)"
+                      v-if="
+                        hasFavorite(dataKomikCategory3.uuid, userLogin.uuid)
+                      "
                     >
                       <!-- Display content when there is a matching favorite -->
                       <v-icon
@@ -909,7 +951,9 @@
                         dense
                         color="#FFC0CB"
                         class="data-table-icon hover-heart"
-                        @click.stop="handlerClickFavorite(dataKomikCategory3.uuid)"
+                        @click.stop="
+                          handlerClickFavorite(dataKomikCategory3.uuid)
+                        "
                         style="cursor: pointer"
                       >
                         mdi-heart
@@ -922,7 +966,9 @@
                         dense
                         color="#FFFFFF"
                         class="data-table-icon hover-heart"
-                        @click.stop="handlerClickFavorite(dataKomikCategory3.uuid)"
+                        @click.stop="
+                          handlerClickFavorite(dataKomikCategory3.uuid)
+                        "
                         style="cursor: pointer"
                       >
                         mdi-heart
@@ -942,7 +988,10 @@
     <transition name="fade">
       <div
         v-if="
-          isCategoryOn == 1 && this.isFavoriteOn == 0 && isKomikCategoryOn == 1 && isKomikTodayOn == 0
+          isCategoryOn == 1 &&
+          this.isFavoriteOn == 0 &&
+          isKomikCategoryOn == 1 &&
+          isKomikTodayOn == 0
         "
         class="container"
         style="margin-bottom: 70px"
@@ -959,7 +1008,7 @@
             text-transform: capitalize;
           "
         >
-          {{this.category}}
+          {{ this.category }}
         </h5>
         <!-- Beri 5 card untuk terbaru -->
         <div class="row">
@@ -1001,7 +1050,6 @@
             <div
               v-for="dataKomikByCategory in paginateDataKomikCategory"
               :key="dataKomikByCategory.id"
-              @click="handlerClickCategory"
               class="card card-with-bg"
               :style="{
                 'background-image':
@@ -1117,7 +1165,10 @@
     <transition name="fade">
       <div
         v-if="
-          isCategoryOn == 0 && this.isFavoriteOn == 0 && isKomikCategoryOn == 0 && isKomikTodayOn == 1
+          isCategoryOn == 0 &&
+          this.isFavoriteOn == 0 &&
+          isKomikCategoryOn == 0 &&
+          isKomikTodayOn == 1
         "
         class="container"
         style="margin-bottom: 70px"
@@ -1175,7 +1226,6 @@
             <div
               v-for="dataKomikTodayShow in paginateDataKomikToday"
               :key="dataKomikTodayShow.id"
-              @click="handlerClickCategory"
               class="card card-with-bg"
               :style="{
                 'background-image':
@@ -1290,7 +1340,12 @@
     <!-- Untuk Favorite Card -->
     <transition name="fade">
       <div
-        v-if="isFavoriteOn == 1 && isCategoryOn == 0 && isKomikCategoryOn == 0 && isKomikTodayOn == 0"
+        v-if="
+          isFavoriteOn == 1 &&
+          isCategoryOn == 0 &&
+          isKomikCategoryOn == 0 &&
+          isKomikTodayOn == 0
+        "
         class="container"
         style="margin-bottom: 70px"
       >
@@ -1347,7 +1402,6 @@
             <div
               v-for="dataKomikFavoriteShow in paginateDataFavorite"
               :key="dataKomikFavoriteShow.id"
-              @click="handlerClickCategory"
               class="card card-with-bg"
               :style="{
                 'background-image':
@@ -1461,6 +1515,23 @@
     </transition>
     <!-- End Untuk Favorite Card -->
 
+    <!-- Snackbar -->
+    <v-snackbar v-model="snackbar" auto-height :color="color" text top right>
+      {{ textMessage }}
+      <template v-slot:action="{ attrs }">
+        <v-btn plain color="red" text v-bind="attrs" @click="snackbar = false">
+          <v-icon
+            dense
+            color="#FF0000"
+            @click="snackbar = false"
+            class="data-table-icon"
+            >mdi-close</v-icon
+          >
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <!-- End Snackbar -->
+
     <!-- Footer -->
     <div style="margin-top: 50px">
       <div class="footer-dark">
@@ -1477,25 +1548,38 @@
                 </p>
               </div>
               <div class="col item social">
-                <a href="#"
-                onmouseover="this.style.transform='translateY(-10%)';"
-                onmouseout="this.style.transform='translateY(0)';"
+                <a
+                  href="#"
+                  onmouseover="this.style.transform='translateY(-10%)';"
+                  onmouseout="this.style.transform='translateY(0)';"
                   ><b-icon icon="instagram" aria-hidden="true"></b-icon></a
-                ><a href="#"
-                onmouseover="this.style.transform='translateY(-10%)';"
-                onmouseout="this.style.transform='translateY(0)';"
+                ><a
+                  href="#"
+                  onmouseover="this.style.transform='translateY(-10%)';"
+                  onmouseout="this.style.transform='translateY(0)';"
                   ><b-icon icon="youtube" aria-hidden="true"></b-icon></a
-                ><a href="#"
-                onmouseover="this.style.transform='translateY(-10%)';"
-                onmouseout="this.style.transform='translateY(0)';"
+                ><a
+                  href="#"
+                  onmouseover="this.style.transform='translateY(-10%)';"
+                  onmouseout="this.style.transform='translateY(0)';"
                   ><b-icon icon="bi:tiktok" aria-hidden="true"></b-icon></a
-                ><a href="#"
-                onmouseover="this.style.transform='translateY(-10%)';"
-                onmouseout="this.style.transform='translateY(0)';">
+                ><a
+                  href="#"
+                  onmouseover="this.style.transform='translateY(-10%)';"
+                  onmouseout="this.style.transform='translateY(0)';"
+                >
                   <b-icon icon="mailbox" aria-hidden="true"></b-icon
                 ></a>
               </div>
-              <p class="copyright">Historical Art Fantasia © 2023</p>
+              <p class="copyright">
+                Historical Art Fantasia © 2023 || created by
+                <span
+                  @click="openNewPage"
+                  class="hoverMyName"
+                  style="cursor: pointer"
+                  >Doni Dwi Irawan</span
+                >
+              </p>
             </div>
           </footer>
         </transition>
@@ -1531,16 +1615,16 @@ export default {
     pageSize: 1,
 
     // Search
-    searchTerm: '',
+    searchTerm: "",
     searchResults: [],
 
+    // Snackbar
+    snackbar: false,
+    textMessage: "",
+    color: "",
+
     // Adds on
-    itemsGenre: [
-      "foo",
-      "bar",
-      "fizz",
-      "buzz",
-    ],
+    itemsGenre: ["foo", "bar", "fizz", "buzz"],
     isCategoryOn: 0,
     isFavoriteOn: 0,
     isKomikTodayOn: 0,
@@ -1653,12 +1737,12 @@ export default {
     handlerClickCard(item) {
       this.addJumlahView(item.uuid);
       this.$router.push({
-        name: 'haf-detail-comic',
+        name: "haf-detail-comic",
         params: {
-            slug: item.slug,
-            uuid: item.uuid
-        }
-    });
+          slug: item.slug,
+          uuid: item.uuid,
+        },
+      });
     },
 
     handlerClickCloseAll() {
@@ -1671,7 +1755,7 @@ export default {
       this.axioDataKomik();
     },
 
-    handlerGetComicByCategori(item){
+    handlerGetComicByCategori(item) {
       this.getComicByCategori(item);
       this.isKomikCategoryOn = 1;
       this.isCategoryOn = 1;
@@ -1723,10 +1807,18 @@ export default {
       this.$http
         .get(url, { headers: headers })
         .then((response) => {
-          this.dataPortfolios = response.data.dataPortfolio;
-
           this.axioDataKomik();
           this.axioDataKomikFavoriteShow();
+
+          if (response.data.iyaFavorite == 1) {
+            this.textMessage = "Comic added to favorites 😍";
+            this.snackbar = true;
+            this.color = "success";
+          } else {
+            this.textMessage = "Comic removed from favorites 😔";
+            this.snackbar = true;
+            this.color = "blue-grey";
+          }
 
           // Use $nextTick to ensure the DOM is updated before triggering the watcher
           // this.$nextTick(() => {
@@ -1794,7 +1886,7 @@ export default {
           );
           this.category = response.data.category;
 
-          console.log(this. dataKomiksByCategory)
+          console.log(this.dataKomiksByCategory);
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
@@ -1811,7 +1903,14 @@ export default {
     axioDataKomikCategorysShow() {
       this.loadingScreen = true;
 
-      var url = this.$api + "/getDataKomikCategorysShow/" + this.itemsGenre[0] + "/" + this.itemsGenre[1] + "/" + this.itemsGenre[2];
+      var url =
+        this.$api +
+        "/getDataKomikCategorysShow/" +
+        this.itemsGenre[0] +
+        "/" +
+        this.itemsGenre[1] +
+        "/" +
+        this.itemsGenre[2];
 
       this.$http
         .get(url)
@@ -1979,7 +2078,7 @@ export default {
 
     // Search
     handleInput() {
-      if (this.searchTerm.trim() === '') {
+      if (this.searchTerm.trim() === "") {
         // Jika input kosong, setel isInputOn ke 0
         this.isInputOn = 0;
         // Atur searchResults menjadi array kosong
@@ -2034,10 +2133,7 @@ export default {
     // Handle next page  for data komik by category
     nextPageCategory() {
       this.loadingScreen = true;
-      if (
-        this.currentPage * this.pageSize <
-        this.dataKomiksByCategory.length
-      ) {
+      if (this.currentPage * this.pageSize < this.dataKomiksByCategory.length) {
         this.currentPage++;
       }
       setTimeout(() => {
@@ -2066,10 +2162,7 @@ export default {
     // Handle next page  for data komik today updates
     nextPageTodayUpdates() {
       this.loadingScreen = true;
-      if (
-        this.currentPage * this.pageSize <
-        this.dataKomikTodaysShow.length
-      ) {
+      if (this.currentPage * this.pageSize < this.dataKomikTodaysShow.length) {
         this.currentPage++;
       }
       setTimeout(() => {
@@ -2093,6 +2186,11 @@ export default {
       setTimeout(() => {
         this.loadingScreen = false;
       }, 300);
+    },
+    openNewPage() {
+      const link =
+        "https://www.linkedin.com/in/doni-dwi-irawan-818029182?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app";
+      window.open(link, "_blank");
     },
   },
 };
@@ -2222,6 +2320,7 @@ export default {
   padding: 2rem 1.5rem;
   transition: box-shadow 0.3s ease, transform 0.2s ease;
   --bs-card-border-width: 0px !important;
+  cursor: pointer;
 }
 
 .card-info {
@@ -2347,6 +2446,9 @@ export default {
 /* /Card */
 
 /* Footer */
+.hoverMyName:hover {
+  color: rgb(125, 213, 237);
+}
 .footer-dark {
   padding: 20px 0;
   color: #f0f9ff;

@@ -365,18 +365,13 @@
             <div class="box-container">
               <div>
                 <div class="d-flex flex-row align-items-start">
-                  <img
-                    v-if="this.userLogin.image == ''"
-                    class="rounded-circle mx-3"
-                    :src="require('@/assets/userImage.jpg')"
-                    width="40"
-                  />
-                  <img
-                    v-else
-                    class="rounded-circle mx-3"
+                  <b-avatar
+                    style="padding: 2px"
+                    badge
+                    badge-variant="success"
                     :src="$baseUrl + '/storage/' + this.userLogin.image"
-                    width="40"
-                  />
+                  >
+                  </b-avatar>
                   <v-textarea
                     :counter="255"
                     filled
@@ -448,6 +443,42 @@
         </center>
       </v-card>
     </v-dialog>
+
+    <!-- Snackbar -->
+    <v-snackbar v-model="snackbar" auto-height :color="color" text top right>
+      {{ textMessage }}
+      <template v-slot:action="{ attrs }">
+        <v-btn plain color="red" text v-bind="attrs" @click="snackbar = false">
+          <v-icon
+            dense
+            color="#FF0000"
+            @click="snackbar = false"
+            class="data-table-icon"
+            >mdi-close</v-icon
+          >
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <!-- End Snackbar -->
+
+    <!-- Dialog Loading -->
+    <v-dialog
+      v-model="dialogLoader"
+      content-class="elevation-0"
+      persistent
+      width="300"
+    >
+      <v-card color="#fff0">
+        <img
+          src="@/assets/Spin-1s-200px.gif"
+          style="height: 150px"
+          class="d-inline-block align-top"
+          alt="Animation"
+        />
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Loading -->
+
     <!-- End Dialog Detail SubCOmic -->
   </v-main>
 </template>
@@ -474,10 +505,16 @@ export default {
     // Form
     CommentSubComicForm: new FormData(),
 
+    // Snackbar
+    snackbar: false,
+    textMessage: "",
+    color: "",
+
     // Adds On
     loadingScreen: false,
     dialogIklan: false,
     dialogSubComic: false,
+    dialogLoader: false,
     userLogin: {
       token: localStorage.getItem("token"), // initialize with a valid token or empty string
       uuid: localStorage.getItem("uuid"),
@@ -510,6 +547,7 @@ export default {
 
     handlerClickFavorite(uuidKomik) {
       this.loadingScreen = true;
+      this.dialogLoader = true;
       // Set the headers
       var headers = {
         Authorization: "Bearer " + this.userLogin.token,
@@ -520,9 +558,19 @@ export default {
 
       this.$http
         .get(url, { headers: headers })
-        .then(() => {
+        .then((response) => {
           this.axioDataComicSinglePost();
           this.axioDataKomikFavorite();
+
+          if (response.data.iyaFavorite == 1) {
+            this.textMessage = "Comic added to favorites 😍";
+            this.snackbar = true;
+            this.color = "success";
+          } else {
+            this.textMessage = "Comic removed from favorites 😔";
+            this.snackbar = true;
+            this.color = "blue-grey";
+          }
 
           // Use $nextTick to ensure the DOM is updated before triggering the watcher
           // this.$nextTick(() => {
@@ -536,17 +584,19 @@ export default {
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
             this.loadingScreen = false;
+            this.dialogLoader = false;
           }, 300);
         })
         .catch((error) => {
           // Menangani kesalahan jika terjadi
           console.error("Error fetching portfolio data:", error);
           this.loadingScreen = false;
+          this.dialogLoader = false;
         });
     },
 
     addLikeSubComic(uuidSubComic, slugSubComic) {
-      this.loadingScreen = true;
+      this.dialogLoader = true;
       var headers = {
         Authorization: "Bearer " + this.userLogin.token,
       };
@@ -562,15 +612,26 @@ export default {
           this.axioDataLikeSubKomik();
           this.axioGetDataSubComic(slugSubComic, uuidSubComic);
 
+          if (response.data.iyaLike == 1) {
+            this.textMessage = "You liked this comic 😍";
+            this.snackbar = true;
+            this.color = "success";
+          } else {
+            this.textMessage =
+              "Oops, is there anything wrong with the comic? 😔";
+            this.snackbar = true;
+            this.color = "blue-grey";
+          }
+
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
-            this.loadingScreen = false;
+            this.dialogLoader = false;
           }, 300);
         })
         .catch((error) => {
           // Menangani kesalahan jika terjadi
           console.error("Error fetching portfolio data:", error);
-          this.loadingScreen = false;
+          this.dialogLoader = false;
         });
     },
 
@@ -597,6 +658,7 @@ export default {
     },
 
     submitCommentSubComic(uuidSubComic) {
+      this.dialogLoader = true;
       var url = this.$api + "/create-komen/" + uuidSubComic;
       var headers = {
         Authorization: "Bearer " + this.userLogin.token,
@@ -614,11 +676,21 @@ export default {
           this.commentSubComic = "";
           this.axioDataKomenSubKomik(uuidSubComic);
 
+          this.textMessage = "Your comment has been posted 😊 ";
+          this.snackbar = true;
+          this.color = "success";
+
+          setTimeout(() => {
+            this.dialogLoader = false;
+          }, 300);
         })
-        .catch((error) => {
-          // Menangani kesalahan jika terjadi
-          console.error("Error fetching Comic data:", error);
-          this.loadingScreen = false;
+        .catch(() => {
+          if(this.commentSubComic.length>255){
+            this.textMessage = "Your comment exceeds the character limit 😔 ";
+            this.snackbar = true;
+            this.color = "blue-grey";
+          }
+          this.dialogLoader = false;
         });
     },
 

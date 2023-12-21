@@ -847,53 +847,6 @@
             style="padding-left: 50px; padding-right: 50px; margin-top: 15px"
           >
             <div id="app">
-              <div
-                style="
-                  padding-left: 50px;
-                  padding-right: 50px;
-                  margin-top: 30px;
-                "
-              >
-                <label
-                  style="
-                    justify-content: start;
-                    display: grid;
-                    margin-bottom: 10px;
-                    font-family: 'Georgia';
-                  "
-                  >Persona Name</label
-                >
-                <div id="app">
-                  <v-text-field
-                    @keyup="uppercaseProfile"
-                    solo
-                    v-model="persona_name"
-                    type="text"
-                    class="input-form-primary"
-                    placeholder="Fill your instagram profile url"
-                    variant="underline"
-                    hide-details="true"
-                  ></v-text-field>
-                  <div style="height: 15px">
-                    <v-slide-y-transition>
-                      <div
-                        v-if="!isPersonaNameValid"
-                        transition="scroll-y-transition"
-                        style="
-                          font-size: 12px;
-                          text-align: left;
-                          color: red;
-                          margin-left: 15px;
-                          min-height: 14px;
-                          font-weight: lighter;
-                        "
-                      >
-                        This field is required
-                      </div>
-                    </v-slide-y-transition>
-                  </div>
-                </div>
-              </div>
               <v-row>
                 <v-col cols="12" sm="6">
                   <label
@@ -903,7 +856,7 @@
                       margin-bottom: 10px;
                       font-family: 'Georgia';
                     "
-                    >Persona Name</label
+                    >Bio</label
                   >
                   <v-text-field
                     solo
@@ -1443,9 +1396,8 @@
         </v-form>
 
         <v-card-actions class="justify-end mt-5">
-          <!-- <div
+          <div
             v-if="
-              !isPersonaNameValid ||
               !isBioValid ||
               !isAgeValid ||
               !isRacialValid ||
@@ -1474,8 +1426,24 @@
               @click="submitUpdateProfile(getUUIDProfile)"
               >Save Profile</v-btn
             >
-          </div> -->
+          </div>
           <div
+          v-if="
+              isBioValid &&
+              isAgeValid &&
+              isRacialValid &&
+              isBirthDateValid &&
+              isZodiacValid &&
+              isMBTIValid &&
+              isBodyWeightValid &&
+              isBodyTallValid &&
+              isLikeValid &&
+              isDidNotLikeValid &&
+              isHobbyValid &&
+              isQuotesValid &&
+              isIgAccValid &&
+              isStoryCharacterValid 
+              "              
           >
             <v-btn
               style="text-transform: unset !important"

@@ -2,7 +2,7 @@
   <v-main>
     <loading-screen :value="loadingScreen"></loading-screen>
 
-    <div class="container searchandorder" style="padding-top: 0px;">
+    <div class="container searchandorder" style="padding-top: 0px">
       <div class="d-flex mb-3 size-bar-home">
         <b-nav>
           <b-nav-item>
@@ -63,7 +63,7 @@
                 class="card-service"
               >
                 <div
-                style="cursor: pointer;"
+                  style="cursor: pointer"
                   class="card-details"
                   @click="handlerDetailServicer(result)"
                 >
@@ -84,12 +84,21 @@
                   </div>
                   <p
                     class="text-title"
-                    style="margin-bottom: 0px; margin-top: 10px"
+                    style="
+                      margin-bottom: 0px;
+                      margin-top: 10px;
+                      white-space: nowrap;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                      max-width: 19ch;
+                    "
                   >
                     {{ result.nama_persona }}
                   </p>
-                  <p v-if="result.projects.length > 1">{{ result.projects }} Projects</p>
-                  <p v-else>{{ dataServicer.projects }} Project</p>
+                  <p v-if="result.projects.length > 1">
+                    {{ result.projects }} Projects
+                  </p>
+                  <p v-else>{{ result.projects }} Project</p>
                 </div>
                 <button
                   @click="handlerDetailServicer(result)"
@@ -149,7 +158,7 @@
             class="card-service"
           >
             <div
-            style="cursor: pointer;"
+              style="cursor: pointer"
               class="card-details"
               @click="handlerDetailServicer(dataServicer)"
             >
@@ -170,11 +179,20 @@
               </div>
               <p
                 class="text-title"
-                style="margin-bottom: 0px; margin-top: 10px"
+                style="
+                  margin-bottom: 0px;
+                  margin-top: 10px;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  max-width: 19ch;
+                "
               >
                 {{ dataServicer.nama_persona }}
               </p>
-              <p v-if="dataServicer.projects.length > 1">{{ dataServicer.projects }} Projects</p>
+              <p v-if="dataServicer.projects.length > 1">
+                {{ dataServicer.projects }} Projects
+              </p>
               <p v-else>{{ dataServicer.projects }} Project</p>
             </div>
             <button
@@ -266,7 +284,7 @@
                       :key="dataPortfolio.id"  -->
               <b-tab title="Portfolio" active>
                 <b-container fluid class="p-4 bg-transparent">
-                  <center>
+                  <center style="min-height: 350px">
                     <v-row>
                       <!-- eslint-disable vue/no-use-v-if-with-v-for,vue/no-confusing-v-for-v-if -->
                       <v-col
@@ -320,15 +338,18 @@
                                     dataReview.user_id_customer
                                   "
                                 >
-                                  <img v-if="dataReviewer.image != null"
+                                  <img
+                                    v-if="dataReviewer.image != null"
                                     :src="
                                       $baseUrl +
                                       '/storage/' +
                                       dataReviewer.image
                                     "
                                   />
-                                  <img v-else
-                                  :src="require('@/assets/userImage.jpg')"/>
+                                  <img
+                                    v-else
+                                    :src="require('@/assets/userImage.jpg')"
+                                  />
                                 </div>
                               </div>
                               <!--name-and-username-->
@@ -422,14 +443,14 @@
                           justify-content: center;
                         "
                       >
-                        Offering Cost
+                        Offering Cost in Rupiah
                       </div>
                       <div class="col-sm-7">
                         <b-form-input
                           id="input-1"
                           v-model="offering_cost"
                           trim
-                          placeholder="e.g. 10000000"
+                          placeholder="e.g. 1.000.000 without character, just only number"
                         ></b-form-input>
                         <v-slide-y-transition>
                           <div
@@ -488,42 +509,42 @@
                       </div>
                     </div>
                     <div class="row" style="margin: 0px">
-                        <div
-                          class="col-sm-4"
-                          style="
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                          "
-                        >
-                          Contact Person
-                        </div>
-                        <div class="col-sm-7">
-                          <b-form-input
-                            id="input-1"
-                            v-model="contactPerson"
-                            trim
-                            placeholder="Your contact like Telegram, Whatsapp, Instagram, etc"
-                          ></b-form-input>
-                          <v-slide-y-transition>
-                            <div
-                              v-if="!isCPValid"
-                              transition="scroll-y-transition"
-                              style="
-                                font-size: 12px;
-                                text-align: left;
-                                color: red;
-                                margin-left: 15px;
-                                margin-top: 1px;
-                                min-height: 14px;
-                                font-weight: lighter;
-                              "
-                            >
-                              This field is required
-                            </div>
-                          </v-slide-y-transition>
-                        </div>
+                      <div
+                        class="col-sm-4"
+                        style="
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                        "
+                      >
+                        Contact Person
                       </div>
+                      <div class="col-sm-7">
+                        <b-form-input
+                          id="input-1"
+                          v-model="contactPerson"
+                          trim
+                          placeholder="Your contact like Telegram, Whatsapp, Instagram, etc"
+                        ></b-form-input>
+                        <v-slide-y-transition>
+                          <div
+                            v-if="!isCPValid"
+                            transition="scroll-y-transition"
+                            style="
+                              font-size: 12px;
+                              text-align: left;
+                              color: red;
+                              margin-left: 15px;
+                              margin-top: 1px;
+                              min-height: 14px;
+                              font-weight: lighter;
+                            "
+                          >
+                            This field is required
+                          </div>
+                        </v-slide-y-transition>
+                      </div>
+                    </div>
                     <div class="row" style="margin: 0px">
                       <div
                         class="col-sm-4"
@@ -571,7 +592,8 @@
                         v-if="
                           !isProjectNameValid ||
                           !isOfferingCostValid ||
-                          !isDescValid
+                          !isDescValid ||
+                          !isCPValid
                         "
                       >
                         <v-btn
@@ -593,7 +615,8 @@
                         v-if="
                           isProjectNameValid &&
                           isOfferingCostValid &&
-                          isDescValid
+                          isDescValid &&
+                          isCPValid
                         "
                       >
                         <v-btn
@@ -816,7 +839,8 @@
                           v-if="
                             !isProjectNameValid ||
                             !isOfferingCostValid ||
-                            !isDescValid
+                            !isDescValid ||
+                            !isCPValid
                           "
                         >
                           <v-btn
@@ -838,7 +862,8 @@
                           v-if="
                             isProjectNameValid &&
                             isOfferingCostValid &&
-                            isDescValid
+                            isDescValid &&
+                            isCPValid
                           "
                         >
                           <v-btn
@@ -889,8 +914,22 @@
       v-model="dialogOrderService"
     >
       <template>
-        <v-card style="min-height: 650px;">
-          <h5 v-if="myProfile.is_servicer == 0 && myProfile.role != 'admin'"
+        <v-card style="min-height: 650px">
+          <v-card-actions class="justify-end">
+            <v-btn
+              @click="dialogOrderService = false"
+              class="mx-1"
+              fab
+              dark
+              small
+              color="red"
+              style="height: 20px; width: 20px"
+            >
+              <b-icon icon="x-lg" aria-hidden="true"></b-icon>
+            </v-btn>
+          </v-card-actions>
+          <h5
+            v-if="myProfile.is_servicer == 0 && myProfile.role != 'admin'"
             class="f-24 f-md-20 f-secondary text-center"
             style="
               margin-bottom: 20px;
@@ -901,7 +940,8 @@
           >
             Your Order Service History
           </h5>
-          <h5 v-if="myProfile.is_servicer == 1"
+          <h5
+            v-if="myProfile.is_servicer == 1"
             class="f-24 f-md-20 f-secondary text-center"
             style="
               margin-bottom: 20px;
@@ -912,7 +952,8 @@
           >
             Order Proposal
           </h5>
-          <h5 v-if="myProfile.role == 'admin'"
+          <h5
+            v-if="myProfile.role == 'admin'"
             class="f-24 f-md-20 f-secondary text-center"
             style="
               margin-bottom: 20px;
@@ -921,7 +962,7 @@
               padding-top: 30px;
             "
           >
-          Order Service History (Admin)
+            Order Service History (Admin)
           </h5>
           <v-container class="conatiner-size-my-profile p-0">
             <b-container class="bv-example-row">
@@ -958,7 +999,7 @@
               </template>
 
               <template v-slot:[`item.buktiTf`]="{ item }">
-                <div style="justify-content: center; display: flex;">
+                <div style="justify-content: center; display: flex">
                   <div
                     v-if="item.buktiTf != null"
                     style="height: 50px; width: 50px; cursor: zoom-in"
@@ -977,7 +1018,12 @@
                     />
                   </div>
                   <div v-else>
-                    <div v-if="item.user_id_customer == myProfile.id && item.is_deal == 1">
+                    <div
+                      v-if="
+                        item.user_id_customer == myProfile.id &&
+                        item.is_deal == 1
+                      "
+                    >
                       <v-tooltip top>
                         <template v-slot:activator="{ on }">
                           <p
@@ -993,7 +1039,7 @@
                         <span>Add Payment Receipt</span>
                       </v-tooltip>
                     </div>
-                    <div v-else>-</div>                    
+                    <div v-else>-</div>
                   </div>
                 </div>
               </template>
@@ -1010,7 +1056,7 @@
                     style="color: red"
                     v-if="item.is_deal == '3' && item.is_done == '0'"
                   >
-                  Sorry, the servicer can't take the order.
+                    Sorry, the servicer can't take the order.
                   </div>
                   <div
                     style="color: rgb(156, 156, 0)"
@@ -1028,7 +1074,9 @@
                     v-else-if="
                       (item.is_deal == '1' &&
                         item.is_done == '0' &&
-                        item.buktiTf !== null && myProfile.role !== 'admin' && item.confirm_buktiTf === 0) ||
+                        item.buktiTf !== null &&
+                        myProfile.role !== 'admin' &&
+                        item.confirm_buktiTf === 0) ||
                       item.buktiTf === ''
                     "
                   >
@@ -1039,25 +1087,28 @@
                     v-else-if="
                       (item.is_deal == '1' &&
                         item.is_done == '0' &&
-                        item.buktiTf !== null && myProfile.role === 'admin' && item.confirm_buktiTf === 0) ||
+                        item.buktiTf !== null &&
+                        myProfile.role === 'admin' &&
+                        item.confirm_buktiTf === 0) ||
                       item.buktiTf === ''
                     "
                   >
-                  <v-btn
-                    text
-                    color="rgb(71, 0, 142)"
-                    @click.stop="handlerConfirmPayment(item)"
-                    style="text-transform: capitalize; font-size: 13px"
-                  >
-                    <v-icon small>mdi-check-all</v-icon> Confirm Payment
-                  </v-btn>
+                    <v-btn
+                      text
+                      color="rgb(71, 0, 142)"
+                      @click.stop="handlerConfirmPayment(item)"
+                      style="text-transform: capitalize; font-size: 13px"
+                    >
+                      <v-icon small>mdi-check-all</v-icon> Confirm Payment
+                    </v-btn>
                   </div>
                   <div
                     style="color: rgb(0, 0, 201)"
                     v-else-if="
                       (item.is_deal == '1' &&
                         item.is_done == '0' &&
-                        item.buktiTf !== null && item.confirm_buktiTf === 1) ||
+                        item.buktiTf !== null &&
+                        item.confirm_buktiTf === 1) ||
                       item.buktiTf === ''
                     "
                   >
@@ -1078,10 +1129,12 @@
                   >mdi-information</v-icon
                 >
                 <v-icon
-                  v-if="item.is_deal == 0"
+                  v-if="
+                    item.is_deal == 0 && myProfile.id == item.user_id_customer
+                  "
                   dense
                   color="#FF0000"
-                  @click="deleteHandlerMerchandise(item)"
+                  @click="deleteHandlerServiceTransaction(item)"
                   class="data-table-icon"
                   >mdi-delete</v-icon
                 >
@@ -1090,7 +1143,7 @@
                   disabled
                   dense
                   color="#FF0000"
-                  @click="deleteHandlerMerchandise(item)"
+                  @click="deleteHandlerServiceTransaction(item)"
                   class="data-table-icon"
                   >mdi-delete</v-icon
                 >
@@ -1118,7 +1171,9 @@
       v-model="dialogDetailServicesTransaction"
     >
       <v-card>
-        <v-toolbar color="primary" dark>Detail Transaction</v-toolbar>
+        <v-toolbar color="primary" style="background-color: #006598" dark
+          >Detail Transaction</v-toolbar
+        >
         <v-row style="margin: 0px">
           <v-col cols="12" sm="8" class="mt-5">
             <div class="style-transaksi-layanan-1">
@@ -1151,7 +1206,11 @@
                   </div>
                   <div
                     style="color: rgb(156, 156, 0)"
-                    v-else-if="this.is_deal == '1' && this.is_done == '0' && this.buktiTfDetail === null"
+                    v-else-if="
+                      this.is_deal == '1' &&
+                      this.is_done == '0' &&
+                      this.buktiTfDetail === null
+                    "
                   >
                     <span style="color: black; margin: 0px">is </span>
                     <span style="text-decoration: underline; font-weight: bold"
@@ -1160,7 +1219,12 @@
                   </div>
                   <div
                     style="color: rgb(71, 0, 142)"
-                    v-else-if="this.is_deal == '1' && this.is_done == '0' && this.buktiTfDetail !== null && this.confirm_BuktiTfDetail === 0"
+                    v-else-if="
+                      this.is_deal == '1' &&
+                      this.is_done == '0' &&
+                      this.buktiTfDetail !== null &&
+                      this.confirm_BuktiTfDetail === 0
+                    "
                   >
                     <span style="color: black; margin: 0px">is </span>
                     <span style="text-decoration: underline; font-weight: bold"
@@ -1169,7 +1233,11 @@
                   </div>
                   <div
                     style="color: rgb(0, 0, 201)"
-                    v-else-if="this.is_deal == '1' && this.is_done == '0' && this.confirm_BuktiTfDetail === 1"
+                    v-else-if="
+                      this.is_deal == '1' &&
+                      this.is_done == '0' &&
+                      this.confirm_BuktiTfDetail === 1
+                    "
                   >
                     <span style="color: black; margin: 0px">is </span>
                     <span style="text-decoration: underline; font-weight: bold"
@@ -1217,7 +1285,7 @@
           <center>
             <div
               class="ma-5 div-detail-order-services"
-              style="width: 50%; text-align: start; padding-bottom: 15px;"
+              style="width: 50%; text-align: start; padding-bottom: 15px"
             >
               <p style="font-size: 19px; color: black; margin: 0px">
                 {{ this.project_nameDetail }}
@@ -1232,62 +1300,69 @@
                 {{ this.contactPersonDetail }}
               </p>
               <div
-                    v-if="this.storyboardDetail != null"
-                    style="height: 150px; width: 150px; cursor: zoom-in"
-                    class="w-img-oval"
-                    @click="zoom($baseUrl + '/storage/' + storyboardDetail)"
-                  >
-                  <p style="color: black; margin: 0px; text-align: justify">
-                Storyboard :
-              </p>
-                    <img
-                      style="
-                        object-fit: cover;
-                        width: 100%;
-                        height: 100%;
-                        border-radius: 10px;
-                      "
-                      :src="$baseUrl + '/storage/' + this.storyboardDetail"
-                      class="img-oval"
-                    />
-                  </div>
+                v-if="this.storyboardDetail != null"
+                style="height: 150px; width: 150px; cursor: zoom-in"
+                class="w-img-oval"
+                @click="zoom($baseUrl + '/storage/' + storyboardDetail)"
+              >
+                <p style="color: black; margin: 0px; text-align: justify">
+                  Storyboard :
+                </p>
+                <img
+                  style="
+                    object-fit: cover;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 10px;
+                  "
+                  :src="$baseUrl + '/storage/' + this.storyboardDetail"
+                  class="img-oval"
+                />
+              </div>
             </div>
 
             <hr style="width: 40%" />
 
             <div class="row no-gutters">
-              <div class="col" style="display: flex;
-  justify-content: end;
-  margin-right: 5px;">
+              <div
+                class="col"
+                style="display: flex; justify-content: end; margin-right: 5px"
+              >
                 <v-btn
-                v-if="this.idServicer == this.userLogin.id && this.is_deal == '0'"
-                style="text-transform: unset !important"
-                rounded
-                outlined
-                small
-                color="indigo"
-                class="btn-form-primary"
-                :loading="loading"
-                @click="takeOrder(uuidTransaksiLayanan)"
-                >Take Order</v-btn>
+                  v-if="
+                    this.idServicer == this.userLogin.id && this.is_deal == '0'
+                  "
+                  style="text-transform: unset !important"
+                  rounded
+                  outlined
+                  small
+                  color="indigo"
+                  class="btn-form-primary"
+                  :loading="loading"
+                  @click="takeOrder(uuidTransaksiLayanan)"
+                  >Take Order</v-btn
+                >
               </div>
-              <div class="col" style="display: flex;
-  justify-content: start;
-  margin-right: 5px;">
+              <div
+                class="col"
+                style="display: flex; justify-content: start; margin-right: 5px"
+              >
                 <v-btn
-                v-if="this.idServicer == this.userLogin.id && this.is_deal == '0'"
-                style="text-transform: unset !important"
-                rounded
-                outlined
-                small
-                color="red"
-                class="btn-form-primary"
-                :loading="loading"
-                @click="declinedOrder(uuidTransaksiLayanan)"
-                >Decline Order</v-btn>
+                  v-if="
+                    this.idServicer == this.userLogin.id && this.is_deal == '0'
+                  "
+                  style="text-transform: unset !important"
+                  rounded
+                  outlined
+                  small
+                  color="red"
+                  class="btn-form-primary"
+                  :loading="loading"
+                  @click="declinedOrder(uuidTransaksiLayanan)"
+                  >Decline Order</v-btn
+                >
               </div>
             </div>
-            
 
             <v-btn
               v-if="this.idServicer == this.userLogin.id && this.is_deal == '1'"
@@ -1316,7 +1391,13 @@
             >
 
             <v-btn
-              v-if="this.idCustomer == this.userLogin.id && this.is_done == 0 && this.is_deal == 1 && this.buktiTfDetail !== null && this.confirm_BuktiTfDetail === 1 "
+              v-if="
+                this.idCustomer == this.userLogin.id &&
+                this.is_done == 0 &&
+                this.is_deal == 1 &&
+                this.buktiTfDetail !== null &&
+                this.confirm_BuktiTfDetail === 1
+              "
               style="text-transform: unset !important"
               rounded
               outlined
@@ -1327,7 +1408,13 @@
               @click="doneOrder(uuidTransaksiLayanan)"
               >Mark as Done</v-btn
             ><v-btn
-              v-else-if="this.idCustomer == this.userLogin.id && this.is_done == 0 && this.is_deal == 0 && this.buktiTfDetail !== null && this.confirm_BuktiTfDetail !== 1"
+              v-else-if="
+                this.idCustomer == this.userLogin.id &&
+                this.is_done == 0 &&
+                this.is_deal == 0 &&
+                this.buktiTfDetail !== null &&
+                this.confirm_BuktiTfDetail !== 1
+              "
               style="text-transform: unset !important"
               rounded
               outlined
@@ -1485,7 +1572,10 @@
           </center>
         </v-card-text>
         <v-card-actions class="justify-end">
-          <v-btn text @click="closeDialogDetailServicesTransaction" style="text-transform: capitalize;"
+          <v-btn
+            text
+            @click="closeDialogDetailServicesTransaction"
+            style="text-transform: capitalize"
             >Close</v-btn
           >
         </v-card-actions>
@@ -1494,7 +1584,7 @@
     <!-- End Detail Services Transaction -->
 
     <!-- Snackbar -->
-    <v-snackbar v-model="snackbar" :color="color" text>
+    <v-snackbar v-model="snackbar" auto-height :color="color" text top right>
       {{ textMessage }}
       <template v-slot:action="{ attrs }">
         <v-btn plain color="red" text v-bind="attrs" @click="snackbar = false">
@@ -1508,6 +1598,25 @@
         </v-btn>
       </template>
     </v-snackbar>
+    <!-- End Snackbar -->
+
+    <!-- Dialog Loading -->
+    <v-dialog
+      v-model="dialogLoader"
+      content-class="elevation-0"
+      persistent
+      width="300"
+    >
+      <v-card color="#fff0">
+        <img
+          src="@/assets/Spin-1s-200px.gif"
+          style="height: 150px"
+          class="d-inline-block align-top"
+          alt="Animation"
+        />
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Loading -->
 
     <!-- Dialog Add Bukti TF -->
     <v-dialog v-model="dialogAddBuktiTf" width="600" style="max-height: none">
@@ -1576,13 +1685,45 @@
               style="text-transform: capitalize"
               @click.stop="submitFileBuktiTfService(itemServiceBuktiTf.uuid)"
             >
-              Submit Transfer Receipt
+              Submit Payment Proof
             </v-btn>
           </div>
         </div>
       </v-card>
     </v-dialog>
     <!-- End Dialog Add Bukti TF -->
+
+    <!-- Dialog Delete Comic Handler -->
+    <v-dialog v-model="dialogConfirmDelete" persistent max-width="400px">
+      <v-card>
+        <v-card-title class="dialog-confirm-title">
+          <span class="headline white--text">Delete Order</span>
+        </v-card-title>
+        <v-card-text class="dialog-confirm-text">
+          Are you sure want to cancel order service?
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            class="ma-1"
+            color="grey"
+            plain
+            @click="dialogConfirmDelete = false"
+            style="text-transform: unset !important"
+            >Cancel</v-btn
+          >
+          <v-btn
+            class="ma-1"
+            color="error"
+            plain
+            @click="deleteOrderService"
+            style="text-transform: unset !important"
+            >Delete</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Delete Comic Handler -->
   </v-main>
 </template>
 
@@ -1613,6 +1754,7 @@ export default {
     uuidTransaksiLayanan: "",
     storyboardDetail: "",
     ReviewLayananForm: new FormData(),
+    deleteUUIDOrderService: "",
 
     // Portfolio
     dataPortfolios: [],
@@ -1673,6 +1815,8 @@ export default {
     dialogOrderService: false,
     dialogAddBuktiTf: false,
     dialogZoom: false,
+    dialogLoader: false,
+    dialogConfirmDelete: false,
     myProfile: [],
     getImage: null, // initialize getImage property here
     loading: false,
@@ -1700,14 +1844,16 @@ export default {
         text: "Offering Cost",
         value: "offering_cost",
         align: "center",
-        sortable: false,
+        sortable: true,
+        filterable: false,
       },
       {
-        text: "Transfer Receipt",
+        text: "Payment Proof",
         value: "buktiTf",
         align: "center",
         sortable: false,
-      },      
+        filterable: false,
+      },
       {
         text: "Status",
         value: "is_deal",
@@ -1727,6 +1873,7 @@ export default {
         value: "actions",
         align: "center",
         sortable: false,
+        filterable: false,
         width: "15%",
       },
     ],
@@ -1781,6 +1928,11 @@ export default {
 
       // Review
       this.axioGetDataServiceReview(item.id);
+    },
+
+    deleteHandlerServiceTransaction(item) {
+      this.dialogConfirmDelete = true;
+      this.deleteUUIDOrderService = item.uuid;
     },
 
     handlerAddBuktiTf(item) {
@@ -1865,14 +2017,12 @@ export default {
       this.$http
         .get(url, { headers: headers })
         .then((response) => {
-          this.dataServiceOrders = response.data.dataServiceOrders.map(
-            (x) => {
-              return {
-                ...x,
-                created_at: moment(x.created_at).format("YYYY-MM-DD h:mm a"),
-              };
-            }
-          );
+          this.dataServiceOrders = response.data.dataServiceOrders.map((x) => {
+            return {
+              ...x,
+              created_at: moment(x.created_at).format("YYYY-MM-DD h:mm a"),
+            };
+          });
 
           console.log("tes");
 
@@ -1971,8 +2121,7 @@ export default {
 
     confirmPayment(uuidOrderService) {
       this.dialogLoader = true;
-      var url =
-        this.$api + "/confirmPaymentService/" + uuidOrderService;
+      var url = this.$api + "/confirmPaymentService/" + uuidOrderService;
       // Set the headers
       var headers = {
         Authorization: "Bearer " + this.userLogin.token,
@@ -1980,20 +2129,25 @@ export default {
 
       this.$http
         .get(url, { headers: headers })
-        .then((response) => {
-          this.error_message = response.data.message;
-          console.log(this.error);
+        .then(() => {
           this.axioDataOrderService();
+
+          this.textMessage =
+            "The transfer proof has been successfully confirmed 😊";
+          this.snackbar = true;
+          this.color = "success";
+
+          setTimeout(() => {
+            this.dialogLoader = false;
+          }, 300);
         })
-        .catch((error) => {
-          this.error_message = error.response.data.message;
-          console.log(this.error);
-          this.dialogConfirmDelete = false;
+        .catch(() => {
+          this.dialogLoader = false;
         });
     },
 
     doneOrder(uuidTransaction) {
-      this.loadingScreen = true;
+      this.dialogLoader = true;
       var url;
 
       url = this.$api + "/doneOrder/" + uuidTransaction;
@@ -2006,31 +2160,28 @@ export default {
       // Gunakan 'url' dalam permintaan POST
       this.$http
         .get(url, { headers: headers })
-        .then((response) => {
-          this.error_message = response.data.message;
-
+        .then(() => {
           this.is_done = 1;
           this.axioDataOrderService();
           this.axioDataServicer();
 
-          this.textMessage = "Order marked as done";
+          this.textMessage =
+            "The service order is now complete, we look forward to your next order 😊👋";
           this.snackbar = true;
-          this.color = "green";
+          this.color = "success";
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
-            this.loadingScreen = false;
+            this.dialogLoader = false;
           }, 300);
         })
-        .catch((error) => {
-          // Menangani kesalahan jika terjadi
-          console.error("Error taking order", error);
-          this.loadingScreen = false;
+        .catch(() => {
+          this.dialogLoader = false;
         });
     },
 
     takeOrder(uuidTransaction) {
-      this.loadingScreen = true;
+      this.dialogLoader = true;
       var url;
 
       url = this.$api + "/takeOrder/" + uuidTransaction;
@@ -2048,26 +2199,26 @@ export default {
 
           this.is_deal = 1;
 
-          this.textMessage = "Order taken successfully";
+          this.textMessage = "You have successfully taken this order 😊";
           this.snackbar = true;
-          this.color = "green";
+          this.color = "success";
 
           this.axioDataOrderService();
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
-            this.loadingScreen = false;
+            this.dialogLoader = false;
           }, 300);
         })
         .catch((error) => {
           // Menangani kesalahan jika terjadi
           console.error("Error taking order", error);
-          this.loadingScreen = false;
+          this.dialogLoader = false;
         });
     },
 
-    declinedOrder(uuidTransaction){
-      this.loadingScreen = true;
+    declinedOrder(uuidTransaction) {
+      this.dialogLoader = true;
       var url;
 
       url = this.$api + "/declinedOrder/" + uuidTransaction;
@@ -2085,25 +2236,57 @@ export default {
 
           this.is_deal = 3;
 
-          this.textMessage = "Order taken successfully";
+          this.textMessage =
+            "Ooopss, You declined this order. Any Problems? 😔";
           this.snackbar = true;
-          this.color = "green";
+          this.color = "red";
 
           this.axioDataOrderService();
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
-            this.loadingScreen = false;
+            this.dialogLoader = false;
           }, 300);
         })
-        .catch((error) => {
-          // Menangani kesalahan jika terjadi
-          console.error("Error taking order", error);
-          this.loadingScreen = false;
+        .catch(() => {
+          this.dialogLoader = false;
+        });
+    },
+
+    deleteOrderService() {
+      this.dialogLoader = true;
+      var url =
+        this.$api + "/deleteOrderService/" + this.deleteUUIDOrderService;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      this.$http
+        .delete(url, { headers: headers })
+        .then((response) => {
+          this.error_message = response.data.message;
+          this.dialogConfirmDelete = false;
+
+          this.textMessage =
+            "Ooops, you canceled or delete your order service. Any problems? 😔";
+          this.snackbar = true;
+          this.color = "success";
+
+          this.axioDataOrderService();
+
+          setTimeout(() => {
+            this.dialogLoader = false;
+          }, 300);
+        })
+        .catch(() => {
+          this.dialogConfirmDelete = false;
+          this.dialogLoader = false;
         });
     },
 
     submitReviewLayanan(uuidTransaksiLayanan, idTransaksiLayanan) {
+      this.dialogLoader = true;
       if (this.$refs.form.validate()) {
         // Set the headers
         var headers = {
@@ -2114,8 +2297,6 @@ export default {
 
         this.ReviewLayananForm.append("rating", this.rating);
         this.ReviewLayananForm.append("isi", this.isi);
-
-        this.loadingScreen = true;
 
         var url =
           this.$api +
@@ -2133,27 +2314,21 @@ export default {
             this.canEditReview = 1;
             this.editReview = null;
 
-            this.textMessage = "Succes added review service transaction";
+            this.textMessage =
+              "The review has been successfully added 😊. Thank you for using our services. We hope you have a wonderful day 🫰";
             this.snackbar = true;
-            this.color = "green";
+            this.color = "success";
 
             setTimeout(() => {
-              this.loadingScreen = false;
+              this.dialogLoader = false;
             }, 300);
           })
-          .catch((error) => {
-            console.log(error);
-
-            this.snackbar = true;
-            this.textMessage = "Unsucces added review service transaction";
-            this.color = "secondary";
-            setTimeout(() => {
-              this.loadingScreen = false;
-            }, 300);
+          .catch(() => {
+            this.dialogLoader = false;
           });
       }
     },
-    
+
     submitFileBuktiTfService(uuid) {
       this.dialogLoader = true;
       var url = this.$api + "/submitFileBuktiTfService/" + uuid;
@@ -2173,10 +2348,7 @@ export default {
       // Mengirim data ke backend Laravel menggunakan axios
       this.$http
         .post(url, this.BuktiTfForm, { headers: headers })
-        .then((response) => {
-          // Handle respon dari backend jika diperlukan
-          console.log(response.data);
-
+        .then(() => {
           this.axioDataOrderService();
 
           document.getElementById("input-file").value = "";
@@ -2184,15 +2356,23 @@ export default {
           this.info.images = [];
           this.info.sizes = [];
           this.dialogAddBuktiTf = false;
+
+          this.textMessage =
+            "You have successfully uploaded the payment proof 😊";
+          this.snackbar = true;
+          this.color = "success";
+
+          setTimeout(() => {
+            this.dialogLoader = false;
+          }, 300);
         })
-        .catch((error) => {
-          // Handle error jika ada
-          console.error(error);
+        .catch(() => {
+          this.dialogLoader = false;
         });
     },
 
     submitServiceTransaction(user_id_servicer) {
-      this.loadingScreen = true;
+      this.dialogLoader = true;
       // Set the headers
       var headers = {
         Authorization: "Bearer " + this.userLogin.token,
@@ -2226,19 +2406,34 @@ export default {
           this.storyboard = null;
           this.contactPerson = "";
 
-          this.textMessage = "Successfully send offering services";
+          this.textMessage =
+            "Your order of service has been sent, please monitor the status of your order on the 'Your Order' menu 😊";
           this.snackbar = true;
-          this.color = "green";
+          this.color = "success";
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
-            this.loadingScreen = false;
+            this.dialogLoader = false;
           }, 300);
         })
-        .catch((error) => {
-          // Menangani kesalahan jika terjadi
-          console.error("Error fetching portfolio data:", error);
-          this.loadingScreen = false;
+        .catch(() => {
+          if (this.project_name.length > 255) {
+            this.textMessage =
+              "Your project name exceeds the character limit 😔";
+            this.snackbar = true;
+            this.color = "blue-gray";
+          } else if (this.desc.length > 255) {
+            this.textMessage =
+              "Your description of task exceeds the character limit 😔";
+            this.snackbar = true;
+            this.color = "blue-grey";
+          } else if (this.contactPerson.length > 255) {
+            this.textMessage =
+              "Your contact person exceeds the character limit 😔";
+            this.snackbar = true;
+            this.color = "blue-grey";
+          }
+          this.dialogLoader = false;
         });
     },
 

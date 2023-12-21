@@ -6,7 +6,7 @@
         <div class="row">
           <b-tabs content-class="mt-5 pa-0" align="center">
             <!-- Forum Tab -->
-            <b-tab title="Forum" class="cta hover-underline-animation" active>
+            <b-tab title="QnA" class="cta hover-underline-animation" active>
               <center>
                 <div class="text-box-school">
                   <div class="box-container">
@@ -17,7 +17,7 @@
                         margin: 10px;
                       "
                     >
-                      Create Forum
+                      Type your question and post it below 👇
                     </h6>
                     <v-form
                       class="form"
@@ -48,7 +48,7 @@
                             rows="4"
                             row-height="30"
                             v-model="isi"
-                            style="margin: 0px; padding: 0px; width: 100%"
+                            style="margin: 0px; padding: 0px; width: 100%; border-radius: 20px;"
                             hide-details="true"
                           ></v-textarea>
                         </div>
@@ -278,7 +278,7 @@
                                   display: grid;
                                 "
                               >
-                                <a
+                                <a v-if="myProfile.id == dataForum.user_id || myProfile.role == 'admin'"
                                   @click="deleteHandlerComic(dataForum)"
                                   style="
                                     color: #4898ff;
@@ -381,7 +381,7 @@
               >
                 <center>
                   <div
-                    v-if="myProfile.role == 'admin' || myProfile.role == 'osis'"
+                    v-if="myProfile.role == 'admin'"
                     class="text-box-school"
                   >
                     <div class="box-container">
@@ -425,7 +425,7 @@
                               rows="4"
                               row-height="30"
                               v-model="isi"
-                              style="margin: 0px; padding: 0px; width: 100%"
+                              style="margin: 0px; padding: 0px; width: 100%; border-radius: 20px;"
                               hide-details="true"
                             ></v-textarea>
                           </div>
@@ -661,8 +661,9 @@
                                     "
                                   >
                                     <a
+                                    v-if="myProfile.role == 'admin'"
                                       @click="
-                                        deleteHandlerComic(dataAnnouncement)
+                                        deleteHandlerAnnouncement(dataAnnouncement)
                                       "
                                       style="
                                         color: #4898ff;
@@ -745,10 +746,35 @@
       <v-card
         class="position-relative m-x-auto p-x-25 p-y-50 br-10 bs-none min-w-full min-w-lg-full"
       >
+      <v-card-title class="lighten-2" style="padding: 0px">
+            <div
+              class="row no-gutters"
+              style="padding: 0px; margin: 0px; margin-top: 10px; margin-bottom:10px"
+            >
+              <div
+                class="col"
+                style="
+                  display: flex;
+                  justify-content: end;
+                  align-items: center;
+                  margin-right: 10px;
+                "
+              >
+                <v-btn
+                  @click="handlerCloseDialogForum"
+                  class="mx-1"
+                  fab
+                  dark
+                  small
+                  color="red"
+                  style="height: 20px; width: 20px"
+                >
+                  <b-icon icon="x-lg" aria-hidden="true"></b-icon>
+                </v-btn>
+              </div>
+            </div>
+          </v-card-title>
         <b-container fluid class="bg-transparent">
-          <v-card-actions style="max-height: none">
-            <a class="btn-close small" @click="handlerCloseDialogForum"> </a>
-          </v-card-actions>
           <center>
             <div
               class="card-school"
@@ -771,7 +797,7 @@
                       font-weight: bold;
                     "
                   >
-                    Detail Forum
+                    Detail Question
                   </h3>
                   <div class="user">
                     <div class="user-pic">
@@ -936,11 +962,11 @@
                           /><v-textarea
                           filled
                           auto-grow
-                          label="Have a questions?"
+                          label="Have an answer?"
                           rows="4"
                           row-height="30"
                           v-model="isiKomen"
-                          style="margin: 0px; padding: 0px; width: 100%"
+                          style="margin: 0px; padding: 0px; width: 100%; border-radius: 20px;"
                           hide-details="true"
                         ></v-textarea>
                       </div>
@@ -1014,7 +1040,7 @@
                               : submitKomenForum('UpdateKomenForum')
                           "
                           class="button-login-register primary"
-                          style="text-transform: unset !important"
+                          style="text-transform: unset !important; border-radius: 20px;"
                           type="button"
                           :loading="loading"
                         >
@@ -1045,7 +1071,7 @@
                 font-family: 'Georgia';
               "
             >
-              Answers
+              Answer
             </p>
 
             <center>
@@ -1129,7 +1155,7 @@
     <!-- End Dialog Detail Forum -->
 
     <!-- Snackbar -->
-    <v-snackbar v-model="snackbar" :color="color" text>
+    <v-snackbar v-model="snackbar" auto-height :color="color" text top right>
       {{ textMessage }}
       <template v-slot:action="{ attrs }">
         <v-btn plain color="red" text v-bind="attrs" @click="snackbar = false">
@@ -1192,6 +1218,55 @@
       </v-card>
     </v-dialog>
     <!-- End Dialog Delete Forum -->
+
+    <!-- Dialog Delete Announcement -->
+    <v-dialog v-model="dialogConfirmDeleteAnnouncement" persistent max-width="400px">
+      <v-card>
+        <v-card-title class="dialog-confirm-title"> </v-card-title>
+        <v-card-text class="dialog-confirm-text">
+          <span>Are you sure want to delete this announcement?</span>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            class="ma-1"
+            color="grey"
+            plain
+            @click="dialogConfirmDeleteAnnouncement = false"
+            style="text-transform: unset !important"
+            >Cancel</v-btn
+          >
+          <v-btn
+            class="ma-1"
+            color="error"
+            plain
+            @click="deleteDataAnnouncement()"
+            style="text-transform: unset !important"
+            >Delete</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Delete Announcement -->
+
+    <!-- Dialog Loading -->
+    <v-dialog
+      v-model="dialogLoader"
+      content-class="elevation-0"
+      persistent
+      width="300"
+    >
+      <v-card color="#fff0">
+        <img
+          src="@/assets/Spin-1s-200px.gif"
+          style="height: 150px"
+          class="d-inline-block align-top"
+          alt="Animation"
+        />
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Loading -->
+
   </div>
 </template>
 
@@ -1235,6 +1310,8 @@ export default {
     dataImagesAnnouncements: [],
     dataImagesAnnouncement: [],
     AnnouncementForm: new FormData(),
+    dialogConfirmDeleteAnnouncement: false,
+    deleteUuidAnnouncement: "",
 
     // Images
     dialogConfirmDeleteImage: false,
@@ -1268,6 +1345,7 @@ export default {
     },
     getImage: null, // initialize getImage property here
     dialogZoom: false,
+    dialogLoader: false,
     loadingScreen: false,
     loading: false,
   }),
@@ -1345,8 +1423,6 @@ export default {
         }
       }
 
-      this.loadingScreen = true;
-
       if (val == "AddAnnouncement") {
         var urlAddAnnouncement = this.$api + "/create-announcement";
 
@@ -1361,22 +1437,11 @@ export default {
             this.imagesAnnouncement = [];
             this.inputType = "addForum";
 
-            this.textMessage = "Announcement Succesfully Created";
+            this.textMessage = "The announcement has been successfully posted 😊";
             this.snackbar = true;
-            this.color = "green";
-            setTimeout(() => {
-              this.loadingScreen = false;
-            }, 300);
+            this.color = "success";
           })
-          .catch((error) => {
-            console.log(error);
-
-            this.snackbar = true;
-            this.textMessage = "Merchandise Unsuccesfully Created";
-            this.color = "secondary";
-            setTimeout(() => {
-              this.loadingScreen = false;
-            }, 300);
+          .catch(() => {
           });
       } else {
         var urlEditForum = this.$api + "/update-forum/";
@@ -1408,10 +1473,6 @@ export default {
             }, 300);
           });
       }
-
-      setTimeout(() => {
-        this.loadingScreen = false;
-      }, 300);
     },
 
     axioDataAnnouncement() {
@@ -1472,7 +1533,7 @@ export default {
       this.imagesKomen.splice(index, 1);
 
       // Reset the file input element for the selected index by setting its value to an empty string
-      // Reset the file input element by setting its value to an empty string
+      // Reset the file input element by setting its value to an empty scomment_forumtring
       const fileInput = document.getElementById("file-upload-komen");
       if (fileInput) {
         fileInput.value = "";
@@ -1494,6 +1555,7 @@ export default {
     },
 
     submitKomenForum(val, idForum) {
+      this.dialogLoader = true;
       // Set the headers
       var headers = {
         Authorization: "Bearer " + this.userLogin.token,
@@ -1514,8 +1576,6 @@ export default {
         }
       }
 
-      this.loading = true;
-
       if (val == "AddKomenForum") {
         var urlAddForum = this.$api + "/create-komenForum/" + idForum;
 
@@ -1529,22 +1589,19 @@ export default {
             this.isiKomen = "";
             this.imagesKomen = [];
             this.inputType = "addForum";
+            this.comment_forum = false;
 
-            this.textMessage = "Comment Succesfully Created";
+            this.textMessage = "The answer has been successfully submitted 😊";
             this.snackbar = true;
-            this.color = "green";
+            this.color = "success";
+
             setTimeout(() => {
-              this.loading = false;
+              this.dialogLoader = false;
             }, 300);
           })
-          .catch((error) => {
-            console.log(error);
-
-            this.snackbar = true;
-            this.textMessage = "Merchandise Unsuccesfully Created";
-            this.color = "secondary";
+          .catch(() => {
             setTimeout(() => {
-              this.loadingScreen = false;
+              this.dialogLoader = false;
             }, 300);
           });
       } else {
@@ -1579,7 +1636,7 @@ export default {
       }
 
       setTimeout(() => {
-        this.loadingScreen = false;
+        this.dialogLoader= false;
       }, 300);
     },
 
@@ -1682,8 +1739,13 @@ export default {
       this.dialogConfirmDeleteForum = true;
     },
 
+    deleteHandlerAnnouncement(dataAnnouncement) {
+      this.deleteUuidAnnouncement = dataAnnouncement.uuid;
+      this.dialogConfirmDeleteAnnouncement = true;
+    },
+
     deleteDataForum() {
-      this.loadingScreen = true;
+      this.dialogLoader = true;
       let uuid = this.deleteUuidForum;
       var url = this.$api + "/delete-forum/" + uuid;
       // Set the headers
@@ -1693,26 +1755,61 @@ export default {
 
       this.$http
         .delete(url, { headers: headers })
-        .then((response) => {
-          this.error_message = response.data.message;
-          console.log(this.error);
+        .then(() => {
+
           this.dialogConfirmDeleteForum = false;
           this.dialogDetailForum = false;
-          this.textMessage = "Forum Succesfully Deleted";
+
+          this.textMessage = "The forum has been successfully removed 😊";
           this.snackbar = true;
-          this.color = "green";
+          this.color = "success";
+
           this.axioDataForum();
-        })
-        .catch((error) => {
-          this.error_message = error.response.data.message;
-          console.log(this.error);
-          this.textMessage = "Forum Unsuccesfully Deleted";
-          this.snackbar = true;
-          this.color = "green";
+
           setTimeout(() => {
-            this.loadingScreen = false;
+            this.dialogLoader = false;
+          }, 300);
+        })
+        .catch(() => {
+          setTimeout(() => {
+            this.dialogLoader = false;
           }, 300);
           this.dialogConfirmDeleteForum = false;
+        });
+    },
+
+    deleteDataAnnouncement() {
+      this.dialogLoader = true;
+      
+      let uuid = this.deleteUuidAnnouncement;
+      var url = this.$api + "/delete-announcement/" + uuid;
+
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      this.$http
+        .delete(url, { headers: headers })
+        .then(() => {
+
+          this.dialogConfirmDeleteAnnouncement = false;
+
+          this.textMessage = "The announcement has been successfully removed 😊";
+          this.snackbar = true;
+          this.color = "success";
+
+          this.axioDataAnnouncement();
+
+          setTimeout(() => {
+            this.dialogLoader = false;
+          }, 300);
+        })
+        .catch(() => {
+          setTimeout(() => {
+            this.dialogLoader = false;
+          }, 300);
+          this.dialogConfirmDeleteAnnouncement = false;
         });
     },
 
@@ -1774,8 +1871,6 @@ export default {
         }
       }
 
-      this.loadingScreen = true;
-
       if (val == "AddForum") {
         var urlAddForum = this.$api + "/create-forum";
 
@@ -1790,22 +1885,11 @@ export default {
             this.images = [];
             this.inputType = "addForum";
 
-            this.textMessage = "Forum Succesfully Created";
+            this.textMessage = "The question has been successfully submitted 😊";
             this.snackbar = true;
-            this.color = "green";
-            setTimeout(() => {
-              this.loadingScreen = false;
-            }, 300);
+            this.color = "success";
           })
-          .catch((error) => {
-            console.log(error);
-
-            this.snackbar = true;
-            this.textMessage = "Merchandise Unsuccesfully Created";
-            this.color = "secondary";
-            setTimeout(() => {
-              this.loadingScreen = false;
-            }, 300);
+          .catch(() => {
           });
       } else {
         var urlEditForum = this.$api + "/update-forum/";
@@ -1837,10 +1921,6 @@ export default {
             }, 300);
           });
       }
-
-      setTimeout(() => {
-        this.loadingScreen = false;
-      }, 300);
     },
 
     axioDataMyProfile() {
