@@ -366,6 +366,8 @@ export default {
         .get(url, { headers: headers })
         .then((response) => {
           this.myProfile = response.data.myProfile;
+          this.checkRoleAndDeleteIfMismatch();
+
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
@@ -382,6 +384,19 @@ export default {
     // Reload Page
     reloadPage() {
       window.location.reload();
+    },
+
+    checkRoleAndDeleteIfMismatch() {
+      console.log(this.userLogin.role, 'role matching', this.myProfile.role)
+      if (this.userLogin.role !== this.myProfile.role) {
+        // Roles don't match, delete the localStorage item
+        this.logout();
+        // You can perform other actions as needed
+        console.log('Role mismatch. LocalStorage item deleted.');
+      } else {
+        // Roles match, you can perform other actions if needed
+        console.log('Role match.');
+      }
     },
   },
   computed: {

@@ -998,7 +998,21 @@
                       hide-details
                     ></v-text-field></div
                 ></b-col>
-                <b-col></b-col>
+                <b-col style="justify-content: start; display: flex"
+                    ><v-btn
+                      small
+                      color="primary"
+                      dark
+                      class="mb-2"
+                      style="
+                        text-transform: unset !important;
+                        border-radius: 20px;
+                      "
+                      @click="handlerRefresDataOrderService"
+                    >
+                      Refresh Order Service
+                    </v-btn></b-col
+                  >
               </b-row>
             </b-container>
 
@@ -1745,7 +1759,12 @@
     <!-- End Dialog Delete Comic Handler -->
 
     <!-- Footer -->
-    <div style="margin-top: 50px" data-aos="fade-up" data-aos-duration="2000" data-aos-offset="0">
+    <div
+      style="margin-top: 50px"
+      data-aos="fade-up"
+      data-aos-duration="2000"
+      data-aos-offset="0"
+    >
       <div class="footer-dark">
         <transition name="fade">
           <footer>
@@ -1760,27 +1779,28 @@
                 </p>
               </div>
               <div class="col item social">
-                <a
-                  href="#"
+                <a                  
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="instagram" aria-hidden="true"></b-icon></a
+                  ><b-icon icon="instagram" aria-hidden="true" @click="openInstagramFooter"></b-icon></a
                 ><a
-                  href="#"
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="youtube" aria-hidden="true"></b-icon></a
-                ><a
-                  href="#"
+                  ><b-icon icon="youtube" aria-hidden="true" @click="openYoutubeFooter"></b-icon></a
+                ><a @click="openTiktokFooter"
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="bi:tiktok" aria-hidden="true"></b-icon></a
-                ><a
-                  href="#"
+                  ><img 
+                    src="@/assets/tiktok.png"
+                    style="height: 33px"
+                    class="d-inline-block align-top"
+                    alt="Animation"
+                  /></a
+                ><a                  
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
                 >
-                  <b-icon icon="mailbox" aria-hidden="true"></b-icon
+                  <b-icon icon="mailbox" aria-hidden="true" @click="sendEmail"></b-icon
                 ></a>
               </div>
               <p class="copyright">
@@ -1898,6 +1918,7 @@ export default {
       token: localStorage.getItem("token"), // initialize with a valid token or empty string
       uuid: localStorage.getItem("uuid"),
       id: localStorage.getItem("id"),
+      role: localStorage.getItem("role"),
     },
     headersServicesTransaction: [
       {
@@ -2013,6 +2034,13 @@ export default {
       this.axioGetDataServiceReview(item.id);
     },
 
+    handlerRefresDataOrderService() {
+      this.axioDataOrderService()
+      this.textMessage = "Order service shiny now ✨ Data buff  Ready to rock!";
+      this.snackbar = true;
+      this.color = "success";
+    },
+
     deleteHandlerServiceTransaction(item) {
       this.dialogConfirmDelete = true;
       this.deleteUUIDOrderService = item.uuid;
@@ -2089,7 +2117,7 @@ export default {
     },
 
     axioDataOrderService() {
-      this.loadingScreen = true;
+      this.dialogLoader = true;
       var headers = {
         Authorization: "Bearer " + this.userLogin.token,
       };
@@ -2107,17 +2135,15 @@ export default {
             };
           });
 
-          console.log("tes");
-
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
-            this.loadingScreen = false;
+            this.dialogLoader = false;
           }, 300);
         })
         .catch((error) => {
           // Menangani kesalahan jika terjadi
           console.error("Error fetching myprofile data:", error);
-          this.loadingScreen = false;
+          this.dialogLoader = false;
         });
     },
 
@@ -2568,6 +2594,7 @@ export default {
         .get(url, { headers: headers })
         .then((response) => {
           this.myProfile = response.data.myProfile;
+          this.checkRoleAndDeleteIfMismatch();
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
@@ -2616,6 +2643,65 @@ export default {
         "https://www.linkedin.com/in/doni-dwi-irawan-818029182?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app";
       window.open(link, "_blank");
     },
+
+    checkRoleAndDeleteIfMismatch() {
+      console.log(this.userLogin.role, 'role matching', this.myProfile.role)
+      if (this.userLogin.role !== this.myProfile.role) {
+        // Roles don't match, delete the localStorage item
+        this.logout();
+        // You can perform other actions as needed
+        console.log('Role mismatch. LocalStorage item deleted.');
+      } else {
+        // Roles match, you can perform other actions if needed
+        console.log('Role match.');
+      }
+    },
+    logout() {
+      this.loadingScreen = true;
+
+      var url = this.$api + "/logout";
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      this.$http
+        .post(url, this.NPCForm, { headers: headers })
+        .then((response) => {
+          console.log(response.data.message);
+          localStorage.removeItem("image");
+          localStorage.removeItem("nama_persona");
+          localStorage.removeItem("role");
+          localStorage.removeItem("token");
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 5000);
+          this.$router.push({
+            name: "login",
+          });
+        });
+    },
+
+    // Footer
+    openInstagramFooter() {
+      window.open('https://www.instagram.com/hafallart/', "_blank");
+    },
+    openYoutubeFooter() {
+      window.open('https://www.youtube.com/@haforastudio9615', "_blank");
+    },
+    openTiktokFooter() {
+      window.open('https://www.tiktok.com/@hafallart', "_blank");
+    },
+    sendEmail() {
+      // Replace 'recipient@example.com' with the actual email address
+      const emailAddress = 'haf3334444@gmail.com';
+
+      // Construct the mailto link
+      const mailtoLink = `mailto:${emailAddress}`;
+
+      // Open the default email client with the mailto link
+      window.location.href = mailtoLink;
+    },
+    // End Footer
   },
 };
 </script>

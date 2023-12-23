@@ -253,10 +253,74 @@
             </div>
           </center>
         </v-card>
+
+
+        <!-- Footer -->
+        <!-- <div
+          style="margin-top: 50px"
+          data-aos="fade-up"
+          data-aos-duration="2000"
+          data-aos-offset="0"
+        >
+          <div class="footer-dark">
+            <transition name="fade">
+              <footer>
+                <div class="container" style="justify-content: center; width: 50%">
+                  <div class="">
+                    <h3>Historical Art Fantasia</h3>
+                    <p>
+                      Praesent sed lobortis mi. Suspendisse vel placerat ligula.
+                      Vivamus ac sem lacus. Ut vehicula rhoncus elementum. Etiam
+                      quis tristique lectus. Aliquam in arcu eget velit pulvinar
+                      dictum vel in justo.
+                    </p>
+                  </div>
+                  <div class="col item social">
+                    <a                  
+                      onmouseover="this.style.transform='translateY(-10%)';"
+                      onmouseout="this.style.transform='translateY(0)';"
+                      ><b-icon icon="instagram" aria-hidden="true" @click="openInstagramFooter"></b-icon></a
+                    ><a
+                      onmouseover="this.style.transform='translateY(-10%)';"
+                      onmouseout="this.style.transform='translateY(0)';"
+                      ><b-icon icon="youtube" aria-hidden="true" @click="openYoutubeFooter"></b-icon></a
+                    ><a @click="openTiktokFooter"
+                      onmouseover="this.style.transform='translateY(-10%)';"
+                      onmouseout="this.style.transform='translateY(0)';"
+                      ><img 
+                        src="@/assets/tiktok.png"
+                        style="height: 33px"
+                        class="d-inline-block align-top"
+                        alt="Animation"
+                      /></a
+                    ><a                  
+                      onmouseover="this.style.transform='translateY(-10%)';"
+                      onmouseout="this.style.transform='translateY(0)';"
+                    >
+                      <b-icon icon="mailbox" aria-hidden="true" @click="sendEmail"></b-icon
+                    ></a>
+                  </div>
+                  <p class="copyright">
+                    Historical Art Fantasia © 2023 || created by
+                    <span
+                      @click="openNewPage"
+                      class="hoverMyName"
+                      style="cursor: pointer"
+                      >Doni Dwi Irawan</span
+                    >
+                  </p>
+                </div>
+              </footer>
+            </transition>
+          </div>
+        </div> -->
+        <!-- Footer -->
       </v-container>
     </div>
 
     <v-dialog
+    data-aos="fade-down"
+          data-aos-duration="1500"
       transition="dialog-top-transition"
       max-width="600"
       v-model="dialogIklan"
@@ -264,12 +328,22 @@
     >
       <template v-slot:default="dialog">
         <v-card style="border-radius: 20px !important">
-          <v-toolbar color="#006598" dark>Opening from the top</v-toolbar>
-          <v-card-text>
-            <div class="text-h2 pa-12">Hello world!</div>
+          <v-toolbar color="#006598" dark>Ads</v-toolbar>
+          <v-card-text style="min-height: 200px; align-items: center; display: grid; padding: 0px;">
+            <h3>Space ads for your product</h3>
+            <p>Click link beside for contact our admin
+              <v-btn @click.stop="sendEmail"
+              color="#006598"
+              fab
+              dark
+              x-small              
+            >
+              <v-icon>mdi-email-outline</v-icon>
+            </v-btn>   
+            </p>            
           </v-card-text>
           <v-card-actions class="justify-end">
-            <v-btn text @click="dialog.value = false">Close</v-btn>
+            <v-btn plain text @click="dialog.value = false" style="text-transform: capitalize;">Close</v-btn>
           </v-card-actions>
         </v-card>
       </template>
@@ -667,6 +741,7 @@
               </div>
             </div>
           </div>
+          <hr style="color: #ffffff00; padding-bottom: 20px; margin: 0px;">
         </center>
       </v-card>
     </v-dialog>
@@ -739,6 +814,8 @@
     <!-- End Dialog Loading -->
 
     <!-- End Dialog Detail SubCOmic -->
+
+
   </v-main>
 </template>
 
@@ -774,8 +851,9 @@ export default {
     subComicUUID: "",
 
     // Adds On
+    
     loadingScreen: false,
-    dialogIklan: false,
+    dialogIklan: true,
     dialogSubComic: false,
     dialogLoader: false,
     dialogConfirmDelete: false,
@@ -785,6 +863,7 @@ export default {
       uuid: localStorage.getItem("uuid"),
       id: localStorage.getItem("id"),
       image: localStorage.getItem("image"),
+      role: localStorage.getItem("role"),
     },
   }),
   computed: {},
@@ -1161,6 +1240,7 @@ export default {
         .get(url, { headers: headers })
         .then((response) => {
           this.myProfile = response.data.myProfile;
+          this.checkRoleAndDeleteIfMismatch();
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
@@ -1171,6 +1251,44 @@ export default {
           // Menangani kesalahan jika terjadi
           console.error("Error fetching myprofile data:", error);
           this.loadingScreen = false;
+        });
+    },
+
+    // LogoutAuto
+    checkRoleAndDeleteIfMismatch() {
+      console.log(this.userLogin.role, 'role matching', this.myProfile.role)
+      if (this.userLogin.role !== this.myProfile.role) {
+        // Roles don't match, delete the localStorage item
+        this.logout();
+        // You can perform other actions as needed
+        console.log('Role mismatch. LocalStorage item deleted.');
+      } else {
+        // Roles match, you can perform other actions if needed
+        console.log('Role match.');
+      }
+    },
+    logout() {
+      this.loadingScreen = true;
+
+      var url = this.$api + "/logout";
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      this.$http
+        .post(url, this.NPCForm, { headers: headers })
+        .then((response) => {
+          console.log(response.data.message);
+          localStorage.removeItem("image");
+          localStorage.removeItem("nama_persona");
+          localStorage.removeItem("role");
+          localStorage.removeItem("token");
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 5000);
+          this.$router.push({
+            name: "login",
+          });
         });
     },
 
@@ -1202,11 +1320,115 @@ export default {
         return "";
       }
     },
+    sendEmail() {
+      // Replace 'recipient@example.com' with the actual email address
+      const emailAddress = 'haf3334444@gmail.com';
+
+      // Construct the mailto link
+      const mailtoLink = `mailto:${emailAddress}`;
+
+      // Open the default email client with the mailto link
+      window.location.href = mailtoLink;
+    },
+
+    // Footer
+    openNewPage() {
+      const link =
+        "https://www.linkedin.com/in/doni-dwi-irawan-818029182?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app";
+      window.open(link, "_blank");
+    },
+    openInstagramFooter() {
+      window.open('https://www.instagram.com/hafallart/', "_blank");
+    },
+    openYoutubeFooter() {
+      window.open('https://www.youtube.com/@haforastudio9615', "_blank");
+    },
+    openTiktokFooter() {
+      window.open('https://www.tiktok.com/@hafallart', "_blank");
+    },
+    // End Footer
   },
 };
 </script>
 
 <style scoped>
+
+/* Footer */
+.hoverMyName:hover {
+  color: rgb(125, 213, 237);
+}
+.footer-dark {
+  padding: 20px 0;
+  color: #f0f9ff;
+  background-color: #282d32;
+}
+
+.footer-dark h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.footer-dark ul {
+  padding: 0;
+  list-style: none;
+  line-height: 1.6;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.footer-dark ul a {
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.6;
+}
+
+.footer-dark ul a:hover {
+  opacity: 0.8;
+}
+
+.footer-dark .item.text p {
+  opacity: 0.6;
+  margin-bottom: 0;
+}
+
+.footer-dark .item.social {
+  text-align: center;
+}
+
+.footer-dark .item.text {
+  margin-bottom: 36px;
+}
+
+.footer-dark .item.social > a {
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
+  margin-left: 1.5px;
+  margin-right: 1.5px;
+  margin-top: 5px;
+  color: #fff;
+  opacity: 0.75;
+}
+
+.footer-dark .item.social > a:hover {
+  opacity: 0.9;
+}
+
+.footer-dark .copyright {
+  text-align: center;
+  padding-top: 24px;
+  opacity: 0.3;
+  font-size: 13px;
+  margin-bottom: 0;
+}
+/* /Footer */
 .text-box-school {
   width: 50%;
   height: fit-content;

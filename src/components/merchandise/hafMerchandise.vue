@@ -767,6 +767,21 @@
         </h3>
 
         <template>
+          <div style="display: flex; justify-content: start; padding-left: 15px;">
+            <v-btn
+              small
+              color="primary"
+              dark
+              class="mb-2 w-2"
+              style="
+                text-transform: unset !important;
+                border-radius: 20px;
+              "
+              @click="handlerRefresDataOrderMerchandise"
+            >
+              Refresh Data Sub Comic
+            </v-btn>
+          </div>          
           <v-container class="conatiner-size-my-profile p-0">
             <v-data-table
               :headers="headersOrderHistory"
@@ -1303,27 +1318,28 @@
                 </p>
               </div>
               <div class="col item social">
-                <a
-                  href="#"
+                <a                  
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="instagram" aria-hidden="true"></b-icon></a
+                  ><b-icon icon="instagram" aria-hidden="true" @click="openInstagramFooter"></b-icon></a
                 ><a
-                  href="#"
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="youtube" aria-hidden="true"></b-icon></a
-                ><a
-                  href="#"
+                  ><b-icon icon="youtube" aria-hidden="true" @click="openYoutubeFooter"></b-icon></a
+                ><a @click="openTiktokFooter"
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="bi:tiktok" aria-hidden="true"></b-icon></a
-                ><a
-                  href="#"
+                  ><img 
+                    src="@/assets/tiktok.png"
+                    style="height: 33px"
+                    class="d-inline-block align-top"
+                    alt="Animation"
+                  /></a
+                ><a                  
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
                 >
-                  <b-icon icon="mailbox" aria-hidden="true"></b-icon
+                  <b-icon icon="mailbox" aria-hidden="true" @click="sendEmail"></b-icon
                 ></a>
               </div>
               <p class="copyright">
@@ -1510,6 +1526,7 @@ export default {
       token: localStorage.getItem("token"), // initialize with a valid token or empty string
       uuid: localStorage.getItem("uuid"),
       id: localStorage.getItem("id"),
+      role: localStorage.getItem("role"),
     },
   }),
   computed: {},
@@ -1567,6 +1584,14 @@ export default {
 
     handlerOrderHistory() {
       this.dialogOrderHistory = true;
+      this.axioDataOrderMerchandise();
+    },
+
+    handlerRefresDataOrderMerchandise() {
+      this.axioDataOrderMerchandise();
+      this.textMessage = "Order merchandise shiny now ✨ Data buff  Ready to rock!";
+      this.snackbar = true;
+      this.color = "success";
     },
 
     handlerDetailMerchandiseFromCart(uuid) {
@@ -1906,7 +1931,7 @@ export default {
     },
 
     axioDataOrderMerchandise() {
-      this.loadingScreen = true;
+      this.dialogLoader = true;
       var url = this.$api + "/getDataOrderMerchandise/" + this.userLogin.uuid;
 
       // Set the headers
@@ -1936,13 +1961,13 @@ export default {
           );
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
-            this.loadingScreen = false;
+            this.dialogLoader = false;
           }, 300);
         })
         .catch((error) => {
           // Menangani kesalahan jika terjadi
           console.error("Error fetching Comic data:", error);
-          this.loadingScreen = false;
+          this.dialogLoader = false;
         });
     },
 
@@ -1989,6 +2014,8 @@ export default {
         .then((response) => {
           this.myProfile = response.data.myProfile;
 
+          this.checkRoleAndDeleteIfMismatch();
+
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
             this.loadingScreen = false;
@@ -1998,6 +2025,44 @@ export default {
           // Menangani kesalahan jika terjadi
           console.error("Error fetching myprofile data:", error);
           this.loadingScreen = false;
+        });
+    },
+
+    // LogoutAuto
+    checkRoleAndDeleteIfMismatch() {
+      console.log(this.userLogin.role, 'role matching', this.myProfile.role)
+      if (this.userLogin.role !== this.myProfile.role) {
+        // Roles don't match, delete the localStorage item
+        this.logout();
+        // You can perform other actions as needed
+        console.log('Role mismatch. LocalStorage item deleted.');
+      } else {
+        // Roles match, you can perform other actions if needed
+        console.log('Role match.');
+      }
+    },
+    logout() {
+      this.loadingScreen = true;
+
+      var url = this.$api + "/logout";
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      this.$http
+        .post(url, this.NPCForm, { headers: headers })
+        .then((response) => {
+          console.log(response.data.message);
+          localStorage.removeItem("image");
+          localStorage.removeItem("nama_persona");
+          localStorage.removeItem("role");
+          localStorage.removeItem("token");
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 5000);
+          this.$router.push({
+            name: "login",
+          });
         });
     },
 
@@ -2115,6 +2180,28 @@ export default {
           .includes(this.searchMerchandise.toLowerCase())
       );
     },
+
+    // Footer
+    openInstagramFooter() {
+      window.open('https://www.instagram.com/hafallart/', "_blank");
+    },
+    openYoutubeFooter() {
+      window.open('https://www.youtube.com/@haforastudio9615', "_blank");
+    },
+    openTiktokFooter() {
+      window.open('https://www.tiktok.com/@hafallart', "_blank");
+    },
+    sendEmail() {
+      // Replace 'recipient@example.com' with the actual email address
+      const emailAddress = 'haf3334444@gmail.com';
+
+      // Construct the mailto link
+      const mailtoLink = `mailto:${emailAddress}`;
+
+      // Open the default email client with the mailto link
+      window.location.href = mailtoLink;
+    },
+    // End Footer
   },
 };
 </script>

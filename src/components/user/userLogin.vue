@@ -64,6 +64,23 @@
         </v-form>
       </div>
     </center>
+
+    <!-- Snackbar -->
+    <v-snackbar v-model="snackbar" auto-height :color="color" text top right>
+      {{ textMessage }}
+      <template v-slot:action="{ attrs }">
+        <v-btn plain color="red" text v-bind="attrs" @click="snackbar = false">
+          <v-icon
+            dense
+            color="#FF0000"
+            @click="snackbar = false"
+            class="data-table-icon"
+            >mdi-close</v-icon
+          >
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <!-- End Snackbar -->
   </div>
 </template>
 
@@ -77,6 +94,11 @@ export default Vue.extend({
         email: "",
         password: "",
       },
+
+      // Snackbar
+      snackbar: false,
+      textMessage: "",
+      color: "",
 
       // ADDONS
       loading: false,
@@ -112,6 +134,7 @@ export default Vue.extend({
       }
     },
     login() {
+      this.loading = true;
       if (this.$refs.form.validate()) {
         var url = this.$api + "/login";
         let data = {
@@ -140,11 +163,12 @@ export default Vue.extend({
               name: "haf-profile",
             });
           })
-          .catch((error) => {
-            console.log(error.response.data.error);
+          .catch(() => {
+            this.textMessage = "We cant find an account with this credentials. Please make sure you entered the right information and you have verified your email address or you can contact administrator 😥😥😥";
+            this.snackbar = true;
+            this.color = "blue-grey";
+            this.loading = false;
           });
-        this.loading = true;
-        setTimeout(() => (this.loading = false), 10000);
       }
     },
   },

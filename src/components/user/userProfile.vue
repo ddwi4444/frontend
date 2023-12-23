@@ -8,8 +8,12 @@
       <div
         @click="zoom($baseUrl + '/storage/' + imageProfile)"
         style="cursor: zoom-in"
+        data-aos="fade-up"
+        data-aos-duration="1500"
       >
         <img
+          data-aos="fade"
+          data-aos-duration="2000"
           v-if="image == null"
           src="@/assets/userImage.jpg"
           class="img-profil border"
@@ -18,6 +22,8 @@
         />
         <div v-else>
           <v-img
+            data-aos="fade"
+            data-aos-duration="2000"
             v-if="image != null"
             :src="$baseUrl + '/storage/' + imageProfile"
             class="img-profil"
@@ -29,55 +35,96 @@
     </v-card-title>
 
     <v-card-text>
-      <h4 style="text-transform: capitalize">
+      <h4
+        style="text-transform: capitalize"
+        data-aos="fade-up"
+        data-aos-duration="1500"
+      >
         {{ getNamaPersona }}
         <v-btn @click="editHandlerProfile" icon x-small color="primary">
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
       </h4>
-      <p class="ma-0 pa-0 bold" style="font-weight: 100">Your bio is here</p>
+      <p
+        data-aos="fade-up"
+        data-aos-duration="1500"
+        v-if="myProfile.bio != null"
+        class="ma-0 pa-0 bold"
+        style="font-weight: 100"
+      >
+        "{{ myProfile.bio }}"
+      </p>
+      <p
+        data-aos="fade-up"
+        data-aos-duration="1500"
+        v-else
+        class="ma-0 pa-0 bold"
+        style="font-weight: 100"
+      >
+        -
+      </p>
     </v-card-text>
 
     <div>
-      <b-tabs align="center" style="padding-left: 0px">
+      <b-tabs
+        align="center"
+        style="padding-left: 0px"
+        data-aos="fade-up"
+        data-aos-duration="1500"
+      >
         <!-- Profile -->
         <b-tab title="Profile" active>
-          <b-container class="conatiner-size-my-profile">
+          <!-- Untuk students dan council -->
+          <b-container
+            class="conatiner-size-my-profile"
+            v-if="myProfile.role == 'student' || myProfile.role == 'osis'"
+          >
             <b-row>
               <b-col sm="7">
-                <p class="ma-0 pa-0">Name : Doni Dwi Irawan</p>
-                <p class="ma-0 pa-0">Age : 17 Tahun</p>
-                <p class="ma-0 pa-0">Racial : Half Demon-Vampire</p>
-                <p class="ma-0 pa-0">Birth Date : 9 April</p>
-                <p class="ma-0 pa-0">Zodiac : Aries</p>
-                <p class="ma-0 pa-0">MBTI : INFJ-T</p>
-                <p class="ma-0 pa-0">Body Weight : 50 kg</p>
-                <p class="ma-0 pa-0">Body Tall : 171 cm</p>
-                <br />
+                <p class="ma-0 pa-0">Name : {{ myProfile.nama_persona }}</p>
+                <p class="ma-0 pa-0">Racial : {{ myProfile.ras }}</p>
+                <p class="ma-0 pa-0">Age : {{ myProfile.umur }}</p>
                 <p class="ma-0 pa-0">
-                  Hobby : Memasak, Membaca Dongeng, minum teh, dan berjalan
-                  jalan.
+                  Birth Date : {{ myProfile.tanggal_lahir }}
+                </p>
+                <p class="ma-0 pa-0">Zodiac : {{ myProfile.zodiak }}</p>
+                <p class="ma-0 pa-0">MBTI : {{ myProfile.MBTI }}</p>
+                <p class="ma-0 pa-0">
+                  Body Weight : {{ myProfile.berat_badan }} kg
                 </p>
                 <p class="ma-0 pa-0">
-                  Like : Bakso, Darah, orang yang mentaati peraturan, langit
-                  malam dan Rasi Bintang, Musik klasik.
-                </p>
-                <p class="ma-0 pa-0">
-                  Did not Like : Bakso, Darah, orang yang mentaati peraturan,
-                  langit malam dan Rasi Bintang, Musik klasik.
+                  Body Tall : {{ myProfile.tinggi_badan }} cm
                 </p>
                 <br />
+                <p class="ma-0 pa-0">Hobby : {{ myProfile.hobi }}</p>
+                <p class="ma-0 pa-0">Like : {{ myProfile.like }}</p>
                 <p class="ma-0 pa-0">
-                  Quotes :<br />“May God Forgive Your sin”
+                  Did not Like : {{ myProfile.did_not_like }}
                 </p>
+                <br />
+                <p class="ma-0 pa-0">Quotes :<br />“{{ myProfile.quotes }}”</p>
                 <h3 class="ma-0 pa-0" style="color: #a36e1e">............</h3>
+                <v-btn
+                  v-if="myProfile.ig_acc != null"
+                  color="#1d5069"
+                  class="ma-4 white--text"
+                  @click="openInstagramInNewTab(myProfile.ig_acc)"
+                  style="
+                    text-transform: capitalize;
+                    font-size: 12px;
+                    border-radius: 20px;
+                  "
+                >
+                  Visit Instagram Account
+                  <v-icon right dark> mdi-instagram </v-icon>
+                </v-btn>
               </b-col>
               <b-col sm="5">
                 <b-img
                   fluid
-                  style="cursor: zoom-in; height: 500px;"
+                  style="cursor: zoom-in; height: 500px; object-fit: contain"
                   @click="zoom($baseUrl + '/storage/' + imageProfile)"
-                  src="https://historicalartfantasia.files.wordpress.com/2022/11/fullbody-gilang-1-b-ilkom-m.-rafael-indrawan.png"
+                  :src="$baseUrl + '/storage/' + imageProfile"
                   alt="Character"
                 ></b-img>
               </b-col>
@@ -86,13 +133,71 @@
               class="wp-block-separator has-css-opacity is-style-wide"
               style="color: #a36e1e"
             />
-            <p>-</p>
+            <center>
+              <div
+                class="storyChar"
+                v-html="myProfile.story_character"
+                style="text-align: ''"
+              ></div>
+            </center>
+          </b-container>
+          <!-- Untuk admin dan user biasa -->
+          <b-container
+            class="conatiner-size-my-profile"
+            v-if="myProfile.role == 'admin'"
+          >
+            <center>
+              <div style="width: 300px; height: 300px">
+                <img
+                  data-aos="zoom-in"
+                  data-aos-duration="1500"
+                  src="@/assets/logoHAF2.png"
+                  class="d-inline-block align-top"
+                  alt="Logo HAF"
+                  style="height: 100%; width: 100px; object-fit: contain"
+                />
+              </div>
+            </center>
+          </b-container>
+          <b-container
+            class="conatiner-size-my-profile mt-5"
+            v-if="myProfile.role == 'user'"
+          >
+            <center>
+              <div
+                class="storyChar"
+                data-aos="zoom-in"
+                data-aos-duration="1500"
+              >
+                <H1 style="font-family: Georgia, serif; margin: 0px"
+                  >Historical Art Fantasia</H1
+                >
+                ║▌│█║▌█║▌│█│║▌║║▌│█║▌│█║▌
+                <br />
+                ʙᴇ ᴄʀᴇᴀᴛɪᴠᴇ, sᴍᴀʀᴛ, ᴀɴᴅ ʟᴇᴀʀɴɪɴɢ ғᴏʀᴇᴠᴇʀ!
+                <br />
+                <br />
+                <h6>
+                  Become a member of the HAF community to enjoy a wider range of
+                  HAF facilities. <br />
+                  Open recruitment for the next season will be announced at a
+                  later date
+                </h6>
+              </div>
+            </center>
           </b-container>
         </b-tab>
         <!-- End Profile -->
 
         <!-- NPC -->
-        <b-tab title="NPC">
+        <b-tab
+          title="NPC"
+          v-if="
+            myProfile.role == 'student' ||
+            myProfile.role == 'osis' ||
+            myProfile.role == 'admin'
+          "
+        >
           <template>
             <v-container class="conatiner-size-my-profile p-0">
               <b-container class="bv-example-row">
@@ -109,16 +214,35 @@
                         hide-details
                       ></v-text-field></div
                   ></b-col>
-                  <b-col
+                  <b-col style="justify-content: end; display: flex"
+                    ><v-btn
+                      v-if="myProfile.role != 'admin'"
+                      small
+                      color="primary"
+                      dark
+                      class="mb-2"
+                      style="
+                        text-transform: unset !important;
+                        border-radius: 20px;
+                      "
+                      @click="addHandlerNPC"
+                    >
+                      Add NPC
+                    </v-btn></b-col
+                  >
+                  <b-col style="justify-content: start; display: flex"
                     ><v-btn
                       small
                       color="primary"
                       dark
                       class="mb-2"
-                      style="text-transform: unset !important"
-                      @click="addHandlerNPC"
+                      style="
+                        text-transform: unset !important;
+                        border-radius: 20px;
+                      "
+                      @click="handlerRefresDataNPC"
                     >
-                      Add NPC
+                      Refresh Data NPC
                     </v-btn></b-col
                   >
                 </b-row>
@@ -178,7 +302,14 @@
         <!-- End NPC -->
 
         <!-- Comic -->
-        <b-tab title="Comic">
+        <b-tab
+          title="Comic"
+          v-if="
+            myProfile.role == 'student' ||
+            myProfile.role == 'osis' ||
+            myProfile.role == 'admin'
+          "
+        >
           <template>
             <v-container class="conatiner-size-my-profile p-0">
               <b-container class="bv-example-row">
@@ -195,16 +326,35 @@
                         hide-details
                       ></v-text-field></div
                   ></b-col>
-                  <b-col
+                  <b-col style="justify-content: end; display: flex"
+                    ><v-btn
+                      v-if="myProfile.role != 'admin'"
+                      small
+                      color="primary"
+                      dark
+                      class="mb-2"
+                      style="
+                        text-transform: unset !important;
+                        border-radius: 20px;
+                      "
+                      @click="addHandlerComic"
+                    >
+                      Add Comic
+                    </v-btn></b-col
+                  >
+                  <b-col style="justify-content: start; display: flex"
                     ><v-btn
                       small
                       color="primary"
                       dark
                       class="mb-2"
-                      style="text-transform: unset !important"
-                      @click="addHandlerComic"
+                      style="
+                        text-transform: unset !important;
+                        border-radius: 20px;
+                      "
+                      @click="handlerRefresDataComic"
                     >
-                      Add Comic
+                      Refresh Data Comic
                     </v-btn></b-col
                   >
                 </b-row>
@@ -236,8 +386,29 @@
                   </div>
                 </template>
 
+                <template v-slot:[`item.status`]="{ item }">
+                  <template v-if="item.status == 0"
+                    ><div style="color: grey">
+                      Comic invisible! Add sub comic in details to show it to
+                      everyone!
+                    </div></template
+                  >
+                  <template v-if="item.status == 1"
+                    ><div style="color: rgb(0, 0, 141)">
+                      Comic is visible! Keep creating and stay motivated
+                    </div></template
+                  >
+                  <template v-if="item.status == 3"
+                    ><div style="color: rgb(168, 0, 0)">
+                      The comic has been suspended by the administrator. Contact
+                      administrator for detail informastion
+                    </div></template
+                  >
+                </template>
+
                 <template v-slot:[`item.actions`]="{ item }">
                   <v-icon
+                    v-if="item.status != 3"
                     dense
                     color="#36abcf"
                     @click="detailhandlerComic(item)"
@@ -245,11 +416,65 @@
                     >mdi-information</v-icon
                   >
                   <v-icon
+                    v-else-if="item.status == 3 && myProfile.role == 'admin'"
+                    dense
+                    color="#36abcf"
+                    @click="detailhandlerComic(item)"
+                    class="data-table-icon mr-3"
+                    >mdi-information</v-icon
+                  >
+                  <v-icon
+                    v-else
+                    dense
+                    disabled
+                    color="#36abcf"
+                    @click="detailhandlerComic(item)"
+                    class="data-table-icon mr-3"
+                    >mdi-information</v-icon
+                  >
+                  <v-icon
+                    v-if="item.status != 3"
                     dense
                     color="#ffbd03"
                     @click="editHandlerComic(item)"
                     class="data-table-icon mr-3"
                     >mdi-pencil</v-icon
+                  >
+                  <v-icon
+                    v-else-if="item.status == 3 && myProfile.role == 'admin'"
+                    dense
+                    color="#ffbd03"
+                    @click="editHandlerComic(item)"
+                    class="data-table-icon mr-3"
+                    >mdi-pencil</v-icon
+                  >
+                  <v-icon
+                    v-else
+                    disabled
+                    dense
+                    color="#ffbd03"
+                    @click="editHandlerComic(item)"
+                    class="data-table-icon mr-3"
+                    >mdi-pencil</v-icon
+                  >
+                  <v-icon
+                    v-if="
+                      myProfile.role == 'admin' &&
+                      (item.status == 1 || item.status == 0)
+                    "
+                    dense
+                    color="grey"
+                    @click="editStatusComic(item)"
+                    class="data-table-icon mr-3"
+                    >mdi-cancel</v-icon
+                  >
+                  <v-icon
+                    v-if="myProfile.role == 'admin' && item.status == 3"
+                    dense
+                    color="orange"
+                    @click="editStatusComic(item)"
+                    class="data-table-icon mr-3"
+                    >mdi-cancel</v-icon
                   >
                   <v-icon
                     dense
@@ -273,82 +498,147 @@
         <!-- End Comic -->
 
         <!-- Portfolio -->
-        <b-tab title="Portfolio">
-          <template>
-            <v-container class="conatiner-size-my-profile p-0">
-              <b-container class="bv-example-row">
-                <b-row style="justify-content: center">
-                  <v-btn
-                    small
-                    color="primary"
-                    dark
-                    class="mb-2 w-2"
-                    style="text-transform: unset !important; width: 30%"
-                    @click="addHandlerPortfolio"
-                  >
-                    Add Portfolio
-                  </v-btn>
-                </b-row>
-              </b-container>
-
-              <v-data-table
-                :headers="list.headersPortfolio"
-                :items="list.portfolios"
+        <b-tab
+          title="Portfolio"
+          v-if="
+            myProfile.role == 'student' ||
+            myProfile.role == 'osis' ||
+            myProfile.role == 'admin'
+          "
+        >
+          <div v-if="myProfile.is_servicer == 0 && myProfile.role != 'admin'">
+            <center>
+              <div
+                class="storyChar mt-5"
+                data-aos="zoom-in"
+                data-aos-duration="1500"
               >
-                <template v-slot:[`item.no`]="{ item }">
-                  <template>{{ list.portfolios.indexOf(item) + 1 }}</template>
-                </template>
-
-                <template v-slot:[`item.thumbnail`]="{ item }">
-                  <div style="display: grid; justify-content: center">
-                    <div
-                      class="w-img-oval m-2"
-                      @click="zoom($baseUrl + '/storage/' + item.thumbnail)"
+                <H1 style="font-family: Georgia, serif; margin: 0px"
+                  >Historical Art Fantasia</H1
+                >
+                ║▌│█║▌█║▌│█│║▌║║▌│█║▌│█║▌
+                <br />
+                ʙᴇ ᴄʀᴇᴀᴛɪᴠᴇ, sᴍᴀʀᴛ, ᴀɴᴅ ʟᴇᴀʀɴɪɴɢ ғᴏʀᴇᴠᴇʀ!
+                <br />
+                <br />
+                <h6>
+                  Do your best and get recommended to become a servicer to sell
+                  your services by the administrator
+                </h6>
+              </div>
+            </center>
+          </div>
+          <div v-if="myProfile.is_servicer == 1 || myProfile.role == 'admin'">
+            <template>
+              <v-container class="conatiner-size-my-profile p-0">
+                <b-container class="bv-example-row">
+                  <b-row>
+                    <b-col
+                      ><!-- SEARCH -->
+                      <div class="form-input" style="margin-left: 10px">
+                        <v-text-field
+                          v-model="list.search_portfolio"
+                          class="p-0 m-0"
+                          append-icon="mdi-magnify"
+                          label="Search NPC"
+                          single-line
+                          hide-details
+                        ></v-text-field></div
+                    ></b-col>
+                    <b-col style="justify-content: end; display: flex"
+                      ><v-btn
+                        v-if="myProfile.role != 'admin'"
+                        small
+                        color="primary"
+                        dark
+                        class="mb-2 w-2"
+                        style="
+                          text-transform: unset !important;
+                          border-radius: 20px;
+                        "
+                        @click="addHandlerPortfolio"
+                      >
+                        Add Portfolio
+                      </v-btn></b-col
                     >
-                      <img
-                        :src="$baseUrl + '/storage/' + item.thumbnail"
-                        class="img-oval"
-                      />
-                      <a class="img-oval-zoom">
-                        <i class="mdi mdi-eye f-28 text-white"></i>
-                      </a>
-                    </div>
-                  </div>
-                </template>
+                    <b-col style="justify-content: start; display: flex"
+                      ><v-btn
+                        small
+                        color="primary"
+                        dark
+                        class="mb-2 w-2"
+                        style="
+                          text-transform: unset !important;
+                          border-radius: 20px;
+                        "
+                        @click="handlerRefresDataPortfolio"
+                      >
+                        Refresh Data Portfolio
+                      </v-btn></b-col
+                    >
+                  </b-row>
+                </b-container>
 
-                <template v-slot:[`item.actions`]="{ item }">
-                  <v-icon
-                    dense
-                    color="#ffbd03"
-                    @click="editHandlerPortfolio(item)"
-                    class="data-table-icon mr-3"
-                    >mdi-pencil</v-icon
-                  >
-                  <v-icon
-                    dense
-                    color="#FF0000"
-                    @click="deleteHandlerPortfolio(item)"
-                    class="data-table-icon"
-                    >mdi-delete</v-icon
-                  >
-                </template>
-                <template v-slot:[`footer.page-text`]="items">
-                  {{ items.pageStart }} - {{ items.pageStop }} of
-                  {{ items.itemsLength }}
-                </template>
-                <template v-slot:no-data>
-                  <div color="white">
-                    <p class="p-0 m-0">Portfolio is empty</p>
-                  </div>
-                </template>
-              </v-data-table>
-            </v-container>
-          </template>
+                <v-data-table
+                  :headers="list.headersPortfolio"
+                  :items="list.portfolios"
+                  :search="list.search_portfolio"
+                >
+                  <template v-slot:[`item.no`]="{ item }">
+                    <template>{{ list.portfolios.indexOf(item) + 1 }}</template>
+                  </template>
+
+                  <template v-slot:[`item.thumbnail`]="{ item }">
+                    <div style="display: grid; justify-content: center">
+                      <div
+                        class="w-img-oval m-2"
+                        @click="zoom($baseUrl + '/storage/' + item.thumbnail)"
+                      >
+                        <img
+                          :src="$baseUrl + '/storage/' + item.thumbnail"
+                          class="img-oval"
+                        />
+                        <a class="img-oval-zoom">
+                          <i class="mdi mdi-eye f-28 text-white"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </template>
+
+                  <template v-slot:[`item.actions`]="{ item }">
+                    <v-icon
+                      dense
+                      color="#ffbd03"
+                      @click="editHandlerPortfolio(item)"
+                      class="data-table-icon mr-3"
+                      >mdi-pencil</v-icon
+                    >
+                    <v-icon
+                      dense
+                      color="#FF0000"
+                      @click="deleteHandlerPortfolio(item)"
+                      class="data-table-icon"
+                      >mdi-delete</v-icon
+                    >
+                  </template>
+                  <template v-slot:[`footer.page-text`]="items">
+                    {{ items.pageStart }} - {{ items.pageStop }} of
+                    {{ items.itemsLength }}
+                  </template>
+                  <template v-slot:no-data>
+                    <div color="white">
+                      <p class="p-0 m-0">Portfolio is empty</p>
+                    </div>
+                  </template>
+                </v-data-table>
+              </v-container>
+            </template>
+          </div>
         </b-tab>
         <!-- End Portfolio -->
 
         <!-- Merchandise -->
-        <b-tab title="Merchandise">
+        <b-tab title="Merchandise" v-if="myProfile.role == 'admin'">
           <template>
             <v-container class="conatiner-size-my-profile p-0">
               <b-container class="bv-example-row">
@@ -371,10 +661,28 @@
                       color="primary"
                       dark
                       class="mb-2"
-                      style="text-transform: unset !important"
+                      style="
+                        text-transform: unset !important;
+                        border-radius: 20px;
+                      "
                       @click="addHandlerMerchandise"
                     >
                       Add Merchandise
+                    </v-btn></b-col
+                  >
+                  <b-col style="justify-content: start; display: flex"
+                    ><v-btn
+                      small
+                      color="primary"
+                      dark
+                      class="mb-2 w-2"
+                      style="
+                        text-transform: unset !important;
+                        border-radius: 20px;
+                      "
+                      @click="handlerRefresDataMerchandise"
+                    >
+                      Refresh Data Merchandise
                     </v-btn></b-col
                   >
                 </b-row>
@@ -437,13 +745,7 @@
         <!-- End Merchandise -->
 
         <!-- Your Order -->
-        <b-tab title="Your Order">
-          <div></div>
-        </b-tab>
-        <!-- End Your Order -->
-
-        <!-- Your Activity -->
-        <b-tab title="Your Activity">
+        <b-tab title="Data User" v-if="myProfile.role == 'admin'">
           <template>
             <v-container class="conatiner-size-my-profile p-0">
               <b-container class="bv-example-row">
@@ -452,81 +754,145 @@
                     ><!-- SEARCH -->
                     <div class="form-input" style="margin-left: 10px">
                       <v-text-field
-                        v-model="list.search_servicesTransaction"
+                        v-model="list.search_user"
                         class="p-0 m-0"
                         append-icon="mdi-magnify"
-                        label="Search Transactions"
+                        label="Search user by name or role"
                         single-line
                         hide-details
                       ></v-text-field></div
                   ></b-col>
-                  <b-col></b-col>
+                  <b-col style="justify-content: start; display: flex"
+                    ><v-btn
+                      small
+                      color="primary"
+                      dark
+                      class="mb-2 w-2"
+                      style="
+                        text-transform: unset !important;
+                        border-radius: 20px;
+                      "
+                      @click="handlerRefresDataUser"
+                    >
+                      Refresh Data User
+                    </v-btn></b-col
+                  >
                 </b-row>
               </b-container>
 
               <v-data-table
-                :headers="list.headersServicesTransaction"
-                :items="list.servicesTransactions"
-                :search="list.search_servicesTransaction"
+                :headers="list.headersUser"
+                :items="list.users"
+                :search="list.search_user"
               >
                 <template v-slot:[`item.no`]="{ item }">
-                  <template>{{
-                    list.servicesTransactions.indexOf(item) + 1
-                  }}</template>
+                  <template>{{ list.users.indexOf(item) + 1 }}</template>
                 </template>
 
-                <template v-slot:[`item.offering_cost`]="{ item }">
-                  <template>
-                    <template
-                      >Rp. {{ formatPrice(item.offering_cost) }}</template
+                <template v-slot:[`item.image`]="{ item }">
+                  <div style="display: grid; justify-content: center">
+                    <div
+                      class="w-img-oval m-2"
+                      @click="zoom($baseUrl + '/storage/' + item.image)"
                     >
-                  </template>
+                      <img
+                        :src="$baseUrl + '/storage/' + item.image"
+                        class="img-oval"
+                      />
+                      <a class="img-oval-zoom">
+                        <i class="mdi mdi-eye f-28 text-white"></i>
+                      </a>
+                    </div>
+                  </div>
                 </template>
 
-                <template v-slot:[`item.is_deal`]="{ item }">
-                  <template>
-                    <div
-                      style="color: gray"
-                      v-if="item.is_deal == '0' && item.is_done == '0'"
+                <template v-slot:[`item.role`]="{ item }">
+                  <div>
+                    <p
+                      style="
+                        margin: 0px;
+                        text-transform: capitalize;
+                        color: black;
+                      "
                     >
-                      Delivered
-                    </div>
-                    <div
-                      style="color: blue"
-                      v-else-if="item.is_deal == '1' && item.is_done == '0'"
+                      {{ item.role }}
+                    </p>
+                  </div>
+                </template>
+
+                <template v-slot:[`item.is_active`]="{ item }">
+                  <div>
+                    <p
+                      v-if="item.is_active == 1"
+                      style="
+                        margin: 0px;
+                        text-transform: capitalize;
+                        color: black;
+                      "
                     >
-                      On-Process
-                    </div>
-                    <div style="color: green" v-else-if="item.is_done == '1'">
-                      Done
-                    </div>
-                  </template>
+                      Active
+                    </p>
+                    <p
+                      v-else
+                      style="
+                        margin: 0px;
+                        text-transform: capitalize;
+                        color: grey;
+                      "
+                    >
+                      Inactive
+                    </p>
+                  </div>
+                </template>
+
+                <template v-slot:[`item.is_servicer`]="{ item }">
+                  <div>
+                    <p
+                      v-if="item.is_servicer == 1"
+                      style="
+                        margin: 0px;
+                        text-transform: capitalize;
+                        color: black;
+                      "
+                    >
+                      <v-icon>mdi-check-circle-outline</v-icon>
+                    </p>
+                    <p
+                      v-else
+                      style="
+                        margin: 0px;
+                        text-transform: capitalize;
+                        color: grey;
+                      "
+                    >
+                      <v-icon>mdi-cancel</v-icon>
+                    </p>
+                  </div>
                 </template>
 
                 <template v-slot:[`item.actions`]="{ item }">
                   <v-icon
                     dense
-                    color="#36abcf"
-                    @click="detailHandlerServicesTransaction(item)"
+                    color="#ffbd03"
+                    @click="handlerEditUser(item)"
                     class="data-table-icon mr-3"
-                    >mdi-information</v-icon
+                    >mdi-pencil</v-icon
                   >
                   <v-icon
-                    v-if="item.is_deal == 0"
+                    v-if="item.is_active == 0"
                     dense
-                    color="#FF0000"
-                    @click="deleteHandlerMerchandise(item)"
+                    color="red"
+                    @click="clickUserActive(item.uuid)"
                     class="data-table-icon"
-                    >mdi-delete</v-icon
+                    >mdi-account-off-outline</v-icon
                   >
                   <v-icon
-                    v-else
-                    disabled
+                    v-if="item.is_active == 1"
                     dense
-                    color="#FF0000"
-                    @click="deleteHandlerMerchandise(item)"
+                    color="green"
+                    @click="clickUserActive(item.uuid)"
                     class="data-table-icon"
-                    >mdi-delete</v-icon
+                    >mdi-account-circle-outline</v-icon
                   >
                 </template>
                 <template v-slot:[`footer.page-text`]="items">
@@ -535,13 +901,14 @@
                 </template>
                 <template v-slot:no-data>
                   <div color="white">
-                    <p class="p-0 m-0">Services Transaction is empty</p>
+                    <p class="p-0 m-0">Merchandise is empty</p>
                   </div>
                 </template>
               </v-data-table>
             </v-container>
           </template>
         </b-tab>
+        <!-- End Your Order -->
 
         <!-- Logout -->
         <b-tab @click="logout">
@@ -844,6 +1211,7 @@
             </div>
           </div>
           <div
+            v-if="myProfile.role == 'student' || myProfile.role == 'osis'"
             style="padding-left: 50px; padding-right: 50px; margin-top: 15px"
           >
             <div id="app">
@@ -1395,7 +1763,10 @@
           </div>
         </v-form>
 
-        <v-card-actions class="justify-end mt-5">
+        <v-card-actions
+          class="justify-end mt-5"
+          v-if="myProfile.role == 'student' || myProfile.role == 'osis'"
+        >
           <div
             v-if="
               !isBioValid ||
@@ -1428,7 +1799,7 @@
             >
           </div>
           <div
-          v-if="
+            v-if="
               isBioValid &&
               isAgeValid &&
               isRacialValid &&
@@ -1442,9 +1813,32 @@
               isHobbyValid &&
               isQuotesValid &&
               isIgAccValid &&
-              isStoryCharacterValid 
-              "              
+              isStoryCharacterValid
+            "
           >
+            <v-btn
+              style="text-transform: unset !important"
+              rounded
+              outlined
+              color="indigo"
+              class="m-t-35"
+              :loading="loading"
+              @click="submitUpdateProfile(getUUIDProfile)"
+              >Save Profile</v-btn
+            >
+          </div>
+
+          <v-btn
+            style="text-transform: unset !important"
+            plain
+            text
+            @click="dialogEditProfile = false"
+            >Close</v-btn
+          >
+        </v-card-actions>
+
+        <v-card-actions class="justify-end mt-5" v-else>
+          <div>
             <v-btn
               style="text-transform: unset !important"
               rounded
@@ -1994,38 +2388,38 @@
               </div>
             </div>
             <div
-            style="padding-left: 50px; padding-right: 50px; margin-top: 30px"
-          >
-            <label
-              style="
-                justify-content: start;
-                display: grid;
-                margin-bottom: 10px;
-                font-family: 'Georgia';
-              "
-              >Synopsys</label
+              style="padding-left: 50px; padding-right: 50px; margin-top: 30px"
             >
-            <div id="app">
-              <vue-editor id="editor1" v-model="sinopsis" />
-              <div style="height: 15px">
-                <v-slide-y-transition>
-                  <div
-                    v-if="!isComicSinopsisValid"
-                    transition="scroll-y-transition"
-                    style="
-                      font-size: 12px;
-                      text-align: left;
-                      color: red;
-                      margin-left: 15px;
-                      min-height: 14px;
-                      font-weight: lighter;
-                    "
-                  >
-                    This field is required
-                  </div>
-                </v-slide-y-transition>
+              <label
+                style="
+                  justify-content: start;
+                  display: grid;
+                  margin-bottom: 10px;
+                  font-family: 'Georgia';
+                "
+                >Synopsys</label
+              >
+              <div id="app">
+                <vue-editor id="editor1" v-model="sinopsis" />
+                <div style="height: 15px">
+                  <v-slide-y-transition>
+                    <div
+                      v-if="!isComicSinopsisValid"
+                      transition="scroll-y-transition"
+                      style="
+                        font-size: 12px;
+                        text-align: left;
+                        color: red;
+                        margin-left: 15px;
+                        min-height: 14px;
+                        font-weight: lighter;
+                      "
+                    >
+                      This field is required
+                    </div>
+                  </v-slide-y-transition>
+                </div>
               </div>
-            </div>
             </div>
           </div>
         </v-form>
@@ -2110,20 +2504,18 @@
         style="min-height: 700px"
         class="position-relative m-x-auto p-x-25 p-y-50 br-10 bs-none min-w-full min-w-lg-full"
       >
-        <v-card-actions class="justify-end mb-5">
+        <v-card-actions class="justify-end">
           <v-btn
-            style="text-transform: unset !important"
-            plain
-            text
             @click="dialogDetailComic = false"
-            ><v-icon
-              dense
-              color="#FF0000"
-              @click="snackbar = false"
-              class="data-table-icon"
-              >mdi-close</v-icon
-            ></v-btn
+            class="mx-1"
+            fab
+            dark
+            small
+            color="red"
+            style="height: 20px; width: 20px"
           >
+            <b-icon icon="x-lg" aria-hidden="true"></b-icon>
+          </v-btn>
         </v-card-actions>
         <h3
           class="f-24 f-md-20 f-secondary text-center m-b-50"
@@ -2153,18 +2545,36 @@
                       hide-details
                     ></v-text-field></div
                 ></b-col>
-                <b-col
+                <b-col style="justify-content: end; display: flex;"
                   ><v-btn
                     small
                     color="primary"
                     dark
                     class="mb-2"
-                    style="text-transform: unset !important"
+                    style="
+                      text-transform: unset !important;
+                      border-radius: 20px;
+                    "
                     @click="addHandlerSubComic(itemComic)"
                   >
                     Add Sub Comic
                   </v-btn></b-col
                 >
+                <b-col style="justify-content: start; display: flex"
+                    ><v-btn
+                      small
+                      color="primary"
+                      dark
+                      class="mb-2 w-2"
+                      style="
+                        text-transform: unset !important;
+                        border-radius: 20px;
+                      "
+                      @click="handlerRefresDataSubComic"
+                    >
+                      Refresh Data Sub Comic
+                    </v-btn></b-col
+                  >
               </b-row>
             </b-container>
 
@@ -2203,6 +2613,7 @@
                   >mdi-pencil</v-icon
                 >
                 <v-icon
+                  v-if="myProfile.role == 'admin'"
                   dense
                   color="#FF0000"
                   @click="deleteHandlerSubComic(item, itemComic)"
@@ -2731,11 +3142,7 @@
               : "Update Merchandise"
           }}
         </h3>
-        <v-form
-          ref="form"
-          class="w-full"
-          @submit.prevent
-        >
+        <v-form ref="form" class="w-full" @submit.prevent>
           <div
             class="h-auto w-full d-flex align-center justify-center flex-column m-b-25 mt-5"
           >
@@ -3363,8 +3770,26 @@
     </v-dialog>
     <!-- End Detail Services Transaction -->
 
+    <!-- Dialog Loading -->
+    <v-dialog
+      v-model="dialogLoader"
+      content-class="elevation-0"
+      persistent
+      width="300"
+    >
+      <v-card color="#fff0">
+        <img
+          src="@/assets/Spin-1s-200px.gif"
+          style="height: 150px"
+          class="d-inline-block align-top"
+          alt="Animation"
+        />
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Loading -->
+
     <!-- Snackbar -->
-    <v-snackbar v-model="snackbar" :color="color" text>
+    <v-snackbar v-model="snackbar" auto-height :color="color" text top right>
       {{ textMessage }}
       <template v-slot:action="{ attrs }">
         <v-btn plain color="red" text v-bind="attrs" @click="snackbar = false">
@@ -3378,6 +3803,111 @@
         </v-btn>
       </template>
     </v-snackbar>
+    <!-- End Snackbar -->
+
+    <v-dialog v-model="dialogEditDataUser" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">Edit Data User</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" sm="6">
+                <v-select
+                  :items="['user', 'student', 'osis']"
+                  label="User Role*"
+                  required
+                  v-model="userIsRole"
+                ></v-select>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-select
+                  :items="['Servicer', 'Not Servicer']"
+                  label="User Service*"
+                  required
+                  v-model="userIsService"
+                ></v-select>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn plain color="blue" text @click="clickSubmitEditaDataUser">
+            Save
+          </v-btn>
+          <v-btn
+            plain
+            text
+            @click="dialogEditDataUser = false"
+            style="text-transform: capitalize"
+            >Close</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Footer -->
+    <div
+      style="margin-top: 50px"
+      data-aos="fade-up"
+      data-aos-duration="2000"
+      data-aos-offset="0"
+    >
+      <div class="footer-dark">
+        <transition name="fade">
+          <footer>
+            <div class="container" style="justify-content: center; width: 50%">
+              <div class="">
+                <h3>Historical Art Fantasia</h3>
+                <p>
+                  Praesent sed lobortis mi. Suspendisse vel placerat ligula.
+                  Vivamus ac sem lacus. Ut vehicula rhoncus elementum. Etiam
+                  quis tristique lectus. Aliquam in arcu eget velit pulvinar
+                  dictum vel in justo.
+                </p>
+              </div>
+              <div class="col item social">
+                <a                  
+                  onmouseover="this.style.transform='translateY(-10%)';"
+                  onmouseout="this.style.transform='translateY(0)';"
+                  ><b-icon icon="instagram" aria-hidden="true" @click="openInstagramFooter"></b-icon></a
+                ><a
+                  onmouseover="this.style.transform='translateY(-10%)';"
+                  onmouseout="this.style.transform='translateY(0)';"
+                  ><b-icon icon="youtube" aria-hidden="true" @click="openYoutubeFooter"></b-icon></a
+                ><a @click="openTiktokFooter"
+                  onmouseover="this.style.transform='translateY(-10%)';"
+                  onmouseout="this.style.transform='translateY(0)';"
+                  ><img 
+                    src="@/assets/tiktok.png"
+                    style="height: 33px"
+                    class="d-inline-block align-top"
+                    alt="Animation"
+                  /></a
+                ><a                  
+                  onmouseover="this.style.transform='translateY(-10%)';"
+                  onmouseout="this.style.transform='translateY(0)';"
+                >
+                  <b-icon icon="mailbox" aria-hidden="true" @click="sendEmail"></b-icon
+                ></a>
+              </div>
+              <p class="copyright">
+                Historical Art Fantasia © 2023 || created by
+                <span
+                  @click="openNewPage"
+                  class="hoverMyName"
+                  style="cursor: pointer"
+                  >Doni Dwi Irawan</span
+                >
+              </p>
+            </div>
+          </footer>
+        </transition>
+      </div>
+    </div>
+    <!-- Footer -->
   </div>
 </template>
 
@@ -3503,6 +4033,13 @@ export default {
     MerchandiseForm: new FormData(),
     images_merchandise_path: [],
 
+    // Edit Data User
+    dialogEditDataUser: false,
+    userIsRole: "",
+    userIsService: "",
+    userDataUUID: "",
+    EditDataUserFormForm: new FormData(),
+
     // Forms
     inputType: "",
     image64Foto: "",
@@ -3524,6 +4061,7 @@ export default {
     },
     multiLine: true,
     dialogZoom: false,
+    dialogLoader: false,
     loadingScreen: true,
     loading: false,
     dialog: false,
@@ -3536,12 +4074,14 @@ export default {
       headersSubComic: [],
       headersPortfolio: [],
       headersMerchandise: [],
+      headersUser: [],
       headersServicesTransaction: [],
       npcs: [],
       comics: [],
       subcomics: [],
       portfolios: [],
       merchandises: [],
+      users: [],
       servicesTransactions: [],
       search_npc: "",
       search_comic: "",
@@ -3549,15 +4089,26 @@ export default {
       search_portfolio: "",
       search_merchandise: "",
       search_servicesTransaction: "",
+      search_user: "",
     },
   }),
   created() {
-    this.initializeNPC();
-    this.initializeComic();
-    this.initializePortfolio();
-    this.initializeMerchandise();
-    this.initializeServicesTranscation();
-    this.axioDataMyProfile();
+    // this.initializeServicesTranscation();
+
+    if (this.userLogin.token != null) {
+      this.axioDataMyProfile();
+    }
+
+    if (this.userLogin.role !== "user") {
+      this.initializeNPC();
+      this.initializeComic();
+      this.initializePortfolio();
+    }
+
+    if (this.userLogin.role === "admin") {
+      this.initializeMerchandise();
+      this.initializeDataUser();
+    }
   },
   computed: {
     getNamaPersona() {
@@ -4047,15 +4598,9 @@ export default {
       } else {
         this.dialogEditProfile = true;
         this.persona_name = this.myProfile.nama_persona;
+        this.image = this.myProfile.image;
+        this.selectedFileProfile = this.myProfile.image;
       }
-
-      console.log(
-        this.myProfile.nama_persona,
-        "editprofile",
-        this.myProfile.image,
-        "haha",
-        this.myProfile.image
-      );
     },
 
     handleFileChangeProfile(event) {
@@ -4101,27 +4646,29 @@ export default {
 
         this.ProfileForm = new FormData();
 
-        this.ProfileForm.append("nama_persona", this.persona_name);
-        this.ProfileForm.append("bio", this.bio);
-        this.ProfileForm.append("umur", this.age);
-        this.ProfileForm.append("ras", this.racial);
-        this.ProfileForm.append("tanggal_lahir", this.birth_date);
-        this.ProfileForm.append("zodiak", this.zodiac);
-        this.ProfileForm.append("MBTI", this.mbti);
-        this.ProfileForm.append("berat_badan", this.body_weight);
-        this.ProfileForm.append("tinggi_badan", this.body_tall);
-        this.ProfileForm.append("like", this.like);
-        this.ProfileForm.append("did_not_like", this.did_not_like);
-        this.ProfileForm.append("hobi", this.hobby);
-        this.ProfileForm.append("quotes", this.quotes);
-        this.ProfileForm.append("ig_acc", this.ig_acc);
-        this.ProfileForm.append("story_character", this.story_character);
+        if (this.myProfile.role == "student" || this.myProfile.role == "osis") {
+          this.ProfileForm.append("nama_persona", this.persona_name);
+          this.ProfileForm.append("bio", this.bio);
+          this.ProfileForm.append("umur", this.age);
+          this.ProfileForm.append("ras", this.racial);
+          this.ProfileForm.append("tanggal_lahir", this.birth_date);
+          this.ProfileForm.append("zodiak", this.zodiac);
+          this.ProfileForm.append("MBTI", this.mbti);
+          this.ProfileForm.append("berat_badan", this.body_weight);
+          this.ProfileForm.append("tinggi_badan", this.body_tall);
+          this.ProfileForm.append("like", this.like);
+          this.ProfileForm.append("did_not_like", this.did_not_like);
+          this.ProfileForm.append("hobi", this.hobby);
+          this.ProfileForm.append("quotes", this.quotes);
+          this.ProfileForm.append("ig_acc", this.ig_acc);
+          this.ProfileForm.append("story_character", this.story_character);
+        }
 
         if (dataFileFoto) {
           this.ProfileForm.append("image", dataFileFoto);
         }
 
-        this.loadingScreen = true;
+        this.dialogLoader = true;
 
         var urlAddProfile = this.$api + "/update-user/" + uuid;
 
@@ -4137,9 +4684,9 @@ export default {
 
             this.dialogEditProfile = false;
 
-            this.textMessage = "Profile Succesfully Updated";
+            this.textMessage = "The profile has been successfully changed 😊";
             this.snackbar = true;
-            this.color = "green";
+            this.color = "success";
 
             localStorage.setItem("nama_persona", this.myProfile.nama_persona);
             localStorage.setItem("image", this.myProfile.image);
@@ -4147,20 +4694,103 @@ export default {
             this.reloadPage();
 
             setTimeout(() => {
-              this.loadingScreen = false;
+              this.dialogLoader = false;
             }, 300);
           })
-          .catch((error) => {
-            console.log(error);
-
-            this.snackbar = true;
-            this.textMessage = "Profile Unsuccesfully Updated";
-            this.color = "secondary";
-            setTimeout(() => {
-              this.loadingScreen = false;
-            }, 300);
+          .catch(() => {
+            this.dialogLoader = false;
           });
       }
+    },
+
+    handlerEditUser(item) {
+      this.dialogEditDataUser = true;
+      this.userIsRole = item.role;
+
+      if (item.is_servicer == 1) {
+        this.userIsService = "Servicer";
+      } else {
+        this.userIsService = "Not Servicer";
+      }
+
+      this.userDataUUID = item.uuid;
+    },
+
+    clickUserActive(uuidUser) {
+      this.dialogLoader = true;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+      var url = this.$api + "/userActive/" + uuidUser;
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          this.initializeDataUser();
+
+          if (response.data.isActive == 0) {
+            this.textMessage = "User data has been deactivated successfully 😊";
+            this.snackbar = true;
+            this.color = "success";
+          } else {
+            this.textMessage = "User data has been activated successfully 😊";
+            this.snackbar = true;
+            this.color = "success";
+          }
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.dialogLoader = false;
+          }, 300);
+        })
+        .catch(() => {
+          this.dialogLoader = false;
+        });
+    },
+
+    clickSubmitEditaDataUser() {
+      this.dialogLoader = true;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+      var url = this.$api + "/editDataUser/" + this.userDataUUID;
+
+      this.EditDataUserForm = new FormData();
+
+      this.EditDataUserForm.append("role", this.userIsRole);
+      this.EditDataUserForm.append("is_servicer", this.userIsService);
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .post(url, this.EditDataUserFormForm, { headers: headers })
+        .then(() => {
+          this.userIsRole = "";
+          this.userIsService = "";
+          this.dialogEditDataUser = false;
+          this.initializeDataUser();
+
+          this.textMessage = "User data has been updated successfully 😊";
+          this.snackbar = true;
+          this.color = "success";
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.dialogLoader = false;
+          }, 300);
+        })
+        .catch(() => {
+          this.dialogLoader = false;
+        });
+    },
+
+    handlerRefresDataUser() {
+      this.initializeDataUser();
+      this.textMessage = "User shiny now ✨ Data buff  Ready to rock!";
+      this.snackbar = true;
+      this.color = "success";
     },
 
     axioDataMyProfile() {
@@ -4177,14 +4807,8 @@ export default {
         .then((response) => {
           this.myProfile = response.data.myProfile;
           this.image = response.data.myProfile.image;
-
-          console.log(
-            response.data.myProfile,
-            "myProfile",
-            response.data.myProfile.image,
-            this.image
-          );
-
+          
+          this.checkRoleAndDeleteIfMismatch();
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
             this.loadingScreen = false;
@@ -4198,6 +4822,90 @@ export default {
     },
     // End For Profile
 
+    // For Data User
+    initializeDataUser() {
+      this.list.headersUser = [
+        {
+          text: "Number",
+          value: "no",
+          filterable: false,
+          width: "10%",
+          align: "center",
+          sortable: false,
+        },
+        {
+          text: "Profile Image",
+          value: "image",
+          align: "center",
+          filterable: false,
+          sortable: false,
+        },
+        {
+          text: "Name (Persona)",
+          value: "nama_persona",
+          align: "center",
+          sortable: false,
+        },
+        {
+          text: "Role",
+          value: "role",
+          align: "center",
+        },
+        {
+          text: "Status",
+          value: "is_active",
+          align: "center",
+          filterable: false,
+        },
+        {
+          text: "Servicer",
+          value: "is_servicer",
+          align: "center",
+          filterable: false,
+        },
+        {
+          text: "Published Date",
+          value: "created_at",
+          filterable: false,
+          align: "center",
+          sortable: true,
+        },
+        { text: "Actions", value: "actions", align: "center", sortable: false },
+      ];
+      this.axioDataUser();
+    },
+
+    axioDataUser() {
+      this.loadingScreen = true;
+      var url = this.$api + "/getDataUser/" + this.userLogin.uuid;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      // Gunakan 'url' dalam permintaan POST
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          // Memformat data NPC dan menyimpannya dalam this.list.npcs
+          this.list.users = response.data.data.map((x) => {
+            return {
+              ...x,
+              created_at: moment(x.created_at).format("YYYY-MM-DD h:mm a"),
+            };
+          });
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch(() => {
+          this.loadingScreen = false;
+        });
+    },
+    // End For Data User
+
     // For Merchandise
     // For Uppercase Form
     uppercaseMerchandise() {
@@ -4207,6 +4915,13 @@ export default {
           words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
       }
       this.nama = words.join(" ");
+    },
+
+    handlerRefresDataMerchandise() {
+      this.initializeMerchandise();
+      this.textMessage = "Merchandise shiny now ✨ Data buff  Ready to rock!";
+      this.snackbar = true;
+      this.color = "success";
     },
 
     editHandlerMerchandise(item) {
@@ -4249,17 +4964,12 @@ export default {
           this.error_message = response.data.message;
           console.log(this.error);
           this.dialogConfirmDeleteMerchandise = false;
-          this.textMessage = "Merchandise Succesfully Deleted";
+          this.textMessage = "Merchandise has been deleted successfully 😊";
           this.snackbar = true;
-          this.color = "green";
+          this.color = "success";
           this.axioDataMerchandise();
         })
-        .catch((error) => {
-          this.error_message = error.response.data.message;
-          console.log(this.error);
-          this.textMessage = "Merchandise Unsuccesfully Deleted";
-          this.snackbar = true;
-          this.color = "green";
+        .catch(() => {
           setTimeout(() => {
             this.loadingScreen = false;
           }, 300);
@@ -4339,9 +5049,7 @@ export default {
             this.loadingScreen = false;
           }, 300);
         })
-        .catch((error) => {
-          // Menangani kesalahan jika terjadi
-          console.error("Error fetching SubComic data:", error);
+        .catch(() => {
           this.loadingScreen = false;
         });
     },
@@ -4370,7 +5078,7 @@ export default {
         this.MerchandiseForm.append("stok", this.stok);
         this.MerchandiseForm.append("harga", this.harga);
 
-        this.loadingScreen = true;
+        this.dialogLoader = true;
 
         if (val == "AddMerchandise") {
           var urlAddMerchandise = this.$api + "/create-merchandise";
@@ -4400,21 +5108,17 @@ export default {
               this.dialogMerchandise = false;
               this.axioDataMerchandise();
 
-              this.textMessage = "Merchandise Succesfully Created";
+              this.textMessage = "Portfolio has been created successfully 😊";
               this.snackbar = true;
-              this.color = "green";
+              this.color = "success";
+
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             })
-            .catch((error) => {
-              console.log(error);
-
-              this.snackbar = true;
-              this.textMessage = "Merchandise Unsuccesfully Created";
-              this.color = "secondary";
+            .catch(() => {
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             });
         } else {
@@ -4436,21 +5140,17 @@ export default {
               this.dialogMerchandise = false;
               this.axioDataMerchandise();
 
-              this.textMessage = "Merchandise Succesfully Updated";
+              this.textMessage = "Portfolio has been changed successfully 😊";
               this.snackbar = true;
-              this.color = "green";
+              this.color = "success";
+
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             })
-            .catch((error) => {
-              console.log(error);
-
-              this.snackbar = true;
-              this.textMessage = "Merchandise Unsuccesfully Updated";
-              this.color = "secondary";
+            .catch(() => {
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             });
         }
@@ -4484,38 +5184,89 @@ export default {
       this.dialogPortfolio = true;
     },
 
+    handlerRefresDataPortfolio() {
+      this.initializePortfolio();
+      this.textMessage = "Portfolio shiny now ✨ Data buff  Ready to rock!";
+      this.snackbar = true;
+      this.color = "success";
+    },
+
     initializePortfolio() {
-      this.list.headersPortfolio = [
-        {
-          text: "Number",
-          value: "no",
-          filterable: false,
-          width: "10%",
-          align: "center",
-          sortable: false,
-        },
-        {
-          text: "Thumbnail",
-          value: "thumbnail",
-          align: "center",
-          filterable: false,
-          sortable: false,
-        },
-        {
-          text: "Published Date",
-          value: "created_at",
-          filterable: false,
-          align: "center",
-          sortable: true,
-        },
-        { text: "Actions", value: "actions", align: "center", sortable: false },
-      ];
+      if (this.userLogin.role == "admin") {
+        this.list.headersPortfolio = [
+          {
+            text: "Number",
+            value: "no",
+            filterable: false,
+            width: "10%",
+            align: "center",
+            sortable: false,
+          },
+          {
+            text: "Thumbnail",
+            value: "thumbnail",
+            align: "center",
+            filterable: false,
+            sortable: false,
+          },
+          {
+            text: "Portfolio By",
+            value: "porto_by",
+            align: "center",
+            sortable: false,
+          },
+          {
+            text: "Published Date",
+            value: "created_at",
+            filterable: false,
+            align: "center",
+            sortable: true,
+          },
+          {
+            text: "Actions",
+            value: "actions",
+            align: "center",
+            sortable: false,
+          },
+        ];
+      } else {
+        this.list.headersPortfolio = [
+          {
+            text: "Number",
+            value: "no",
+            filterable: false,
+            width: "10%",
+            align: "center",
+            sortable: false,
+          },
+          {
+            text: "Thumbnail",
+            value: "thumbnail",
+            align: "center",
+            filterable: false,
+            sortable: false,
+          },
+          {
+            text: "Published Date",
+            value: "created_at",
+            filterable: false,
+            align: "center",
+            sortable: true,
+          },
+          {
+            text: "Actions",
+            value: "actions",
+            align: "center",
+            sortable: false,
+          },
+        ];
+      }
       this.axioDataPortfolio();
     },
 
     axioDataPortfolio() {
       this.loadingScreen = true;
-      var url = this.$api + "/show-all-portfolio";
+      var url = this.$api + "/show-all-portfolio/" + this.userLogin.id;
       // Set the headers
       var headers = {
         Authorization: "Bearer " + this.userLogin.token,
@@ -4538,9 +5289,7 @@ export default {
             this.loadingScreen = false;
           }, 300);
         })
-        .catch((error) => {
-          // Menangani kesalahan jika terjadi
-          console.error("Error fetching SubComic data:", error);
+        .catch(() => {
           this.loadingScreen = false;
         });
     },
@@ -4560,21 +5309,22 @@ export default {
           this.error_message = response.data.message;
           console.log(this.error);
           this.dialogConfirmDeletePortfolio = false;
-          this.textMessage = "Portfolio Succesfully Deleted";
+
+          this.textMessage = "Portfolio has been deleted successfully 😊";
           this.snackbar = true;
-          this.color = "green";
+          this.color = "success";
+
           this.axioDataPortfolio();
-        })
-        .catch((error) => {
-          this.error_message = error.response.data.message;
-          console.log(this.error);
-          this.textMessage = "Portfolio Unsuccesfully Deleted";
-          this.snackbar = true;
-          this.color = "green";
+
           setTimeout(() => {
             this.loadingScreen = false;
           }, 300);
-          this.dialogConfirmDeleteSubComic = false;
+        })
+        .catch(() => {
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+          this.dialogConfirmDeletePortfolio = false;
         });
     },
 
@@ -4591,7 +5341,7 @@ export default {
 
         this.PortfolioFrom = new FormData();
 
-        this.loadingScreen = true;
+        this.dialogLoader = true;
 
         if (val == "AddPortfolio") {
           var urlAddPortfolio = this.$api + "/create-portfolio";
@@ -4612,21 +5362,17 @@ export default {
               this.dialogPortfolio = false;
               this.axioDataPortfolio();
 
-              this.textMessage = "Portfolio Succesfully Created";
+              this.textMessage = "Portfolio has been created successfully 😊";
               this.snackbar = true;
-              this.color = "green";
+              this.color = "success";
+
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             })
-            .catch((error) => {
-              console.log(error);
-
-              this.snackbar = true;
-              this.textMessage = "Portfolio Unsuccesfully Created";
-              this.color = "secondary";
+            .catch(() => {
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             });
         } else {
@@ -4646,33 +5392,36 @@ export default {
               this.dialogPortfolio = false;
               this.axioDataPortfolio();
 
-              this.textMessage = "Portfolio Succesfully Updated";
+              this.textMessage = "Portfolio has been changed successfully 😊";
               this.snackbar = true;
-              this.color = "green";
+              this.color = "success";
+
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             })
-            .catch((error) => {
-              console.log(error);
-
-              this.snackbar = true;
-              this.textMessage = "Portfolio Unsuccesfully updated";
-              this.color = "secondary";
+            .catch(() => {
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             });
         }
 
         setTimeout(() => {
-          this.loadingScreen = false;
+          this.dialogLoader = false;
         }, 300);
       }
     },
     // End For Portfolio
 
     // For Sub Comic
+    handlerRefresDataSubComic() {
+      this.initializeSubComic();
+      this.textMessage = "Sub comic shiny now ✨ Data buff  Ready to rock!";
+      this.snackbar = true;
+      this.color = "success";
+    },
+
     editHandlerSubComic(item, itemComic) {
       this.clearForm();
       this.inputType = "UpdateComic";
@@ -4781,7 +5530,8 @@ export default {
     axioDataSubComic(detailIdComic) {
       this.loadingScreen = true;
       let id = detailIdComic;
-      var url = this.$api + "/show-all-subcomic/" + id;
+      var url =
+        this.$api + "/show-all-subcomic/" + id + "/" + this.userLogin.id;
       // Set the headers
       var headers = {
         Authorization: "Bearer " + this.userLogin.token,
@@ -4812,7 +5562,7 @@ export default {
     },
 
     deleteDataSubComic() {
-      this.loadingScreen = true;
+      this.dialogLoader = true;
       let id = this.detailIdComic;
       let uuid = this.deleteUuidSubComic;
       var url = this.$api + "/delete-subkomik/" + uuid;
@@ -4823,23 +5573,22 @@ export default {
 
       this.$http
         .delete(url, { headers: headers })
-        .then((response) => {
-          this.error_message = response.data.message;
-          console.log(this.error);
+        .then(() => {
           this.dialogConfirmDeleteSubComic = false;
-          this.textMessage = "Sub Comic Succesfully Deleted";
+
+          this.textMessage = "The comic sub has been deleted successfully 😊";
           this.snackbar = true;
-          this.color = "green";
+          this.color = "success";
+
           this.axioDataSubComic(id);
-        })
-        .catch((error) => {
-          this.error_message = error.response.data.message;
-          console.log(this.error);
-          this.textMessage = "Sub Comic Unsuccesfully Deleted";
-          this.snackbar = true;
-          this.color = "green";
+
           setTimeout(() => {
-            this.loadingScreen = false;
+            this.dialogLoader = false;
+          }, 300);
+        })
+        .catch(() => {
+          setTimeout(() => {
+            this.dialogLoader = false;
           }, 300);
           this.dialogConfirmDeleteSubComic = false;
         });
@@ -4866,7 +5615,7 @@ export default {
         this.SubComicForm.append("judul", this.judul);
         this.SubComicForm.append("chapter", this.chapter);
 
-        this.loadingScreen = true;
+        this.dialogLoader = true;
 
         if (val == "AddSubComic") {
           var urlAddSubComic = this.$api + "/create-subkomik/" + id;
@@ -4881,10 +5630,7 @@ export default {
 
           this.$http
             .post(urlAddSubComic, this.SubComicForm, { headers: headers })
-            .then((response) => {
-              this.error_message = response.data.message;
-              console.log(this.error_message);
-
+            .then(() => {
               // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
               document.getElementById("file-foto").value = "";
 
@@ -4894,21 +5640,18 @@ export default {
               this.closeDialogAddandEditSubComic();
               this.axioDataSubComic(idComic);
 
-              this.textMessage = "Sub Comic Succesfully Created";
+              this.textMessage =
+                "The comic sub has been posted successfully 😊";
               this.snackbar = true;
-              this.color = "green";
+              this.color = "success";
+
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             })
-            .catch((error) => {
-              console.log(error);
-
-              this.snackbar = true;
-              this.textMessage = "Sub Comic Unsuccesfully Created";
-              this.color = "secondary";
+            .catch(() => {
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             });
         } else {
@@ -4936,27 +5679,24 @@ export default {
               this.closeDialogAddandEditSubComic();
               this.axioDataSubComic(idComic);
 
-              this.textMessage = "Sub Comic Succesfully Updated";
+              this.textMessage =
+                "The comic sub has been updated successfully 😊";
               this.snackbar = true;
-              this.color = "green";
+              this.color = "success";
+
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             })
-            .catch((error) => {
-              console.log(error);
-
-              this.snackbar = true;
-              this.textMessage = "Sub Comic Unsuccesfully updated";
-              this.color = "secondary";
+            .catch(() => {
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             });
         }
 
         setTimeout(() => {
-          this.loadingScreen = false;
+          this.dialogLoader = false;
         }, 300);
       }
     },
@@ -5003,10 +5743,51 @@ export default {
       this.dialogConfirmDeleteComic = true;
     },
 
+    handlerRefresDataComic() {
+      this.initializeComic();
+      this.textMessage = "Comic shiny now ✨ Data buff  Ready to rock!";
+      this.snackbar = true;
+      this.color = "success";
+    },
+
     addHandlerComic() {
       this.clearForm();
       this.inputType = "AddComic";
       this.dialogComic = true;
+    },
+
+    editStatusComic(item) {
+      this.loadingScreen = true;
+      var url = this.$api + "/editStatusKomik/" + item.uuid;
+      // Set the headers
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      this.$http
+        .get(url, { headers: headers })
+        .then((response) => {
+          if (response.data.isSuspen == 1) {
+            this.textMessage = "The comic has been suspended successfully";
+            this.snackbar = true;
+            this.color = "green";
+          } else {
+            this.textMessage = "The comic has been unsuspended successfully";
+            this.snackbar = true;
+            this.color = "green";
+          }
+
+          this.axioDataComic();
+
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch(() => {
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        });
     },
 
     deleteDataComic() {
@@ -5043,51 +5824,119 @@ export default {
     },
 
     initializeComic() {
-      this.list.headersComic = [
-        {
-          text: "Number",
-          value: "no",
-          filterable: false,
-          width: "10%",
-          align: "center",
-          sortable: false,
-        },
-        {
-          text: "Thumbnail",
-          value: "thumbnail",
-          align: "center",
-          filterable: false,
-          sortable: false,
-        },
-        {
-          text: "Comic Title",
-          value: "judul",
-          sortable: false,
-          align: "center",
-          width: "30%",
-        },
-        {
-          text: "Status",
-          value: "status",
-          align: "center",
-          filterable: false,
-          sortable: false,
-        },
-        {
-          text: "Published Date",
-          value: "updated_at",
-          filterable: false,
-          align: "center",
-          sortable: true,
-        },
-        { text: "Actions", value: "actions", align: "center", sortable: false },
-      ];
+      if (this.userLogin.role == "admin") {
+        this.list.headersComic = [
+          {
+            text: "Number",
+            value: "no",
+            filterable: false,
+            width: "10%",
+            align: "center",
+            sortable: false,
+          },
+          {
+            text: "Thumbnail",
+            value: "thumbnail",
+            align: "center",
+            filterable: false,
+            sortable: false,
+          },
+          {
+            text: "Comic Title",
+            value: "judul",
+            sortable: false,
+            align: "center",
+          },
+          {
+            text: "Viewers",
+            value: "jumlah_view",
+            align: "center",
+            filterable: false,
+          },
+          {
+            text: "Post By",
+            value: "post_by",
+            align: "center",
+            sortable: false,
+          },
+          {
+            text: "Status",
+            value: "status",
+            align: "center",
+            filterable: false,
+            sortable: false,
+          },
+          {
+            text: "Published Date",
+            value: "updated_at",
+            filterable: false,
+            align: "center",
+            sortable: true,
+          },
+          {
+            text: "Actions",
+            value: "actions",
+            align: "center",
+            sortable: false,
+          },
+        ];
+      } else {
+        this.list.headersComic = [
+          {
+            text: "Number",
+            value: "no",
+            filterable: false,
+            width: "10%",
+            align: "center",
+            sortable: false,
+          },
+          {
+            text: "Thumbnail",
+            value: "thumbnail",
+            align: "center",
+            filterable: false,
+            sortable: false,
+          },
+          {
+            text: "Comic Title",
+            value: "judul",
+            sortable: false,
+            align: "center",
+          },
+          {
+            text: "Viewers",
+            value: "jumlah_view",
+            align: "center",
+            filterable: false,
+          },
+          {
+            text: "Status",
+            value: "status",
+            align: "center",
+            filterable: false,
+            sortable: false,
+          },
+          {
+            text: "Published Date",
+            value: "updated_at",
+            filterable: false,
+            align: "center",
+            sortable: true,
+          },
+          {
+            text: "Actions",
+            value: "actions",
+            align: "center",
+            sortable: false,
+          },
+        ];
+      }
       this.axioDataComic();
     },
 
     axioDataComic() {
       this.loadingScreen = true;
-      var url = this.$api + "/show-all-comic";
+      var url = this.$api + "/show-all-comic/" + this.userLogin.id;
       // Set the headers
       var headers = {
         Authorization: "Bearer " + this.userLogin.token,
@@ -5261,7 +6110,7 @@ export default {
     },
 
     deleteDataNPC() {
-      this.loadingScreen = true;
+      this.dialogLoader = true;
       let uuid = this.deleteUuidNPC;
       var url = this.$api + "/delete-npc/" + uuid;
       // Set the headers
@@ -5271,68 +6120,124 @@ export default {
 
       this.$http
         .delete(url, { headers: headers })
-        .then((response) => {
-          this.error_message = response.data.message;
-          console.log(this.error);
+        .then(() => {
           this.dialogConfirmDeleteNPC = false;
-          this.textMessage = "NPC Succesfully Deleted";
+          this.textMessage = "Got it! NPC gone. Poof! ✨";
           this.snackbar = true;
           this.color = "green";
           this.axioDataNPC();
-        })
-        .catch((error) => {
-          this.error_message = error.response.data.message;
-          console.log(this.error);
-          this.textMessage = "NPC Unsuccesfully Created";
-          this.snackbar = true;
-          this.color = "green";
+
           setTimeout(() => {
-            this.loadingScreen = false;
+            this.dialogLoader = false;
           }, 300);
+        })
+        .catch(() => {
+          this.dialogLoader = false;
           this.dialogConfirmDeleteNPC = false;
         });
     },
 
+    handlerRefresDataNPC() {
+      this.initializeNPC();
+      this.textMessage = "NPC shiny now ✨ Data buff  Ready to rock!";
+      this.snackbar = true;
+      this.color = "success";
+    },
+
     initializeNPC() {
-      this.list.headersNPC = [
-        {
-          text: "Number",
-          value: "no",
-          filterable: false,
-          width: "10%",
-          align: "center",
-          sortable: false,
-        },
-        {
-          text: "Image",
-          value: "image_npc",
-          filterable: false,
-          sortable: false,
-          align: "center",
-          width: "10%",
-        },
-        {
-          text: "NPC Name",
-          value: "npc_name",
-          align: "center",
-          width: "30%",
-          sortable: false,
-        },
-        {
-          text: "Published Date",
-          value: "updated_at",
-          filterable: false,
-          align: "center",
-          sortable: true,
-        },
-        { text: "Actions", value: "actions", align: "center", sortable: false },
-      ];
+      if (this.userLogin.role == "admin") {
+        this.list.headersNPC = [
+          {
+            text: "Number",
+            value: "no",
+            filterable: false,
+            width: "10%",
+            align: "center",
+            sortable: false,
+          },
+          {
+            text: "Image",
+            value: "image_npc",
+            filterable: false,
+            sortable: false,
+            align: "center",
+            width: "10%",
+          },
+          {
+            text: "NPC Name",
+            value: "npc_name",
+            align: "center",
+            width: "20%",
+            sortable: false,
+          },
+          {
+            text: "Author Name",
+            value: "nama_author",
+            align: "center",
+            width: "20%",
+            sortable: false,
+          },
+          {
+            text: "Published Date",
+            value: "updated_at",
+            filterable: false,
+            align: "center",
+            sortable: true,
+          },
+          {
+            text: "Actions",
+            value: "actions",
+            align: "center",
+            sortable: false,
+            width: "15%",
+          },
+        ];
+      } else {
+        this.list.headersNPC = [
+          {
+            text: "Number",
+            value: "no",
+            filterable: false,
+            width: "10%",
+            align: "center",
+            sortable: false,
+          },
+          {
+            text: "Image",
+            value: "image_npc",
+            filterable: false,
+            sortable: false,
+            align: "center",
+            width: "10%",
+          },
+          {
+            text: "NPC Name",
+            value: "npc_name",
+            align: "center",
+            width: "20%",
+            sortable: false,
+          },
+          {
+            text: "Published Date",
+            value: "updated_at",
+            filterable: false,
+            align: "center",
+            sortable: true,
+          },
+          {
+            text: "Actions",
+            value: "actions",
+            align: "center",
+            sortable: false,
+          },
+        ];
+      }
       this.axioDataNPC();
     },
 
     axioDataNPC() {
       this.loadingScreen = true;
-      var url = this.$api + "/show-all-npc";
+      var url = this.$api + "/show-all-npc/" + this.userLogin.id;
       // Set the headers
       var headers = {
         Authorization: "Bearer " + this.userLogin.token,
@@ -5379,7 +6284,7 @@ export default {
         this.NPCForm.append("npc_profile", this.npc_profile);
         this.NPCForm.append("npc_story", this.npc_story);
 
-        this.loadingScreen = true;
+        this.dialogLoader = true;
 
         if (val == "AddNPC") {
           var urlAddNPC = this.$api + "/create-npc";
@@ -5400,22 +6305,16 @@ export default {
               this.closeDialog();
               this.axioDataNPC();
 
-              this.textMessage = "NPC Succesfully Created";
+              this.textMessage = "The NPC has been successfully added 😊";
               this.snackbar = true;
-              this.color = "green";
+              this.color = "success";
+
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             })
-            .catch((error) => {
-              console.log(error);
-
-              this.snackbar = true;
-              this.textMessage = "NPC Unsuccesfully Created";
-              this.color = "secondary";
-              setTimeout(() => {
-                this.loadingScreen = false;
-              }, 300);
+            .catch(() => {
+              this.dialogLoader = false;
             });
         } else {
           var urlEditNPC = this.$api + "/update-npc/" + uuid;
@@ -5435,22 +6334,16 @@ export default {
               this.closeDialog();
               this.axioDataNPC();
 
-              this.textMessage = "NPC Succesfully Updated";
+              this.textMessage = "The NPC has been successfully changed 😊";
               this.snackbar = true;
-              this.color = "green";
+              this.color = "success";
+
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             })
-            .catch((error) => {
-              console.log(error);
-
-              this.snackbar = true;
-              this.textMessage = "NPC Unsuccesfully Updated";
-              this.color = "secondary";
-              setTimeout(() => {
-                this.loadingScreen = false;
-              }, 300);
+            .catch(() => {
+              this.dialogLoader = false;
             });
         }
 
@@ -5465,6 +6358,21 @@ export default {
     },
 
     // End For NPC
+
+    // LogoutAuto
+    checkRoleAndDeleteIfMismatch() {
+      console.log(this.userLogin.role, 'role matching', this.myProfile.role)
+      if (this.userLogin.role !== this.myProfile.role) {
+        // Roles don't match, delete the localStorage item
+        this.logout();
+        // You can perform other actions as needed
+        console.log('Role mismatch. LocalStorage item deleted.');
+      } else {
+        // Roles match, you can perform other actions if needed
+        console.log('Role match.');
+      }
+    },
+    
 
     // Reload Page
     reloadPage() {
@@ -5541,6 +6449,38 @@ export default {
       this.selectedFile = null; // Store the selected file
     },
 
+    // Footer
+    openNewPage() {
+      const link =
+        "https://www.linkedin.com/in/doni-dwi-irawan-818029182?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app";
+      window.open(link, "_blank");
+    },
+    openInstagramFooter() {
+      window.open('https://www.instagram.com/hafallart/', "_blank");
+    },
+    openYoutubeFooter() {
+      window.open('https://www.youtube.com/@haforastudio9615', "_blank");
+    },
+    openTiktokFooter() {
+      window.open('https://www.tiktok.com/@hafallart', "_blank");
+    },
+    sendEmail() {
+      // Replace 'recipient@example.com' with the actual email address
+      const emailAddress = 'haf3334444@gmail.com';
+
+      // Construct the mailto link
+      const mailtoLink = `mailto:${emailAddress}`;
+
+      // Open the default email client with the mailto link
+      window.location.href = mailtoLink;
+    },
+    // End Footer
+
+    // Link instagram profile
+    openInstagramInNewTab(akun_ig) {
+      window.open(akun_ig, "_blank");
+    },
+
     // For changing the format of currency
     formatPrice(value) {
       let val = (value / 1).toFixed(2).replace(".", ",");
@@ -5584,6 +6524,86 @@ export default {
 </script>
 
 <style scoped>
+
+/* Footer */
+.hoverMyName:hover {
+  color: rgb(125, 213, 237);
+}
+.footer-dark {
+  padding: 20px 0;
+  color: #f0f9ff;
+  background-color: #282d32;
+}
+
+.footer-dark h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.footer-dark ul {
+  padding: 0;
+  list-style: none;
+  line-height: 1.6;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.footer-dark ul a {
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.6;
+}
+
+.footer-dark ul a:hover {
+  opacity: 0.8;
+}
+
+.footer-dark .item.text p {
+  opacity: 0.6;
+  margin-bottom: 0;
+}
+
+.footer-dark .item.social {
+  text-align: center;
+}
+
+.footer-dark .item.text {
+  margin-bottom: 36px;
+}
+
+.footer-dark .item.social > a {
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
+  margin-left: 1.5px;
+  margin-right: 1.5px;
+  margin-top: 5px;
+  color: #fff;
+  opacity: 0.75;
+}
+
+.footer-dark .item.social > a:hover {
+  opacity: 0.9;
+}
+
+.footer-dark .copyright {
+  text-align: center;
+  padding-top: 24px;
+  opacity: 0.3;
+  font-size: 13px;
+  margin-bottom: 0;
+}
+/* /Footer */
+.storyChar {
+  width: 55%;
+}
 .btn-img-profil {
   position: absolute;
   display: flex;
@@ -5707,6 +6727,9 @@ export default {
 }
 
 @media only screen and (max-width: 600px) {
+  .storyChar {
+    width: 80%;
+  }
   .div-detail-order-services {
     width: 80% !important;
   }

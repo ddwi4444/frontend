@@ -56,12 +56,13 @@
                       </div>
 
                       <center>
-                        <label for="file-upload" style="font-size: 12px"
+                        <label for="file-upload" style="font-size: 12px; border-radius: 20px;"
                           ><v-icon small style="margin-right: 4px"
                             >fas fa-images</v-icon
                           >Add Images</label
                         >
                         <input
+                        style="border-radius: 20px;"
                           type="file"
                           id="file-upload"
                           ref="fileFoto"
@@ -435,12 +436,13 @@
                         <center>
                           <label
                             for="file-upload-announcement"
-                            style="font-size: 12px"
+                            style="font-size: 12px; border-radius: 20px;"
                             ><v-icon small style="margin-right: 4px"
                               >fas fa-images</v-icon
                             >Add Images</label
                           >
                           <input
+                          style="border-radius: 20px;"
                             type="file"
                             id="file-upload-announcement"
                             ref="fileFotoAnnouncement"
@@ -972,12 +974,13 @@
                       </div>
 
                       <center>
-                        <label for="file-upload-komen" style="font-size: 12px"
+                        <label for="file-upload-komen" style="font-size: 12px; border-radius: 20px;"
                           ><v-icon small style="margin-right: 4px"
                             >fas fa-images</v-icon
                           >Add Images</label
                         >
                         <input
+                        style="border-radius: 20px;"
                           type="file"
                           id="file-upload-komen"
                           ref="fileFotoKomen"
@@ -1269,7 +1272,12 @@
 
 
     <!-- Footer -->
-    <div style="margin-top: 50px" data-aos="fade-up" data-aos-duration="2000" data-aos-offset="0">
+    <div
+      style="margin-top: 50px"
+      data-aos="fade-up"
+      data-aos-duration="2000"
+      data-aos-offset="0"
+    >
       <div class="footer-dark">
         <transition name="fade">
           <footer>
@@ -1284,27 +1292,28 @@
                 </p>
               </div>
               <div class="col item social">
-                <a
-                  href="#"
+                <a                  
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="instagram" aria-hidden="true"></b-icon></a
+                  ><b-icon icon="instagram" aria-hidden="true" @click="openInstagramFooter"></b-icon></a
                 ><a
-                  href="#"
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="youtube" aria-hidden="true"></b-icon></a
-                ><a
-                  href="#"
+                  ><b-icon icon="youtube" aria-hidden="true" @click="openYoutubeFooter"></b-icon></a
+                ><a @click="openTiktokFooter"
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="bi:tiktok" aria-hidden="true"></b-icon></a
-                ><a
-                  href="#"
+                  ><img 
+                    src="@/assets/tiktok.png"
+                    style="height: 33px"
+                    class="d-inline-block align-top"
+                    alt="Animation"
+                  /></a
+                ><a                  
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
                 >
-                  <b-icon icon="mailbox" aria-hidden="true"></b-icon
+                  <b-icon icon="mailbox" aria-hidden="true" @click="sendEmail"></b-icon
                 ></a>
               </div>
               <p class="copyright">
@@ -1992,6 +2001,8 @@ export default {
         .then((response) => {
           this.myProfile = response.data.myProfile;
 
+          this.checkRoleAndDeleteIfMismatch();
+
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
             this.loadingScreen = false;
@@ -2004,6 +2015,44 @@ export default {
         });
     },
     // End Forum
+
+    // LogoutAuto
+    checkRoleAndDeleteIfMismatch() {
+      console.log(this.userLogin.role, 'role matching', this.myProfile.role)
+      if (this.userLogin.role !== this.myProfile.role) {
+        // Roles don't match, delete the localStorage item
+        this.logout();
+        // You can perform other actions as needed
+        console.log('Role mismatch. LocalStorage item deleted.');
+      } else {
+        // Roles match, you can perform other actions if needed
+        console.log('Role match.');
+      }
+    },
+    logout() {
+      this.loadingScreen = true;
+
+      var url = this.$api + "/logout";
+      var headers = {
+        Authorization: "Bearer " + this.userLogin.token,
+      };
+
+      this.$http
+        .post(url, this.NPCForm, { headers: headers })
+        .then((response) => {
+          console.log(response.data.message);
+          localStorage.removeItem("image");
+          localStorage.removeItem("nama_persona");
+          localStorage.removeItem("role");
+          localStorage.removeItem("token");
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 5000);
+          this.$router.push({
+            name: "login",
+          });
+        });
+    },
 
     // For zoom image
     zoom(img) {
@@ -2060,6 +2109,28 @@ export default {
         "https://www.linkedin.com/in/doni-dwi-irawan-818029182?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app";
       window.open(link, "_blank");
     },
+
+    // Footer
+    openInstagramFooter() {
+      window.open('https://www.instagram.com/hafallart/', "_blank");
+    },
+    openYoutubeFooter() {
+      window.open('https://www.youtube.com/@haforastudio9615', "_blank");
+    },
+    openTiktokFooter() {
+      window.open('https://www.tiktok.com/@hafallart', "_blank");
+    },
+    sendEmail() {
+      // Replace 'recipient@example.com' with the actual email address
+      const emailAddress = 'haf3334444@gmail.com';
+
+      // Construct the mailto link
+      const mailtoLink = `mailto:${emailAddress}`;
+
+      // Open the default email client with the mailto link
+      window.location.href = mailtoLink;
+    },
+    // End Footer
   },
 };
 </script>
