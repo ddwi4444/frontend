@@ -3977,7 +3977,8 @@ export default {
     npc_story: "",
 
     // Comic
-    items: ["foo", "bar", "fizz", "buzz"],
+    items: [
+"Drama", "Fantasy", "Kingdom", "Comedy", "Action", "Slice of Life", "Romantic", "Thriller", "Horror", "Local"],
     dialogComic: false,
     dialogConfirmDeleteComic: false,
     dialogDetailComic: false,

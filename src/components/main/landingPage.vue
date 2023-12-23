@@ -1704,7 +1704,8 @@ export default {
     color: "",
 
     // Adds on
-    itemsGenre: ["foo", "bar", "fizz", "buzz"],
+    itemsGenre: [
+"Drama", "Fantasy", "Kingdom", "Comedy", "Action", "Slice of Life", "Romantic", "Thriller", "Horror", "Local"],
     isCategoryOn: 0,
     isFavoriteOn: 0,
     isKomikTodayOn: 0,
