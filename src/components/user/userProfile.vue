@@ -809,13 +809,34 @@
                 <template v-slot:[`item.role`]="{ item }">
                   <div>
                     <p
+                      v-if="item.role == 'user'"
                       style="
                         margin: 0px;
                         text-transform: capitalize;
                         color: black;
                       "
                     >
-                      {{ item.role }}
+                      User
+                    </p>
+                    <p
+                      v-else-if="item.role == 'student'"
+                      style="
+                        margin: 0px;
+                        text-transform: capitalize;
+                        color: blue;
+                      "
+                    >
+                      Student
+                    </p>
+                    <p
+                      v-else-if="item.role == 'osis'"
+                      style="
+                        margin: 0px;
+                        text-transform: capitalize;
+                        color: rgb(149, 52, 0);
+                      "
+                    >
+                      Osis
                     </p>
                   </div>
                 </template>
@@ -827,7 +848,7 @@
                       style="
                         margin: 0px;
                         text-transform: capitalize;
-                        color: black;
+                        color: green;
                       "
                     >
                       Active
@@ -837,7 +858,7 @@
                       style="
                         margin: 0px;
                         text-transform: capitalize;
-                        color: grey;
+                        color: red;
                       "
                     >
                       Inactive
@@ -855,7 +876,7 @@
                         color: black;
                       "
                     >
-                      <v-icon>mdi-check-circle-outline</v-icon>
+                      <v-icon color="green">mdi-check-circle-outline</v-icon>
                     </p>
                     <p
                       v-else
@@ -2233,7 +2254,6 @@
               >Comic Title</label
             >
             <v-text-field
-              @keyup="uppercaseComic"
               solo
               v-model="judul"
               type="text"
@@ -2747,7 +2767,6 @@
               >Sub Comic Title</label
             >
             <v-text-field
-              @keyup="uppercaseComic"
               solo
               v-model="judul"
               type="text"
@@ -3218,7 +3237,6 @@
               >Product Name</label
             >
             <v-text-field
-              @keyup="uppercaseMerchandise"
               solo
               v-model="nama"
               type="text"
@@ -3815,8 +3833,8 @@
             <v-row>
               <v-col cols="12" sm="6">
                 <v-select
-                  :items="['user', 'student', 'osis']"
-                  label="User Role*"
+                  :items="['User', 'Student', 'Osis']"
+                  label="User Role"
                   required
                   v-model="userIsRole"
                 ></v-select>
@@ -3824,7 +3842,7 @@
               <v-col cols="12" sm="6">
                 <v-select
                   :items="['Servicer', 'Not Servicer']"
-                  label="User Service*"
+                  label="User Service"
                   required
                   v-model="userIsService"
                 ></v-select>
@@ -3834,7 +3852,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn plain color="blue" text @click="clickSubmitEditaDataUser">
+          <v-btn style="text-transform: capitalize" color="blue" text @click="clickSubmitEditaDataUser">
             Save
           </v-btn>
           <v-btn
@@ -4705,7 +4723,16 @@ export default {
 
     handlerEditUser(item) {
       this.dialogEditDataUser = true;
-      this.userIsRole = item.role;
+
+      if(item.role == 'user'){
+        this.userIsRole = "User";
+      }
+      else if(item.role == 'student'){
+        this.userIsRole = "Student";
+      }
+      else if(item.role == 'osis'){
+        this.userIsRole = "Osis";
+      }
 
       if (item.is_servicer == 1) {
         this.userIsService = "Servicer";
@@ -4765,7 +4792,7 @@ export default {
 
       // Gunakan 'url' dalam permintaan POST
       this.$http
-        .post(url, this.EditDataUserFormForm, { headers: headers })
+        .post(url, this.EditDataUserForm, { headers: headers })
         .then(() => {
           this.userIsRole = "";
           this.userIsService = "";
