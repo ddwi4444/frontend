@@ -95,23 +95,18 @@
             class="searchDiv"
             style="align-items: center; display: flex"
           >
-            <div class="search-box">
-              <button
-                class="btn-search"
-                style="padding-top: 1.5px"
-                @click="search"
-              >
-                <b-icon-search></b-icon-search>
-              </button>
-              <input
-                type="text"
-                class="input-search"
-                v-model="searchMerchandise"
+          <div class="coolinput">
+            <label for="input-name" class="text">Search merchandise</label>
+            <input
+              type="text"
+              v-model="searchMerchandise"
                 @keyup.enter="search"
                 @input="handleInput"
-                placeholder="Type to Search..."
-              />
-            </div>
+              placeholder="Write merchandise title here..."
+              name="input"
+              class="input"
+            />
+          </div> 
           </b-nav-item>
         </b-nav>
       </div>
@@ -193,7 +188,10 @@
       </transition>
       <!-- End Serach -->
 
-      <div class="row" style="margin: 0px; padding: 0px">
+      <div class="row" style="margin: 0px; padding: 0px; min-height: 300px">
+        <div data-aos="fade-up" data-aos-duration="2000" v-if="dataMerchandises.length == 0" style="text-align: center;  align-items: center;  display: grid;">
+          Get ready for some awesome merchandise coming your way! 🎉 <br> Stay loyal and keep those excitement levels high as you wait for us! 🚀 #ComingSoon
+        </div>
         <div
           class="row"
           style="
@@ -2363,67 +2361,40 @@ export default {
 }
 /* /Card */
 
-/* Button Search */
-.search-box {
+/* Search */
+.coolinput {
+  display: flex;
+  flex-direction: column;
   width: fit-content;
-  height: fit-content;
-  position: relative;
+  position: static;
+  width: 300px;
 }
-.input-search {
-  height: 30px;
-  width: 30px;
-  border-style: solid;
-  padding: 10px;
-  font-size: 14px;
-  letter-spacing: 2px;
-  outline: none;
-  border-radius: 25px;
-  transition: all 0.5s ease-in-out;
-  background-color: white;
-  border-color: #006598;
-  padding-right: 40px;
-  color: #006598;
-}
-.input-search::placeholder {
-  color: white;
-  font-size: 14px;
-  letter-spacing: 2px;
-  font-weight: 100;
-}
-.btn-search {
-  width: 50px;
-  height: 30px;
-  border-style: none;
-  font-size: 20px;
-  font-weight: bold;
-  outline: none;
-  cursor: pointer;
-  border-radius: 25px;
-  position: absolute;
-  right: 0px;
-  color: #006598;
-  background-color: transparent;
-  pointer-events: painted;
-  justify-content: center;
-}
-.btn-search:focus ~ .input-search {
-  width: 350px;
-  border-radius: 0px;
-  background-color: transparent;
-  border: 0.5px solid #006598;
-  border-radius: 25px;
-  transition: all 0.5s cubic-bezier(0, 0.11, 0.35, 2);
-}
-.input-search:focus {
-  width: 350px;
-  border-radius: 0px;
-  background-color: transparent;
-  border: 0.5px solid #006598;
-  border-radius: 25px;
-  transition: all 0.5s cubic-bezier(0, 0.11, 0.35, 2);
-}
-/* /Button Search */
 
+.coolinput label.text {
+  font-size: 0.75rem;
+  color: #006598;
+  font-weight: 600;
+  position: relative;
+  top: 0.5rem;
+  margin: 0 0 0 7px;
+  padding: 0 3px;
+  background: #ffffff;
+  width: fit-content;
+}
+
+.coolinput input[type="text"].input {
+  padding: 11px 10px;
+  font-size: 14px;
+  border: 2px #006598 solid;
+  border-radius: 20px;
+  background: #ffffff00;
+  color: #006598;
+}
+
+.coolinput input[type="text"].input:focus {
+  outline: none;
+}
+/* End Search */
 .size-bar-home {
   padding-right: 150px;
   padding-left: 150px;
@@ -2514,23 +2485,6 @@ export default {
     padding-left: 0px;
   }
 
-  .btn-search:focus ~ .input-search {
-    width: 250px;
-    border-radius: 0px;
-    background-color: transparent;
-    border: 0.5px solid #006598;
-    border-radius: 25px;
-    transition: all 0.5s cubic-bezier(0, 0.11, 0.35, 2);
-  }
-
-  .input-search:focus {
-    width: 250px;
-    border-radius: 0px;
-    background-color: transparent;
-    border: 0.5px solid #006598;
-    border-radius: 25px;
-    transition: all 0.5s cubic-bezier(0, 0.11, 0.35, 2);
-  }
 }
 
 @media (max-width: 991px) {

@@ -54,17 +54,17 @@
               </b-nav-item>
             </transition>
           </b-nav>
-          <div class="search-box">
-            <button class="btn-search" @click="search">
-              <b-icon-search></b-icon-search>
-            </button>
+
+          <div class="coolinput">
+            <label for="input-name" class="text">Search comic</label>
             <input
               type="text"
-              class="input-search"
               v-model="searchTerm"
               @keyup.enter="search"
               @input="handleInput"
-              placeholder="Type to Search..."
+              placeholder="Write comic title here..."
+              name="input"
+              class="input"
             />
           </div>
         </div>
@@ -231,8 +231,8 @@
           Latest Updates
         </h5>
         <!-- Beri 5 card untuk terbaru -->
-        <div class="row">
-          <div class="row" style="justify-content: center; max-width: none">
+        <div class="row" style="padding: 0px; margin: 0px;">
+          <div class="row" style="justify-content: center; padding: 0px; margin: 0px; max-width: none">
             <div
               data-aos="fade-up"
               data-aos-duration="2000"
@@ -341,7 +341,7 @@
             Popular This Week
           </h5>
           <div class="section" style="margin-bottom: 30px">
-            <div class="row" style="justify-content: center; max-width: none">
+            <div class="row" style="justify-content: center; max-width: none; padding: 0px; margin: 0px;">
               <div
                 data-aos="fade-up"
                 data-aos-duration="2000"
@@ -442,8 +442,8 @@
           Daily Updates
         </h5>
         <!-- Beri 5 card untuk terbaru -->
-        <div class="row">
-          <div class="row" style="justify-content: center; max-width: none">
+        <div class="row" style="padding: 0px; margin: 0px;">
+          <div class="row" style="justify-content: center; max-width: none; padding: 0px; margin: 0px;">
             <div v-if="dataTodays.length == 0">
               <div
                 class="row no-gutters"
@@ -598,8 +598,8 @@
         {{ itemsGenre[0] }}
       </h5>
       <!-- Beri 5 card untuk terbaru -->
-      <div class="row">
-        <div class="row" style="justify-content: center; max-width: none">
+      <div class="row" style="padding: 0px; margin: 0px;">
+        <div class="row" style="justify-content: center; max-width: none; padding: 0px; margin: 0px;">
           <transition name="fade">
             <div
               data-aos="fade-up"
@@ -748,8 +748,8 @@
         {{ itemsGenre[1] }}
       </h5>
       <!-- Beri 5 card untuk terbaru -->
-      <div class="row">
-        <div class="row" style="justify-content: center; max-width: none">
+      <div class="row" style="padding: 0px; margin: 0px;">
+        <div class="row" style="justify-content: center; max-width: none; padding: 0px; margin: 0px;">
           <transition name="fade">
             <div
               v-if="dataKomikCategorys2.length == 0"
@@ -896,8 +896,8 @@
         {{ itemsGenre[2] }}
       </h5>
       <!-- Beri 5 card untuk terbaru -->
-      <div class="row">
-        <div class="row" style="justify-content: center; max-width: none">
+      <div class="row" style="padding: 0px; margin: 0px;">
+        <div class="row" style="justify-content: center; max-width: none; padding: 0px; margin: 0px;">
           <transition name="fade">
             <div
               v-if="dataKomikCategorys3.length == 0"
@@ -1055,8 +1055,8 @@
           {{ this.category }}
         </h5>
         <!-- Beri 5 card untuk terbaru -->
-        <div class="row">
-          <div class="row" style="justify-content: center; max-width: none">
+        <div class="row" style="padding: 0px; margin: 0px;">
+          <div class="row" style="justify-content: center; max-width: none; padding: 0px; margin: 0px;">
             <div
               data-aos="fade-up"
               data-aos-duration="2000"
@@ -1244,8 +1244,8 @@
           Today Updates
         </h5>
         <!-- Beri 5 card untuk terbaru -->
-        <div class="row">
-          <div class="row" style="justify-content: center; max-width: none">
+        <div class="row" style="padding: 0px; margin: 0px;">
+          <div class="row" style="justify-content: center; max-width: none; padding: 0px; margin: 0px;">
             <div
               data-aos="fade-up"
               data-aos-duration="2000"
@@ -1429,8 +1429,8 @@
           Your Favorite
         </h5>
         <!-- Beri 5 card untuk terbaru -->
-        <div class="row">
-          <div class="row" style="justify-content: center; max-width: none">
+        <div class="row" style="padding: 0px; margin: 0px;">
+          <div class="row" style="justify-content: center; max-width: none; padding: 0px; margin: 0px;">
             <div
               data-aos="fade-up"
               data-aos-duration="2000"
@@ -2420,68 +2420,40 @@ export default {
 .tabs-category {
   width: 50%;
 }
-/* Button Search */
-.search-box {
+/* Search */
+.coolinput {
+  display: flex;
+  flex-direction: column;
   width: fit-content;
-  height: fit-content;
+  position: static;
+  width: 300px;
+}
+
+.coolinput label.text {
+  font-size: 0.75rem;
+  color: #006598;
+  font-weight: 600;
   position: relative;
-  padding-left: 16px;
-  margin-top: 10px !important;
+  top: 0.5rem;
+  margin: 0 0 0 7px;
+  padding: 0 3px;
+  background: #ffffff;
+  width: fit-content;
 }
-.input-search {
-  height: 30px;
-  width: 30px;
-  border-style: solid;
-  padding: 10px;
+
+.coolinput input[type="text"].input {
+  padding: 11px 10px;
   font-size: 14px;
-  letter-spacing: 2px;
-  outline: none;
-  border-radius: 25px;
-  transition: all 0.5s ease-in-out;
-  background-color: white;
-  border-color: #006598;
-  padding-right: 40px;
+  border: 2px #006598 solid;
+  border-radius: 20px;
+  background: #ffffff00;
   color: #006598;
 }
-.input-search::placeholder {
-  color: white;
-  font-size: 14px;
-  letter-spacing: 2px;
-  font-weight: 100;
-}
-.btn-search {
-  width: 50px;
-  height: 30px;
-  border-style: none;
-  font-size: 20px;
-  font-weight: bold;
+
+.coolinput input[type="text"].input:focus {
   outline: none;
-  cursor: pointer;
-  border-radius: 25px;
-  position: absolute;
-  right: 0px;
-  color: #006598;
-  background-color: transparent;
-  pointer-events: painted;
-  justify-content: center;
 }
-.btn-search:focus ~ .input-search {
-  width: 350px;
-  border-radius: 0px;
-  background-color: transparent;
-  border: 0.5px solid #006598;
-  border-radius: 25px;
-  transition: all 0.5s cubic-bezier(0, 0.11, 0.35, 2);
-}
-.input-search:focus {
-  width: 350px;
-  border-radius: 0px;
-  background-color: transparent;
-  border: 0.5px solid #006598;
-  border-radius: 25px;
-  transition: all 0.5s cubic-bezier(0, 0.11, 0.35, 2);
-}
-/* /Button Search */
+/* End Search */
 
 .size-bar-home {
   padding-right: 150px;
@@ -2732,22 +2704,6 @@ export default {
     margin-bottom: 0;
   }
 
-  .btn-search:focus ~ .input-search {
-    width: 200px;
-    border-radius: 0px;
-    background-color: transparent;
-    border: 0.5px solid #006598;
-    border-radius: 25px;
-    transition: all 0.5s cubic-bezier(0, 0.11, 0.35, 2);
-  }
-  .input-search:focus {
-    width: 200px;
-    border-radius: 0px;
-    background-color: transparent;
-    border: 0.5px solid #006598;
-    border-radius: 25px;
-    transition: all 0.5s cubic-bezier(0, 0.11, 0.35, 2);
-  }
 }
 
 @media (max-width: 991px) {
