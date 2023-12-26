@@ -1696,13 +1696,7 @@
                   </div>
                 </v-col>
               </v-row>
-              <div
-                style="
-                  padding-left: 50px;
-                  padding-right: 50px;
-                  margin-top: 30px;
-                "
-              >
+              <div style="margin-top: 30px;">
                 <label
                   style="
                     justify-content: start;
@@ -1742,13 +1736,7 @@
                   </div>
                 </div>
               </div>
-              <div
-                style="
-                  padding-left: 50px;
-                  padding-right: 50px;
-                  margin-top: 30px;
-                "
-              >
+              <div style="margin-top: 30px;">
                 <label
                   style="
                     justify-content: start;
@@ -1759,7 +1747,7 @@
                   >Story Character</label
                 >
                 <div id="app">
-                  <vue-editor id="editor1" v-model="story_character" />
+                  <vue-editor :editor-toolbar="customToolbar" id="editor1" v-model="story_character" />
                   <div style="height: 15px">
                     <v-slide-y-transition>
                       <div
@@ -2031,7 +2019,7 @@
               >NPC Profile</label
             >
             <div id="app">
-              <vue-editor id="editor1" v-model="npc_profile" />
+              <vue-editor :editor-toolbar="customToolbar" id="editor1" v-model="npc_profile" />
               <div style="height: 15px">
                 <v-slide-y-transition>
                   <div
@@ -2065,7 +2053,7 @@
               >NPC Story</label
             >
             <div id="app">
-              <vue-editor id="editor2" v-model="npc_story" />
+              <vue-editor :editor-toolbar="customToolbar" id="editor2" v-model="npc_story" />
               <div style="height: 15px">
                 <v-slide-y-transition>
                   <div
@@ -2407,9 +2395,7 @@
                 </v-slide-y-transition>
               </div>
             </div>
-            <div
-              style="padding-left: 50px; padding-right: 50px; margin-top: 30px"
-            >
+            <div style="margin-top: 30px">
               <label
                 style="
                   justify-content: start;
@@ -2420,7 +2406,7 @@
                 >Synopsys</label
               >
               <div id="app">
-                <vue-editor id="editor1" v-model="sinopsis" />
+                <vue-editor :editor-toolbar="customToolbar" id="editor1" v-model="sinopsis" />
                 <div style="height: 15px">
                   <v-slide-y-transition>
                     <div
@@ -3280,7 +3266,7 @@
               >Product Description</label
             >
             <div id="app">
-              <vue-editor id="editor3" v-model="deskripsi" />
+              <vue-editor :editor-toolbar="customToolbar" id="editor3" v-model="deskripsi" />
               <div style="height: 15px">
                 <v-slide-y-transition>
                   <div
@@ -4111,6 +4097,12 @@ export default {
     dialog: false,
     dialogDelete: false,
     loadingScreenLogout: "",
+    customToolbar: [
+      [{ header: [false, 1, 2, 3, 4, 5, 6] }],
+      ["bold", "italic", "underline", "size"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["code-block"],
+    ],
 
     list: {
       headersNPC: [],
