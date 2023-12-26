@@ -1076,6 +1076,19 @@
           border-bottom-right-radius: unset !important;
         "
       >
+      <div style="justify-content: end; display: flex; padding: 8px 16px; margin: 0px;">
+            <v-btn
+              @click="dialogDetailOrderProducts = false"
+              class="mx-1"
+              fab
+              dark
+              small
+              color="red"
+              style="height: 20px; width: 20px"
+            >
+              <b-icon icon="x-lg" aria-hidden="true"></b-icon>
+            </v-btn>
+          </div>
         <h5
           class="f-24 f-md-20 f-secondary text-center"
           style="
@@ -1305,14 +1318,11 @@
       <div class="footer-dark">
         <transition name="fade">
           <footer>
-            <div class="container" style="justify-content: center; width: 50%">
+            <div class="container container-footer" style="justify-content: center; width: 50%">
               <div class="">
                 <h3>Historical Art Fantasia</h3>
                 <p>
-                  Praesent sed lobortis mi. Suspendisse vel placerat ligula.
-                  Vivamus ac sem lacus. Ut vehicula rhoncus elementum. Etiam
-                  quis tristique lectus. Aliquam in arcu eget velit pulvinar
-                  dictum vel in justo.
+                  "Be Creative, smart, and learning forever"
                 </p>
               </div>
               <div class="col item social">
@@ -2367,7 +2377,7 @@ export default {
   flex-direction: column;
   width: fit-content;
   position: static;
-  width: 300px;
+  width: 250px;
 }
 
 .coolinput label.text {
@@ -2477,6 +2487,9 @@ export default {
 }
 /* /Footer */
 @media (max-width: 767px) {
+  .container-footer{
+    width: 90% !important;
+  }
   .searchDiv {
     width: 200px;
   }

@@ -233,6 +233,44 @@
         <!-- Beri 5 card untuk terbaru -->
         <div class="row" style="padding: 0px; margin: 0px;">
           <div class="row" style="justify-content: center; padding: 0px; margin: 0px; max-width: none">
+            <div v-if="dataTodays.length == 0">
+              <div
+                class="row no-gutters"
+                data-aos="fade-up"
+                data-aos-duration="2000"
+              >
+                <div
+                  class="col"
+                  style="
+                    display: grid;
+                    align-content: center;
+                    justify-content: end;
+                  "
+                >
+                  <p>There is no comic latest update</p>
+                </div>
+                <div
+                  class="col"
+                  style="
+                    display: grid;
+                    align-content: center;
+                    justify-content: start;
+                  "
+                >
+                  <img
+                    src="@/assets/2953962.jpg"
+                    style="height: 150px"
+                    class="d-inline-block align-top"
+                    alt="Animation"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              v-else
+              class="row"
+              style="justify-content: center; max-width: none"
+            >
             <div
               data-aos="fade-up"
               data-aos-duration="2000"
@@ -306,6 +344,7 @@
                 </div>
               </div>
             </div>
+            </div>
           </div>
         </div>
 
@@ -342,6 +381,44 @@
           </h5>
           <div class="section" style="margin-bottom: 30px">
             <div class="row" style="justify-content: center; max-width: none; padding: 0px; margin: 0px;">
+              <div v-if="dataTodays.length == 0">
+              <div
+                class="row no-gutters"
+                data-aos="fade-up"
+                data-aos-duration="2000"
+              >
+                <div
+                  class="col"
+                  style="
+                    display: grid;
+                    align-content: center;
+                    justify-content: end;
+                  "
+                >
+                  <p>There is no comic popular this week</p>
+                </div>
+                <div
+                  class="col"
+                  style="
+                    display: grid;
+                    align-content: center;
+                    justify-content: start;
+                  "
+                >
+                  <img
+                    src="@/assets/2953962.jpg"
+                    style="height: 150px"
+                    class="d-inline-block align-top"
+                    alt="Animation"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              v-else
+              class="row"
+              style="justify-content: center; max-width: none"
+            >
               <div
                 data-aos="fade-up"
                 data-aos-duration="2000"
@@ -422,6 +499,7 @@
                   </div>
                 </div>
               </div>
+              </div>
             </div>
           </div>
         </div>
@@ -458,7 +536,7 @@
                     justify-content: end;
                   "
                 >
-                  <p>There is no comics updates today</p>
+                  <p>There is no comic updates today</p>
                 </div>
                 <div
                   class="col"
@@ -1076,7 +1154,7 @@
                     justify-content: end;
                   "
                 >
-                  <p>There is no comics {{ this.category }}</p>
+                  <p>There is no comic {{ this.category }}</p>
                 </div>
                 <div
                   class="col"
@@ -1615,14 +1693,11 @@
       <div class="footer-dark">
         <transition name="fade">
           <footer>
-            <div class="container" style="justify-content: center; width: 50%">
+            <div class="container container-footer" style="justify-content: center; width: 50%">
               <div class="">
                 <h3>Historical Art Fantasia</h3>
                 <p>
-                  Praesent sed lobortis mi. Suspendisse vel placerat ligula.
-                  Vivamus ac sem lacus. Ut vehicula rhoncus elementum. Etiam
-                  quis tristique lectus. Aliquam in arcu eget velit pulvinar
-                  dictum vel in justo.
+                  "Be Creative, smart, and learning forever"
                 </p>
               </div>
               <div class="col item social">
@@ -2426,12 +2501,12 @@ export default {
   flex-direction: column;
   width: fit-content;
   position: static;
-  width: 300px;
+  width: 250px;
 }
 
 .coolinput label.text {
   font-size: 0.75rem;
-  color: #006598;
+  color: #257dd4;
   font-weight: 600;
   position: relative;
   top: 0.5rem;
@@ -2444,10 +2519,10 @@ export default {
 .coolinput input[type="text"].input {
   padding: 11px 10px;
   font-size: 14px;
-  border: 2px #006598 solid;
+  border: 2px #257dd4 solid;
   border-radius: 20px;
   background: #ffffff00;
-  color: #006598;
+  color: #257dd4;
 }
 
 .coolinput input[type="text"].input:focus {
@@ -2687,6 +2762,9 @@ export default {
 }
 
 @media (max-width: 767px) {
+  .container-footer{
+    width: 90% !important;
+  }
   .tabs-category {
     width: 90%;
   }

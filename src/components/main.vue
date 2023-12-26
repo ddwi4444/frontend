@@ -29,7 +29,7 @@
             >
               My Profile
             </div>
-            <div class="menuUncolor" v-else @click="handlerGoMyProfile">
+            <div class="menuUncolor" v-else-if="this.myProfile.length != 0" @click="handlerGoMyProfile">
               My Profile
             </div>
           </div>
@@ -116,7 +116,7 @@
             @click="goToLogin"
           >
             Login
-            <v-icon fade-right color="white"> mdi-login </v-icon>
+            <v-icon small fade-right color="white"> mdi-login </v-icon>
           </v-btn>
         </div>
 
@@ -193,23 +193,23 @@ export default {
     const currentURL = window.location.href;
 
     // Check if the current URL contains 'http://localhost:8080/haf-merchandise'
-    if (currentURL.includes("http://localhost:8080/haf-service")) {
+    if (currentURL.includes("https://historicalartfantasia.com/haf-service")) {
       // Set isMerchandise to 1
       this.isServices = 1;
     }
-    if (currentURL.includes("http://localhost:8080/haf-merchandise")) {
+    if (currentURL.includes("https://historicalartfantasia.com/haf-merchandise")) {
       // Set isMerchandise to 1
       this.isMerchandise = 1;
     }
-    if (currentURL.includes("http://localhost:8080/haf-school")) {
+    if (currentURL.includes("https://historicalartfantasia.com/haf-school")) {
       // Set isMerchandise to 1
       this.isSchool = 1;
     }
-    if (currentURL.includes("http://localhost:8080/haf-about")) {
+    if (currentURL.includes("https://historicalartfantasia.com/haf-about")) {
       // Set isMerchandise to 1
       this.isAbout = 1;
     }
-    if (currentURL.includes("http://localhost:8080/haf-profile")) {
+    if (currentURL.includes("https://historicalartfantasia.com/haf-profile")) {
       // Set isMerchandise to 1
       this.isMyProfile = 1;
     }

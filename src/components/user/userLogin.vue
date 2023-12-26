@@ -1,7 +1,7 @@
 <template>
   <div>
     <center>
-      <div class="row" style="margin-top: 30px; justify-content: center">
+      <div class="row" style="margin-top: 30px; justify-content: center; margin: 0px; padding: 0px;">
         <v-form class="form" ref="form" @submit.prevent="login()">
           <img data-aos="zoom-in" data-aos-duration="1500"
             src="@/assets/logoHAF2.png"
@@ -38,7 +38,7 @@
               required
             />
           </label>
-          <div class="row no-gutters" style="justify-content: center" data-aos="fade-up" data-aos-duration="1500">
+          <div class="row no-gutters" style="margin:0px; padding: 0px; justify-content: center" data-aos="fade-up" data-aos-duration="1500">
             <div class="col" style="justify-content: end; display: flex; margin: 3px;">
               <v-btn
                 class="button-login-register primary"
@@ -60,7 +60,7 @@
               >
             </div>
           </div>
-          <p data-aos="fade-up" data-aos-duration="1500" class="signin">Forgot Password? <a href="#">Help</a></p>
+          <p data-aos="fade-up" data-aos-duration="1500" class="signin">Forgot Password? <a @click="sendEmail" style="color: blue;">Contact Administrator</a></p>
         </v-form>
       </div>
     </center>
@@ -170,6 +170,16 @@ export default Vue.extend({
             this.loading = false;
           });
       }
+    },
+    sendEmail() {
+      // Replace 'recipient@example.com' with the actual email address
+      const emailAddress = "haf3334444@gmail.com";
+
+      // Construct the mailto link
+      const mailtoLink = `mailto:${emailAddress}`;
+
+      // Open the default email client with the mailto link
+      window.location.href = mailtoLink;
     },
   },
 });

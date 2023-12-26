@@ -2565,7 +2565,7 @@
                       hide-details
                     ></v-text-field></div
                 ></b-col>
-                <b-col style="justify-content: end; display: flex;"
+                <b-col style="justify-content: end; display: flex"
                   ><v-btn
                     small
                     color="primary"
@@ -2581,20 +2581,20 @@
                   </v-btn></b-col
                 >
                 <b-col style="justify-content: start; display: flex"
-                    ><v-btn
-                      small
-                      color="primary"
-                      dark
-                      class="mb-2 w-2"
-                      style="
-                        text-transform: unset !important;
-                        border-radius: 20px;
-                      "
-                      @click="handlerRefresDataSubComic"
-                    >
-                      Refresh Data Sub Comic
-                    </v-btn></b-col
+                  ><v-btn
+                    small
+                    color="primary"
+                    dark
+                    class="mb-2 w-2"
+                    style="
+                      text-transform: unset !important;
+                      border-radius: 20px;
+                    "
+                    @click="handlerRefresDataSubComic"
                   >
+                    Refresh Data Sub Comic
+                  </v-btn></b-col
+                >
               </b-row>
             </b-container>
 
@@ -3852,7 +3852,12 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn style="text-transform: capitalize" color="blue" text @click="clickSubmitEditaDataUser">
+          <v-btn
+            style="text-transform: capitalize"
+            color="blue"
+            text
+            @click="clickSubmitEditaDataUser"
+          >
             Save
           </v-btn>
           <v-btn
@@ -3876,39 +3881,49 @@
       <div class="footer-dark">
         <transition name="fade">
           <footer>
-            <div class="container" style="justify-content: center; width: 50%">
+            <div
+              class="container container-footer"
+              style="justify-content: center; width: 50%"
+            >
               <div class="">
                 <h3>Historical Art Fantasia</h3>
-                <p>
-                  Praesent sed lobortis mi. Suspendisse vel placerat ligula.
-                  Vivamus ac sem lacus. Ut vehicula rhoncus elementum. Etiam
-                  quis tristique lectus. Aliquam in arcu eget velit pulvinar
-                  dictum vel in justo.
-                </p>
+                <p>"Be Creative, smart, and learning forever"</p>
               </div>
               <div class="col item social">
-                <a                  
+                <a
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="instagram" aria-hidden="true" @click="openInstagramFooter"></b-icon></a
+                  ><b-icon
+                    icon="instagram"
+                    aria-hidden="true"
+                    @click="openInstagramFooter"
+                  ></b-icon></a
                 ><a
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="youtube" aria-hidden="true" @click="openYoutubeFooter"></b-icon></a
-                ><a @click="openTiktokFooter"
+                  ><b-icon
+                    icon="youtube"
+                    aria-hidden="true"
+                    @click="openYoutubeFooter"
+                  ></b-icon></a
+                ><a
+                  @click="openTiktokFooter"
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><img 
+                  ><img
                     src="@/assets/tiktok.png"
                     style="height: 33px"
                     class="d-inline-block align-top"
-                    alt="Animation"
-                  /></a
-                ><a                  
+                    alt="Animation" /></a
+                ><a
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
                 >
-                  <b-icon icon="mailbox" aria-hidden="true" @click="sendEmail"></b-icon
+                  <b-icon
+                    icon="mailbox"
+                    aria-hidden="true"
+                    @click="sendEmail"
+                  ></b-icon
                 ></a>
               </div>
               <p class="copyright">
@@ -3978,7 +3993,17 @@ export default {
 
     // Comic
     items: [
-"Drama", "Fantasy", "Kingdom", "Comedy", "Action", "Slice of Life", "Romantic", "Thriller", "Horror", "Local"],
+      "Drama",
+      "Fantasy",
+      "Kingdom",
+      "Comedy",
+      "Action",
+      "Slice of Life",
+      "Romantic",
+      "Thriller",
+      "Horror",
+      "Local",
+    ],
     dialogComic: false,
     dialogConfirmDeleteComic: false,
     dialogDetailComic: false,
@@ -4188,8 +4213,8 @@ export default {
     },
     isIgAccValid() {
       // Regular expression to match a valid URL
-      const urlPattern =
-        /^(http|https):\/\/(www\.)?instagram\.com\/[\w-]+\/?$/i;
+      // Regular expression to match a valid Instagram URL
+      const urlPattern = /^https:\/\/www\.instagram\.com\/.*$/i;
 
       // Use test method to check if input matches the URL pattern
       return urlPattern.test(this.ig_acc);
@@ -4227,9 +4252,8 @@ export default {
       return volume !== "" && /^\d+$/.test(volume); // Content is required (not empty) and contains only numbers
     },
     isComicInstagramAuthorValid() {
-      // Regular expression to match a valid URL
-      const urlPattern =
-        /^(http|https):\/\/(www\.)?instagram\.com\/[\w-]+\/?$/i;
+      // Regular expression to match a valid Instagram URL
+      const urlPattern = /^https:\/\/www\.instagram\.com\/.*$/i;
 
       // Use test method to check if input matches the URL pattern
       return urlPattern.test(this.instagram_author);
@@ -4725,13 +4749,11 @@ export default {
     handlerEditUser(item) {
       this.dialogEditDataUser = true;
 
-      if(item.role == 'user'){
+      if (item.role == "user") {
         this.userIsRole = "User";
-      }
-      else if(item.role == 'student'){
+      } else if (item.role == "student") {
         this.userIsRole = "Student";
-      }
-      else if(item.role == 'osis'){
+      } else if (item.role == "osis") {
         this.userIsRole = "Osis";
       }
 
@@ -4835,7 +4857,7 @@ export default {
         .then((response) => {
           this.myProfile = response.data.myProfile;
           this.image = response.data.myProfile.image;
-          
+
           this.checkRoleAndDeleteIfMismatch();
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
@@ -5444,7 +5466,7 @@ export default {
 
     // For Sub Comic
     handlerRefresDataSubComic() {
-      this.initializeSubComic();
+      this.initializeSubComic(this.detailIdComic);
       this.textMessage = "Sub comic shiny now ✨ Data buff  Ready to rock!";
       this.snackbar = true;
       this.color = "success";
@@ -5512,7 +5534,7 @@ export default {
       }
     },
 
-    initializeSubComic(detailIdComic) {
+    initializeSubComic(idComic) {
       this.list.headersSubComic = [
         {
           text: "Number",
@@ -5552,7 +5574,7 @@ export default {
         },
         { text: "Actions", value: "actions", align: "center", sortable: false },
       ];
-      this.axioDataSubComic(detailIdComic);
+      this.axioDataSubComic(idComic);
     },
 
     axioDataSubComic(detailIdComic) {
@@ -5667,6 +5689,7 @@ export default {
 
               this.closeDialogAddandEditSubComic();
               this.axioDataSubComic(idComic);
+              this.axioDataComic();
 
               this.textMessage =
                 "The comic sub has been posted successfully 😊";
@@ -5706,6 +5729,7 @@ export default {
 
               this.closeDialogAddandEditSubComic();
               this.axioDataSubComic(idComic);
+              this.axioDataComic();
 
               this.textMessage =
                 "The comic sub has been updated successfully 😊";
@@ -5747,7 +5771,7 @@ export default {
       this.detailUuidComic = item.uuid;
       this.detailIdComic = item.id;
       this.judulComic = item.judul;
-      this.initializeSubComic(this.detailIdComic);
+      this.initializeSubComic(item.id);
     },
 
     editHandlerComic(item) {
@@ -6013,7 +6037,7 @@ export default {
         this.ComicForm.append("instagram_author", this.instagram_author);
         this.ComicForm.append("sinopsis", this.sinopsis);
 
-        this.loadingScreen = true;
+        this.dialogLoader = true;
 
         if (val == "AddComic") {
           var urlAddComic = this.$api + "/create-komik";
@@ -6034,21 +6058,16 @@ export default {
               this.closeDialog();
               this.axioDataComic();
 
-              this.textMessage = "Comic Succesfully Created";
+              this.textMessage = "The comic has been successfully added 😊";
               this.snackbar = true;
               this.color = "green";
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             })
-            .catch((error) => {
-              console.log(error);
-
-              this.snackbar = true;
-              this.textMessage = "Comic Unsuccesfully Created";
-              this.color = "secondary";
+            .catch(() => {
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             });
         } else {
@@ -6059,9 +6078,7 @@ export default {
 
           this.$http
             .post(urlEditComic, this.ComicForm, { headers: headers })
-            .then((response) => {
-              this.error_message = response.data.message;
-              console.log(this.error_message);
+            .then(() => {
 
               // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
               document.getElementById("file-foto").value = "";
@@ -6069,27 +6086,22 @@ export default {
               this.closeDialog();
               this.axioDataComic();
 
-              this.textMessage = "Comic Succesfully Updated";
+              this.textMessage = "The comic has been successfully changed 😊";
               this.snackbar = true;
               this.color = "green";
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             })
-            .catch((error) => {
-              console.log(error);
-
-              this.snackbar = true;
-              this.textMessage = "Comic Unsuccesfully updated";
-              this.color = "secondary";
+            .catch(() => {
               setTimeout(() => {
-                this.loadingScreen = false;
+                this.dialogLoader = false;
               }, 300);
             });
         }
 
         setTimeout(() => {
-          this.loadingScreen = false;
+          this.dialogLoader = false;
         }, 300);
       }
     },
@@ -6389,18 +6401,17 @@ export default {
 
     // LogoutAuto
     checkRoleAndDeleteIfMismatch() {
-      console.log(this.userLogin.role, 'role matching', this.myProfile.role)
+      console.log(this.userLogin.role, "role matching", this.myProfile.role);
       if (this.userLogin.role !== this.myProfile.role) {
         // Roles don't match, delete the localStorage item
         this.logout();
         // You can perform other actions as needed
-        console.log('Role mismatch. LocalStorage item deleted.');
+        console.log("Role mismatch. LocalStorage item deleted.");
       } else {
         // Roles match, you can perform other actions if needed
-        console.log('Role match.');
+        console.log("Role match.");
       }
     },
-    
 
     // Reload Page
     reloadPage() {
@@ -6454,6 +6465,7 @@ export default {
       this.genre = "";
       this.volume = "";
       this.instagram_author = "";
+      this.sinopsis = "";
 
       // Comic & Sub Comic
       this.judul = "";
@@ -6484,17 +6496,17 @@ export default {
       window.open(link, "_blank");
     },
     openInstagramFooter() {
-      window.open('https://www.instagram.com/hafallart/', "_blank");
+      window.open("https://www.instagram.com/hafallart/", "_blank");
     },
     openYoutubeFooter() {
-      window.open('https://www.youtube.com/@haforastudio9615', "_blank");
+      window.open("https://www.youtube.com/@haforastudio9615", "_blank");
     },
     openTiktokFooter() {
-      window.open('https://www.tiktok.com/@hafallart', "_blank");
+      window.open("https://www.tiktok.com/@hafallart", "_blank");
     },
     sendEmail() {
       // Replace 'recipient@example.com' with the actual email address
-      const emailAddress = 'haf3334444@gmail.com';
+      const emailAddress = "haf3334444@gmail.com";
 
       // Construct the mailto link
       const mailtoLink = `mailto:${emailAddress}`;
@@ -6552,7 +6564,6 @@ export default {
 </script>
 
 <style scoped>
-
 /* Footer */
 .hoverMyName:hover {
   color: rgb(125, 213, 237);
@@ -6755,6 +6766,9 @@ export default {
 }
 
 @media only screen and (max-width: 600px) {
+  .container-footer {
+    width: 90% !important;
+  }
   .storyChar {
     width: 80%;
   }

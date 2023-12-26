@@ -1765,14 +1765,11 @@
       <div class="footer-dark">
         <transition name="fade">
           <footer>
-            <div class="container" style="justify-content: center; width: 50%">
+            <div class="container container-footer" style="justify-content: center; width: 50%">
               <div class="">
                 <h3>Historical Art Fantasia</h3>
                 <p>
-                  Praesent sed lobortis mi. Suspendisse vel placerat ligula.
-                  Vivamus ac sem lacus. Ut vehicula rhoncus elementum. Etiam
-                  quis tristique lectus. Aliquam in arcu eget velit pulvinar
-                  dictum vel in justo.
+                  "Be Creative, smart, and learning forever"
                 </p>
               </div>
               <div class="col item social">
@@ -3078,6 +3075,10 @@ export default {
   }
 }
 @media (max-width: 790px) {
+  .container-footer{
+    width: 90% !important;
+  }
+
   .searchandorder {
     padding-left: 0px;
     padding-right: 0px;

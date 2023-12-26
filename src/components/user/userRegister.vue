@@ -1,7 +1,7 @@
 <template>
   <div>
     <center>
-      <div class="row" style="justify-content: center">
+      <div class="row" style="justify-content: center; margin: 0px; padding: 0px;">
         <v-form ref="form" class="form" @submit.prevent="submit">
           <img data-aos="zoom-in" data-aos-duration="1500"
             src="@/assets/logoHAF2.png"
@@ -75,6 +75,23 @@
         </v-form>
       </div>
     </center>
+
+    <!-- Snackbar -->
+    <v-snackbar v-model="snackbar" auto-height :color="color" text top right>
+      {{ textMessage }}
+      <template v-slot:action="{ attrs }">
+        <v-btn plain color="red" text v-bind="attrs" @click="snackbar = false">
+          <v-icon
+            dense
+            color="#FF0000"
+            @click="snackbar = false"
+            class="data-table-icon"
+            >mdi-close</v-icon
+          >
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <!-- End Snackbar -->
   </div>
 </template>
 
@@ -94,6 +111,11 @@ export default Vue.extend({
 
       // ADDONS
       loading: false,
+
+      // Snackbar
+      snackbar: false,
+      textMessage: "",
+      color: "",
     };
   },
   computed: {
@@ -150,6 +172,8 @@ export default Vue.extend({
       }
     },
     submit() {
+      this.loading = true;
+
       if (this.$refs.form.validate()) {
         var url = this.$api + "/register";
         let data = {
@@ -158,13 +182,27 @@ export default Vue.extend({
           password: this.password,
         };
 
-        this.$http.post(url, data);
-        this.$router.push({
-          name: "login",
-        });
+        this.$http
+          .post(url, data)
+          .then((response) => {
 
-        this.loading = true;
-        setTimeout(() => (this.loading = false), 10000);
+            this.textMessage = (response.data.message);
+            this.snackbar = true;
+            this.color = "success";
+
+            // this.$router.push({
+            //   name: "login",
+            // });
+          })
+          .catch(() => {
+            this.textMessage = "🚫 Oops! Something went wrong. Registration unsuccessful.";
+            this.snackbar = true;
+            this.color = "blue-grey";
+
+            this.loading = false;
+          });
+
+        setTimeout(() => (this.loading = false), 500);
       }
     },
   },
