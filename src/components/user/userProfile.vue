@@ -516,7 +516,7 @@
                 <H1 style="font-family: Georgia, serif; margin: 0px"
                   >Historical Art Fantasia</H1
                 >
-                ║▌│█║▌█║▌│█│║▌║║▌│█║▌│█║▌
+                <p>║▌│█║▌█║▌│█│║▌║║▌│█║▌│█║▌</p>                
                 <br />
                 ʙᴇ ᴄʀᴇᴀᴛɪᴠᴇ, sᴍᴀʀᴛ, ᴀɴᴅ ʟᴇᴀʀɴɪɴɢ ғᴏʀᴇᴠᴇʀ!
                 <br />
@@ -791,17 +791,21 @@
 
                 <template v-slot:[`item.image`]="{ item }">
                   <div style="display: grid; justify-content: center">
-                    <div
+                    <div v-if="item.image != null"
                       class="w-img-oval m-2"
                       @click="zoom($baseUrl + '/storage/' + item.image)"
                     >
-                      <img
+                      <img v-if="item.image != null"
                         :src="$baseUrl + '/storage/' + item.image"
                         class="img-oval"
                       />
-                      <a class="img-oval-zoom">
+                      <a class="img-oval-zoom" v-if="item.image != null">
                         <i class="mdi mdi-eye f-28 text-white"></i>
                       </a>
+                      <img v-else
+                        src="@/assets/userImage.jpg"
+                        class="img-oval"
+                      />
                     </div>
                   </div>
                 </template>
@@ -836,7 +840,7 @@
                         color: rgb(149, 52, 0);
                       "
                     >
-                      Osis
+                      Council
                     </p>
                   </div>
                 </template>
@@ -3819,7 +3823,7 @@
             <v-row>
               <v-col cols="12" sm="6">
                 <v-select
-                  :items="['User', 'Student', 'Osis']"
+                  :items="['User', 'Student', 'Council']"
                   label="User Role"
                   required
                   v-model="userIsRole"
@@ -4746,7 +4750,7 @@ export default {
       } else if (item.role == "student") {
         this.userIsRole = "Student";
       } else if (item.role == "osis") {
-        this.userIsRole = "Osis";
+        this.userIsRole = "Council";
       }
 
       if (item.is_servicer == 1) {

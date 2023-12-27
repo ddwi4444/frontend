@@ -3,7 +3,7 @@
     <center>
       <div class="row" style="justify-content: center; margin: 0px; padding: 0px;">
         <v-form ref="form" class="form" @submit.prevent="submit">
-          <img data-aos="zoom-in" data-aos-duration="1500"
+          <img data-aos="zoom-in" data-aos-duration="1500" data-aos-offset="0"
             src="@/assets/logoHAF2.png"
             class="d-inline-block align-top"
             alt="Logo HAF"
@@ -11,12 +11,12 @@
             style="cursor: pointer"
           />
 
-          <p data-aos="zoom-out" data-aos-duration="1500" class="title" style="margin-bottom: 0px">Register</p>
-          <p data-aos="zoom-out" data-aos-duration="1500" class="message" style="margin-bottom: 0px">
+          <p data-aos="zoom-out" data-aos-duration="1500" data-aos-offset="0" class="title" style="margin-bottom: 0px">Register</p>
+          <p data-aos="zoom-out" data-aos-duration="1500" data-aos-offset="0" class="message" style="margin-bottom: 0px">
             Signup now and get full access to our app.
           </p>
 
-          <label data-aos="fade-right" data-aos-duration="1500">
+          <label data-aos="fade-right" data-aos-duration="1500" data-aos-offset="0">
             <v-text-field
               v-model="nama_persona"
               :rules="namaPersonaRules"
@@ -28,7 +28,7 @@
             />
           </label>
 
-          <label data-aos="fade-left" data-aos-duration="1500">
+          <label data-aos="fade-left" data-aos-duration="1500" data-aos-offset="0">
             <v-text-field
               v-model="email"
               :rules="emailRules"
@@ -39,7 +39,7 @@
             />
           </label>
 
-          <label data-aos="fade-right" data-aos-duration="1500">
+          <label data-aos="fade-right" data-aos-duration="1500" data-aos-offset="0">
             <v-text-field
               v-model="password"
               :rules="passwordRules"
@@ -50,7 +50,7 @@
             />
           </label>
 
-          <label data-aos="fade-left" data-aos-duration="1500">
+          <label data-aos="fade-left" data-aos-duration="1500" data-aos-offset="0">
             <v-text-field
               v-model="confirmPassword"
               :rules="confirmPasswordRules"
