@@ -801,8 +801,10 @@
                       />
                       <a class="img-oval-zoom" v-if="item.image != null">
                         <i class="mdi mdi-eye f-28 text-white"></i>
-                      </a>
-                      <img v-else
+                      </a>                      
+                    </div>
+                    <div v-else class="w-img-oval m-2">
+                      <img
                         src="@/assets/userImage.jpg"
                         class="img-oval"
                       />
