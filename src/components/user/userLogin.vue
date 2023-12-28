@@ -158,6 +158,7 @@ export default Vue.extend({
             localStorage.setItem("uuid", response.data.data.user.uuid);
             localStorage.setItem("id", response.data.data.user.id);
             localStorage.setItem("token", response.data.data.token);
+            localStorage.setItem("userToken", response.data.data.user.userToken);
 
             this.$router.push({
               name: "haf-profile",

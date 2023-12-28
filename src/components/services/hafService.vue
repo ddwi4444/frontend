@@ -109,10 +109,10 @@
                   >
                     {{ result.nama_persona }}
                   </p>
-                  <p v-if="result.projects.length > 1">
+                  <p v-if="result.projects != null">
                     {{ result.projects }} Projects
                   </p>
-                  <p v-else>{{ result.projects }} Project</p>
+                  <p v-else>0 Project</p>
                 </div>
                 <button
                   @click="handlerDetailServicer(result)"
@@ -206,10 +206,10 @@
               >
                 {{ dataServicer.nama_persona }}
               </p>
-              <p v-if="dataServicer.projects.length > 1">
+              <p v-if="dataServicer.projects != null">
                 {{ dataServicer.projects }} Projects
               </p>
-              <p v-else>{{ dataServicer.projects }} Project</p>
+              <p v-else>0 Project</p>
             </div>
             <button
               @click="handlerDetailServicer(dataServicer)"
@@ -251,7 +251,7 @@
             class="lighten-2"
             style="margin-top: 0px; padding-top: 0px; justify-content: center"
           >
-            <img
+            <img v-if="this.imageServicer != null"
               style="
                 border-radius: 50%;
                 height: 100px;
@@ -259,6 +259,16 @@
                 object-fit: cover;
               "
               :src="$baseUrl + '/storage/' + this.imageServicer"
+              alt="Avatar"
+            />
+            <img v-else
+              style="
+                border-radius: 50%;
+                height: 100px;
+                width: 100px;
+                object-fit: cover;
+              "
+              src="@/assets/userImage.jpg"
               alt="Avatar"
             />
           </v-card-title>
@@ -409,7 +419,8 @@
                 <div
                   v-if="
                     user_id_servicer != userLogin.id &&
-                    myProfile.is_servicer == 0
+                    myProfile.is_servicer == 0 &&
+                    myProfile.role != 'admin'
                   "
                 >
                   <v-form class="form" ref="form" @submit.prevent>
@@ -659,6 +670,7 @@
                       opacity: 0.5;
                     "
                   >
+                  <center>
                     <v-form class="form" ref="form" @submit.prevent>
                       <div class="row" style="margin: 0px">
                         <div
@@ -896,6 +908,7 @@
                         </div>
                       </v-card-actions>
                     </v-form>
+                  </center>
                   </div>
                 </div>
               </b-tab>
@@ -1913,6 +1926,7 @@ export default {
       uuid: localStorage.getItem("uuid"),
       id: localStorage.getItem("id"),
       role: localStorage.getItem("role"),
+      userToken: localStorage.getItem("userToken"),
     },
     headersServicesTransaction: [
       {
@@ -2066,7 +2080,7 @@ export default {
     },
 
     axioGetDataServiceReview(id) {
-      this.loadingScreen = true;
+      this.dialogLoader = true;
       var url;
 
       url = this.$api + "/get-reviewLayanan/" + id;
@@ -2100,13 +2114,13 @@ export default {
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
-            this.loadingScreen = false;
+            this.dialogLoader = false;
           }, 300);
         })
         .catch((error) => {
           // Menangani kesalahan jika terjadi
           console.error("Error fetching myprofile data:", error);
-          this.loadingScreen = false;
+          this.dialogLoader = false;
         });
     },
 
@@ -2136,7 +2150,7 @@ export default {
         })
         .catch((error) => {
           // Menangani kesalahan jika terjadi
-          console.error("Error fetching myprofile data:", error);
+          console.error("Error fetching myprofile data:dataServicers", error);
           this.dialogLoader = false;
         });
     },
@@ -2164,7 +2178,7 @@ export default {
     },
 
     axioDataReview(idServicer) {
-      this.loadingScreen = true;
+      this.dialogLoader = true;
       var url = this.$api + "/show-all-reviewLayanan/" + idServicer;
 
       // Gunakan 'url' dalam permintaan POST
@@ -2188,18 +2202,18 @@ export default {
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
-            this.loadingScreen = false;
+            this.dialogLoader = false;
           }, 300);
         })
         .catch((error) => {
           // Menangani kesalahan jika terjadi
           console.error("Error fetching review data", error);
-          this.loadingScreen = false;
+          this.dialogLoader = false;
         });
     },
 
     axioDataPortfolio(user_id) {
-      this.loadingScreen = true;
+      this.dialogLoader = true;
       var url = this.$api + "/get-dataPortfolio/" + user_id;
 
       // Gunakan 'url' dalam permintaan POST
@@ -2212,13 +2226,13 @@ export default {
 
           // Menonaktifkan loading screen setelah 300ms
           setTimeout(() => {
-            this.loadingScreen = false;
+            this.dialogLoader = false;
           }, 300);
         })
         .catch((error) => {
           // Menangani kesalahan jika terjadi
           console.error("Error fetching portfolio data:", error);
-          this.loadingScreen = false;
+          this.dialogLoader = false;
         });
     },
 
@@ -2639,8 +2653,7 @@ export default {
     },
 
     checkRoleAndDeleteIfMismatch() {
-      console.log(this.userLogin.role, 'role matching', this.myProfile.role)
-      if (this.userLogin.role !== this.myProfile.role) {
+      if (this.userLogin.role !== this.myProfile.role || this.userLogin.userToken != this.myProfile.userToken) {
         // Roles don't match, delete the localStorage item
         this.logout();
         // You can perform other actions as needed
@@ -3075,6 +3088,18 @@ export default {
   }
 }
 @media (max-width: 790px) {
+  .card-service {
+  width: 150px;
+  height: 215px;
+  border-radius: 20px;
+  background: #ffffff;
+  position: relative;
+  padding: 10px;
+  border: 2px solid #c3c6ce;
+  transition: 0.5s ease-out;
+  overflow: visible;
+  margin: 10px;
+}
   .container-footer{
     width: 90% !important;
   }

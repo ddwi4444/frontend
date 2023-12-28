@@ -864,6 +864,7 @@ export default {
       id: localStorage.getItem("id"),
       image: localStorage.getItem("image"),
       role: localStorage.getItem("role"),
+      userToken: localStorage.getItem("userToken"),
     },
   }),
   computed: {},
@@ -1256,8 +1257,7 @@ export default {
 
     // LogoutAuto
     checkRoleAndDeleteIfMismatch() {
-      console.log(this.userLogin.role, 'role matching', this.myProfile.role)
-      if (this.userLogin.role !== this.myProfile.role) {
+      if (this.userLogin.role !== this.myProfile.role || this.userLogin.userToken != this.myProfile.userToken) {
         // Roles don't match, delete the localStorage item
         this.logout();
         // You can perform other actions as needed

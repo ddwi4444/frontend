@@ -194,15 +194,15 @@ export default Vue.extend({
             //   name: "login",
             // });
           })
-          .catch(() => {
-            this.textMessage = "🚫 Oops! Something went wrong. Registration unsuccessful.";
+          .catch((error) => {
+            this.textMessage = (error.response.data.message);
             this.snackbar = true;
             this.color = "blue-grey";
 
             this.loading = false;
           });
 
-        setTimeout(() => (this.loading = false), 500);
+        this.loading = false;
       }
     },
   },

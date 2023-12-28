@@ -216,7 +216,6 @@
                   ></b-col>
                   <b-col style="justify-content: end; display: flex"
                     ><v-btn
-                      v-if="myProfile.role != 'admin'"
                       small
                       color="primary"
                       dark
@@ -516,7 +515,7 @@
                 <H1 style="font-family: Georgia, serif; margin: 0px"
                   >Historical Art Fantasia</H1
                 >
-                <p>║▌│█║▌█║▌│█│║▌║║▌│█║▌│█║▌</p>                
+                <p>║▌│█║▌█║▌│█│║▌║║▌│█║▌│█║▌</p>
                 <br />
                 ʙᴇ ᴄʀᴇᴀᴛɪᴠᴇ, sᴍᴀʀᴛ, ᴀɴᴅ ʟᴇᴀʀɴɪɴɢ ғᴏʀᴇᴠᴇʀ!
                 <br />
@@ -791,23 +790,22 @@
 
                 <template v-slot:[`item.image`]="{ item }">
                   <div style="display: grid; justify-content: center">
-                    <div v-if="item.image != null"
+                    <div
+                      v-if="item.image != null"
                       class="w-img-oval m-2"
                       @click="zoom($baseUrl + '/storage/' + item.image)"
                     >
-                      <img v-if="item.image != null"
+                      <img
+                        v-if="item.image != null"
                         :src="$baseUrl + '/storage/' + item.image"
                         class="img-oval"
                       />
                       <a class="img-oval-zoom" v-if="item.image != null">
                         <i class="mdi mdi-eye f-28 text-white"></i>
-                      </a>                      
+                      </a>
                     </div>
                     <div v-else class="w-img-oval m-2">
-                      <img
-                        src="@/assets/userImage.jpg"
-                        class="img-oval"
-                      />
+                      <img src="@/assets/userImage.jpg" class="img-oval" />
                     </div>
                   </div>
                 </template>
@@ -906,6 +904,13 @@
                     >mdi-pencil</v-icon
                   >
                   <v-icon
+                    dense
+                    color="rgb(232, 121, 77)"
+                    @click="handlerEditPasswordUser(item)"
+                    class="data-table-icon mr-3"
+                    >mdi-key</v-icon
+                  >
+                  <v-icon
                     v-if="item.is_active == 0"
                     dense
                     color="red"
@@ -932,6 +937,75 @@
                   </div>
                 </template>
               </v-data-table>
+            </v-container>
+          </template>
+        </b-tab>
+        <!-- End Your Order -->
+
+        <!-- Your Order -->
+        <b-tab title="Change Password" v-if="myProfile.role != 'admin'">
+          <template>
+            <v-container>
+              <center>
+                <v-form
+                  ref="form"
+                  class="form"
+                  @submit.prevent="submit"
+                  style="justify-content: center; display: grid"
+                >
+                  <center>
+                    <label style="width: 250px">
+                      <v-text-field
+                        v-model="currentPassword"
+                        :rules="passwordRules"
+                        placeholder="Current password"
+                        type="password"
+                        class="input"
+                        required
+                      />
+                    </label>
+
+                    <br />
+
+                    <label style="width: 250px">
+                      <v-text-field
+                        v-model="newPassword"
+                        :rules="passwordRules"
+                        placeholder="New password"
+                        type="password"
+                        class="input"
+                        required
+                      />
+                    </label>
+                    <br />
+
+                    <label style="width: 250px">
+                      <v-text-field
+                        v-model="newPasswordConfirm"
+                        :rules="confirmPasswordRules"
+                        placeholder="New password confirmation"
+                        type="password"
+                        class="input"
+                        required
+                      />
+                    </label>
+
+                    <br />
+
+                    <v-btn
+                      class="primary"
+                      style="
+                        text-transform: capitalize !important;
+                        border-radius: 20px;
+                        margin-top: 10px;
+                      "
+                      @click="submitEditPasswordUser"
+                      :loading="loading"
+                      >Change Password</v-btn
+                    >
+                  </center>
+                </v-form>
+              </center>
             </v-container>
           </template>
         </b-tab>
@@ -1702,7 +1776,7 @@
                   </div>
                 </v-col>
               </v-row>
-              <div style="margin-top: 30px;">
+              <div style="margin-top: 30px">
                 <label
                   style="
                     justify-content: start;
@@ -1742,7 +1816,7 @@
                   </div>
                 </div>
               </div>
-              <div style="margin-top: 30px;">
+              <div style="margin-top: 30px">
                 <label
                   style="
                     justify-content: start;
@@ -1753,7 +1827,11 @@
                   >Story Character</label
                 >
                 <div id="app">
-                  <vue-editor :editor-toolbar="customToolbar" id="editor1" v-model="story_character" />
+                  <vue-editor
+                    :editor-toolbar="customToolbar"
+                    id="editor1"
+                    v-model="story_character"
+                  />
                   <div style="height: 15px">
                     <v-slide-y-transition>
                       <div
@@ -2025,7 +2103,11 @@
               >NPC Profile</label
             >
             <div id="app">
-              <vue-editor :editor-toolbar="customToolbar" id="editor1" v-model="npc_profile" />
+              <vue-editor
+                :editor-toolbar="customToolbar"
+                id="editor1"
+                v-model="npc_profile"
+              />
               <div style="height: 15px">
                 <v-slide-y-transition>
                   <div
@@ -2059,7 +2141,11 @@
               >NPC Story</label
             >
             <div id="app">
-              <vue-editor :editor-toolbar="customToolbar" id="editor2" v-model="npc_story" />
+              <vue-editor
+                :editor-toolbar="customToolbar"
+                id="editor2"
+                v-model="npc_story"
+              />
               <div style="height: 15px">
                 <v-slide-y-transition>
                   <div
@@ -2412,7 +2498,11 @@
                 >Synopsys</label
               >
               <div id="app">
-                <vue-editor :editor-toolbar="customToolbar" id="editor1" v-model="sinopsis" />
+                <vue-editor
+                  :editor-toolbar="customToolbar"
+                  id="editor1"
+                  v-model="sinopsis"
+                />
                 <div style="height: 15px">
                   <v-slide-y-transition>
                     <div
@@ -3272,7 +3362,11 @@
               >Product Description</label
             >
             <div id="app">
-              <vue-editor :editor-toolbar="customToolbar" id="editor3" v-model="deskripsi" />
+              <vue-editor
+                :editor-toolbar="customToolbar"
+                id="editor3"
+                v-model="deskripsi"
+              />
               <div style="height: 15px">
                 <v-slide-y-transition>
                   <div
@@ -3815,6 +3909,7 @@
     </v-snackbar>
     <!-- End Snackbar -->
 
+    <!-- Dialog Edit Data User -->
     <v-dialog v-model="dialogEditDataUser" persistent max-width="600px">
       <v-card>
         <v-card-title>
@@ -3862,6 +3957,64 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!-- End Dialog Edit Data User -->
+
+    <!-- Dialog Edit Password User -->
+    <v-dialog v-model="dialogEditPasswordUser" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="text-h5"
+            >Edit Password User {{ userPasswordEditNama }}</span
+          >
+        </v-card-title>
+        <v-container>
+          <center>
+            <v-form ref="form" class="form" @submit.prevent="submit">
+              <label style="width: 100%">
+                <v-text-field
+                  v-model="newPassword"
+                  :rules="passwordRules"
+                  placeholder="New password"
+                  type="password"
+                  class="input"
+                  required
+                />
+              </label>
+
+              <label style="width: 100%">
+                <v-text-field
+                  v-model="newPasswordConfirm"
+                  :rules="confirmPasswordRules"
+                  placeholder="New password confirmation"
+                  type="password"
+                  class="input"
+                  required
+                />
+              </label>
+
+              <v-btn
+                class="primary"
+                style="
+                  text-transform: capitalize !important;
+                  border-radius: 20px;
+                "
+                @click="submitEditPassword"
+                :loading="loading"
+                >Change Password</v-btn
+              >
+              <v-btn
+                plain
+                text
+                @click="handlerCloseDialogEditPassword"
+                style="text-transform: capitalize"
+                >Close</v-btn
+              >
+            </v-form>
+          </center>
+        </v-container>
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Edit Password User -->
 
     <!-- Footer -->
     <div
@@ -4074,7 +4227,17 @@ export default {
     userIsRole: "",
     userIsService: "",
     userDataUUID: "",
-    EditDataUserFormForm: new FormData(),
+    EditDataUserForm: new FormData(),
+
+    // Edit Data User
+    dialogEditPasswordUser: false,
+    userPasswordUUID: "",
+    EditPasswordUserForm: new FormData(),
+    userPasswordEditNama: "",
+    newPassword: "",
+    newPasswordConfirm: "",
+    currentPassword: "",
+    valid: true,
 
     // Forms
     inputType: "",
@@ -4094,6 +4257,7 @@ export default {
       uuid: localStorage.getItem("uuid"),
       role: localStorage.getItem("role"),
       id: localStorage.getItem("id"),
+      userToken: localStorage.getItem("userToken"),
     },
     multiLine: true,
     dialogZoom: false,
@@ -4153,6 +4317,26 @@ export default {
     }
   },
   computed: {
+    passwordRules() {
+      return [
+        (v) => !!v || "This field is required",
+        (v) =>
+          (v && v.length >= 8) ||
+          "Your password needs to be minimal 8 characters",
+      ];
+    },
+    confirmPasswordRules() {
+      return [
+        (v) => !!v || "This field is required",
+        (v) =>
+          (v && v.length >= 8) ||
+          "Your password needs to be minimal 8 characters",
+        (v) =>
+          v === this.newPassword ||
+          "Password Confirmation did not match with password",
+      ];
+    },
+
     getNamaPersona() {
       return localStorage.getItem("nama_persona");
     },
@@ -4764,6 +4948,18 @@ export default {
       this.userDataUUID = item.uuid;
     },
 
+    handlerEditPasswordUser(item) {
+      this.dialogEditPasswordUser = true;
+      this.userPasswordEditNama = item.nama_persona;
+      this.userPasswordUUID = item.uuid;
+    },
+
+    handlerCloseDialogEditPassword() {
+      this.newPassword = "";
+      this.newPasswordConfirm = "";
+      this.dialogEditPasswordUser = false;
+    },
+
     clickUserActive(uuidUser) {
       this.dialogLoader = true;
       // Set the headers
@@ -4832,6 +5028,94 @@ export default {
         .catch(() => {
           this.dialogLoader = false;
         });
+    },
+
+    submitEditPassword() {
+      if (this.$refs.form.validate()) {
+        this.dialogLoader = true;
+        // Set the headers
+        var headers = {
+          Authorization: "Bearer " + this.userLogin.token,
+        };
+        var url = this.$api + "/resetPassword/" + this.userPasswordUUID;
+
+        this.EditDataUserForm = new FormData();
+
+        this.EditDataUserForm.append("password", this.newPassword);
+        this.EditDataUserForm.append(
+          "password_confirmation",
+          this.newPasswordConfirm
+        );
+
+        // Gunakan 'url' dalam permintaan POST
+        this.$http
+          .post(url, this.EditDataUserForm, { headers: headers })
+          .then(() => {
+            this.newPassword = "";
+            this.newPasswordConfirm = "";
+            this.dialogEditPasswordUser = false;
+            this.initializeDataUser();
+
+            this.textMessage =
+              "User data password has been updated successfully 😊";
+            this.snackbar = true;
+            this.color = "success";
+
+            // Menonaktifkan loading screen setelah 300ms
+            setTimeout(() => {
+              this.dialogLoader = false;
+            }, 300);
+          })
+          .catch(() => {
+            this.dialogLoader = false;
+          });
+      }
+    },
+
+    submitEditPasswordUser() {
+      if (this.$refs.form.validate()) {
+        this.dialogLoader = true;
+        // Set the headers
+        var headers = {
+          Authorization: "Bearer " + this.userLogin.token,
+        };
+        var url = this.$api + "/resetPasswordUser/" + this.userLogin.uuid;
+
+        this.EditDataUserForm = new FormData();
+
+        this.EditDataUserForm.append("old_password", this.currentPassword);
+        this.EditDataUserForm.append("password", this.newPassword);
+        this.EditDataUserForm.append(
+          "password_confirmation",
+          this.newPasswordConfirm
+        );
+
+        // Gunakan 'url' dalam permintaan POST
+        this.$http
+          .post(url, this.EditDataUserForm, { headers: headers })
+          .then(() => {
+            this.currentPassword = "";
+            this.newPassword = "";
+            this.newPasswordConfirm = "";
+            this.dialogEditPasswordUser = false;
+            this.logout();
+
+            this.textMessage = "Your password has been updated successfully 😊";
+            this.snackbar = true;
+            this.color = "success";
+
+            // Menonaktifkan loading screen setelah 300ms
+            setTimeout(() => {
+              this.dialogLoader = false;
+            }, 300);
+          })
+          .catch((error) => {
+            this.textMessage = error.response.data.message;
+            this.snackbar = true;
+            this.color = "success";
+            this.dialogLoader = false;
+          });
+      }
     },
 
     handlerRefresDataUser() {
@@ -6077,7 +6361,6 @@ export default {
           this.$http
             .post(urlEditComic, this.ComicForm, { headers: headers })
             .then(() => {
-
               // Setelah form dikirim, kosongkan input file dengan ID "file-foto"
               document.getElementById("file-foto").value = "";
 
@@ -6399,8 +6682,10 @@ export default {
 
     // LogoutAuto
     checkRoleAndDeleteIfMismatch() {
-      console.log(this.userLogin.role, "role matching", this.myProfile.role);
-      if (this.userLogin.role !== this.myProfile.role) {
+      if (
+        this.userLogin.role !== this.myProfile.role ||
+        this.userLogin.userToken != this.myProfile.userToken
+      ) {
         // Roles don't match, delete the localStorage item
         this.logout();
         // You can perform other actions as needed
