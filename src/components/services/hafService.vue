@@ -69,8 +69,8 @@
           style="margin-bottom: 70px; margin-top: 20px"
         >
           <p>Result for {{ searchServicer }}</p>
-          <div class="row" v-if="searchResults.length > 0">
-            <div class="row" style="justify-content: center; max-width: none">
+          <div class="row" style="margin: 0px; padding: 0px;" v-if="searchResults.length > 0">
+            <div class="row" style="justify-content: center; max-width: none; padding: 0px; margin: 0px;">
               <div
                 v-for="result in searchResults"
                 :key="result.id"
@@ -420,7 +420,9 @@
                   v-if="
                     user_id_servicer != userLogin.id &&
                     myProfile.is_servicer == 0 &&
-                    myProfile.role != 'admin'
+                    myProfile.role != 'admin' &&
+                    myProfile.role != 'student' &&
+                    myProfile.role != 'osis'
                   "
                 >
                   <v-form class="form" ref="form" @submit.prevent>
@@ -1334,7 +1336,10 @@
                 {{ this.project_nameDetail }}
               </p>
               <p style="color: black; margin: 0px">
-                Rp. {{ formatPrice(this.offering_costDetail) }}
+                Rp. {{ formatPrice(this.offering_costDetail) }} + Service tax Rp. 10.000,00
+              </p>
+              <p style="color: black; margin: 0px">
+                You have to pay Rp. {{ formatPrice(offering_costDetail + 10000) }}
               </p>
               <p style="color: black; margin: 0px; text-align: justify">
                 {{ this.description }}
@@ -1365,6 +1370,29 @@
             </div>
 
             <hr style="width: 40%" />
+
+
+
+            <div v-if="this.idCustomer == this.userLogin.id">
+              <div
+                style="height: 300px; width: 250px;"
+                class="w-img-oval"
+              >
+                <p style="color: black; margin: 0px; text-align: justify">
+                  Pay with qris :
+                </p>
+                <img
+                  style="
+                    object-fit: cover;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 10px;
+                  "
+                  src="@/assets/qris.jpg"
+                  class="img-oval"
+                />
+              </div>
+            </div>
 
             <div class="row no-gutters">
               <div
@@ -2934,7 +2962,7 @@ export default {
 
 .card-button-service {
   transform: translate(-50%, 125%);
-  width: 60%;
+  width: 80%;
   border-radius: 1rem;
   border: none;
   background-color: #008bf8;

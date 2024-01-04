@@ -866,6 +866,7 @@
                           "
                         >
                           <a
+                            v-if="myProfile.id == dataForum.user_id || myProfile.role == 'admin'"
                             @click="deleteHandlerComic(dataForum)"
                             style="
                               color: #4898ff;

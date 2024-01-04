@@ -680,10 +680,10 @@
                   <v-icon right dark> mdi-instagram </v-icon>
                 </v-btn>
               </b-col>
-              <b-col sm="5">
+              <b-col sm="5" style="align-items: center; display: flex;">
                 <b-img
                   fluid
-                  style="cursor: zoom-in; height: 500px; object-fit: contain"
+                  style="cursor: zoom-in; object-fit: contain; border-radius: 20px;"
                   @click="zoom($baseUrl + '/storage/' + imageDetailProfile)"
                   :src="$baseUrl + '/storage/' + imageDetailProfile"
                   alt="Image Profile"
@@ -754,10 +754,10 @@
               <b-col sm="7">
                 <div v-html="npc_profileDetailNPC" style="text-align: ''"></div>
               </b-col>
-              <b-col sm="5">
+              <b-col sm="5" style="align-items: center; display: flex;">
                 <b-img
                   fluid
-                  style="cursor: zoom-in; height: 500px; object-fit: contain"
+                  style="cursor: zoom-in; object-fit: contain; border-radius: 10px;"
                   @click="zoom($baseUrl + '/storage/' + image_npcDetailNPC)"
                   :src="$baseUrl + '/storage/' + image_npcDetailNPC"
                   alt="Image NPC"
@@ -1256,7 +1256,7 @@ export default {
 
 /* Card */
 .cardSNPC {
-  width: 155px;
+  width: 133px;
   height: 254px;
   box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
   position: relative;

@@ -8,13 +8,20 @@
         data-aos="fade-up"
         data-aos-duration="2000"
       >
-        <div style="width: 100%">
-          <b-nav tabs style="padding-top: 3px; align-items: center">
+        <div style="width: 90%">
+          <b-nav tabs style="padding-top: 3px; align-items: center; padding: 0px; margin-top: 10px;">
             <b-nav-item
               v-if="isCategoryOn == 1"
               active
               @click="handlerClickCategory"
-              >Category</b-nav-item
+              >Category <v-icon
+                  dense
+                  color="red"
+                  class="data-table-icon hover-heart"
+                  style="cursor: pointer"
+                >
+                  mdi-close
+                </v-icon></b-nav-item
             >
             <b-nav-item v-else @click="handlerClickCategory"
               >Category</b-nav-item
@@ -23,7 +30,14 @@
               v-if="isKomikTodayOn == 1"
               active
               @click="handlerClickKomikToday"
-              >Today Updates</b-nav-item
+              >Today Updates <v-icon
+                  dense
+                  color="red"
+                  class="data-table-icon hover-heart"
+                  style="cursor: pointer"
+                >
+                  mdi-close
+                </v-icon></b-nav-item
             >
             <b-nav-item v-else @click="handlerClickKomikToday"
               >Today Updates</b-nav-item
@@ -32,27 +46,18 @@
               v-if="isFavoriteOn == 1"
               active
               @click="handlerClickFavoriteLandingPage"
-              >Favorites</b-nav-item
-            >
-            <b-nav-item v-else @click="handlerClickFavoriteLandingPage"
-              >Favorites</b-nav-item
-            >
-            <transition name="fade">
-              <b-nav-item
-                v-if="
-                  isCategoryOn == 1 || isFavoriteOn == 1 || isKomikTodayOn == 1
-                "
-                @click.stop="handlerClickCloseAll"
-                ><v-icon
+              >Favorites <v-icon
                   dense
                   color="red"
                   class="data-table-icon hover-heart"
                   style="cursor: pointer"
                 >
                   mdi-close
-                </v-icon>
-              </b-nav-item>
-            </transition>
+                </v-icon></b-nav-item
+            >
+            <b-nav-item v-else @click="handlerClickFavoriteLandingPage"
+              >Favorites</b-nav-item
+            >
           </b-nav>
 
           <div class="coolinput">
@@ -105,8 +110,8 @@
       data-aos-duration="2000"
     >
       <p>Result for {{ searchTerm }}</p>
-      <div class="row" v-if="searchResults.length > 0">
-        <div class="row" style="justify-content: center; max-width: none">
+      <div class="row" v-if="searchResults.length > 0" style="margin: 0px; padding: 0px;">
+        <div class="row" style="justify-content: center; max-width: none; margin: 0px; padding: 0px;">
           <div
             v-for="result in searchResults"
             :key="result.id"
@@ -379,7 +384,7 @@
           >
             Popular This Week
           </h5>
-          <div class="section" style="margin-bottom: 30px">
+          <div class="section" style="margin-bottom: 30px; padding: 0px;">
             <div class="row" style="justify-content: center; max-width: none; padding: 0px; margin: 0px;">
               <div v-if="dataTodays.length == 0">
               <div
@@ -2547,7 +2552,7 @@ export default {
   object-fit: cover; /* Apply the object-fit: cover style to handle resizing and positioning */
 }
 .card {
-  width: 165px;
+  width: 140px;
   height: 254px;
   margin: 2px;
   padding: 2rem 1.5rem;
@@ -2762,6 +2767,15 @@ export default {
 }
 
 @media (max-width: 767px) {
+  .coolinput {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    position: static;
+    width: 250px;
+    padding-left: 8px;
+
+  }
   .container-footer{
     width: 90% !important;
   }
@@ -2772,10 +2786,9 @@ export default {
     text-align: center;
     padding-bottom: 20px;
   }
-
   .size-bar-home {
-    padding-right: 50px;
-    padding-left: 50px;
+    padding-right: 10px;
+    padding-left: 10px;
   }
 
   .footer-dark .item.text {

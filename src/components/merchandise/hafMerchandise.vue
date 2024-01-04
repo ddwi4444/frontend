@@ -121,8 +121,8 @@
           style="margin-bottom: 70px; margin-top: 20px"
         >
           <p>Result for {{ searchMerchandise }}</p>
-          <div class="row" v-if="searchResults.length > 0">
-            <div class="row" style="justify-content: center; max-width: none">
+          <div class="row" v-if="searchResults.length > 0" style="margin: 0px; padding: 0px;">
+            <div class="row" style="justify-content: center; max-width: none; margin: 0px; padding: 0px;">
               <div
                 data-aos="fade-up"
                 data-aos-duration="2000"
@@ -1112,8 +1112,34 @@
           </p>
           <p class="ma-0 pa-0">
             Total Price : Rp.
-            {{ formatPrice(dataOrderInDetailOrderProducts.total_prices) }}
+            {{ formatPrice(dataOrderInDetailOrderProducts.total_prices) }} + Service tax Rp. 5.000,00
           </p>
+          <p class="ma-0 pa-0">
+            You have to pay : Rp.
+            {{ formatPrice(dataOrderInDetailOrderProducts.total_prices + 5000) }}
+          </p>
+          <div style="padding-bottom: 25px;">
+            <center>
+              <div
+                style="height: 300px; width: 250px;"
+                class="w-img-oval"
+              >
+                <p style="color: black; margin: 0px; text-align: justify">
+                  Pay with qris :
+                </p>
+                <img
+                  style="
+                    object-fit: cover;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 10px;
+                  "
+                  src="@/assets/qris.jpg"
+                  class="img-oval"
+                />
+              </div>
+            </center>
+            </div>
         </div>
         <center>
           <div>
@@ -2497,6 +2523,23 @@ export default {
     padding-right: 0px;
     padding-left: 0px;
   }
+
+  .card-merchandise {
+  position: relative;
+  width: 138px;
+  height: 16.5em;
+  box-shadow: 0px 1px 13px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 120ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  padding: 0.5em;
+  padding-bottom: 3.4em;
+  border-radius: 10px;
+  margin: 5px;
+}
 
 }
 

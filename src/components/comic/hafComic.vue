@@ -127,7 +127,7 @@
             data-aos-duration="1500"
             class="f-24 f-md-20 f-secondary text-center m-b-50"
             style="
-              padding-top: 170px;
+              padding-top: 150px;
               font-family: 'Georgia';
               font-weight: bold;
             "
@@ -1611,7 +1611,8 @@ export default {
     width: 100% !important;
   }
   .imageThumbnail {
-    max-width: 200px;
+    max-width: 158px;
+    max-height: 300px;
   }
   .containerImage {
     justify-content: start !important;

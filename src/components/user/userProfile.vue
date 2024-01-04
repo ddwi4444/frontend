@@ -119,10 +119,10 @@
                   <v-icon right dark> mdi-instagram </v-icon>
                 </v-btn>
               </b-col>
-              <b-col sm="5">
+              <b-col sm="5" style="align-items: center; display: flex;">
                 <b-img
                   fluid
-                  style="cursor: zoom-in; height: 500px; object-fit: contain"
+                  style="cursor: zoom-in; object-fit: contain; border-radius: 10px;"
                   @click="zoom($baseUrl + '/storage/' + imageProfile)"
                   :src="$baseUrl + '/storage/' + imageProfile"
                   alt="Character"
