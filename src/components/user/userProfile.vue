@@ -216,6 +216,7 @@
                   ></b-col>
                   <b-col style="justify-content: end; display: flex"
                     ><v-btn
+                      v-if="myProfile.role != 'admin'"
                       small
                       color="primary"
                       dark
@@ -326,8 +327,8 @@
                       ></v-text-field></div
                   ></b-col>
                   <b-col style="justify-content: end; display: flex"
-                    ><v-btn
-                      v-if="myProfile.role != 'admin'"
+                    ><v-btn         
+                    v-if="myProfile.role != 'admin'" 
                       small
                       color="primary"
                       dark
@@ -535,11 +536,11 @@
                     <b-col
                       ><!-- SEARCH -->
                       <div class="form-input" style="margin-left: 10px">
-                        <v-text-field
+                        <v-text-field v-if="myProfile.role == 'admin'"
                           v-model="list.search_portfolio"
                           class="p-0 m-0"
                           append-icon="mdi-magnify"
-                          label="Search NPC"
+                          label="Search portfolio by servicer is name"
                           single-line
                           hide-details
                         ></v-text-field></div
@@ -2649,6 +2650,7 @@
                 ></b-col>
                 <b-col style="justify-content: end; display: flex"
                   ><v-btn
+                  v-if="myProfile.role != 'admin'" 
                     small
                     color="primary"
                     dark
@@ -5841,8 +5843,8 @@ export default {
           width: "30%",
         },
         {
-          text: "Status",
-          value: "status",
+          text: "Likes",
+          value: "jumlah_like",
           align: "center",
           filterable: false,
           sortable: false,

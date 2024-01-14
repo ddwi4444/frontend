@@ -422,7 +422,7 @@
                             <v-textarea
                               filled
                               auto-grow
-                              label="Have a questions?"
+                              label="Type announcement"
                               rows="4"
                               row-height="30"
                               v-model="isi"

@@ -76,6 +76,24 @@
       </div>
     </center>
 
+    <!-- Dialog Loading -->
+    <v-dialog
+      v-model="dialogLoader"
+      content-class="elevation-0"
+      persistent
+      width="300"
+    >
+      <v-card color="#fff0">
+        <img
+          src="@/assets/Spin-1s-200px.gif"
+          style="height: 150px"
+          class="d-inline-block align-top"
+          alt="Animation"
+        />
+      </v-card>
+    </v-dialog>
+    <!-- End Dialog Loading -->
+
     <!-- Snackbar -->
     <v-snackbar v-model="snackbar" auto-height :color="color" text top right>
       {{ textMessage }}
@@ -111,6 +129,7 @@ export default Vue.extend({
 
       // ADDONS
       loading: false,
+      dialogLoader: false,
 
       // Snackbar
       snackbar: false,
@@ -172,7 +191,7 @@ export default Vue.extend({
       }
     },
     submit() {
-      this.loading = true;
+      this.dialogLoader = true;
 
       if (this.$refs.form.validate()) {
         var url = this.$api + "/register";
@@ -190,19 +209,27 @@ export default Vue.extend({
             this.snackbar = true;
             this.color = "success";
 
+            this.nama_persona = "";
+            this.email = "";
+            this.password = "";
+            this.confirmPassword = "";
+
             // this.$router.push({
             //   name: "login",
             // });
+            setTimeout(() => {
+              this.dialogLoader = false;
+            }, 300);
           })
           .catch((error) => {
             this.textMessage = (error.response.data.message);
             this.snackbar = true;
             this.color = "blue-grey";
 
-            this.loading = false;
+            this.dialogLoader = false;
           });
 
-        this.loading = false;
+          this.dialogLoader = false;
       }
     },
   },

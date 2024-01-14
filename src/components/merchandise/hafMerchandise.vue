@@ -777,7 +777,7 @@
               "
               @click="handlerRefresDataOrderMerchandise"
             >
-              Refresh Data Sub Comic
+              Refresh Order Merchandise
             </v-btn>
           </div>          
           <v-container class="conatiner-size-my-profile p-0">
@@ -1115,7 +1115,7 @@
             {{ formatPrice(dataOrderInDetailOrderProducts.total_prices) }} + Service tax Rp. 5.000,00
           </p>
           <p class="ma-0 pa-0">
-            You have to pay : Rp.
+            You have to pay Rp.
             {{ formatPrice(dataOrderInDetailOrderProducts.total_prices + 5000) }}
           </p>
           <div style="padding-bottom: 25px;">
@@ -1142,7 +1142,7 @@
             </div>
         </div>
         <center>
-          <div>
+          <div style="padding-bottom: 10px;">
             <!-- Update the v-for and :src attribute -->
             <div
               v-for="dataDetailOrderProductMerchandise in dataDetailOrderProductsMerchandise"
@@ -1154,8 +1154,7 @@
                 style="
                   max-width: 540px;
                   min-height: 130px;
-                  padding: 0px;
-                  margin: 7px;
+                  margin-top: 10px;                  
                   border-radius: 20px;
                 "
               >

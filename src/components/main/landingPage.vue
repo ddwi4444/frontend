@@ -238,7 +238,7 @@
         <!-- Beri 5 card untuk terbaru -->
         <div class="row" style="padding: 0px; margin: 0px;">
           <div class="row" style="justify-content: center; padding: 0px; margin: 0px; max-width: none">
-            <div v-if="dataTodays.length == 0">
+            <div v-if="dataLatests.length == 0">
               <div
                 class="row no-gutters"
                 data-aos="fade-up"
@@ -386,7 +386,7 @@
           </h5>
           <div class="section" style="margin-bottom: 30px; padding: 0px;">
             <div class="row" style="justify-content: center; max-width: none; padding: 0px; margin: 0px;">
-              <div v-if="dataTodays.length == 0">
+              <div v-if="dataPopulars.length == 0">
               <div
                 class="row no-gutters"
                 data-aos="fade-up"

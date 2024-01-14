@@ -1373,7 +1373,7 @@
 
 
 
-            <div v-if="this.idCustomer == this.userLogin.id">
+            <div v-if="this.idCustomer == this.userLogin.id" style="margin-bottom: 40px;">
               <div
                 style="height: 300px; width: 250px;"
                 class="w-img-oval"
