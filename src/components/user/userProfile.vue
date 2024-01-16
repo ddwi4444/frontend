@@ -5260,7 +5260,7 @@ export default {
 
     editHandlerMerchandise(item) {
       this.clearForm();
-      this.dialogMerchandise = true;
+      this.getImagesMerchandise(item.id);      
       this.inputType = "UpdateMerchandise";
       this.editUuidMerchandise = item.uuid;
       this.thumbnail = item.thumbnail;
@@ -5269,6 +5269,7 @@ export default {
       this.harga = item.harga;
       this.stok = item.stok;
       this.selectedFile = item.thumbnail;
+      this.dialogMerchandise = true;
     },
 
     deleteHandlerMerchandise(item) {
@@ -5281,6 +5282,30 @@ export default {
       this.clearForm();
       this.inputType = "AddMerchandise";
       this.dialogMerchandise = true;
+    },
+
+    getImagesMerchandise(idMerchandise) {
+      this.loadingScreen = true;
+
+      var url =
+        this.$api +
+        "/getImagesMerchandise/" + idMerchandise;
+
+      this.$http
+        .get(url)
+        .then((response) => {
+          this.images_merchandise_path = response.data.data;
+
+          // Menonaktifkan loading screen setelah 300ms
+          setTimeout(() => {
+            this.loadingScreen = false;
+          }, 300);
+        })
+        .catch((error) => {
+          // Menangani kesalahan jika terjadi
+          console.error("Error fetching portfolio data:", error);
+          this.loadingScreen = false;
+        });
     },
 
     deleteDataMerchandise() {
@@ -5459,6 +5484,16 @@ export default {
           var urlEditMerchandise = this.$api + "/update-merchandise/" + uuid;
           if (dataFileFoto) {
             this.MerchandiseForm.append("thumbnail", dataFileFoto);
+          }
+
+          if (dataFileImagesMerchandisePath.length > 0) {
+            // Iterate through selected files and append them to the FormData
+            for (let i = 0; i < dataFileImagesMerchandisePath.length; i++) {
+              this.MerchandiseForm.append(
+                "images_merchandise_path[]",
+                dataFileImagesMerchandisePath[i]
+              );
+            }
           }
 
           this.$http

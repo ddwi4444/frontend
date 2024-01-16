@@ -197,6 +197,7 @@
                         object-fit: cover;
                       "
                       :src="$baseUrl + '/storage/' + dataSubComic.thumbnail"
+                      :lazy-src="$baseUrl + '/storage/' + dataSubComic.thumbnail"
                       alt="Image"
                       class="rounded-0"
                     ></b-card-img>
@@ -370,6 +371,7 @@
             <!-- Your dialog content goes here -->
             <v-img
               :src="$baseUrl + '/storage/' + dataSubComicSinglePost.content"
+              :lazy-src="$baseUrl + '/storage/' + dataSubComicSinglePost.content"
               style="width: 100%"
             ></v-img>
           </div>
