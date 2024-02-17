@@ -1105,7 +1105,7 @@
                   </div>
                   <div
                     style="color: rgb(156, 156, 0)"
-                    v-else-if="
+                    v-if="
                       (item.is_deal == '1' &&
                         item.is_done == '0' &&
                         item.buktiTf === null) ||
@@ -1114,29 +1114,23 @@
                   >
                     Waiting for payment
                   </div>
-                  <div
-                    style="color: rgb(71, 0, 142)"
-                    v-else-if="
-                      (item.is_deal == '1' &&
+                  <div style="color: rgb(71, 0, 142)"
+                    v-if="
+                      item.is_deal == 1 &&
                         item.is_done == '0' &&
-                        item.buktiTf !== null &&
-                        myProfile.role !== 'admin' &&
-                        item.confirm_buktiTf === 0) ||
-                      item.buktiTf === ''
+                        item.confirm_buktiTf === '0' &&
+                        item.buktiTf !== null">
+                    <div
+                    style="color: rgb(71, 0, 142)"
+                    v-if="
+                        myProfile.role !== 'admin'
                     "
                   >
                     Waiting for confirm payment by Admin
                   </div>
                   <div
                     style="color: rgb(71, 0, 142)"
-                    v-else-if="
-                      (item.is_deal == '1' &&
-                        item.is_done == '0' &&
-                        item.buktiTf !== null &&
-                        myProfile.role === 'admin' &&
-                        item.confirm_buktiTf === 0) ||
-                      item.buktiTf === ''
-                    "
+                    v-else
                   >
                     <v-btn
                       text
@@ -1147,19 +1141,18 @@
                       <v-icon small>mdi-check-all</v-icon> Confirm Payment
                     </v-btn>
                   </div>
+                  </div>                  
                   <div
                     style="color: rgb(0, 0, 201)"
-                    v-else-if="
-                      (item.is_deal == '1' &&
+                    v-if="
+                      item.is_deal == '1' &&
                         item.is_done == '0' &&
-                        item.buktiTf !== null &&
-                        item.confirm_buktiTf === 1) ||
-                      item.buktiTf === ''
+                        item.confirm_buktiTf === '1'
                     "
                   >
                     Servicer processing the order
                   </div>
-                  <div style="color: green" v-else-if="item.is_done == '1'">
+                  <div style="color: green" v-if="item.is_done == '1'">
                     Done
                   </div>
                 </template>
@@ -1242,7 +1235,7 @@
                   </div>
                   <div
                     style="color: red"
-                    v-else-if="this.is_deal == '3' && this.is_done == '0'"
+                    v-if="this.is_deal == '3'"
                   >
                     <span style="color: black; margin: 0px">is </span>
                     <span style="text-decoration: underline; font-weight: bold"
@@ -1251,7 +1244,7 @@
                   </div>
                   <div
                     style="color: rgb(156, 156, 0)"
-                    v-else-if="
+                    v-if="
                       this.is_deal == '1' &&
                       this.is_done == '0' &&
                       this.buktiTfDetail === null
@@ -1264,11 +1257,11 @@
                   </div>
                   <div
                     style="color: rgb(71, 0, 142)"
-                    v-else-if="
+                    v-if="
                       this.is_deal == '1' &&
                       this.is_done == '0' &&
                       this.buktiTfDetail !== null &&
-                      this.confirm_BuktiTfDetail === 0
+                      this.confirm_BuktiTfDetail === '0'
                     "
                   >
                     <span style="color: black; margin: 0px">is </span>
@@ -1278,10 +1271,10 @@
                   </div>
                   <div
                     style="color: rgb(0, 0, 201)"
-                    v-else-if="
+                    v-if="
                       this.is_deal == '1' &&
                       this.is_done == '0' &&
-                      this.confirm_BuktiTfDetail === 1
+                      this.confirm_BuktiTfDetail === '1'
                     "
                   >
                     <span style="color: black; margin: 0px">is </span>
@@ -1289,7 +1282,7 @@
                       >servicer processing the order</span
                     >
                   </div>
-                  <div style="color: green" v-else-if="this.is_done == '1'">
+                  <div style="color: green" v-if="this.is_done == '1'">
                     <span style="color: black; margin: 0px">is </span>
                     <span style="text-decoration: underline; font-weight: bold"
                       >done</span
@@ -1339,7 +1332,7 @@
                 Rp. {{ formatPrice(this.offering_costDetail) }} + Service tax Rp. 10.000,00
               </p>
               <p style="color: black; margin: 0px">
-                You have to pay Rp. {{ formatPrice(offering_costDetail + 10000) }}
+                You have to pay Rp. {{ formatPrice(totalCostDetail) }}
               </p>
               <p style="color: black; margin: 0px; text-align: justify">
                 {{ this.description }}
@@ -1464,10 +1457,10 @@
             <v-btn
               v-if="
                 this.idCustomer == this.userLogin.id &&
-                this.is_done == 0 &&
-                this.is_deal == 1 &&
+                this.is_done == '0' &&
+                this.is_deal == '1' &&
                 this.buktiTfDetail !== null &&
-                this.confirm_BuktiTfDetail === 1
+                this.confirm_BuktiTfDetail === '1'
               "
               style="text-transform: unset !important"
               rounded
@@ -1868,6 +1861,7 @@ export default {
     // Transkasi Layanan
     project_nameDetail: "",
     offering_costDetail: "",
+    totalCostDetail: "",
     description: "",
     dialogDetailServicesTransaction: false,
     customer_name: "",
@@ -2060,6 +2054,8 @@ export default {
       this.buktiTfDetail = item.buktiTf;
       this.confirm_BuktiTfDetail = item.confirm_buktiTf;
       this.offering_costDetail = item.offering_cost;
+      // Calculate total cost
+    this.totalCostDetail = parseFloat(item.offering_cost) + 10000;
       this.description = item.description;
       this.idCustomer = item.user_id_customer;
       this.idServicer = item.user_id_servicer;

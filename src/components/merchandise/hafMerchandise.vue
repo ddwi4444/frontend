@@ -853,7 +853,7 @@
                   "
                   style="color: #9d7a18; margin: 0px"
                 >
-                  Shiped
+                  Shiped and order done
                 </p>
                 <p
                   v-if="
@@ -1116,7 +1116,7 @@
           </p>
           <p class="ma-0 pa-0">
             You have to pay Rp.
-            {{ formatPrice(dataOrderInDetailOrderProducts.total_prices + 5000) }}
+            {{ formatPrice(totalHargaOrder) }}
           </p>
           <div style="padding-bottom: 25px;">
             <center>
@@ -1431,6 +1431,7 @@ export default {
       images: [],
       sizes: [],
     },
+    totalHargaOrder: "",
     itemProductBuktiTf: [],
     BuktiTfForm: new FormData(),
 
@@ -1604,6 +1605,7 @@ export default {
       this.axioGetDataDetailOrderProductsMerchandise(item.uuid);
       this.dataOrderInDetailOrderProducts = item;
       this.dialogDetailOrderProducts = true;
+      this.totalHargaOrder = parseFloat(item.total_prices) + 5000;
     },
 
     handlerDeleteOrder(itemUuid) {
@@ -1651,7 +1653,6 @@ export default {
           this.detailImageMerchandise.push(this.dataImageMerchandises[i]);
         }
       }
-      console.log(item, this.totalPcs, this.detailImageMerchandise);
     },
 
     confirmPayment(uuidOrderMerchandise) {
