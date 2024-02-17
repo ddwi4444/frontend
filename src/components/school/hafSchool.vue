@@ -4,11 +4,20 @@
     <div>
       <div class="container">
         <div class="row">
-          <b-tabs content-class="mt-5 pa-0" align="center" data-aos="fade-up" data-aos-duration="2000">
+          <b-tabs
+            content-class="mt-5 pa-0"
+            align="center"
+            data-aos="fade-up"
+            data-aos-duration="2000"
+          >
             <!-- Forum Tab -->
             <b-tab title="QnA" class="cta hover-underline-animation" active>
               <center>
-                <div class="text-box-school" data-aos="fade-up" data-aos-duration="2000">
+                <div
+                  class="text-box-school"
+                  data-aos="fade-up"
+                  data-aos-duration="2000"
+                >
                   <div class="box-container">
                     <h6
                       style="
@@ -29,8 +38,13 @@
                         <div class="d-flex flex-row align-items-start">
                           <img
                             v-if="myProfile.image != null"
-                            style="width: 50px; height: 50px"
-                            class="rounded-circle mx-3"
+                            style="
+                              width: 40px !important;
+                              height: 40px !important;
+                              border-radius: 50%;
+                              margin-right: 5px;
+                              object-fit: cover;
+                            "
                             :src="$baseUrl + '/storage/' + this.myProfile.image"
                             width="40"
                           />
@@ -48,7 +62,11 @@
                             rows="4"
                             row-height="30"
                             v-model="isi"
-                            style="margin: 0px; padding: 0px; width: 100%; border-radius: 20px;"
+                            style="
+                              margin: 0px;
+                              padding: 0px;
+                              border-radius: 20px;
+                            "
                             hide-details="true"
                           ></v-textarea>
                         </div>
@@ -56,13 +74,15 @@
                       </div>
 
                       <center>
-                        <label for="file-upload" style="font-size: 12px; border-radius: 20px;"
+                        <label
+                          for="file-upload"
+                          style="font-size: 12px; border-radius: 20px"
                           ><v-icon small style="margin-right: 4px"
                             >fas fa-images</v-icon
                           >Add Images</label
                         >
                         <input
-                        style="border-radius: 20px;"
+                          style="border-radius: 20px"
                           type="file"
                           id="file-upload"
                           ref="fileFoto"
@@ -208,9 +228,11 @@
 
               <b-container fluid class="p-4 bg-transparent">
                 <center>
-                  <div data-aos="fade-up" data-aos-duration="2000"
+                  <div
+                    data-aos="fade-up"
+                    data-aos-duration="2000"
                     class="card-school mt-5"
-                    v-for="(dataForum, index) in dataForums"
+                    v-for="(dataForum, index) in paginateDataForum"
                     :key="dataForum.id"
                   >
                     <div>
@@ -279,7 +301,11 @@
                                   display: grid;
                                 "
                               >
-                                <a v-if="myProfile.id == dataForum.user_id || myProfile.role == 'admin'"
+                                <a
+                                  v-if="
+                                    myProfile.id == dataForum.user_id ||
+                                    myProfile.role == 'admin'
+                                  "
                                   @click="deleteHandlerComic(dataForum)"
                                   style="
                                     color: #4898ff;
@@ -338,7 +364,7 @@
                         style="width: 90%; padding: 0px; margin: 0px"
                       />
 
-                      <div class="row">
+                      <div class="row" style="padding-bottom: 10px;">
                         <v-btn
                           @click="
                             detailForumHandler(dataForum, dataImagesForums)
@@ -365,6 +391,37 @@
                     </div>
                   </div>
                 </center>
+
+                <!-- Pagination controls with limited page numbers -->
+                <div
+                  class="pagination"
+                  v-if="paginateDataForum.length != 0"
+                  data-aos="fade-up"
+                  data-aos-duration="2000"
+                  data-aos-offset="0"
+                >
+                  <button @click="prevPageForum" :disabled="currentPage === 1">
+                    Previous
+                  </button>
+                  <span
+                    style="padding: 0px !important"
+                    v-for="pageNumber in visiblePageNumbersDataForum"
+                    :key="pageNumber"
+                  >
+                    <button
+                      @click="gotoPageForum(pageNumber)"
+                      :class="{ active: pageNumber === currentPage }"
+                    >
+                      {{ pageNumber }}
+                    </button>
+                  </span>
+                  <button
+                    @click="nextPageForum"
+                    :disabled="currentPage * pageSize >= dataForums.length"
+                  >
+                    Next
+                  </button>
+                </div>
               </b-container>
             </b-tab>
             <!-- End Forum Tab -->
@@ -381,10 +438,7 @@
                 "
               >
                 <center>
-                  <div
-                    v-if="myProfile.role == 'admin'"
-                    class="text-box-school"
-                  >
+                  <div v-if="myProfile.role == 'admin'" class="text-box-school">
                     <div class="box-container">
                       <h6
                         style="
@@ -405,8 +459,13 @@
                           <div class="d-flex flex-row align-items-start">
                             <img
                               v-if="myProfile.image != null"
-                              style="width: 50px; height: 50px"
-                              class="rounded-circle mx-3"
+                              style="
+                                width: 40px !important;
+                                height: 40px !important;
+                                border-radius: 50%;
+                                margin-right: 5px;
+                                object-fit: cover;
+                              "
                               :src="
                                 $baseUrl + '/storage/' + this.myProfile.image
                               "
@@ -426,7 +485,11 @@
                               rows="4"
                               row-height="30"
                               v-model="isi"
-                              style="margin: 0px; padding: 0px; width: 100%; border-radius: 20px;"
+                              style="
+                                margin: 0px;
+                                padding: 0px;
+                                border-radius: 20px;
+                              "
                               hide-details="true"
                             ></v-textarea>
                           </div>
@@ -436,13 +499,13 @@
                         <center>
                           <label
                             for="file-upload-announcement"
-                            style="font-size: 12px; border-radius: 20px;"
+                            style="font-size: 12px; border-radius: 20px"
                             ><v-icon small style="margin-right: 4px"
                               >fas fa-images</v-icon
                             >Add Images</label
                           >
                           <input
-                          style="border-radius: 20px;"
+                            style="border-radius: 20px"
                             type="file"
                             id="file-upload-announcement"
                             ref="fileFotoAnnouncement"
@@ -584,13 +647,21 @@
 
                   <b-container fluid class="p-4 bg-transparent">
                     <center>
-                      <div data-aos="fade-up" data-aos-duration="2000"
+                      <div
+                        data-aos="fade-up"
+                        data-aos-duration="2000"
                         class="card-school mt-5"
-                        v-for="(dataAnnouncement, index) in dataAnnouncements"
+                        v-for="(
+                          dataAnnouncement, index
+                        ) in paginateDataAnnouncement"
                         :key="dataAnnouncement.id"
                       >
                         <div data-aos="fade-up" data-aos-duration="2000">
-                          <div class="comment-container-school" data-aos="fade-up" data-aos-duration="2000">
+                          <div
+                            class="comment-container-school"
+                            data-aos="fade-up"
+                            data-aos-duration="2000"
+                          >
                             <div class="user">
                               <div class="user-pic">
                                 <b-avatar
@@ -663,9 +734,11 @@
                                     "
                                   >
                                     <a
-                                    v-if="myProfile.role == 'admin'"
+                                      v-if="myProfile.role == 'admin'"
                                       @click="
-                                        deleteHandlerAnnouncement(dataAnnouncement)
+                                        deleteHandlerAnnouncement(
+                                          dataAnnouncement
+                                        )
                                       "
                                       style="
                                         color: #4898ff;
@@ -729,6 +802,42 @@
                         </div>
                       </div>
                     </center>
+
+                    <!-- Pagination controls with limited page numbers -->
+                    <div
+                      class="pagination"
+                      v-if="paginateDataAnnouncement.length != 0"
+                      data-aos="fade-up"
+                      data-aos-duration="2000"
+                      data-aos-offset="0"
+                    >
+                      <button
+                        @click="prevPageAnnouncement"
+                        :disabled="currentPage === 1"
+                      >
+                        Previous
+                      </button>
+                      <span
+                        style="padding: 0px !important"
+                        v-for="pageNumber in visiblePageNumbersDataAnnouncement"
+                        :key="pageNumber"
+                      >
+                        <button
+                          @click="gotoPageAnnouncement(pageNumber)"
+                          :class="{ active: pageNumber === currentPage }"
+                        >
+                          {{ pageNumber }}
+                        </button>
+                      </span>
+                      <button
+                        @click="nextPageAnnouncement"
+                        :disabled="
+                          currentPage * pageSize >= dataAnnouncements.length
+                        "
+                      >
+                        Next
+                      </button>
+                    </div>
                   </b-container>
                 </center>
               </b-container>
@@ -748,34 +857,39 @@
       <v-card
         class="position-relative m-x-auto p-x-25 p-y-50 br-10 bs-none min-w-full min-w-lg-full"
       >
-      <v-card-title class="lighten-2" style="padding: 0px">
+        <v-card-title class="lighten-2" style="padding: 0px">
+          <div
+            class="row no-gutters"
+            style="
+              padding: 0px;
+              margin: 0px;
+              margin-top: 10px;
+              margin-bottom: 10px;
+            "
+          >
             <div
-              class="row no-gutters"
-              style="padding: 0px; margin: 0px; margin-top: 10px; margin-bottom:10px"
+              class="col"
+              style="
+                display: flex;
+                justify-content: end;
+                align-items: center;
+                margin-right: 10px;
+              "
             >
-              <div
-                class="col"
-                style="
-                  display: flex;
-                  justify-content: end;
-                  align-items: center;
-                  margin-right: 10px;
-                "
+              <v-btn
+                @click="handlerCloseDialogForum"
+                class="mx-1"
+                fab
+                dark
+                small
+                color="red"
+                style="height: 20px; width: 20px"
               >
-                <v-btn
-                  @click="handlerCloseDialogForum"
-                  class="mx-1"
-                  fab
-                  dark
-                  small
-                  color="red"
-                  style="height: 20px; width: 20px"
-                >
-                  <b-icon icon="x-lg" aria-hidden="true"></b-icon>
-                </v-btn>
-              </div>
+                <b-icon icon="x-lg" aria-hidden="true"></b-icon>
+              </v-btn>
             </div>
-          </v-card-title>
+          </div>
+        </v-card-title>
         <b-container fluid class="bg-transparent">
           <center>
             <div
@@ -866,7 +980,10 @@
                           "
                         >
                           <a
-                            v-if="myProfile.id == dataForum.user_id || myProfile.role == 'admin'"
+                            v-if="
+                              myProfile.id == dataForum.user_id ||
+                              myProfile.role == 'admin'
+                            "
                             @click="deleteHandlerComic(dataForum)"
                             style="
                               color: #4898ff;
@@ -950,38 +1067,45 @@
                     <div>
                       <div class="d-flex flex-row align-items-start mb-2">
                         <img
-                            v-if="myProfile.image != null"
-                            style="width: 50px; height: 50px"
-                            class="rounded-circle mx-3"
-                            :src="$baseUrl + '/storage/' + myProfile.image"
-                            width="40"
-                          />
-                          <img
-                            v-else
-                            style="width: 50px; height: 50px"
-                            class="rounded-circle mx-3"
-                            src="@/assets/userImage.jpg"
-                            width="40"
-                          /><v-textarea
+                          v-if="myProfile.image != null"
+                          style="
+                            width: 40px !important;
+                            height: 40px !important;
+                            border-radius: 50%;
+                            margin-right: 5px;
+                            object-fit: cover;
+                          "
+                          :src="$baseUrl + '/storage/' + myProfile.image"
+                          width="40"
+                        />
+                        <img
+                          v-else
+                          style="width: 50px; height: 50px"
+                          class="rounded-circle mx-3"
+                          src="@/assets/userImage.jpg"
+                          width="40"
+                        /><v-textarea
                           filled
                           auto-grow
                           label="Have an answer?"
                           rows="4"
                           row-height="30"
                           v-model="isiKomen"
-                          style="margin: 0px; padding: 0px; width: 100%; border-radius: 20px;"
+                          style="margin: 0px; padding: 0px; border-radius: 20px"
                           hide-details="true"
                         ></v-textarea>
                       </div>
 
                       <center>
-                        <label for="file-upload-komen" style="font-size: 12px; border-radius: 20px;"
+                        <label
+                          for="file-upload-komen"
+                          style="font-size: 12px; border-radius: 20px"
                           ><v-icon small style="margin-right: 4px"
                             >fas fa-images</v-icon
                           >Add Images</label
                         >
                         <input
-                        style="border-radius: 20px;"
+                          style="border-radius: 20px"
                           type="file"
                           id="file-upload-komen"
                           ref="fileFotoKomen"
@@ -1044,7 +1168,10 @@
                               : submitKomenForum('UpdateKomenForum')
                           "
                           class="button-login-register primary"
-                          style="text-transform: unset !important; border-radius: 20px;"
+                          style="
+                            text-transform: unset !important;
+                            border-radius: 20px;
+                          "
                           type="button"
                           :loading="loading"
                         >
@@ -1057,18 +1184,18 @@
               </div>
             </div>
 
-            
-
-            <p v-if="noComments"
+            <p
+              v-if="noComments"
               style="
                 margin-top: 16px;
                 margin-bottom: 10px;
                 font-family: 'Georgia';
               "
             >
-            There are no comments
+              There are no comments
             </p>
-            <p v-else
+            <p
+              v-else
               style="
                 margin-top: 16px;
                 margin-bottom: 10px;
@@ -1091,12 +1218,12 @@
                     <div class="user">
                       <div class="user-pic">
                         <b-avatar
-                              style="padding: 0px"
-                              badge
-                              badge-variant="success"
-                              :src="getUserImagecomment(dataKomenForum.user_id)"
-                            >
-                            </b-avatar>
+                          style="padding: 0px"
+                          badge
+                          badge-variant="success"
+                          :src="getUserImagecomment(dataKomenForum.user_id)"
+                        >
+                        </b-avatar>
                       </div>
                       <div class="user-info">
                         <span>{{ dataKomenForum.komen_by }}</span>
@@ -1188,8 +1315,8 @@
             :src="getImage"
             class="img-zoom-full of-cover"
           />
-        </v-card-text> </v-card
-      >this.axioDataKomenForum();
+        </v-card-text>
+      </v-card>
     </v-dialog>
     <!-- End Dialog Zooom Image -->
 
@@ -1224,7 +1351,11 @@
     <!-- End Dialog Delete Forum -->
 
     <!-- Dialog Delete Announcement -->
-    <v-dialog v-model="dialogConfirmDeleteAnnouncement" persistent max-width="400px">
+    <v-dialog
+      v-model="dialogConfirmDeleteAnnouncement"
+      persistent
+      max-width="400px"
+    >
       <v-card>
         <v-card-title class="dialog-confirm-title"> </v-card-title>
         <v-card-text class="dialog-confirm-text">
@@ -1271,7 +1402,6 @@
     </v-dialog>
     <!-- End Dialog Loading -->
 
-
     <!-- Footer -->
     <div
       style="margin-top: 50px"
@@ -1282,36 +1412,49 @@
       <div class="footer-dark">
         <transition name="fade">
           <footer>
-            <div class="container container-footer" style="justify-content: center; width: 50%">
+            <div
+              class="container container-footer"
+              style="justify-content: center; width: 50%"
+            >
               <div class="">
                 <h3>Historical Art Fantasia</h3>
-                <p>
-                  "Be Creative, smart, and learning forever"
-                </p>
+                <p>"Be Creative, smart, and learning forever"</p>
               </div>
               <div class="col item social">
-                <a                  
+                <a
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="instagram" aria-hidden="true" @click="openInstagramFooter"></b-icon></a
+                  ><b-icon
+                    icon="instagram"
+                    aria-hidden="true"
+                    @click="openInstagramFooter"
+                  ></b-icon></a
                 ><a
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="youtube" aria-hidden="true" @click="openYoutubeFooter"></b-icon></a
-                ><a @click="openTiktokFooter"
+                  ><b-icon
+                    icon="youtube"
+                    aria-hidden="true"
+                    @click="openYoutubeFooter"
+                  ></b-icon></a
+                ><a
+                  @click="openTiktokFooter"
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><img 
+                  ><img
                     src="@/assets/tiktok.png"
                     style="height: 33px"
                     class="d-inline-block align-top"
-                    alt="Animation"
-                  /></a
-                ><a                  
+                    alt="Animation" /></a
+                ><a
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
                 >
-                  <b-icon icon="mailbox" aria-hidden="true" @click="sendEmail"></b-icon
+                  <b-icon
+                    icon="mailbox"
+                    aria-hidden="true"
+                    @click="sendEmail"
+                  ></b-icon
                 ></a>
               </div>
               <p class="copyright">
@@ -1378,6 +1521,10 @@ export default {
     // Images
     dialogConfirmDeleteImage: false,
 
+    // Pagination Favorite Card
+    currentPage: 1,
+    pageSize: 7,
+
     // Snackbar
     snackbar: false,
     textMessage: "",
@@ -1430,6 +1577,58 @@ export default {
         this.dataKomenForums.filter(
           (comment) => comment.forum_id == this.idForum
         ).length === 0
+      );
+    },
+
+    paginateDataForum() {
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.dataForums.slice(startIndex, endIndex);
+    },
+    // Calculate the total number of pages
+    totalPagesDataForum() {
+      return Math.ceil(this.dataForums.length / this.pageSize);
+    },
+    // Calculate the visible page numbers based on the current page
+    visiblePageNumbersDataForum() {
+      const totalVisiblePages = 4;
+      const startPage = Math.max(
+        1,
+        this.currentPage - Math.floor(totalVisiblePages / 2)
+      );
+      const endPage = Math.min(
+        this.totalPagesDataForum,
+        startPage + totalVisiblePages - 1
+      );
+      return Array.from(
+        { length: endPage - startPage + 1 },
+        (_, i) => startPage + i
+      );
+    },
+
+    paginateDataAnnouncement() {
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.dataAnnouncements.slice(startIndex, endIndex);
+    },
+    // Calculate the total number of pages
+    totalPagesDataAnnouncement() {
+      return Math.ceil(this.dataAnnouncements.length / this.pageSize);
+    },
+    // Calculate the visible page numbers based on the current page
+    visiblePageNumbersDataAnnouncement() {
+      const totalVisiblePages = 4;
+      const startPage = Math.max(
+        1,
+        this.currentPage - Math.floor(totalVisiblePages / 2)
+      );
+      const endPage = Math.min(
+        this.totalPagesDataAnnouncement,
+        startPage + totalVisiblePages - 1
+      );
+      return Array.from(
+        { length: endPage - startPage + 1 },
+        (_, i) => startPage + i
       );
     },
   },
@@ -1500,12 +1699,12 @@ export default {
             this.imagesAnnouncement = [];
             this.inputType = "addForum";
 
-            this.textMessage = "The announcement has been successfully posted 😊";
+            this.textMessage =
+              "The announcement has been successfully posted 😊";
             this.snackbar = true;
             this.color = "success";
           })
-          .catch(() => {
-          });
+          .catch(() => {});
       } else {
         var urlEditForum = this.$api + "/update-forum/";
 
@@ -1699,7 +1898,7 @@ export default {
       }
 
       setTimeout(() => {
-        this.dialogLoader= false;
+        this.dialogLoader = false;
       }, 300);
     },
 
@@ -1819,7 +2018,6 @@ export default {
       this.$http
         .delete(url, { headers: headers })
         .then(() => {
-
           this.dialogConfirmDeleteForum = false;
           this.dialogDetailForum = false;
 
@@ -1843,7 +2041,7 @@ export default {
 
     deleteDataAnnouncement() {
       this.dialogLoader = true;
-      
+
       let uuid = this.deleteUuidAnnouncement;
       var url = this.$api + "/delete-announcement/" + uuid;
 
@@ -1855,10 +2053,10 @@ export default {
       this.$http
         .delete(url, { headers: headers })
         .then(() => {
-
           this.dialogConfirmDeleteAnnouncement = false;
 
-          this.textMessage = "The announcement has been successfully removed 😊";
+          this.textMessage =
+            "The announcement has been successfully removed 😊";
           this.snackbar = true;
           this.color = "success";
 
@@ -1948,12 +2146,12 @@ export default {
             this.images = [];
             this.inputType = "addForum";
 
-            this.textMessage = "The question has been successfully submitted 😊";
+            this.textMessage =
+              "The question has been successfully submitted 😊";
             this.snackbar = true;
             this.color = "success";
           })
-          .catch(() => {
-          });
+          .catch(() => {});
       } else {
         var urlEditForum = this.$api + "/update-forum/";
 
@@ -2017,14 +2215,17 @@ export default {
 
     // LogoutAuto
     checkRoleAndDeleteIfMismatch() {
-      if (this.userLogin.role !== this.myProfile.role || this.userLogin.userToken != this.myProfile.userToken) {
+      if (
+        this.userLogin.role !== this.myProfile.role ||
+        this.userLogin.userToken != this.myProfile.userToken
+      ) {
         // Roles don't match, delete the localStorage item
         this.logout();
         // You can perform other actions as needed
-        console.log('Role mismatch. LocalStorage item deleted.');
+        console.log("Role mismatch. LocalStorage item deleted.");
       } else {
         // Roles match, you can perform other actions if needed
-        console.log('Role match.');
+        console.log("Role match.");
       }
     },
     logout() {
@@ -2089,9 +2290,7 @@ export default {
       }
     },
     getUserImagecomment(userId) {
-      const user = this.dataUsersKomen.find(
-        (user) => user.id === userId
-      );
+      const user = this.dataUsersKomen.find((user) => user.id === userId);
 
       if (user && user.image) {
         return `${this.$baseUrl}/storage/${user.image}`;
@@ -2110,17 +2309,17 @@ export default {
 
     // Footer
     openInstagramFooter() {
-      window.open('https://www.instagram.com/hafallart/', "_blank");
+      window.open("https://www.instagram.com/hafallart/", "_blank");
     },
     openYoutubeFooter() {
-      window.open('https://www.youtube.com/@haforastudio9615', "_blank");
+      window.open("https://www.youtube.com/@haforastudio9615", "_blank");
     },
     openTiktokFooter() {
-      window.open('https://www.tiktok.com/@hafallart', "_blank");
+      window.open("https://www.tiktok.com/@hafallart", "_blank");
     },
     sendEmail() {
       // Replace 'recipient@example.com' with the actual email address
-      const emailAddress = 'haf3334444@gmail.com';
+      const emailAddress = "haf3334444@gmail.com";
 
       // Construct the mailto link
       const mailtoLink = `mailto:${emailAddress}`;
@@ -2129,11 +2328,94 @@ export default {
       window.location.href = mailtoLink;
     },
     // End Footer
+
+    // Handle next page  for data favorite
+    nextPageForum() {
+      this.loadingScreen = true;
+      if (this.currentPage * this.pageSize < this.dataForums.length) {
+        this.currentPage++;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle previous page
+    prevPageForum() {
+      this.loadingScreen = true;
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle going to a specific page
+    gotoPageForum(pageNumber) {
+      this.loadingScreen = true;
+      this.currentPage = pageNumber;
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+
+    // Handle next page  for data favorite
+    nextPageAnnouncement() {
+      this.loadingScreen = true;
+      if (this.currentPage * this.pageSize < this.dataAnnouncements.length) {
+        this.currentPage++;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle previous page
+    prevPageAnnouncement() {
+      this.loadingScreen = true;
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle going to a specific page
+    gotoPageAnnouncement(pageNumber) {
+      this.loadingScreen = true;
+      this.currentPage = pageNumber;
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
   },
 };
 </script>
 
 <style scoped>
+/* Paginate */
+/* Add your styling here if needed */
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination button {
+  cursor: pointer;
+  margin: 0 6px;
+  font-size: 15px;
+}
+
+.pagination button:hover {
+  cursor: pointer;
+  margin: 0 6px;
+  font-size: 15px;
+  color: #006598;
+}
+
+.pagination button.active {
+  color: #006598;
+}
+/* end Paginate */
 /* Card */
 .card-school {
   width: 80%;
@@ -2573,7 +2855,7 @@ label:hover {
     align-items: center;
   }
 
-  .container-footer{
+  .container-footer {
     width: 90% !important;
   }
 

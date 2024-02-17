@@ -3,7 +3,7 @@
     <loading-screen :value="loadingScreen"></loading-screen>
 
     <div style="padding-top: 35px" data-aos="zoom-in" data-aos-duration="2000">
-      <H1 style="font-family: Georgia, serif; margin: 0px" 
+      <H1 style="font-family: Georgia, serif; margin: 0px"
         >Historical Art Fantasia</H1
       >
       <p style="font-family: Georgia, serif; margin: 0px; font-weight: lighter">
@@ -59,7 +59,9 @@
       >
         <center>
           <div style="width: 60%" class="containerAboutHaf">
-            <img data-aos="fade-up" data-aos-duration="2000"
+            <img
+              data-aos="fade-up"
+              data-aos-duration="2000"
               style="width: 250px; margin-bottom: 30px"
               src="@/assets/logoHAF2.png"
             />
@@ -91,11 +93,15 @@
               bergaya eropa dan memiliki konsep luxury & aesthetic.
             </p>
 
-            <hr data-aos="fade-up" data-aos-duration="2000"
+            <hr
+              data-aos="fade-up"
+              data-aos-duration="2000"
               style="color: #4a1d00 !important; border: 1px solid !important"
             />
 
-            <H3 data-aos="fade-up" data-aos-duration="2000"
+            <H3
+              data-aos="fade-up"
+              data-aos-duration="2000"
               style="
                 font-family: Georgia, serif;
                 margin: 0px;
@@ -110,7 +116,9 @@
               >Our Students Project</H3
             >
 
-            <h4 data-aos="fade-up" data-aos-duration="2000"
+            <h4
+              data-aos="fade-up"
+              data-aos-duration="2000"
               @click="openNewPageYoutubeOtomo"
               class="hafProject"
               style="
@@ -120,10 +128,14 @@
                 margin-bottom: 20px;
               "
             >
-            🎮 HAF Otomo Game Project 🎮
+              🎮 HAF Otomo Game Project 🎮
             </h4>
 
-            <div class="youtube-container" data-aos="fade-up" data-aos-duration="2000">
+            <div
+              class="youtube-container"
+              data-aos="fade-up"
+              data-aos-duration="2000"
+            >
               <iframe
                 width="600"
                 height="400"
@@ -133,7 +145,9 @@
               ></iframe>
             </div>
 
-            <h4 data-aos="fade-up" data-aos-duration="2000"
+            <h4
+              data-aos="fade-up"
+              data-aos-duration="2000"
               @click="openNewPageMVMusic"
               class="hafProject"
               style="
@@ -143,10 +157,14 @@
                 margin-bottom: 20px;
               "
             >
-            🎶 HAF MV Cover Project 🎶
+              🎶 HAF MV Cover Project 🎶
             </h4>
 
-            <div class="youtube-container" data-aos="fade-up" data-aos-duration="2000">
+            <div
+              class="youtube-container"
+              data-aos="fade-up"
+              data-aos-duration="2000"
+            >
               <iframe
                 width="600"
                 height="400"
@@ -170,12 +188,17 @@
       >
         <center>
           <div style="width: 60%" class="containerAboutHaf">
-            <H3 style="font-family: Georgia, serif; margin: 0px" data-aos="fade-up" data-aos-duration="2000"
+            <H3
+              style="font-family: Georgia, serif; margin: 0px"
+              data-aos="fade-up"
+              data-aos-duration="2000"
               >Student Year Book · S4</H3
             >
 
             <img
-              style="width: 100%; margin-bottom: 30px; margin-top: 20px" data-aos="fade-up" data-aos-duration="2000"
+              style="width: 100%; margin-bottom: 30px; margin-top: 20px"
+              data-aos="fade-up"
+              data-aos-duration="2000"
               src="@/assets/hafstudents.jpg"
             />
 
@@ -189,12 +212,18 @@
               membawamu menuju tempat yang indah di negeri selatan.
             </p>
 
-            <p style="font-size: 10px" data-aos="fade-up" data-aos-duration="2000">
+            <p
+              style="font-size: 10px"
+              data-aos="fade-up"
+              data-aos-duration="2000"
+            >
               *Silahkan click gambar karakter yang kamu ingin lihat biodata dan
               backstorynya
             </p>
 
-            <H4 data-aos="fade-up" data-aos-duration="2000"
+            <H4
+              data-aos="fade-up"
+              data-aos-duration="2000"
               style="
                 font-family: Georgia, serif;
                 margin: 0px;
@@ -223,7 +252,9 @@
                   padding: 0px;
                 "
               >
-                <div data-aos="fade-up" data-aos-duration="2000"
+                <div
+                  data-aos="fade-up"
+                  data-aos-duration="2000"
                   class="cardSNPC"
                   v-for="filteredStudent in filteredStudentsOsis"
                   :key="filteredStudent.id"
@@ -264,7 +295,9 @@
               </div>
             </div>
 
-            <H4 data-aos="fade-up" data-aos-duration="2000"
+            <H4
+              data-aos="fade-up"
+              data-aos-duration="2000"
               style="
                 font-family: Georgia, serif;
                 margin: 0px;
@@ -289,7 +322,11 @@
                 width: 90%;
               "
             >
-              <div class="coolinput" data-aos="fade-up" data-aos-duration="2000">
+              <div
+                class="coolinput"
+                data-aos="fade-up"
+                data-aos-duration="2000"
+              >
                 <label for="input-name" class="text">Search student</label>
                 <input
                   type="text"
@@ -318,7 +355,9 @@
                     padding: 0px;
                   "
                 >
-                  <div data-aos="fade-up" data-aos-duration="2000"
+                  <div
+                    data-aos="fade-up"
+                    data-aos-duration="2000"
                     class="cardSNPC"
                     v-for="filteredStudent in searchResultsStudent"
                     :key="filteredStudent.id"
@@ -367,6 +406,8 @@
                 style="margin-bottom: 30px; margin: 0px; padding: 0px"
               >
                 <div
+                  data-aos="fade-up"
+                  data-aos-duration="2000"
                   class="row"
                   style="
                     justify-content: center;
@@ -375,9 +416,9 @@
                     padding: 0px;
                   "
                 >
-                  <div data-aos="fade-up" data-aos-duration="2000"
+                  <div
                     class="cardSNPC"
-                    v-for="filteredStudent in filteredStudentsStudent"
+                    v-for="filteredStudent in paginateDataStudent"
                     :key="filteredStudent.id"
                     :class="{ cardSNPCHover: filteredStudent.quotes != null }"
                   >
@@ -413,6 +454,42 @@
                       </div>
                     </div>
                   </div>
+
+                  <!-- Pagination controls with limited page numbers -->
+                  <div
+                    class="pagination"
+                    v-if="paginateDataStudent.length != 0"
+                    data-aos="fade-up"
+                    data-aos-duration="2000"
+                    data-aos-offset="0"
+                  >
+                    <button
+                      @click="prevPageStudent"
+                      :disabled="currentPage === 1"
+                    >
+                      Previous
+                    </button>
+                    <span
+                      style="padding: 0px !important"
+                      v-for="pageNumber in visiblePageNumbersDataStudent"
+                      :key="pageNumber"
+                    >
+                      <button
+                        @click="gotoPageStudent(pageNumber)"
+                        :class="{ active: pageNumber === currentPage }"
+                      >
+                        {{ pageNumber }}
+                      </button>
+                    </span>
+                    <button
+                      @click="nextPageStudent"
+                      :disabled="
+                        currentPage * pageSize >= filteredStudentsStudent.length
+                      "
+                    >
+                      Next
+                    </button>
+                  </div>
                 </div>
               </div>
             </transition>
@@ -431,12 +508,17 @@
       >
         <center>
           <div style="width: 60%" class="containerAboutHaf">
-            <H3 style="font-family: Georgia, serif; margin: 0px" data-aos="fade-up" data-aos-duration="2000"
+            <H3
+              style="font-family: Georgia, serif; margin: 0px"
+              data-aos="fade-up"
+              data-aos-duration="2000"
               >HAF NPC Book</H3
             >
 
             <img
-              style="width: 100%; margin-bottom: 30px; margin-top: 20px" data-aos="fade-up" data-aos-duration="2000"
+              style="width: 100%; margin-bottom: 30px; margin-top: 20px"
+              data-aos="fade-up"
+              data-aos-duration="2000"
               src="@/assets/enemies-karzer.jpg"
             />
 
@@ -449,12 +531,18 @@
               membawamu menuju tempat yang indah di dalam buku nya yang ajaib.
             </p>
 
-            <p data-aos="fade-up" data-aos-duration="2000" style="font-size: 10px">
+            <p
+              data-aos="fade-up"
+              data-aos-duration="2000"
+              style="font-size: 10px"
+            >
               *Silahkan click gambar karakter yang kamu ingin lihat biodata dan
               backstorynya
             </p>
 
-            <H4 data-aos="fade-up" data-aos-duration="2000"
+            <H4
+              data-aos="fade-up"
+              data-aos-duration="2000"
               style="
                 font-family: Georgia, serif;
                 margin: 0px;
@@ -478,7 +566,11 @@
                 width: 90%;
               "
             >
-              <div class="coolinput" data-aos="fade-up" data-aos-duration="2000">
+              <div
+                class="coolinput"
+                data-aos="fade-up"
+                data-aos-duration="2000"
+              >
                 <label for="input-name" class="text">Search NPC</label>
                 <input
                   type="text"
@@ -506,8 +598,10 @@
                     margin: 0px;
                     padding: 0px;
                   "
-                > 
-                  <div data-aos="fade-up" data-aos-duration="2000"
+                >
+                  <div
+                    data-aos="fade-up"
+                    data-aos-duration="2000"
                     class="cardSNPC"
                     v-for="npc in searchResultsNPC"
                     :key="npc.id"
@@ -557,7 +651,13 @@
                     padding: 0px;
                   "
                 >
-                  <div data-aos="fade-up" data-aos-duration="2000" class="cardSNPC" v-for="npc in npcs" :key="npc.id">
+                  <div
+                    data-aos="fade-up"
+                    data-aos-duration="2000"
+                    class="cardSNPC"
+                    v-for="npc in paginateDataNPC"
+                    :key="npc.id"
+                  >
                     <div
                       @click.stop="
                         handlerClickDetailNPC(
@@ -583,6 +683,37 @@
                         <label>{{ npc.npc_name }}</label>
                       </div>
                     </div>
+                  </div>
+
+                  <!-- Pagination controls with limited page numbers -->
+                  <div
+                    class="pagination"
+                    v-if="paginateDataNPC.length != 0"
+                    data-aos="fade-up"
+                    data-aos-duration="2000"
+                    data-aos-offset="0"
+                  >
+                    <button @click="prevPageNPC" :disabled="currentPage === 1">
+                      Previous
+                    </button>
+                    <span
+                      style="padding: 0px !important"
+                      v-for="pageNumber in visiblePageNumbersDataNPC"
+                      :key="pageNumber"
+                    >
+                      <button
+                        @click="gotoPageNPC(pageNumber)"
+                        :class="{ active: pageNumber === currentPage }"
+                      >
+                        {{ pageNumber }}
+                      </button>
+                    </span>
+                    <button
+                      @click="nextPageNPC"
+                      :disabled="currentPage * pageSize >= npcs.length"
+                    >
+                      Next
+                    </button>
                   </div>
                 </div>
               </div>
@@ -680,10 +811,14 @@
                   <v-icon right dark> mdi-instagram </v-icon>
                 </v-btn>
               </b-col>
-              <b-col sm="5" style="align-items: center; display: flex;">
+              <b-col sm="5" style="align-items: center; display: flex">
                 <b-img
                   fluid
-                  style="cursor: zoom-in; object-fit: contain; border-radius: 20px;"
+                  style="
+                    cursor: zoom-in;
+                    object-fit: contain;
+                    border-radius: 20px;
+                  "
                   @click="zoom($baseUrl + '/storage/' + imageDetailProfile)"
                   :src="$baseUrl + '/storage/' + imageDetailProfile"
                   alt="Image Profile"
@@ -754,10 +889,14 @@
               <b-col sm="7">
                 <div v-html="npc_profileDetailNPC" style="text-align: ''"></div>
               </b-col>
-              <b-col sm="5" style="align-items: center; display: flex;">
+              <b-col sm="5" style="align-items: center; display: flex">
                 <b-img
                   fluid
-                  style="cursor: zoom-in; object-fit: contain; border-radius: 10px;"
+                  style="
+                    cursor: zoom-in;
+                    object-fit: contain;
+                    border-radius: 10px;
+                  "
                   @click="zoom($baseUrl + '/storage/' + image_npcDetailNPC)"
                   :src="$baseUrl + '/storage/' + image_npcDetailNPC"
                   alt="Image NPC"
@@ -794,7 +933,9 @@
     <!-- End Dialog Zooom Image -->
 
     <center>
-      <hr data-aos="fade-up" data-aos-duration="2000"
+      <hr
+        data-aos="fade-up"
+        data-aos-duration="2000"
         style="
           color: #4a1d00 !important;
           border: 1px solid !important;
@@ -802,7 +943,10 @@
           width: 50%;
         "
       />
-      <H5 data-aos="fade-up" data-aos-duration="2000" style="font-family: Georgia, serif; margin: 0px; margin-bottom: 20px"
+      <H5
+        data-aos="fade-up"
+        data-aos-duration="2000"
+        style="font-family: Georgia, serif; margin: 0px; margin-bottom: 20px"
         >Historical Art Fantasia</H5
       >
       <p data-aos="fade-up" data-aos-duration="2000">
@@ -811,7 +955,9 @@
         <br />
         <span style="font-weight: bold">HAF (seluruh siswa dan osis).</span>
       </p>
-      <hr data-aos="fade-up" data-aos-duration="2000"
+      <hr
+        data-aos="fade-up"
+        data-aos-duration="2000"
         style="
           color: #4a1d00 !important;
           border: 1px solid !important;
@@ -830,36 +976,49 @@
       <div class="footer-dark">
         <transition name="fade">
           <footer>
-            <div class="container container-footer" style="justify-content: center; width: 50%">
+            <div
+              class="container container-footer"
+              style="justify-content: center; width: 50%"
+            >
               <div class="">
                 <h3>Historical Art Fantasia</h3>
-                <p>
-                  "Be Creative, smart, and learning forever"
-                </p>
+                <p>"Be Creative, smart, and learning forever"</p>
               </div>
               <div class="col item social">
-                <a                  
+                <a
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="instagram" aria-hidden="true" @click="openInstagramFooter"></b-icon></a
+                  ><b-icon
+                    icon="instagram"
+                    aria-hidden="true"
+                    @click="openInstagramFooter"
+                  ></b-icon></a
                 ><a
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="youtube" aria-hidden="true" @click="openYoutubeFooter"></b-icon></a
-                ><a @click="openTiktokFooter"
+                  ><b-icon
+                    icon="youtube"
+                    aria-hidden="true"
+                    @click="openYoutubeFooter"
+                  ></b-icon></a
+                ><a
+                  @click="openTiktokFooter"
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><img 
+                  ><img
                     src="@/assets/tiktok.png"
                     style="height: 33px"
                     class="d-inline-block align-top"
-                    alt="Animation"
-                  /></a
-                ><a                  
+                    alt="Animation" /></a
+                ><a
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
                 >
-                  <b-icon icon="mailbox" aria-hidden="true" @click="sendEmail"></b-icon
+                  <b-icon
+                    icon="mailbox"
+                    aria-hidden="true"
+                    @click="sendEmail"
+                  ></b-icon
                 ></a>
               </div>
               <p class="copyright">
@@ -931,6 +1090,10 @@ export default {
     dialogDetailNPC: false,
     dialogZoom: false,
 
+    // Pagination Favorite Card
+    currentPage: 1,
+    pageSize: 10,
+
     // Youtube Embed
     videoId1:
       "https://www.youtube.com/watch?v=aRg_-196XVQ&list=PLwPxx-wrGFZ4LrCqfZiKM3GisoaDhHV0m", // Replace with the actual video ID
@@ -966,6 +1129,58 @@ export default {
     },
     filteredStudentsStudent() {
       return this.dataStudents.filter((student) => student.role === "student");
+    },
+
+    paginateDataStudent() {
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.filteredStudentsStudent.slice(startIndex, endIndex);
+    },
+    // Calculate the total number of pages
+    totalPagesDataStudent() {
+      return Math.ceil(this.filteredStudentsStudent.length / this.pageSize);
+    },
+    // Calculate the visible page numbers based on the current page
+    visiblePageNumbersDataStudent() {
+      const totalVisiblePages = 4;
+      const startPage = Math.max(
+        1,
+        this.currentPage - Math.floor(totalVisiblePages / 2)
+      );
+      const endPage = Math.min(
+        this.totalPagesDataStudent,
+        startPage + totalVisiblePages - 1
+      );
+      return Array.from(
+        { length: endPage - startPage + 1 },
+        (_, i) => startPage + i
+      );
+    },
+
+    paginateDataNPC() {
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.npcs.slice(startIndex, endIndex);
+    },
+    // Calculate the total number of pages
+    totalPagesDataNPC() {
+      return Math.ceil(this.npcs.length / this.pageSize);
+    },
+    // Calculate the visible page numbers based on the current page
+    visiblePageNumbersDataNPC() {
+      const totalVisiblePages = 4;
+      const startPage = Math.max(
+        1,
+        this.currentPage - Math.floor(totalVisiblePages / 2)
+      );
+      const endPage = Math.min(
+        this.totalPagesDataNPC,
+        startPage + totalVisiblePages - 1
+      );
+      return Array.from(
+        { length: endPage - startPage + 1 },
+        (_, i) => startPage + i
+      );
     },
   },
   watch: {},
@@ -1183,17 +1398,17 @@ export default {
 
     // Footer
     openInstagramFooter() {
-      window.open('https://www.instagram.com/hafallart/', "_blank");
+      window.open("https://www.instagram.com/hafallart/", "_blank");
     },
     openYoutubeFooter() {
-      window.open('https://www.youtube.com/@haforastudio9615', "_blank");
+      window.open("https://www.youtube.com/@haforastudio9615", "_blank");
     },
     openTiktokFooter() {
-      window.open('https://www.tiktok.com/@hafallart', "_blank");
+      window.open("https://www.tiktok.com/@hafallart", "_blank");
     },
     sendEmail() {
       // Replace 'recipient@example.com' with the actual email address
-      const emailAddress = 'haf3334444@gmail.com';
+      const emailAddress = "haf3334444@gmail.com";
 
       // Construct the mailto link
       const mailtoLink = `mailto:${emailAddress}`;
@@ -1202,11 +1417,94 @@ export default {
       window.location.href = mailtoLink;
     },
     // End Footer
+
+    // Handle next page  for data favorite
+    nextPageStudent() {
+      this.loadingScreen = true;
+      if (this.currentPage * this.pageSize < this.dataStudents.length) {
+        this.currentPage++;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle previous page
+    prevPageStudent() {
+      this.loadingScreen = true;
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle going to a specific page
+    gotoPageStudent(pageNumber) {
+      this.loadingScreen = true;
+      this.currentPage = pageNumber;
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+
+    // Handle next page  for data favorite
+    nextPageNPC() {
+      this.loadingScreen = true;
+      if (this.currentPage * this.pageSize < this.npcs.length) {
+        this.currentPage++;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle previous page
+    prevPageNPC() {
+      this.loadingScreen = true;
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle going to a specific page
+    gotoPageNPC(pageNumber) {
+      this.loadingScreen = true;
+      this.currentPage = pageNumber;
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
   },
 };
 </script>
 
 <style scoped>
+/* Paginate */
+/* Add your styling here if needed */
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination button {
+  cursor: pointer;
+  margin: 0 6px;
+  font-size: 15px;
+}
+
+.pagination button:hover {
+  cursor: pointer;
+  margin: 0 6px;
+  font-size: 15px;
+  color: #006598;
+}
+
+.pagination button.active {
+  color: #006598;
+}
+/* end Paginate */
 .fade-enter-active,
 .fade-leave-active {
   transition: all 0.5s ease-in-out;
@@ -1542,7 +1840,7 @@ iframe {
     width: 90% !important;
   }
 
-  .container-footer{
+  .container-footer {
     width: 90% !important;
   }
   .coolinput {

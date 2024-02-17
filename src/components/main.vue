@@ -62,17 +62,17 @@
             HAF School
           </div>
 
-          <div class="menuColor" v-if="isAbout == 1" @click="handlerGoAbout">
+          <div class="menuColor menuAbout" v-if="isAbout == 1" @click="handlerGoAbout">
             About
           </div>
-          <div class="menuUncolor" v-else @click="handlerGoAbout">About</div>
+          <div class="menuUncolor menuAbout" v-else @click="handlerGoAbout">About</div>
 
-          <div class="show-profile-and-logout" style="margin-bottom: 15px">
+          <div class="show-profile-and-logout" style="margin-bottom: 15px" v-if="myProfile.length != 0">
             <router-link
-              style="margin-bottom: 10px"
+              style="margin-bottom: 10px; color: #ed7474"
               to="login"
               @click.native="logout"
-              >Logout</router-link
+              > <b-spinner style="color: #ed7474" type="grow" small></b-spinner> Logout</router-link
             >
           </div>
         </div>
@@ -540,6 +540,9 @@ export default {
 }
 
 @media (max-width: 768px) {
+  .menuAbout{
+    padding-bottom: 15px;
+  }
   .menuColor {
     color: #f39c12 !important;
     cursor: pointer;

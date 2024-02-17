@@ -7,56 +7,56 @@
         <b-nav data-aos="fade-up" data-aos-duration="2000">
           <b-nav-item>
             <div v-if="this.myProfile.length != 0">
-            <v-btn
-              @click.stop="handlerOrderServiceHistory"
-              class="mx-2 button-merchan"
-              fab
-              dark
-              small
-              color="rgb(22, 128, 182)"
-            >
-              <b-icon
-                class="icon-merchan"
-                icon="card-checklist"
-                aria-hidden="true"
-              ></b-icon>
-            </v-btn>
-            <p style="margin: 0px; font-size: 13px">Your Order</p>
-          </div>
-          <div v-else>
-            <v-btn
-              @click.stop="handlerDetailUserNotLogin"
-              class="mx-2 button-merchan"
-              fab
-              dark
-              small
-              color="rgb(22, 128, 182)"
-            >
-              <b-icon
-                class="icon-merchan"
-                icon="card-checklist"
-                aria-hidden="true"
-              ></b-icon>
-            </v-btn>
-            <p style="margin: 0px; font-size: 13px">Your Order</p>
-          </div>
+              <v-btn
+                @click.stop="handlerOrderServiceHistory"
+                class="mx-2 button-merchan"
+                fab
+                dark
+                small
+                color="rgb(22, 128, 182)"
+              >
+                <b-icon
+                  class="icon-merchan"
+                  icon="card-checklist"
+                  aria-hidden="true"
+                ></b-icon>
+              </v-btn>
+              <p style="margin: 0px; font-size: 13px">Your Order</p>
+            </div>
+            <div v-else>
+              <v-btn
+                @click.stop="handlerDetailUserNotLogin"
+                class="mx-2 button-merchan"
+                fab
+                dark
+                small
+                color="rgb(22, 128, 182)"
+              >
+                <b-icon
+                  class="icon-merchan"
+                  icon="card-checklist"
+                  aria-hidden="true"
+                ></b-icon>
+              </v-btn>
+              <p style="margin: 0px; font-size: 13px">Your Order</p>
+            </div>
           </b-nav-item>
           <b-nav-item
             class="searchDiv"
             style="align-items: center; display: flex"
           >
-          <div class="coolinput">
-            <label for="input-name" class="text">Search servicer</label>
-            <input
-              type="text"
-              v-model="searchServicer"
+            <div class="coolinput">
+              <label for="input-name" class="text">Search servicer</label>
+              <input
+                type="text"
+                v-model="searchServicer"
                 @keyup.enter="search"
                 @input="handleInput"
-              placeholder="Write name servicer here..."
-              name="input"
-              class="input"
-            />
-          </div>
+                placeholder="Write name servicer here..."
+                name="input"
+                class="input"
+              />
+            </div>
           </b-nav-item>
         </b-nav>
       </div>
@@ -64,13 +64,27 @@
       <!-- Search -->
       <!-- Tampilkan hasil pencarian di sini -->
       <transition name="fade">
-        <div data-aos="fade-up" data-aos-duration="2000"
+        <div
+          data-aos="fade-up"
+          data-aos-duration="2000"
           v-if="this.isInputOn == 1"
           style="margin-bottom: 70px; margin-top: 20px"
         >
           <p>Result for {{ searchServicer }}</p>
-          <div class="row" style="margin: 0px; padding: 0px;" v-if="searchResults.length > 0">
-            <div class="row" style="justify-content: center; max-width: none; padding: 0px; margin: 0px;">
+          <div
+            class="row"
+            style="margin: 0px; padding: 0px"
+            v-if="searchResults.length > 0"
+          >
+            <div
+              class="row"
+              style="
+                justify-content: center;
+                max-width: none;
+                padding: 0px;
+                margin: 0px;
+              "
+            >
               <div
                 v-for="result in searchResults"
                 :key="result.id"
@@ -124,7 +138,11 @@
             </div>
           </div>
           <div v-else>
-            <div class="row no-gutters" data-aos="fade-up" data-aos-duration="2000">
+            <div
+              class="row no-gutters"
+              data-aos="fade-up"
+              data-aos-duration="2000"
+            >
               <div
                 class="col"
                 style="
@@ -157,8 +175,16 @@
       <!-- End Serach -->
 
       <div class="row" style="margin: 0px; padding: 0px; min-height: 300px">
-        <div data-aos="fade-up" data-aos-duration="2000" v-if="dataServicers.length == 0" style="text-align: center;  align-items: center;  display: grid;">
-          Exciting services are on the horizon! 🌟 <br> Stay tuned and remain loyal as we prepare to unveil our fantastic offerings. Your support means the world to us! 🚀 #ComingSoon        </div>
+        <div
+          data-aos="fade-up"
+          data-aos-duration="2000"
+          v-if="dataServicers.length == 0"
+          style="text-align: center; align-items: center; display: grid"
+        >
+          Exciting services are on the horizon! 🌟 <br />
+          Stay tuned and remain loyal as we prepare to unveil our fantastic
+          offerings. Your support means the world to us! 🚀 #ComingSoon
+        </div>
         <div
           class="row"
           style="
@@ -168,8 +194,10 @@
             padding: 0px;
           "
         >
-          <div data-aos="fade-up" data-aos-duration="2000"
-            v-for="dataServicer in dataServicers"
+          <div
+            data-aos="fade-up"
+            data-aos-duration="2000"
+            v-for="dataServicer in paginateData"
             :key="dataServicer.id"
             class="card-service"
           >
@@ -220,6 +248,33 @@
           </div>
         </div>
       </div>
+
+      <!-- Pagination controls with limited page numbers -->
+      <div
+        class="pagination"
+        v-if="paginateData.length != 0"
+        data-aos="fade-up"
+        data-aos-duration="2000"
+        data-aos-offset="0"
+      >
+        <button @click="prevPage" :disabled="currentPage === 1">
+          Previous
+        </button>
+        <span v-for="pageNumber in visiblePageNumbersData" :key="pageNumber">
+          <button
+            @click="gotoPage(pageNumber)"
+            :class="{ active: pageNumber === currentPage }"
+          >
+            {{ pageNumber }}
+          </button>
+        </span>
+        <button
+          @click="nextPage"
+          :disabled="currentPage * pageSize >= dataServicers.length"
+        >
+          Next
+        </button>
+      </div>
     </div>
 
     <div class="text-center">
@@ -251,7 +306,8 @@
             class="lighten-2"
             style="margin-top: 0px; padding-top: 0px; justify-content: center"
           >
-            <img v-if="this.imageServicer != null"
+            <img
+              v-if="this.imageServicer != null"
               style="
                 border-radius: 50%;
                 height: 100px;
@@ -261,7 +317,8 @@
               :src="$baseUrl + '/storage/' + this.imageServicer"
               alt="Avatar"
             />
-            <img v-else
+            <img
+              v-else
               style="
                 border-radius: 50%;
                 height: 100px;
@@ -672,245 +729,249 @@
                       opacity: 0.5;
                     "
                   >
-                  <center>
-                    <v-form class="form" ref="form" @submit.prevent>
-                      <div class="row" style="margin: 0px">
-                        <div
-                          class="col-sm-4"
-                          style="
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                          "
-                        >
-                          Project Name
-                        </div>
-                        <div class="col-sm-7">
-                          <b-form-input
-                            id="input-1"
-                            v-model="project_name"
-                            trim
-                            placeholder="e.g. Coloring Manga"
-                          ></b-form-input>
-                          <v-slide-y-transition>
-                            <div
-                              v-if="!isProjectNameValid"
-                              transition="scroll-y-transition"
-                              style="
-                                font-size: 12px;
-                                text-align: left;
-                                color: red;
-                                margin-left: 15px;
-                                margin-top: 1px;
-                                min-height: 14px;
-                                font-weight: lighter;
-                              "
-                            >
-                              This field is required
-                            </div>
-                          </v-slide-y-transition>
-                        </div>
-                      </div>
-                      <div class="row" style="margin: 0px">
-                        <div
-                          class="col-sm-4"
-                          style="
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                          "
-                        >
-                          Offering Cost
-                        </div>
-                        <div class="col-sm-7">
-                          <b-form-input
-                            id="input-1"
-                            v-model="offering_cost"
-                            trim
-                            placeholder="e.g. 10000000"
-                          ></b-form-input>
-                          <v-slide-y-transition>
-                            <div
-                              v-if="!isOfferingCostValid"
-                              transition="scroll-y-transition"
-                              style="
-                                font-size: 12px;
-                                text-align: left;
-                                color: red;
-                                margin-left: 15px;
-                                margin-top: 1px;
-                                min-height: 14px;
-                                font-weight: lighter;
-                              "
-                            >
-                              This field is required and must be a number
-                            </div>
-                          </v-slide-y-transition>
-                        </div>
-                      </div>
-                      <div class="row" style="margin: 0px">
-                        <div
-                          class="col-sm-4"
-                          style="
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                          "
-                        >
-                          Description of Task
-                        </div>
-                        <div class="col-sm-7">
-                          <b-form-input
-                            id="input-1"
-                            v-model="desc"
-                            trim
-                            placeholder="Describe shortly what you want to servicer do"
-                          ></b-form-input>
-                          <v-slide-y-transition>
-                            <div
-                              v-if="!isDescValid"
-                              transition="scroll-y-transition"
-                              style="
-                                font-size: 12px;
-                                text-align: left;
-                                color: red;
-                                margin-left: 15px;
-                                margin-top: 1px;
-                                min-height: 14px;
-                                font-weight: lighter;
-                              "
-                            >
-                              This field is required
-                            </div>
-                          </v-slide-y-transition>
-                        </div>
-                      </div>
-                      <div class="row" style="margin: 0px">
-                        <div
-                          class="col-sm-4"
-                          style="
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                          "
-                        >
-                          Contact Person
-                        </div>
-                        <div class="col-sm-7">
-                          <b-form-input
-                            id="input-1"
-                            v-model="contactPerson"
-                            trim
-                            placeholder="Your contact like Telegram, Whatsapp, Instagram, etc"
-                          ></b-form-input>
-                          <v-slide-y-transition>
-                            <div
-                              v-if="!isCPValid"
-                              transition="scroll-y-transition"
-                              style="
-                                font-size: 12px;
-                                text-align: left;
-                                color: red;
-                                margin-left: 15px;
-                                margin-top: 1px;
-                                min-height: 14px;
-                                font-weight: lighter;
-                              "
-                            >
-                              This field is required
-                            </div>
-                          </v-slide-y-transition>
-                        </div>
-                      </div>
-                      <div class="row" style="margin: 0px">
-                        <div
-                          class="col-sm-4"
-                          style="
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                          "
-                        >
-                          Storyboard
-                          <span
+                    <center>
+                      <v-form class="form" ref="form" @submit.prevent>
+                        <div class="row" style="margin: 0px">
+                          <div
+                            class="col-sm-4"
                             style="
-                              position: relative;
-                              top: -0.5rem;
-                              font-size: 10px;
-                              color: red;
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
                             "
-                            >*Optional</span
                           >
+                            Project Name
+                          </div>
+                          <div class="col-sm-7">
+                            <b-form-input
+                              id="input-1"
+                              v-model="project_name"
+                              trim
+                              placeholder="e.g. Coloring Manga"
+                            ></b-form-input>
+                            <v-slide-y-transition>
+                              <div
+                                v-if="!isProjectNameValid"
+                                transition="scroll-y-transition"
+                                style="
+                                  font-size: 12px;
+                                  text-align: left;
+                                  color: red;
+                                  margin-left: 15px;
+                                  margin-top: 1px;
+                                  min-height: 14px;
+                                  font-weight: lighter;
+                                "
+                              >
+                                This field is required
+                              </div>
+                            </v-slide-y-transition>
+                          </div>
                         </div>
-                        <div class="col-sm-7" style="text-align: start">
-                          <b-form-file
-                            style="width: 300px"
-                            id="storyboard"
-                            v-model="storyboard"
-                            class="mt-3"
-                            plain
-                            accept="image/*"
-                          ></b-form-file>
+                        <div class="row" style="margin: 0px">
+                          <div
+                            class="col-sm-4"
+                            style="
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                            "
+                          >
+                            Offering Cost
+                          </div>
+                          <div class="col-sm-7">
+                            <b-form-input
+                              id="input-1"
+                              v-model="offering_cost"
+                              trim
+                              placeholder="e.g. 10000000"
+                            ></b-form-input>
+                            <v-slide-y-transition>
+                              <div
+                                v-if="!isOfferingCostValid"
+                                transition="scroll-y-transition"
+                                style="
+                                  font-size: 12px;
+                                  text-align: left;
+                                  color: red;
+                                  margin-left: 15px;
+                                  margin-top: 1px;
+                                  min-height: 14px;
+                                  font-weight: lighter;
+                                "
+                              >
+                                This field is required and must be a number
+                              </div>
+                            </v-slide-y-transition>
+                          </div>
                         </div>
-                      </div>
+                        <div class="row" style="margin: 0px">
+                          <div
+                            class="col-sm-4"
+                            style="
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                            "
+                          >
+                            Description of Task
+                          </div>
+                          <div class="col-sm-7">
+                            <b-form-input
+                              id="input-1"
+                              v-model="desc"
+                              trim
+                              placeholder="Describe shortly what you want to servicer do"
+                            ></b-form-input>
+                            <v-slide-y-transition>
+                              <div
+                                v-if="!isDescValid"
+                                transition="scroll-y-transition"
+                                style="
+                                  font-size: 12px;
+                                  text-align: left;
+                                  color: red;
+                                  margin-left: 15px;
+                                  margin-top: 1px;
+                                  min-height: 14px;
+                                  font-weight: lighter;
+                                "
+                              >
+                                This field is required
+                              </div>
+                            </v-slide-y-transition>
+                          </div>
+                        </div>
+                        <div class="row" style="margin: 0px">
+                          <div
+                            class="col-sm-4"
+                            style="
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                            "
+                          >
+                            Contact Person
+                          </div>
+                          <div class="col-sm-7">
+                            <b-form-input
+                              id="input-1"
+                              v-model="contactPerson"
+                              trim
+                              placeholder="Your contact like Telegram, Whatsapp, Instagram, etc"
+                            ></b-form-input>
+                            <v-slide-y-transition>
+                              <div
+                                v-if="!isCPValid"
+                                transition="scroll-y-transition"
+                                style="
+                                  font-size: 12px;
+                                  text-align: left;
+                                  color: red;
+                                  margin-left: 15px;
+                                  margin-top: 1px;
+                                  min-height: 14px;
+                                  font-weight: lighter;
+                                "
+                              >
+                                This field is required
+                              </div>
+                            </v-slide-y-transition>
+                          </div>
+                        </div>
+                        <div class="row" style="margin: 0px">
+                          <div
+                            class="col-sm-4"
+                            style="
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                            "
+                          >
+                            Storyboard
+                            <span
+                              style="
+                                position: relative;
+                                top: -0.5rem;
+                                font-size: 10px;
+                                color: red;
+                              "
+                              >*Optional</span
+                            >
+                          </div>
+                          <div class="col-sm-7" style="text-align: start">
+                            <b-form-file
+                              style="width: 300px"
+                              id="storyboard"
+                              v-model="storyboard"
+                              class="mt-3"
+                              plain
+                              accept="image/*"
+                            ></b-form-file>
+                          </div>
+                        </div>
 
-                      <v-card-actions class="row" style="margin: 0px">
-                        <div
-                          class="col-sm-4"
-                          style="
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                          "
-                        ></div>
-                        <div
-                          class="col-sm-7"
-                          style="text-align: start"
-                          v-if="
-                            !isProjectNameValid ||
-                            !isOfferingCostValid ||
-                            !isDescValid ||
-                            !isCPValid
-                          "
-                        >
-                          <v-btn
-                            style="text-transform: unset !important"
-                            rounded
-                            outlined
-                            small
-                            disabled
-                            color="indigo"
-                            class="btn-form-primary m-t-35"
-                            :loading="loading"
-                            @click="submitServiceTransaction(user_id_servicer)"
-                            >Order</v-btn
+                        <v-card-actions class="row" style="margin: 0px">
+                          <div
+                            class="col-sm-4"
+                            style="
+                              display: flex;
+                              align-items: center;
+                              justify-content: center;
+                            "
+                          ></div>
+                          <div
+                            class="col-sm-7"
+                            style="text-align: start"
+                            v-if="
+                              !isProjectNameValid ||
+                              !isOfferingCostValid ||
+                              !isDescValid ||
+                              !isCPValid
+                            "
                           >
-                        </div>
-                        <div
-                          class="col-sm-7"
-                          style="text-align: start"
-                          v-if="
-                            isProjectNameValid &&
-                            isOfferingCostValid &&
-                            isDescValid &&
-                            isCPValid
-                          "
-                        >
-                          <v-btn
-                            style="text-transform: unset !important"
-                            rounded
-                            small
-                            outlined
-                            color="indigo"
-                            class="m-t-35"
-                            :loading="loading"
-                            @click="submitServiceTransaction(user_id_servicer)"
-                            >Order</v-btn
+                            <v-btn
+                              style="text-transform: unset !important"
+                              rounded
+                              outlined
+                              small
+                              disabled
+                              color="indigo"
+                              class="btn-form-primary m-t-35"
+                              :loading="loading"
+                              @click="
+                                submitServiceTransaction(user_id_servicer)
+                              "
+                              >Order</v-btn
+                            >
+                          </div>
+                          <div
+                            class="col-sm-7"
+                            style="text-align: start"
+                            v-if="
+                              isProjectNameValid &&
+                              isOfferingCostValid &&
+                              isDescValid &&
+                              isCPValid
+                            "
                           >
-                        </div>
-                      </v-card-actions>
-                    </v-form>
-                  </center>
+                            <v-btn
+                              style="text-transform: unset !important"
+                              rounded
+                              small
+                              outlined
+                              color="indigo"
+                              class="m-t-35"
+                              :loading="loading"
+                              @click="
+                                submitServiceTransaction(user_id_servicer)
+                              "
+                              >Order</v-btn
+                            >
+                          </div>
+                        </v-card-actions>
+                      </v-form>
+                    </center>
                   </div>
                 </div>
               </b-tab>
@@ -1011,20 +1072,20 @@
                     ></v-text-field></div
                 ></b-col>
                 <b-col style="justify-content: start; display: flex"
-                    ><v-btn
-                      small
-                      color="primary"
-                      dark
-                      class="mb-2"
-                      style="
-                        text-transform: unset !important;
-                        border-radius: 20px;
-                      "
-                      @click="handlerRefresDataOrderService"
-                    >
-                      Refresh Order Service
-                    </v-btn></b-col
+                  ><v-btn
+                    small
+                    color="primary"
+                    dark
+                    class="mb-2"
+                    style="
+                      text-transform: unset !important;
+                      border-radius: 20px;
+                    "
+                    @click="handlerRefresDataOrderService"
                   >
+                    Refresh Order Service
+                  </v-btn></b-col
+                >
               </b-row>
             </b-container>
 
@@ -1114,40 +1175,38 @@
                   >
                     Waiting for payment
                   </div>
-                  <div style="color: rgb(71, 0, 142)"
-                    v-if="
-                      item.is_deal == 1 &&
-                        item.is_done == '0' &&
-                        item.confirm_buktiTf === '0' &&
-                        item.buktiTf !== null">
-                    <div
-                    style="color: rgb(71, 0, 142)"
-                    v-if="
-                        myProfile.role !== 'admin'
-                    "
-                  >
-                    Waiting for confirm payment by Admin
-                  </div>
                   <div
                     style="color: rgb(71, 0, 142)"
-                    v-else
+                    v-if="
+                      item.is_deal == 1 &&
+                      item.is_done == '0' &&
+                      item.confirm_buktiTf === '0' &&
+                      item.buktiTf !== null
+                    "
                   >
-                    <v-btn
-                      text
-                      color="rgb(71, 0, 142)"
-                      @click.stop="handlerConfirmPayment(item)"
-                      style="text-transform: capitalize; font-size: 13px"
+                    <div
+                      style="color: rgb(71, 0, 142)"
+                      v-if="myProfile.role !== 'admin'"
                     >
-                      <v-icon small>mdi-check-all</v-icon> Confirm Payment
-                    </v-btn>
+                      Waiting for confirm payment by Admin
+                    </div>
+                    <div style="color: rgb(71, 0, 142)" v-else>
+                      <v-btn
+                        text
+                        color="rgb(71, 0, 142)"
+                        @click.stop="handlerConfirmPayment(item)"
+                        style="text-transform: capitalize; font-size: 13px"
+                      >
+                        <v-icon small>mdi-check-all</v-icon> Confirm Payment
+                      </v-btn>
+                    </div>
                   </div>
-                  </div>                  
                   <div
                     style="color: rgb(0, 0, 201)"
                     v-if="
                       item.is_deal == '1' &&
-                        item.is_done == '0' &&
-                        item.confirm_buktiTf === '1'
+                      item.is_done == '0' &&
+                      item.confirm_buktiTf === '1'
                     "
                   >
                     Servicer processing the order
@@ -1233,10 +1292,7 @@
                       >waiting for servicer confirmation</span
                     >
                   </div>
-                  <div
-                    style="color: red"
-                    v-if="this.is_deal == '3'"
-                  >
+                  <div style="color: red" v-if="this.is_deal == '3'">
                     <span style="color: black; margin: 0px">is </span>
                     <span style="text-decoration: underline; font-weight: bold"
                       >sorry, the servicer can't take the order.</span
@@ -1329,7 +1385,8 @@
                 {{ this.project_nameDetail }}
               </p>
               <p style="color: black; margin: 0px">
-                Rp. {{ formatPrice(this.offering_costDetail) }} + Service tax Rp. 10.000,00
+                Rp. {{ formatPrice(this.offering_costDetail) }} + Service tax
+                Rp. 10.000,00
               </p>
               <p style="color: black; margin: 0px">
                 You have to pay Rp. {{ formatPrice(totalCostDetail) }}
@@ -1364,13 +1421,11 @@
 
             <hr style="width: 40%" />
 
-
-
-            <div v-if="this.idCustomer == this.userLogin.id" style="margin-bottom: 40px;">
-              <div
-                style="height: 300px; width: 250px;"
-                class="w-img-oval"
-              >
+            <div
+              v-if="this.idCustomer == this.userLogin.id"
+              style="margin-bottom: 40px"
+            >
+              <div style="height: 300px; width: 250px" class="w-img-oval">
                 <p style="color: black; margin: 0px; text-align: justify">
                   Pay with qris :
                 </p>
@@ -1799,36 +1854,49 @@
       <div class="footer-dark">
         <transition name="fade">
           <footer>
-            <div class="container container-footer" style="justify-content: center; width: 50%">
+            <div
+              class="container container-footer"
+              style="justify-content: center; width: 50%"
+            >
               <div class="">
                 <h3>Historical Art Fantasia</h3>
-                <p>
-                  "Be Creative, smart, and learning forever"
-                </p>
+                <p>"Be Creative, smart, and learning forever"</p>
               </div>
               <div class="col item social">
-                <a                  
+                <a
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="instagram" aria-hidden="true" @click="openInstagramFooter"></b-icon></a
+                  ><b-icon
+                    icon="instagram"
+                    aria-hidden="true"
+                    @click="openInstagramFooter"
+                  ></b-icon></a
                 ><a
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="youtube" aria-hidden="true" @click="openYoutubeFooter"></b-icon></a
-                ><a @click="openTiktokFooter"
+                  ><b-icon
+                    icon="youtube"
+                    aria-hidden="true"
+                    @click="openYoutubeFooter"
+                  ></b-icon></a
+                ><a
+                  @click="openTiktokFooter"
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><img 
+                  ><img
                     src="@/assets/tiktok.png"
                     style="height: 33px"
                     class="d-inline-block align-top"
-                    alt="Animation"
-                  /></a
-                ><a                  
+                    alt="Animation" /></a
+                ><a
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
                 >
-                  <b-icon icon="mailbox" aria-hidden="true" @click="sendEmail"></b-icon
+                  <b-icon
+                    icon="mailbox"
+                    aria-hidden="true"
+                    @click="sendEmail"
+                  ></b-icon
                 ></a>
               </div>
               <p class="copyright">
@@ -1881,6 +1949,10 @@ export default {
 
     // Portfolio
     dataPortfolios: [],
+
+    // Pagination Favorite Card
+    currentPage: 1,
+    pageSize: 15,
 
     // Servicer
     dataServicers: [],
@@ -2005,7 +2077,7 @@ export default {
   }),
   created() {
     this.axioDataServicer();
-    if(this.userLogin.token != null){
+    if (this.userLogin.token != null) {
       this.axioDataMyProfile();
     }
   },
@@ -2023,13 +2095,38 @@ export default {
     isCPValid() {
       return this.contactPerson.trim() !== ""; // Content is required (not empty)
     },
+
+    paginateData() {
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.dataServicers.slice(startIndex, endIndex);
+    },
+    // Calculate the total number of pages
+    totalPagesData() {
+      return Math.ceil(this.dataServicers.length / this.pageSize);
+    },
+    // Calculate the visible page numbers based on the current page
+    visiblePageNumbersData() {
+      const totalVisiblePages = 4;
+      const startPage = Math.max(
+        1,
+        this.currentPage - Math.floor(totalVisiblePages / 2)
+      );
+      const endPage = Math.min(
+        this.totalPagesData,
+        startPage + totalVisiblePages - 1
+      );
+      return Array.from(
+        { length: endPage - startPage + 1 },
+        (_, i) => startPage + i
+      );
+    },
   },
   methods: {
-    handlerDetailUserNotLogin(){
-      this.textMessage =
-            "You need to log in to access this feature 🤭🤭🤭";
-          this.snackbar = true;
-          this.color = "blue-grey";
+    handlerDetailUserNotLogin() {
+      this.textMessage = "You need to log in to access this feature 🤭🤭🤭";
+      this.snackbar = true;
+      this.color = "blue-grey";
     },
 
     clickEditReview() {
@@ -2055,7 +2152,7 @@ export default {
       this.confirm_BuktiTfDetail = item.confirm_buktiTf;
       this.offering_costDetail = item.offering_cost;
       // Calculate total cost
-    this.totalCostDetail = parseFloat(item.offering_cost) + 10000;
+      this.totalCostDetail = parseFloat(item.offering_cost) + 10000;
       this.description = item.description;
       this.idCustomer = item.user_id_customer;
       this.idServicer = item.user_id_servicer;
@@ -2067,7 +2164,7 @@ export default {
     },
 
     handlerRefresDataOrderService() {
-      this.axioDataOrderService()
+      this.axioDataOrderService();
       this.textMessage = "Order service shiny now ✨ Data buff  Ready to rock!";
       this.snackbar = true;
       this.color = "success";
@@ -2639,7 +2736,7 @@ export default {
           this.loadingScreen = false;
         });
     },
-    
+
     calculateFileSize(sizeInBytes) {
       const temp = sizeInBytes / 1024;
       if (temp < 1024) {
@@ -2677,14 +2774,17 @@ export default {
     },
 
     checkRoleAndDeleteIfMismatch() {
-      if (this.userLogin.role !== this.myProfile.role || this.userLogin.userToken != this.myProfile.userToken) {
+      if (
+        this.userLogin.role !== this.myProfile.role ||
+        this.userLogin.userToken != this.myProfile.userToken
+      ) {
         // Roles don't match, delete the localStorage item
         this.logout();
         // You can perform other actions as needed
-        console.log('Role mismatch. LocalStorage item deleted.');
+        console.log("Role mismatch. LocalStorage item deleted.");
       } else {
         // Roles match, you can perform other actions if needed
-        console.log('Role match.');
+        console.log("Role match.");
       }
     },
     logout() {
@@ -2712,19 +2812,48 @@ export default {
         });
     },
 
+    // Handle next page  for data favorite
+    nextPage() {
+      this.loadingScreen = true;
+      if (this.currentPage * this.pageSize < this.dataServicers.length) {
+        this.currentPage++;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle previous page
+    prevPage() {
+      this.loadingScreen = true;
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle going to a specific page
+    gotoPage(pageNumber) {
+      this.loadingScreen = true;
+      this.currentPage = pageNumber;
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+
     // Footer
     openInstagramFooter() {
-      window.open('https://www.instagram.com/hafallart/', "_blank");
+      window.open("https://www.instagram.com/hafallart/", "_blank");
     },
     openYoutubeFooter() {
-      window.open('https://www.youtube.com/@haforastudio9615', "_blank");
+      window.open("https://www.youtube.com/@haforastudio9615", "_blank");
     },
     openTiktokFooter() {
-      window.open('https://www.tiktok.com/@hafallart', "_blank");
+      window.open("https://www.tiktok.com/@hafallart", "_blank");
     },
     sendEmail() {
       // Replace 'recipient@example.com' with the actual email address
-      const emailAddress = 'haf3334444@gmail.com';
+      const emailAddress = "haf3334444@gmail.com";
 
       // Construct the mailto link
       const mailtoLink = `mailto:${emailAddress}`;
@@ -2738,6 +2867,32 @@ export default {
 </script>
 
 <style scoped>
+/* Paginate */
+/* Add your styling here if needed */
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination button {
+  cursor: pointer;
+  margin: 0 6px;
+  font-size: 15px;
+}
+
+.pagination button:hover {
+  cursor: pointer;
+  margin: 0 6px;
+  font-size: 15px;
+  color: #006598;
+}
+
+.pagination button.active {
+  color: #006598;
+}
+/* end Paginate */
+
 .fade-enter-active,
 .fade-leave-active {
   transition: all 0.5s ease-in-out;
@@ -2813,7 +2968,6 @@ export default {
 .button-merchan:hover .icon-merchan {
   transform: scale(+140%);
 }
-
 
 /* Footer */
 .hoverMyName:hover {
@@ -3113,18 +3267,18 @@ export default {
 }
 @media (max-width: 790px) {
   .card-service {
-  width: 150px;
-  height: 215px;
-  border-radius: 20px;
-  background: #ffffff;
-  position: relative;
-  padding: 10px;
-  border: 2px solid #c3c6ce;
-  transition: 0.5s ease-out;
-  overflow: visible;
-  margin: 10px;
-}
-  .container-footer{
+    width: 150px;
+    height: 215px;
+    border-radius: 20px;
+    background: #ffffff;
+    position: relative;
+    padding: 10px;
+    border: 2px solid #c3c6ce;
+    transition: 0.5s ease-out;
+    overflow: visible;
+    margin: 10px;
+  }
+  .container-footer {
     width: 90% !important;
   }
 

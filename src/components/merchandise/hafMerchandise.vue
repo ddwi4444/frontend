@@ -95,18 +95,18 @@
             class="searchDiv"
             style="align-items: center; display: flex"
           >
-          <div class="coolinput">
-            <label for="input-name" class="text">Search merchandise</label>
-            <input
-              type="text"
-              v-model="searchMerchandise"
+            <div class="coolinput">
+              <label for="input-name" class="text">Search merchandise</label>
+              <input
+                type="text"
+                v-model="searchMerchandise"
                 @keyup.enter="search"
                 @input="handleInput"
-              placeholder="Write merchandise title here..."
-              name="input"
-              class="input"
-            />
-          </div> 
+                placeholder="Write merchandise title here..."
+                name="input"
+                class="input"
+              />
+            </div>
           </b-nav-item>
         </b-nav>
       </div>
@@ -121,8 +121,20 @@
           style="margin-bottom: 70px; margin-top: 20px"
         >
           <p>Result for {{ searchMerchandise }}</p>
-          <div class="row" v-if="searchResults.length > 0" style="margin: 0px; padding: 0px;">
-            <div class="row" style="justify-content: center; max-width: none; margin: 0px; padding: 0px;">
+          <div
+            class="row"
+            v-if="searchResults.length > 0"
+            style="margin: 0px; padding: 0px"
+          >
+            <div
+              class="row"
+              style="
+                justify-content: center;
+                max-width: none;
+                margin: 0px;
+                padding: 0px;
+              "
+            >
               <div
                 data-aos="fade-up"
                 data-aos-duration="2000"
@@ -189,8 +201,15 @@
       <!-- End Serach -->
 
       <div class="row" style="margin: 0px; padding: 0px; min-height: 300px">
-        <div data-aos="fade-up" data-aos-duration="2000" v-if="dataMerchandises.length == 0" style="text-align: center;  align-items: center;  display: grid;">
-          Get ready for some awesome merchandise coming your way! 🎉 <br> Stay loyal and keep those excitement levels high as you wait for us! 🚀 #ComingSoon
+        <div
+          data-aos="fade-up"
+          data-aos-duration="2000"
+          v-if="dataMerchandises.length == 0"
+          style="text-align: center; align-items: center; display: grid"
+        >
+          Get ready for some awesome merchandise coming your way! 🎉 <br />
+          Stay loyal and keep those excitement levels high as you wait for us!
+          🚀 #ComingSoon
         </div>
         <div
           class="row"
@@ -204,7 +223,7 @@
           <div
             data-aos="fade-up"
             data-aos-duration="2000"
-            v-for="dataMerchandise in dataMerchandises"
+            v-for="dataMerchandise in paginateData"
             :key="dataMerchandise.id"
             @click="handlerDetailMerchandise(dataMerchandise)"
             class="card-merchandise"
@@ -227,6 +246,32 @@
               >Rp. {{ formatPrice(dataMerchandise.harga) }}</span
             >
           </div>
+        </div>
+        <!-- Pagination controls with limited page numbers -->
+        <div
+          class="pagination"
+          v-if="paginateData.length != 0"
+          data-aos="fade-up"
+          data-aos-duration="2000"
+          data-aos-offset="0"
+        >
+          <button @click="prevPage" :disabled="currentPage === 1">
+            Previous
+          </button>
+          <span v-for="pageNumber in visiblePageNumbersData" :key="pageNumber">
+            <button
+              @click="gotoPage(pageNumber)"
+              :class="{ active: pageNumber === currentPage }"
+            >
+              {{ pageNumber }}
+            </button>
+          </span>
+          <button
+            @click="nextPage"
+            :disabled="currentPage * pageSize >= dataMerchandises.length"
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>
@@ -765,21 +810,20 @@
         </h3>
 
         <template>
-          <div style="display: flex; justify-content: start; padding-left: 15px;">
+          <div
+            style="display: flex; justify-content: start; padding-left: 15px"
+          >
             <v-btn
               small
               color="primary"
               dark
               class="mb-2 w-2"
-              style="
-                text-transform: unset !important;
-                border-radius: 20px;
-              "
+              style="text-transform: unset !important; border-radius: 20px"
               @click="handlerRefresDataOrderMerchandise"
             >
               Refresh Order Merchandise
             </v-btn>
-          </div>          
+          </div>
           <v-container class="conatiner-size-my-profile p-0">
             <v-data-table
               :headers="headersOrderHistory"
@@ -1076,19 +1120,26 @@
           border-bottom-right-radius: unset !important;
         "
       >
-      <div style="justify-content: end; display: flex; padding: 8px 16px; margin: 0px;">
-            <v-btn
-              @click="dialogDetailOrderProducts = false"
-              class="mx-1"
-              fab
-              dark
-              small
-              color="red"
-              style="height: 20px; width: 20px"
-            >
-              <b-icon icon="x-lg" aria-hidden="true"></b-icon>
-            </v-btn>
-          </div>
+        <div
+          style="
+            justify-content: end;
+            display: flex;
+            padding: 8px 16px;
+            margin: 0px;
+          "
+        >
+          <v-btn
+            @click="dialogDetailOrderProducts = false"
+            class="mx-1"
+            fab
+            dark
+            small
+            color="red"
+            style="height: 20px; width: 20px"
+          >
+            <b-icon icon="x-lg" aria-hidden="true"></b-icon>
+          </v-btn>
+        </div>
         <h5
           class="f-24 f-md-20 f-secondary text-center"
           style="
@@ -1112,18 +1163,16 @@
           </p>
           <p class="ma-0 pa-0">
             Total Price : Rp.
-            {{ formatPrice(dataOrderInDetailOrderProducts.total_prices) }} + Service tax Rp. 5.000,00
+            {{ formatPrice(dataOrderInDetailOrderProducts.total_prices) }} +
+            Service tax Rp. 5.000,00
           </p>
           <p class="ma-0 pa-0">
             You have to pay Rp.
             {{ formatPrice(totalHargaOrder) }}
           </p>
-          <div style="padding-bottom: 25px;">
+          <div style="padding-bottom: 25px">
             <center>
-              <div
-                style="height: 300px; width: 250px;"
-                class="w-img-oval"
-              >
+              <div style="height: 300px; width: 250px" class="w-img-oval">
                 <p style="color: black; margin: 0px; text-align: justify">
                   Pay with qris :
                 </p>
@@ -1139,10 +1188,10 @@
                 />
               </div>
             </center>
-            </div>
+          </div>
         </div>
         <center>
-          <div style="padding-bottom: 10px;">
+          <div style="padding-bottom: 10px">
             <!-- Update the v-for and :src attribute -->
             <div
               v-for="dataDetailOrderProductMerchandise in dataDetailOrderProductsMerchandise"
@@ -1154,7 +1203,7 @@
                 style="
                   max-width: 540px;
                   min-height: 130px;
-                  margin-top: 10px;                  
+                  margin-top: 10px;
                   border-radius: 20px;
                 "
               >
@@ -1343,36 +1392,49 @@
       <div class="footer-dark">
         <transition name="fade">
           <footer>
-            <div class="container container-footer" style="justify-content: center; width: 50%">
+            <div
+              class="container container-footer"
+              style="justify-content: center; width: 50%"
+            >
               <div class="">
                 <h3>Historical Art Fantasia</h3>
-                <p>
-                  "Be Creative, smart, and learning forever"
-                </p>
+                <p>"Be Creative, smart, and learning forever"</p>
               </div>
               <div class="col item social">
-                <a                  
+                <a
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="instagram" aria-hidden="true" @click="openInstagramFooter"></b-icon></a
+                  ><b-icon
+                    icon="instagram"
+                    aria-hidden="true"
+                    @click="openInstagramFooter"
+                  ></b-icon></a
                 ><a
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><b-icon icon="youtube" aria-hidden="true" @click="openYoutubeFooter"></b-icon></a
-                ><a @click="openTiktokFooter"
+                  ><b-icon
+                    icon="youtube"
+                    aria-hidden="true"
+                    @click="openYoutubeFooter"
+                  ></b-icon></a
+                ><a
+                  @click="openTiktokFooter"
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
-                  ><img 
+                  ><img
                     src="@/assets/tiktok.png"
                     style="height: 33px"
                     class="d-inline-block align-top"
-                    alt="Animation"
-                  /></a
-                ><a                  
+                    alt="Animation" /></a
+                ><a
                   onmouseover="this.style.transform='translateY(-10%)';"
                   onmouseout="this.style.transform='translateY(0)';"
                 >
-                  <b-icon icon="mailbox" aria-hidden="true" @click="sendEmail"></b-icon
+                  <b-icon
+                    icon="mailbox"
+                    aria-hidden="true"
+                    @click="sendEmail"
+                  ></b-icon
                 ></a>
               </div>
               <p class="copyright">
@@ -1472,6 +1534,10 @@ export default {
     dialogDetailOrderProducts: false,
     dialogAddNoResi: false,
 
+    // Pagination Favorite Card
+    currentPage: 1,
+    pageSize: 15,
+
     // Adds On
     getImage: null,
     loadingScreen: false,
@@ -1564,7 +1630,33 @@ export default {
       userToken: localStorage.getItem("userToken"),
     },
   }),
-  computed: {},
+  computed: {
+    paginateData() {
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.dataMerchandises.slice(startIndex, endIndex);
+    },
+    // Calculate the total number of pages
+    totalPagesData() {
+      return Math.ceil(this.dataMerchandises.length / this.pageSize);
+    },
+    // Calculate the visible page numbers based on the current page
+    visiblePageNumbersData() {
+      const totalVisiblePages = 4;
+      const startPage = Math.max(
+        1,
+        this.currentPage - Math.floor(totalVisiblePages / 2)
+      );
+      const endPage = Math.min(
+        this.totalPagesData,
+        startPage + totalVisiblePages - 1
+      );
+      return Array.from(
+        { length: endPage - startPage + 1 },
+        (_, i) => startPage + i
+      );
+    },
+  },
   created() {
     this.axioDataMerchandise();
     if (this.userLogin.token != null) {
@@ -1625,7 +1717,8 @@ export default {
 
     handlerRefresDataOrderMerchandise() {
       this.axioDataOrderMerchandise();
-      this.textMessage = "Order merchandise shiny now ✨ Data buff  Ready to rock!";
+      this.textMessage =
+        "Order merchandise shiny now ✨ Data buff  Ready to rock!";
       this.snackbar = true;
       this.color = "success";
     },
@@ -2065,14 +2158,17 @@ export default {
 
     // LogoutAuto
     checkRoleAndDeleteIfMismatch() {
-      if (this.userLogin.role !== this.myProfile.role || this.userLogin.userToken != this.myProfile.userToken) {
+      if (
+        this.userLogin.role !== this.myProfile.role ||
+        this.userLogin.userToken != this.myProfile.userToken
+      ) {
         // Roles don't match, delete the localStorage item
         this.logout();
         // You can perform other actions as needed
-        console.log('Role mismatch. LocalStorage item deleted.');
+        console.log("Role mismatch. LocalStorage item deleted.");
       } else {
         // Roles match, you can perform other actions if needed
-        console.log('Role match.');
+        console.log("Role match.");
       }
     },
     logout() {
@@ -2217,17 +2313,17 @@ export default {
 
     // Footer
     openInstagramFooter() {
-      window.open('https://www.instagram.com/hafallart/', "_blank");
+      window.open("https://www.instagram.com/hafallart/", "_blank");
     },
     openYoutubeFooter() {
-      window.open('https://www.youtube.com/@haforastudio9615', "_blank");
+      window.open("https://www.youtube.com/@haforastudio9615", "_blank");
     },
     openTiktokFooter() {
-      window.open('https://www.tiktok.com/@hafallart', "_blank");
+      window.open("https://www.tiktok.com/@hafallart", "_blank");
     },
     sendEmail() {
       // Replace 'recipient@example.com' with the actual email address
-      const emailAddress = 'haf3334444@gmail.com';
+      const emailAddress = "haf3334444@gmail.com";
 
       // Construct the mailto link
       const mailtoLink = `mailto:${emailAddress}`;
@@ -2236,11 +2332,65 @@ export default {
       window.location.href = mailtoLink;
     },
     // End Footer
+
+    // Handle next page  for data favorite
+    nextPage() {
+      this.loadingScreen = true;
+      if (this.currentPage * this.pageSize < this.dataMerchandises.length) {
+        this.currentPage++;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle previous page
+    prevPage() {
+      this.loadingScreen = true;
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
+    // Handle going to a specific page
+    gotoPage(pageNumber) {
+      this.loadingScreen = true;
+      this.currentPage = pageNumber;
+      setTimeout(() => {
+        this.loadingScreen = false;
+      }, 300);
+    },
   },
 };
 </script>
 
 <style scoped>
+/* Paginate */
+/* Add your styling here if needed */
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination button {
+  cursor: pointer;
+  margin: 0 6px;
+  font-size: 15px;
+}
+
+.pagination button:hover {
+  cursor: pointer;
+  margin: 0 6px;
+  font-size: 15px;
+  color: #006598;
+}
+
+.pagination button.active {
+  color: #006598;
+}
+/* end Paginate */
 .disabled-div {
   pointer-events: none; /* Prevents user interaction */
   opacity: 0.5; /* Visually indicates the disabled state */
@@ -2513,7 +2663,7 @@ export default {
 }
 /* /Footer */
 @media (max-width: 767px) {
-  .container-footer{
+  .container-footer {
     width: 90% !important;
   }
   .searchDiv {
@@ -2525,22 +2675,21 @@ export default {
   }
 
   .card-merchandise {
-  position: relative;
-  width: 138px;
-  height: 16.5em;
-  box-shadow: 0px 1px 13px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: all 120ms;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
-  padding: 0.5em;
-  padding-bottom: 3.4em;
-  border-radius: 10px;
-  margin: 5px;
-}
-
+    position: relative;
+    width: 138px;
+    height: 16.5em;
+    box-shadow: 0px 1px 13px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 120ms;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    padding: 0.5em;
+    padding-bottom: 3.4em;
+    border-radius: 10px;
+    margin: 5px;
+  }
 }
 
 @media (max-width: 991px) {
